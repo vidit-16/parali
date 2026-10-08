@@ -1,0 +1,42 @@
+"""Farmer's voice to text with Amazon Transcribe streaming (hi-IN).
+
+The browser records 16 kHz mono PCM (16-bit little-endian) and sends it in one request; we stream it to
+Transcribe and return the final transcript. A push-to-talk clip of a few seconds comes back in about the
+length of the clip.
+"""
+import asyncio
+
+SAMPLE_RATE = 16000
+CHUNK = 8000  # bytes: 0.25 s of 16 kHz 16-bit audio
+MAX_SECONDS = 30
+
+
+def transcribe_pcm(pcm: bytes, language: str = "hi-IN", region: str = "us-west-2") -> str:
+    if len(pcm) > SAMPLE_RATE * 2 * MAX_SECONDS:
+        pcm = pcm[: SAMPLE_RATE * 2 * MAX_SECONDS]
+    return asyncio.run(_stream(pcm, language, region))
+
+
+async def _stream(pcm: bytes, language: str, region: str) -> str:
+    from amazon_transcribe.client import TranscribeStreamingClient
+    from amazon_transcribe.handlers import TranscriptResultStreamHandler
+
+    parts: list[str] = []
+
+    class Handler(TranscriptResultStreamHandler):
+        async def handle_transcript_event(self, event):
+            for r in event.transcript.results:
+                if not r.is_partial and r.alternatives:
+                    parts.append(r.alternatives[0].transcript)
+
+    client = TranscribeStreamingClient(region=region)
+    stream = await client.start_stream_transcription(
+        language_code=language, media_sample_rate_hz=SAMPLE_RATE, media_encoding="pcm")
+
+    async def send():
+        for i in range(0, len(pcm), CHUNK):
+            await stream.input_stream.send_audio_event(audio_chunk=pcm[i:i + CHUNK])
+        await stream.input_stream.end_stream()
+
+    await asyncio.gather(send(), Handler(stream.output_stream).handle_events())
+    return " ".join(parts).strip()

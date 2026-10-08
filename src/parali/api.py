@@ -17,6 +17,8 @@ class Deps:
     officer_pin: str | None = None
     speaker: Callable[[str], bytes] | None = None
     reset: Callable[[], None] | None = None
+    agent_backend: object | None = None                      # None: scripted assistant
+    transcriber: Callable[[bytes], str] | None = None        # 16 kHz PCM -> Hindi text
 
 
 def _json(status: int, body) -> tuple[int, dict, bytes]:
@@ -32,7 +34,7 @@ def _pin_ok(deps: Deps, headers: dict) -> bool:
 
 def _claim_view(store: Store, c: dict) -> dict:
     out = dict(c)
-    for k in ("evidence_key", "audio_key"):
+    for k in ("evidence_key", "audio_key", "notice_key"):
         if c.get(k):
             out[k.replace("_key", "_url")] = store.blob_url(c[k])
     return out
@@ -68,6 +70,8 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             c = service.review(s, m.group(1), str(data.get("officer_id", "")), str(data.get("verdict", "")),
                                str(data.get("note", ""))[:500], deps.speaker)
             return _json(200, _claim_view(s, c))
+        if method == "POST" and path == "/api/agent":
+            return _json(200, _agent_turn(deps, data))
         if method == "POST" and path == "/api/demo/reset":
             if not _pin_ok(deps, headers) or deps.reset is None:
                 return _json(403, {"error": "officer PIN required"})
@@ -76,6 +80,29 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
     except service.WorkflowError as e:
         return _json(409, {"error": str(e)})
     return _json(404, {"error": "no such route"})
+
+
+def _agent_turn(deps: Deps, data: dict) -> dict:
+    import base64
+    import uuid
+
+    from parali import agent
+    farmer_id = str(data.get("farmer_id", ""))
+    if deps.store.get("fields", farmer_id) is None:
+        raise service.WorkflowError("unknown farmer")
+    text = str(data.get("text", ""))[:500]
+    transcript = None
+    if data.get("audio_b64") and deps.transcriber:
+        pcm = base64.b64decode(data["audio_b64"])[: 16000 * 2 * 30]
+        text = transcript = deps.transcriber(pcm)
+    r = agent.respond(deps.store, farmer_id, text, deps.dispatch, backend=deps.agent_backend)
+    out = {"transcript": transcript, "text": text, "hi": r.hi, "en": r.en, "tools": r.tools, "mode": r.mode,
+           "note": r.note}
+    if deps.speaker and r.hi:
+        key = f"agent/{uuid.uuid4().hex[:12]}.mp3"
+        deps.store.put_blob(key, deps.speaker(r.hi), "audio/mpeg")
+        out["audio_url"] = deps.store.blob_url(key)
+    return out
 
 
 def officer_pin_from_env() -> str | None:

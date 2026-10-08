@@ -69,3 +69,21 @@ def test_reset_requires_pin(deps):
     assert call(deps, "POST", "/api/demo/reset", {})[0] == 403
     assert call(deps, "POST", "/api/demo/reset", {}, {"X-Officer-Pin": "2468"})[0] == 200
     assert flag == [1]
+
+
+def test_agent_route_text(deps):
+    st, r = call(deps, "POST", "/api/agent", {"farmer_id": "f1", "text": "मुझे दावा दर्ज करना है"})
+    assert st == 200 and r["tools"] == ["file_claim"] and r["mode"] == "scripted"
+    assert deps.sent  # claim dispatched for processing
+
+
+def test_agent_route_audio_and_speech(deps):
+    deps.transcriber = lambda pcm: "मेरा दावा कहाँ तक पहुँचा"
+    deps.speaker = lambda text: b"mp3"
+    import base64
+    st, r = call(deps, "POST", "/api/agent", {"farmer_id": "f1", "audio_b64": base64.b64encode(b"\0" * 320).decode()})
+    assert st == 200 and r["transcript"] == "मेरा दावा कहाँ तक पहुँचा" and r["audio_url"].endswith(".mp3")
+
+
+def test_agent_route_unknown_farmer(deps):
+    assert call(deps, "POST", "/api/agent", {"farmer_id": "nobody", "text": "status"})[0] == 409
