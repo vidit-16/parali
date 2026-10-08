@@ -34,6 +34,28 @@ def cmd_area(a):
     print(f"{len(stack.dates)} dates, grid {stack.scl.shape[1:]} -> {a.out}")
 
 
+def cmd_plots(a):
+    from parali.area import AreaStack
+    from parali.fields import save_fields
+    from parali.label import render_strip
+    from parali.plots import sample_plots
+    stack = AreaStack.load(Path(a.area))
+    plots = sample_plots(stack, firms.load(Path(a.firms)), per_stratum=a.per_stratum)
+    save_fields(plots, Path(a.out))
+    chips = Path(a.chips)
+    for i, p in enumerate(plots, 1):
+        render_strip(stack, p, chips / f"{p.id}.png")
+        if i % 25 == 0:
+            print(f"  {i}/{len(plots)} chips", flush=True)
+    print(f"{len(plots)} plots -> {a.out}, chips -> {chips}")
+
+
+def cmd_label(a):
+    from parali.label import serve
+    ids = [f.id for f in load_fields(a.plots)]
+    serve(ids, Path(a.chips).resolve(), Path(a.out), port=a.port)
+
+
 def cmd_features(a):
     paths = sorted(Path(a.history).glob("*.npz"))
     w = csv.writer(sys.stdout)
@@ -74,6 +96,21 @@ def main(argv=None):
     s.add_argument("--tile")
     s.add_argument("--out", required=True)
     s.set_defaults(func=cmd_area)
+
+    s = sub.add_parser("plots", help="sample evaluation plots and render labelling images")
+    s.add_argument("--area", required=True)
+    s.add_argument("--firms", required=True)
+    s.add_argument("--per-stratum", type=int, default=70)
+    s.add_argument("--out", required=True)
+    s.add_argument("--chips", required=True)
+    s.set_defaults(func=cmd_plots)
+
+    s = sub.add_parser("label", help="open the labelling page")
+    s.add_argument("--plots", required=True)
+    s.add_argument("--chips", required=True)
+    s.add_argument("--out", required=True)
+    s.add_argument("--port", type=int, default=8765)
+    s.set_defaults(func=cmd_label)
 
     s = sub.add_parser("features", help="print per-date features as CSV")
     s.add_argument("--history", required=True)
