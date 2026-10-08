@@ -26,8 +26,72 @@ def hi_date(d: date | str) -> str:
     return f"{d.day} {HI_MONTHS[d.month - 1]}"
 
 
+def rupees(n: int) -> str:
+    """Indian digit grouping: 123456 -> 1,23,456."""
+    s = str(int(n))
+    if len(s) <= 3:
+        return s
+    head, tail = s[:-3], s[-3:]
+    parts = []
+    while len(head) > 2:
+        parts.insert(0, head[-2:])
+        head = head[:-2]
+    return ",".join([head] + parts + [tail]) if head else ",".join(parts + [tail])
+
+
+def advance_text(claim: dict) -> dict:
+    """Before harvest: is there an advance, and why."""
+    adv = claim.get("advance") or {}
+    y = adv.get("prev_season", "")
+    if adv.get("eligible"):
+        amt = rupees(adv.get("amount", 0))
+        paid = adv.get("status") == "paid"
+        return {
+            "hi": f"{y} में आपके खेत में पराली जलाने का निशान नहीं मिला, इसलिए आपको ₹{amt} की अग्रिम राशि "
+                  + ("मिल चुकी है।" if paid else "मिलेगी।") + " बाकी राशि कटाई के बाद उपग्रह जाँच से तय होगी।",
+            "en": f"Your field was clean in {y}, so you " + ("received" if paid else "get")
+                  + f" an advance of Rs {amt}. The rest is decided by the satellite check after harvest.",
+        }
+    if adv:
+        return {
+            "hi": f"{y} की तस्वीरों में आपका खेत साफ़ नहीं दिखा, इसलिए इस साल अग्रिम राशि नहीं है। "
+                  "पूरी राशि कटाई के बाद जाँच से मिलेगी। इस साल खेत साफ़ रहा तो अगले साल अग्रिम मिलेगी।",
+            "en": f"Your field was not clearly clean in {y}, so there is no advance this year. The full amount "
+                  "comes after the post-harvest check. A clean season this year earns the advance next year.",
+        }
+    return {"hi": "", "en": ""}
+
+
+def _money(claim: dict) -> dict:
+    s = claim.get("settlement") or {}
+    adv = claim.get("advance") or {}
+    paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
+    if s.get("state") == "balance_due":
+        hi = f" बाकी राशि ₹{rupees(s['balance'])} जारी की जाएगी"
+        en = f" The remaining Rs {rupees(s['balance'])} will be released"
+        if paid:
+            hi += f" (₹{rupees(paid)} अग्रिम पहले मिल चुकी है)"
+            en += f" (Rs {rupees(paid)} was paid as advance)"
+        hi += "।"
+        en += "."
+        if adv and not adv.get("eligible"):
+            hi += " इस साल खेत साफ़ रहा, अगले साल आपको अग्रिम राशि मिलेगी।"
+            en += " This clean season earns you the advance next year."
+        return {"hi": hi, "en": en}
+    if s.get("state") == "recover_advance":
+        return {"hi": f" पहले दी गई ₹{rupees(s['recover'])} की अग्रिम राशि वापस करनी होगी; ग्राम अधिकारी आपको लिखित सूचना देंगे।",
+                "en": f" The advance of Rs {rupees(s['recover'])} has to be returned; the village officer will send a written notice."}
+    return {"hi": "", "en": ""}
+
+
 def farmer_text(claim: dict) -> dict:
-    """Returns {"hi": ..., "en": ...} for the claim's current status."""
+    """Returns {"hi": ..., "en": ...} for the claim's current status, with the money line."""
+    base = _status_text(claim)
+    money = _money(claim)
+    return {"hi": base["hi"] + money["hi"], "en": base["en"] + money["en"]}
+
+
+def _status_text(claim: dict) -> dict:
     status = claim["status"]
     dec = claim.get("decision") or {}
     name = claim.get("farmer_name_hi") or claim.get("farmer_name", "")
@@ -39,9 +103,8 @@ def farmer_text(claim: dict) -> dict:
         n = len(dec.get("clear_dates", []))
         return {
             "hi": greet_hi + f"{field_hi} खेत के लिए आपका दावा स्वीकृत हो गया है। उपग्रह की {n} साफ़ तस्वीरों में "
-                  "पराली जलाने का कोई निशान नहीं मिला। राशि के लिए आपका दावा आगे भेज दिया गया है।",
-            "en": f"Your claim for {field} is approved. {n} clear satellite images show no sign of burning. "
-                  "It has been sent on for payment.",
+                  "पराली जलाने का कोई निशान नहीं मिला।",
+            "en": f"Your claim for {field} is approved. {n} clear satellite images show no sign of burning.",
         }
     if status == "needs_review":
         rule = dec.get("rule", "")

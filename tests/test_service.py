@@ -122,3 +122,26 @@ def test_stack_subset_keeps_georeference():
     assert sub.scl.shape[1] < st.scl.shape[1]
     x, y = sub.transform @ (0, 0)
     assert 500000 <= x <= 500060 and 3299900 <= y <= 3300000
+
+
+def test_rupees_indian_grouping():
+    from parali.messages import rupees
+    assert [rupees(n) for n in (750, 1140, 123456, 10000000)] == ["750", "1,140", "1,23,456", "1,00,00,000"]
+
+
+def test_money_lines():
+    from parali.messages import advance_text, farmer_text
+    base = {"field_name": "K", "decision": {"clear_dates": ["2025-10-01"]}}
+    paid = {"eligible": True, "amount": 750, "status": "paid", "prev_season": "2024"}
+    c = {**base, "status": "auto_approved", "advance": paid,
+         "settlement": {"state": "balance_due", "balance": 2250, "recover": 0, "total": 3000}}
+    t = farmer_text(c)
+    assert "2,250" in t["hi"] and "750" in t["en"]
+    c = {**base, "status": "officer_confirmed_burnt", "advance": paid,
+         "settlement": {"state": "recover_advance", "balance": 0, "recover": 750, "total": 3000}}
+    assert "वापस" in farmer_text(c)["hi"]
+    no = {"eligible": False, "amount": 0, "status": "not_eligible", "prev_season": "2024"}
+    c = {**base, "status": "auto_approved", "advance": no,
+         "settlement": {"state": "balance_due", "balance": 3000, "recover": 0, "total": 3000}}
+    assert "next year" in farmer_text(c)["en"]
+    assert "advance" in advance_text({"advance": paid})["en"] and "no advance" in advance_text({"advance": no})["en"]
