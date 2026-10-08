@@ -9,19 +9,22 @@ import uuid
 from datetime import date
 from typing import Callable
 
-from parali import evidence, notice, season
-from parali.area import AreaStack
-from parali.features import field_features
-from parali.fields import Field
-from parali.firms import Fire, fires_near
+from typing import TYPE_CHECKING
+
+from parali import notice, season
 from parali.messages import farmer_text
-from parali.rules import Thresholds, decide
 from parali.store import Store, now_iso
+
+if TYPE_CHECKING:  # imagery stack pulls in rasterio; keep it out of the agent Lambda
+    from parali.area import AreaStack
+    from parali.fields import Field
+    from parali.firms import Fire
+    from parali.rules import Thresholds
 
 REVIEW_STATES = ("needs_review", "possible_burn")
 OFFICER_VERDICTS = {"approve": "officer_approved", "confirm_burnt": "officer_confirmed_burnt"}
 
-StackProvider = Callable[[Field, date, date], AreaStack]
+StackProvider = Callable[["Field", date, date], "AreaStack"]
 Speaker = Callable[[str], bytes]
 
 
@@ -29,8 +32,10 @@ class WorkflowError(ValueError):
     pass
 
 
-def field_from_item(item: dict) -> Field:
+def field_from_item(item: dict) -> "Field":
     from shapely.geometry import shape
+
+    from parali.fields import Field
     props = {k: v for k, v in item.items() if k not in ("id", "geometry")}
     return Field(item["id"], shape(item["geometry"]), props)
 
@@ -62,7 +67,10 @@ def create_claim(store: Store, field_id: str, season_start: str, season_end: str
     return claim
 
 
-def _decide_season(field: Field, stacks: StackProvider, fires: list[Fire], th: Thresholds, start: date, end: date):
+def _decide_season(field: "Field", stacks: StackProvider, fires: "list[Fire]", th: "Thresholds", start: date, end: date):
+    from parali.features import field_features
+    from parali.firms import fires_near
+    from parali.rules import decide
     stack = stacks(field, start, end)
     feats = field_features(stack.histories([field])[field.id])
     c = field.geometry.centroid
@@ -70,7 +78,7 @@ def _decide_season(field: Field, stacks: StackProvider, fires: list[Fire], th: T
     return stack, feats, near, decide(feats, th, len(near), start, end)
 
 
-def assess_advance(store: Store, claim_id: str, stacks: StackProvider, fires: list[Fire], th: Thresholds,
+def assess_advance(store: Store, claim_id: str, stacks: StackProvider, fires: "list[Fire]", th: "Thresholds",
                    prev_start: str, prev_end: str) -> dict:
     """Check last season for this field and offer the advance if it was clean."""
     claim = _get(store, claim_id)
@@ -133,7 +141,7 @@ def _speak(store: Store, claim: dict, speaker: Speaker | None) -> None:
     claim["audio_key"] = key
 
 
-def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: list[Fire], th: Thresholds,
+def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: "list[Fire]", th: "Thresholds",
                   speaker: Speaker | None = None) -> dict:
     claim = store.get("claims", claim_id)
     if claim is None:
@@ -145,6 +153,7 @@ def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: lis
     as_of = date.fromisoformat(claim["as_of"])
     stack, feats, near, d = _decide_season(field, stacks, fires, th, start, min(end, as_of))
 
+    from parali import evidence
     key = f"evidence/{claim_id}.png"
     store.put_blob(key, evidence.render(stack, field, d.burn_date), "image/png")
     claim.update({
@@ -164,7 +173,7 @@ def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: lis
     return claim
 
 
-def run_season(store: Store, claim_id: str, stacks: StackProvider, fires: list[Fire], th: Thresholds,
+def run_season(store: Store, claim_id: str, stacks: StackProvider, fires: "list[Fire]", th: "Thresholds",
                speaker: Speaker | None = None) -> dict:
     """Demo path for one claim: last-season check, advance paid if eligible (by the department, before
     harvest), then this season's check and settlement."""
