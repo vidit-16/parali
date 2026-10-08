@@ -50,6 +50,26 @@ def cmd_plots(a):
     print(f"{len(plots)} plots -> {a.out}, chips -> {chips}")
 
 
+def cmd_plots_extra(a):
+    from parali.area import AreaStack
+    from parali.fields import save_fields
+    from parali.label import render_strip
+    from parali.plots import add_signal_strata
+    stack = AreaStack.load(Path(a.area))
+    old = load_fields(a.plots)
+    plots = add_signal_strata(stack, firms.load(Path(a.firms)), old, extra=a.extra)
+    save_fields(plots, Path(a.plots))
+    new = [p for p in plots if p.props.get("round") == 2]
+    for p in new:
+        render_strip(stack, p, Path(a.chips) / f"{p.id}.png")
+    sizes = {}
+    for p in plots:
+        sizes.setdefault(p.props["stratum"], [p.props["stratum_size"], 0])[1] += 1
+    for k, (size, n) in sorted(sizes.items()):
+        print(f"  {k:10} population {size:6}  plots {n}")
+    print(f"{len(new)} new plots -> {a.plots}")
+
+
 def cmd_label(a):
     from parali.label import serve
     ids = [f.id for f in load_fields(a.plots)]
@@ -156,6 +176,14 @@ def main(argv=None):
     s.add_argument("--out", required=True)
     s.add_argument("--chips", required=True)
     s.set_defaults(func=cmd_plots)
+
+    s = sub.add_parser("plots-extra", help="re-stratify by burn signal and add plots from signal strata")
+    s.add_argument("--area", required=True)
+    s.add_argument("--firms", required=True)
+    s.add_argument("--plots", required=True)
+    s.add_argument("--chips", required=True)
+    s.add_argument("--extra", type=int, default=40)
+    s.set_defaults(func=cmd_plots_extra)
 
     s = sub.add_parser("label", help="open the labelling page")
     s.add_argument("--plots", required=True)

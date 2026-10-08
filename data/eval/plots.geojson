@@ -5,8 +5,8 @@
    "type": "Feature",
    "properties": {
     "id": "p000_056",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 185
    },
    "geometry": {
@@ -42,7 +42,7 @@
    "properties": {
     "id": "p004_129",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 298
    },
    "geometry": {
@@ -78,7 +78,7 @@
    "properties": {
     "id": "p005_130",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 282
    },
    "geometry": {
@@ -114,7 +114,7 @@
    "properties": {
     "id": "p007_019",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 306
    },
    "geometry": {
@@ -150,7 +150,7 @@
    "properties": {
     "id": "p012_122",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 235
    },
    "geometry": {
@@ -186,7 +186,7 @@
    "properties": {
     "id": "p012_132",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 379
    },
    "geometry": {
@@ -222,7 +222,7 @@
    "properties": {
     "id": "p013_123",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 199
    },
    "geometry": {
@@ -258,7 +258,7 @@
    "properties": {
     "id": "p014_070",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 269
    },
    "geometry": {
@@ -294,7 +294,7 @@
    "properties": {
     "id": "p015_118",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 225
    },
    "geometry": {
@@ -330,7 +330,7 @@
    "properties": {
     "id": "p019_130",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 381
    },
    "geometry": {
@@ -366,7 +366,7 @@
    "properties": {
     "id": "p020_066",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 294
    },
    "geometry": {
@@ -401,8 +401,8 @@
    "type": "Feature",
    "properties": {
     "id": "p024_135",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 192
    },
    "geometry": {
@@ -438,7 +438,7 @@
    "properties": {
     "id": "p032_096",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 394
    },
    "geometry": {
@@ -474,7 +474,7 @@
    "properties": {
     "id": "p033_093",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 254
    },
    "geometry": {
@@ -509,8 +509,8 @@
    "type": "Feature",
    "properties": {
     "id": "p036_005",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 213
    },
    "geometry": {
@@ -546,7 +546,7 @@
    "properties": {
     "id": "p037_002",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 310
    },
    "geometry": {
@@ -581,8 +581,8 @@
    "type": "Feature",
    "properties": {
     "id": "p041_093",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 391
    },
    "geometry": {
@@ -617,8 +617,8 @@
    "type": "Feature",
    "properties": {
     "id": "p041_112",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 281
    },
    "geometry": {
@@ -654,7 +654,7 @@
    "properties": {
     "id": "p048_133",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 313
    },
    "geometry": {
@@ -690,7 +690,7 @@
    "properties": {
     "id": "p049_037",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 109
    },
    "geometry": {
@@ -726,7 +726,7 @@
    "properties": {
     "id": "p050_128",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 368
    },
    "geometry": {
@@ -762,7 +762,7 @@
    "properties": {
     "id": "p050_133",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 248
    },
    "geometry": {
@@ -798,7 +798,7 @@
    "properties": {
     "id": "p050_139",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 236
    },
    "geometry": {
@@ -834,7 +834,7 @@
    "properties": {
     "id": "p051_067",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 345
    },
    "geometry": {
@@ -870,7 +870,7 @@
    "properties": {
     "id": "p053_035",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 322
    },
    "geometry": {
@@ -906,7 +906,7 @@
    "properties": {
     "id": "p053_125",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 338
    },
    "geometry": {
@@ -942,7 +942,7 @@
    "properties": {
     "id": "p054_037",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 148
    },
    "geometry": {
@@ -978,7 +978,7 @@
    "properties": {
     "id": "p054_134",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 333
    },
    "geometry": {
@@ -1013,8 +1013,8 @@
    "type": "Feature",
    "properties": {
     "id": "p058_045",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 279
    },
    "geometry": {
@@ -1050,7 +1050,7 @@
    "properties": {
     "id": "p062_094",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 375
    },
    "geometry": {
@@ -1086,7 +1086,7 @@
    "properties": {
     "id": "p065_123",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 126
    },
    "geometry": {
@@ -1122,7 +1122,7 @@
    "properties": {
     "id": "p073_054",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 380
    },
    "geometry": {
@@ -1158,7 +1158,7 @@
    "properties": {
     "id": "p074_047",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 300
    },
    "geometry": {
@@ -1194,7 +1194,7 @@
    "properties": {
     "id": "p075_050",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 301
    },
    "geometry": {
@@ -1230,7 +1230,7 @@
    "properties": {
     "id": "p087_065",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 238
    },
    "geometry": {
@@ -1266,7 +1266,7 @@
    "properties": {
     "id": "p090_106",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 177
    },
    "geometry": {
@@ -1302,7 +1302,7 @@
    "properties": {
     "id": "p093_106",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 383
    },
    "geometry": {
@@ -1338,7 +1338,7 @@
    "properties": {
     "id": "p104_091",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 395
    },
    "geometry": {
@@ -1374,7 +1374,7 @@
    "properties": {
     "id": "p109_124",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 176
    },
    "geometry": {
@@ -1410,7 +1410,7 @@
    "properties": {
     "id": "p109_125",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 97
    },
    "geometry": {
@@ -1446,7 +1446,7 @@
    "properties": {
     "id": "p117_021",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 364
    },
    "geometry": {
@@ -1482,7 +1482,7 @@
    "properties": {
     "id": "p121_019",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 288
    },
    "geometry": {
@@ -1517,8 +1517,8 @@
    "type": "Feature",
    "properties": {
     "id": "p121_026",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 273
    },
    "geometry": {
@@ -1554,7 +1554,7 @@
    "properties": {
     "id": "p122_026",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 279
    },
    "geometry": {
@@ -1589,8 +1589,8 @@
    "type": "Feature",
    "properties": {
     "id": "p130_101",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 318
    },
    "geometry": {
@@ -1626,7 +1626,7 @@
    "properties": {
     "id": "p135_019",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 309
    },
    "geometry": {
@@ -1662,7 +1662,7 @@
    "properties": {
     "id": "p136_040",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 272
    },
    "geometry": {
@@ -1698,7 +1698,7 @@
    "properties": {
     "id": "p136_102",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 133
    },
    "geometry": {
@@ -1734,7 +1734,7 @@
    "properties": {
     "id": "p138_100",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 292
    },
    "geometry": {
@@ -1770,7 +1770,7 @@
    "properties": {
     "id": "p140_084",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 399
    },
    "geometry": {
@@ -1806,7 +1806,7 @@
    "properties": {
     "id": "p144_020",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 100
    },
    "geometry": {
@@ -1842,7 +1842,7 @@
    "properties": {
     "id": "p148_079",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 252
    },
    "geometry": {
@@ -1878,7 +1878,7 @@
    "properties": {
     "id": "p149_096",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 252
    },
    "geometry": {
@@ -1914,7 +1914,7 @@
    "properties": {
     "id": "p150_042",
     "stratum": "on",
-    "stratum_size": 2954,
+    "stratum_size": 2536,
     "fire_dist_m": 103
    },
    "geometry": {
@@ -1949,8 +1949,8 @@
    "type": "Feature",
    "properties": {
     "id": "p150_134",
-    "stratum": "on",
-    "stratum_size": 2954,
+    "stratum": "on+sig",
+    "stratum_size": 418,
     "fire_dist_m": 97
    },
    "geometry": {
@@ -1986,7 +1986,7 @@
    "properties": {
     "id": "p001_021",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 487
    },
    "geometry": {
@@ -2022,7 +2022,7 @@
    "properties": {
     "id": "p002_000",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 676
    },
    "geometry": {
@@ -2058,7 +2058,7 @@
    "properties": {
     "id": "p005_069",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 460
    },
    "geometry": {
@@ -2094,7 +2094,7 @@
    "properties": {
     "id": "p009_075",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 472
    },
    "geometry": {
@@ -2130,7 +2130,7 @@
    "properties": {
     "id": "p010_022",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 646
    },
    "geometry": {
@@ -2166,7 +2166,7 @@
    "properties": {
     "id": "p014_008",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 441
    },
    "geometry": {
@@ -2202,7 +2202,7 @@
    "properties": {
     "id": "p016_003",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 555
    },
    "geometry": {
@@ -2238,7 +2238,7 @@
    "properties": {
     "id": "p016_049",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 604
    },
    "geometry": {
@@ -2274,7 +2274,7 @@
    "properties": {
     "id": "p016_070",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 428
    },
    "geometry": {
@@ -2310,7 +2310,7 @@
    "properties": {
     "id": "p021_129",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 515
    },
    "geometry": {
@@ -2346,7 +2346,7 @@
    "properties": {
     "id": "p024_048",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 716
    },
    "geometry": {
@@ -2382,7 +2382,7 @@
    "properties": {
     "id": "p025_003",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 661
    },
    "geometry": {
@@ -2418,7 +2418,7 @@
    "properties": {
     "id": "p026_060",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 616
    },
    "geometry": {
@@ -2454,7 +2454,7 @@
    "properties": {
     "id": "p034_098",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 409
    },
    "geometry": {
@@ -2489,8 +2489,8 @@
    "type": "Feature",
    "properties": {
     "id": "p036_084",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 748
    },
    "geometry": {
@@ -2526,7 +2526,7 @@
    "properties": {
     "id": "p038_050",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 665
    },
    "geometry": {
@@ -2562,7 +2562,7 @@
    "properties": {
     "id": "p041_115",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 450
    },
    "geometry": {
@@ -2598,7 +2598,7 @@
    "properties": {
     "id": "p044_047",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 438
    },
    "geometry": {
@@ -2634,7 +2634,7 @@
    "properties": {
     "id": "p044_057",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 655
    },
    "geometry": {
@@ -2669,8 +2669,8 @@
    "type": "Feature",
    "properties": {
     "id": "p045_111",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 408
    },
    "geometry": {
@@ -2706,7 +2706,7 @@
    "properties": {
     "id": "p046_127",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 624
    },
    "geometry": {
@@ -2742,7 +2742,7 @@
    "properties": {
     "id": "p047_052",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 505
    },
    "geometry": {
@@ -2778,7 +2778,7 @@
    "properties": {
     "id": "p047_104",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 541
    },
    "geometry": {
@@ -2814,7 +2814,7 @@
    "properties": {
     "id": "p050_107",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 722
    },
    "geometry": {
@@ -2850,7 +2850,7 @@
    "properties": {
     "id": "p050_116",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 511
    },
    "geometry": {
@@ -2886,7 +2886,7 @@
    "properties": {
     "id": "p051_030",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 451
    },
    "geometry": {
@@ -2921,8 +2921,8 @@
    "type": "Feature",
    "properties": {
     "id": "p056_031",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 587
    },
    "geometry": {
@@ -2958,7 +2958,7 @@
    "properties": {
     "id": "p058_031",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 624
    },
    "geometry": {
@@ -2993,8 +2993,8 @@
    "type": "Feature",
    "properties": {
     "id": "p062_099",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 570
    },
    "geometry": {
@@ -3030,7 +3030,7 @@
    "properties": {
     "id": "p064_038",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 700
    },
    "geometry": {
@@ -3066,7 +3066,7 @@
    "properties": {
     "id": "p066_096",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 721
    },
    "geometry": {
@@ -3102,7 +3102,7 @@
    "properties": {
     "id": "p067_070",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 715
    },
    "geometry": {
@@ -3138,7 +3138,7 @@
    "properties": {
     "id": "p068_117",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 457
    },
    "geometry": {
@@ -3174,7 +3174,7 @@
    "properties": {
     "id": "p068_130",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 611
    },
    "geometry": {
@@ -3210,7 +3210,7 @@
    "properties": {
     "id": "p071_115",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 701
    },
    "geometry": {
@@ -3246,7 +3246,7 @@
    "properties": {
     "id": "p074_056",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 558
    },
    "geometry": {
@@ -3282,7 +3282,7 @@
    "properties": {
     "id": "p075_072",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 410
    },
    "geometry": {
@@ -3318,7 +3318,7 @@
    "properties": {
     "id": "p080_105",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 490
    },
    "geometry": {
@@ -3354,7 +3354,7 @@
    "properties": {
     "id": "p085_058",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 674
    },
    "geometry": {
@@ -3389,8 +3389,8 @@
    "type": "Feature",
    "properties": {
     "id": "p087_071",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 550
    },
    "geometry": {
@@ -3426,7 +3426,7 @@
    "properties": {
     "id": "p087_116",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 724
    },
    "geometry": {
@@ -3461,8 +3461,8 @@
    "type": "Feature",
    "properties": {
     "id": "p100_128",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 712
    },
    "geometry": {
@@ -3497,8 +3497,8 @@
    "type": "Feature",
    "properties": {
     "id": "p112_130",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 407
    },
    "geometry": {
@@ -3534,7 +3534,7 @@
    "properties": {
     "id": "p115_130",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 594
    },
    "geometry": {
@@ -3570,7 +3570,7 @@
    "properties": {
     "id": "p126_027",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 520
    },
    "geometry": {
@@ -3606,7 +3606,7 @@
    "properties": {
     "id": "p126_029",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 639
    },
    "geometry": {
@@ -3642,7 +3642,7 @@
    "properties": {
     "id": "p131_091",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 574
    },
    "geometry": {
@@ -3678,7 +3678,7 @@
    "properties": {
     "id": "p136_038",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 401
    },
    "geometry": {
@@ -3713,8 +3713,8 @@
    "type": "Feature",
    "properties": {
     "id": "p141_032",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 665
    },
    "geometry": {
@@ -3750,7 +3750,7 @@
    "properties": {
     "id": "p143_083",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 430
    },
    "geometry": {
@@ -3786,7 +3786,7 @@
    "properties": {
     "id": "p143_105",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 743
    },
    "geometry": {
@@ -3822,7 +3822,7 @@
    "properties": {
     "id": "p144_046",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 535
    },
    "geometry": {
@@ -3857,8 +3857,8 @@
    "type": "Feature",
    "properties": {
     "id": "p146_010",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 746
    },
    "geometry": {
@@ -3894,7 +3894,7 @@
    "properties": {
     "id": "p146_086",
     "stratum": "near",
-    "stratum_size": 4592,
+    "stratum_size": 4065,
     "fire_dist_m": 584
    },
    "geometry": {
@@ -3929,8 +3929,8 @@
    "type": "Feature",
    "properties": {
     "id": "p147_102",
-    "stratum": "near",
-    "stratum_size": 4592,
+    "stratum": "near+sig",
+    "stratum_size": 527,
     "fire_dist_m": 719
    },
    "geometry": {
@@ -3966,7 +3966,7 @@
    "properties": {
     "id": "p000_135",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 849
    },
    "geometry": {
@@ -4002,7 +4002,7 @@
    "properties": {
     "id": "p002_031",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1088
    },
    "geometry": {
@@ -4038,7 +4038,7 @@
    "properties": {
     "id": "p014_093",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1741
    },
    "geometry": {
@@ -4074,7 +4074,7 @@
    "properties": {
     "id": "p015_020",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 897
    },
    "geometry": {
@@ -4110,7 +4110,7 @@
    "properties": {
     "id": "p018_086",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1454
    },
    "geometry": {
@@ -4146,7 +4146,7 @@
    "properties": {
     "id": "p022_094",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1138
    },
    "geometry": {
@@ -4182,7 +4182,7 @@
    "properties": {
     "id": "p022_108",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1174
    },
    "geometry": {
@@ -4218,7 +4218,7 @@
    "properties": {
     "id": "p024_084",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1230
    },
    "geometry": {
@@ -4254,7 +4254,7 @@
    "properties": {
     "id": "p028_037",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1278
    },
    "geometry": {
@@ -4290,7 +4290,7 @@
    "properties": {
     "id": "p029_116",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1033
    },
    "geometry": {
@@ -4326,7 +4326,7 @@
    "properties": {
     "id": "p030_064",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 809
    },
    "geometry": {
@@ -4361,8 +4361,8 @@
    "type": "Feature",
    "properties": {
     "id": "p030_124",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 986
    },
    "geometry": {
@@ -4398,7 +4398,7 @@
    "properties": {
     "id": "p032_073",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 847
    },
    "geometry": {
@@ -4434,7 +4434,7 @@
    "properties": {
     "id": "p033_029",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 921
    },
    "geometry": {
@@ -4470,7 +4470,7 @@
    "properties": {
     "id": "p033_083",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 866
    },
    "geometry": {
@@ -4506,7 +4506,7 @@
    "properties": {
     "id": "p040_051",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 783
    },
    "geometry": {
@@ -4542,7 +4542,7 @@
    "properties": {
     "id": "p053_076",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 897
    },
    "geometry": {
@@ -4577,8 +4577,8 @@
    "type": "Feature",
    "properties": {
     "id": "p054_015",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 1027
    },
    "geometry": {
@@ -4614,7 +4614,7 @@
    "properties": {
     "id": "p057_143",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 766
    },
    "geometry": {
@@ -4650,7 +4650,7 @@
    "properties": {
     "id": "p058_072",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1035
    },
    "geometry": {
@@ -4686,7 +4686,7 @@
    "properties": {
     "id": "p060_107",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1092
    },
    "geometry": {
@@ -4722,7 +4722,7 @@
    "properties": {
     "id": "p064_016",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1803
    },
    "geometry": {
@@ -4758,7 +4758,7 @@
    "properties": {
     "id": "p065_078",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1217
    },
    "geometry": {
@@ -4793,8 +4793,8 @@
    "type": "Feature",
    "properties": {
     "id": "p066_014",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 1917
    },
    "geometry": {
@@ -4830,7 +4830,7 @@
    "properties": {
     "id": "p068_111",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 928
    },
    "geometry": {
@@ -4865,8 +4865,8 @@
    "type": "Feature",
    "properties": {
     "id": "p074_039",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 873
    },
    "geometry": {
@@ -4902,7 +4902,7 @@
    "properties": {
     "id": "p077_042",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 760
    },
    "geometry": {
@@ -4938,7 +4938,7 @@
    "properties": {
     "id": "p077_112",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 837
    },
    "geometry": {
@@ -4974,7 +4974,7 @@
    "properties": {
     "id": "p078_132",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1196
    },
    "geometry": {
@@ -5010,7 +5010,7 @@
    "properties": {
     "id": "p085_080",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1279
    },
    "geometry": {
@@ -5046,7 +5046,7 @@
    "properties": {
     "id": "p085_081",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1356
    },
    "geometry": {
@@ -5082,7 +5082,7 @@
    "properties": {
     "id": "p094_038",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 872
    },
    "geometry": {
@@ -5118,7 +5118,7 @@
    "properties": {
     "id": "p097_020",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1960
    },
    "geometry": {
@@ -5154,7 +5154,7 @@
    "properties": {
     "id": "p112_065",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1771
    },
    "geometry": {
@@ -5190,7 +5190,7 @@
    "properties": {
     "id": "p114_079",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1137
    },
    "geometry": {
@@ -5226,7 +5226,7 @@
    "properties": {
     "id": "p115_097",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1228
    },
    "geometry": {
@@ -5261,8 +5261,8 @@
    "type": "Feature",
    "properties": {
     "id": "p117_045",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 1731
    },
    "geometry": {
@@ -5298,7 +5298,7 @@
    "properties": {
     "id": "p119_096",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1212
    },
    "geometry": {
@@ -5333,8 +5333,8 @@
    "type": "Feature",
    "properties": {
     "id": "p120_056",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 1834
    },
    "geometry": {
@@ -5370,7 +5370,7 @@
    "properties": {
     "id": "p121_114",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1004
    },
    "geometry": {
@@ -5406,7 +5406,7 @@
    "properties": {
     "id": "p122_076",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1602
    },
    "geometry": {
@@ -5442,7 +5442,7 @@
    "properties": {
     "id": "p125_125",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1316
    },
    "geometry": {
@@ -5478,7 +5478,7 @@
    "properties": {
     "id": "p125_130",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1348
    },
    "geometry": {
@@ -5514,7 +5514,7 @@
    "properties": {
     "id": "p127_129",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1491
    },
    "geometry": {
@@ -5550,7 +5550,7 @@
    "properties": {
     "id": "p128_033",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 993
    },
    "geometry": {
@@ -5586,7 +5586,7 @@
    "properties": {
     "id": "p131_134",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1607
    },
    "geometry": {
@@ -5622,7 +5622,7 @@
    "properties": {
     "id": "p132_131",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1554
    },
    "geometry": {
@@ -5658,7 +5658,7 @@
    "properties": {
     "id": "p133_071",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1117
    },
    "geometry": {
@@ -5694,7 +5694,7 @@
    "properties": {
     "id": "p136_129",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1287
    },
    "geometry": {
@@ -5730,7 +5730,7 @@
    "properties": {
     "id": "p140_118",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1414
    },
    "geometry": {
@@ -5766,7 +5766,7 @@
    "properties": {
     "id": "p141_056",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1107
    },
    "geometry": {
@@ -5802,7 +5802,7 @@
    "properties": {
     "id": "p142_001",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1435
    },
    "geometry": {
@@ -5838,7 +5838,7 @@
    "properties": {
     "id": "p145_051",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 868
    },
    "geometry": {
@@ -5873,8 +5873,8 @@
    "type": "Feature",
    "properties": {
     "id": "p150_000",
-    "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum": "mid+sig",
+    "stratum_size": 912,
     "fire_dist_m": 1592
    },
    "geometry": {
@@ -5910,7 +5910,7 @@
    "properties": {
     "id": "p151_065",
     "stratum": "mid",
-    "stratum_size": 7078,
+    "stratum_size": 6166,
     "fire_dist_m": 1147
    },
    "geometry": {
@@ -5946,7 +5946,7 @@
    "properties": {
     "id": "p067_002",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2037
    },
    "geometry": {
@@ -5981,8 +5981,8 @@
    "type": "Feature",
    "properties": {
     "id": "p068_009",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2037
    },
    "geometry": {
@@ -6018,7 +6018,7 @@
    "properties": {
     "id": "p068_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2061
    },
    "geometry": {
@@ -6053,8 +6053,8 @@
    "type": "Feature",
    "properties": {
     "id": "p069_010",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2119
    },
    "geometry": {
@@ -6090,7 +6090,7 @@
    "properties": {
     "id": "p069_015",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2165
    },
    "geometry": {
@@ -6126,7 +6126,7 @@
    "properties": {
     "id": "p070_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2220
    },
    "geometry": {
@@ -6162,7 +6162,7 @@
    "properties": {
     "id": "p071_000",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2391
    },
    "geometry": {
@@ -6198,7 +6198,7 @@
    "properties": {
     "id": "p071_004",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2314
    },
    "geometry": {
@@ -6234,7 +6234,7 @@
    "properties": {
     "id": "p071_008",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2280
    },
    "geometry": {
@@ -6270,7 +6270,7 @@
    "properties": {
     "id": "p072_012",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2370
    },
    "geometry": {
@@ -6306,7 +6306,7 @@
    "properties": {
     "id": "p073_000",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2545
    },
    "geometry": {
@@ -6342,7 +6342,7 @@
    "properties": {
     "id": "p073_002",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2504
    },
    "geometry": {
@@ -6378,7 +6378,7 @@
    "properties": {
     "id": "p073_012",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2450
    },
    "geometry": {
@@ -6414,7 +6414,7 @@
    "properties": {
     "id": "p074_009",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2519
    },
    "geometry": {
@@ -6450,7 +6450,7 @@
    "properties": {
     "id": "p075_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2570
    },
    "geometry": {
@@ -6486,7 +6486,7 @@
    "properties": {
     "id": "p075_021",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2103
    },
    "geometry": {
@@ -6522,7 +6522,7 @@
    "properties": {
     "id": "p076_007",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2685
    },
    "geometry": {
@@ -6558,7 +6558,7 @@
    "properties": {
     "id": "p078_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2725
    },
    "geometry": {
@@ -6594,7 +6594,7 @@
    "properties": {
     "id": "p079_005",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2939
    },
    "geometry": {
@@ -6630,7 +6630,7 @@
    "properties": {
     "id": "p080_020",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2208
    },
    "geometry": {
@@ -6665,8 +6665,8 @@
    "type": "Feature",
    "properties": {
     "id": "p082_012",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2812
    },
    "geometry": {
@@ -6702,7 +6702,7 @@
    "properties": {
     "id": "p082_014",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2653
    },
    "geometry": {
@@ -6738,7 +6738,7 @@
    "properties": {
     "id": "p083_007",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 3202
    },
    "geometry": {
@@ -6774,7 +6774,7 @@
    "properties": {
     "id": "p083_018",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2326
    },
    "geometry": {
@@ -6810,7 +6810,7 @@
    "properties": {
     "id": "p083_019",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2247
    },
    "geometry": {
@@ -6846,7 +6846,7 @@
    "properties": {
     "id": "p083_142",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2046
    },
    "geometry": {
@@ -6882,7 +6882,7 @@
    "properties": {
     "id": "p086_139",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2046
    },
    "geometry": {
@@ -6918,7 +6918,7 @@
    "properties": {
     "id": "p087_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2713
    },
    "geometry": {
@@ -6953,8 +6953,8 @@
    "type": "Feature",
    "properties": {
     "id": "p087_014",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2633
    },
    "geometry": {
@@ -6990,7 +6990,7 @@
    "properties": {
     "id": "p088_014",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2637
    },
    "geometry": {
@@ -7026,7 +7026,7 @@
    "properties": {
     "id": "p088_141",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2040
    },
    "geometry": {
@@ -7061,8 +7061,8 @@
    "type": "Feature",
    "properties": {
     "id": "p089_010",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2780
    },
    "geometry": {
@@ -7098,7 +7098,7 @@
    "properties": {
     "id": "p090_013",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2626
    },
    "geometry": {
@@ -7134,7 +7134,7 @@
    "properties": {
     "id": "p090_144",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2069
    },
    "geometry": {
@@ -7170,7 +7170,7 @@
    "properties": {
     "id": "p091_000",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 3029
    },
    "geometry": {
@@ -7206,7 +7206,7 @@
    "properties": {
     "id": "p091_008",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2696
    },
    "geometry": {
@@ -7242,7 +7242,7 @@
    "properties": {
     "id": "p091_019",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2267
    },
    "geometry": {
@@ -7278,7 +7278,7 @@
    "properties": {
     "id": "p091_021",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2109
    },
    "geometry": {
@@ -7314,7 +7314,7 @@
    "properties": {
     "id": "p091_145",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2069
    },
    "geometry": {
@@ -7350,7 +7350,7 @@
    "properties": {
     "id": "p092_015",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2428
    },
    "geometry": {
@@ -7386,7 +7386,7 @@
    "properties": {
     "id": "p092_020",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2204
    },
    "geometry": {
@@ -7422,7 +7422,7 @@
    "properties": {
     "id": "p092_021",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2126
    },
    "geometry": {
@@ -7457,8 +7457,8 @@
    "type": "Feature",
    "properties": {
     "id": "p094_015",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2272
    },
    "geometry": {
@@ -7493,8 +7493,8 @@
    "type": "Feature",
    "properties": {
     "id": "p094_016",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2252
    },
    "geometry": {
@@ -7529,8 +7529,8 @@
    "type": "Feature",
    "properties": {
     "id": "p095_015",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2195
    },
    "geometry": {
@@ -7566,7 +7566,7 @@
    "properties": {
     "id": "p095_016",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2174
    },
    "geometry": {
@@ -7602,7 +7602,7 @@
    "properties": {
     "id": "p095_018",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2141
    },
    "geometry": {
@@ -7638,7 +7638,7 @@
    "properties": {
     "id": "p097_014",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2066
    },
    "geometry": {
@@ -7674,7 +7674,7 @@
    "properties": {
     "id": "p099_003",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2377
    },
    "geometry": {
@@ -7709,8 +7709,8 @@
    "type": "Feature",
    "properties": {
     "id": "p100_007",
-    "stratum": "far",
-    "stratum_size": 426,
+    "stratum": "far+sig",
+    "stratum_size": 67,
     "fire_dist_m": 2114
    },
    "geometry": {
@@ -7746,7 +7746,7 @@
    "properties": {
     "id": "p100_008",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2068
    },
    "geometry": {
@@ -7782,7 +7782,7 @@
    "properties": {
     "id": "p100_009",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2024
    },
    "geometry": {
@@ -7818,7 +7818,7 @@
    "properties": {
     "id": "p105_002",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2101
    },
    "geometry": {
@@ -7854,7 +7854,7 @@
    "properties": {
     "id": "p118_060",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2159
    },
    "geometry": {
@@ -7890,7 +7890,7 @@
    "properties": {
     "id": "p119_059",
     "stratum": "far",
-    "stratum_size": 426,
+    "stratum_size": 359,
     "fire_dist_m": 2046
    },
    "geometry": {
@@ -7916,6 +7916,1560 @@
       [
        76.12861164250475,
        29.90415419696906
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p070_010",
+    "stratum": "far+sig",
+    "stratum_size": 67,
+    "fire_dist_m": 2199,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.0883991046879,
+       29.93986583513084
+      ],
+      [
+       76.08840696362525,
+       29.940587679803464
+      ],
+      [
+       76.08757814175186,
+       29.940594521896717
+      ],
+      [
+       76.08757028879623,
+       29.939872677025786
+      ],
+      [
+       76.0883991046879,
+       29.93986583513084
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p094_014",
+    "stratum": "far+sig",
+    "stratum_size": 67,
+    "fire_dist_m": 2295,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.09152526251569,
+       29.92251413808246
+      ],
+      [
+       76.09153313851216,
+       29.923235983904146
+      ],
+      [
+       76.0907044612818,
+       29.923242842065036
+      ],
+      [
+       76.09069659126179,
+       29.922520996044508
+      ],
+      [
+       76.09152526251569,
+       29.92251413808246
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p120_062",
+    "stratum": "far+sig",
+    "stratum_size": 67,
+    "fire_dist_m": 2153,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.1310890120874,
+       29.903411066235535
+      ],
+      [
+       76.13109716723868,
+       29.90413290444368
+      ],
+      [
+       76.13026865928998,
+       29.904140007154474
+      ],
+      [
+       76.1302605101091,
+       29.903418168740302
+      ],
+      [
+       76.1310890120874,
+       29.903411066235535
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p003_087",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1541,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.15277512987315,
+       29.98768572390403
+      ],
+      [
+       76.15278346963686,
+       29.98840754740908
+      ],
+      [
+       76.15195426915061,
+       29.988414804741243
+      ],
+      [
+       76.15194593538247,
+       29.98769298102606
+      ],
+      [
+       76.15277512987315,
+       29.98768572390403
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p010_004",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 856,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.0838960910126,
+       29.98321741658625
+      ],
+      [
+       76.08390393112005,
+       29.98393925758551
+      ],
+      [
+       76.0830747482359,
+       29.983946080266715
+      ],
+      [
+       76.08306691412326,
+       29.983224239069884
+      ],
+      [
+       76.0838960910126,
+       29.98321741658625
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p019_094",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1379,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.1584454164692,
+       29.976085614362656
+      ],
+      [
+       76.15845379333504,
+       29.976807437693516
+      ],
+      [
+       76.15762469087458,
+       29.97681472818553
+      ],
+      [
+       76.15761632000078,
+       29.97609290464351
+      ],
+      [
+       76.1584454164692,
+       29.976085614362656
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p020_099",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1373,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.16258248772486,
+       29.97532726234626
+      ],
+      [
+       76.16259089424558,
+       29.97604908470048
+      ],
+      [
+       76.1617617992998,
+       29.976056401067268
+      ],
+      [
+       76.16175339877086,
+       29.97533457850115
+      ],
+      [
+       76.16258248772486,
+       29.97532726234626
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p039_127",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 759,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18563400142739,
+       29.96140576562707
+      ],
+      [
+       76.18564256980176,
+       29.962127583533245
+      ],
+      [
+       76.18481359728464,
+       29.962135041872113
+      ],
+      [
+       76.18480503489768,
+       29.961413223749872
+      ],
+      [
+       76.18563400142739,
+       29.96140576562707
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p051_016",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 869,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.09352204479063,
+       29.953539686608092
+      ],
+      [
+       76.09352994506666,
+       29.95426152854822
+      ],
+      [
+       76.09270101121623,
+       29.954268405688236
+      ],
+      [
+       76.09269311692597,
+       29.95354656354884
+      ],
+      [
+       76.09352204479063,
+       29.953539686608092
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p058_027",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 930,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.10258447758697,
+       29.948410815773766
+      ],
+      [
+       76.10259244168152,
+       29.94913265607941
+      ],
+      [
+       76.10176355289369,
+       29.949139589155994
+      ],
+      [
+       76.10175559478331,
+       29.94841774864944
+      ],
+      [
+       76.10258447758697,
+       29.948410815773766
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p062_056",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 791,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.12658940464809,
+       29.94532015682656
+      ],
+      [
+       76.12659754109767,
+       29.946041991564684
+      ],
+      [
+       76.12576868471876,
+       29.946049074962747
+      ],
+      [
+       76.12576055425222,
+       29.945327240019342
+      ],
+      [
+       76.12658940464809,
+       29.94532015682656
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p064_062",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 991,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.13154615700645,
+       29.9438338809899
+      ],
+      [
+       76.13155432876059,
+       29.944555714655483
+      ],
+      [
+       76.1307254861234,
+       29.944562828907753
+      ],
+      [
+       76.1307173203518,
+       29.94384099503598
+      ],
+      [
+       76.13154615700645,
+       29.9438338809899
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p064_069",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 927,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.13734800526852,
+       29.943783936770377
+      ],
+      [
+       76.13735621890025,
+       29.944505768988495
+      ],
+      [
+       76.13652737834475,
+       29.944512919715997
+      ],
+      [
+       76.13651917069552,
+       29.943791087290652
+      ],
+      [
+       76.13734800526852,
+       29.943783936770377
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p068_091",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 881,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.15554891208738,
+       29.940737995766536
+      ],
+      [
+       76.15555725611948,
+       29.941459823712247
+      ],
+      [
+       76.1547284461036,
+       29.941467088231857
+      ],
+      [
+       76.15472010805294,
+       29.94074526007562
+      ],
+      [
+       76.15554891208738,
+       29.940737995766536
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p073_091",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1275,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.15550719647156,
+       29.937128854819584
+      ],
+      [
+       76.15551553898881,
+       29.937850683171416
+      ],
+      [
+       76.15468675887787,
+       29.93785794663835
+      ],
+      [
+       76.15467842234095,
+       29.93713611807598
+      ],
+      [
+       76.15550719647156,
+       29.937128854819584
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p095_030",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1510,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.10477599219968,
+       29.921681859922455
+      ],
+      [
+       76.10478396352882,
+       29.922403702623104
+      ],
+      [
+       76.10395529687763,
+       29.922410643886842
+      ],
+      [
+       76.1039473315246,
+       29.921688800984935
+      ],
+      [
+       76.10477599219968,
+       29.921681859922455
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p101_020",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1640,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.09644190908438,
+       29.91741996633003
+      ],
+      [
+       76.0964498189282,
+       29.918141811522407
+      ],
+      [
+       76.09562118524771,
+       29.918148699524327
+      ],
+      [
+       76.09561328137877,
+       29.917426854132223
+      ],
+      [
+       76.09644190908438,
+       29.91741996633003
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p122_069",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1986,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.13687212463465,
+       29.90191752927489
+      ],
+      [
+       76.136880320983,
+       29.902639366198915
+      ],
+      [
+       76.13605182705294,
+       29.902646504911633
+      ],
+      [
+       76.13604363667449,
+       29.901924667780545
+      ],
+      [
+       76.13687212463465,
+       29.90191752927489
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p129_032",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 977,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.10616205357258,
+       29.89712527585505
+      ],
+      [
+       76.10617002700089,
+       29.897847120906945
+      ],
+      [
+       76.10534156399419,
+       29.897854065731835
+      ],
+      [
+       76.10533359653459,
+       29.897132220478486
+      ],
+      [
+       76.10616205357258,
+       29.89712527585505
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p133_133",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1452,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18980038348077,
+       29.89350978312459
+      ],
+      [
+       76.18980895845675,
+       29.8942316073768
+      ],
+      [
+       76.18898054966913,
+       29.89423907661802
+      ],
+      [
+       76.18897198066007,
+       29.89351725214913
+      ],
+      [
+       76.18980038348077,
+       29.89350978312459
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p140_000",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1495,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.07956569785702,
+       29.88940455306841
+      ],
+      [
+       76.07957347717294,
+       29.89012640538208
+      ],
+      [
+       76.07874507065885,
+       29.890133181603677
+      ],
+      [
+       76.07873729730954,
+       29.889411329093395
+      ],
+      [
+       76.07956569785702,
+       29.88940455306841
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p152_054",
+    "stratum": "mid+sig",
+    "stratum_size": 912,
+    "fire_dist_m": 1069,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.12420170701576,
+       29.88036882255451
+      ],
+      [
+       76.12420980498436,
+       29.881090664999835
+      ],
+      [
+       76.12338148562112,
+       29.881097719539408
+      ],
+      [
+       76.12337339361606,
+       29.880375876889378
+      ],
+      [
+       76.12420170701576,
+       29.88036882255451
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p010_019",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 497,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.0963337100796,
+       29.983114453036748
+      ],
+      [
+       76.09634164010798,
+       29.983836291054317
+      ],
+      [
+       76.09551246151572,
+       29.983843192024427
+      ],
+      [
+       76.09550453748203,
+       29.983121353807025
+      ],
+      [
+       76.0963337100796,
+       29.983114453036748
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p014_114",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 427,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.1750697682973,
+       29.97954780771077
+      ],
+      [
+       76.17507826654429,
+       29.980269626380235
+      ],
+      [
+       76.1742491402446,
+       29.980277022288767
+      ],
+      [
+       76.17424064799057,
+       29.979555203405123
+      ],
+      [
+       76.1750697682973,
+       29.97954780771077
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p023_059",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 488,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.12939419510231,
+       29.973450346576097
+      ],
+      [
+       76.12940236105555,
+       29.974172177531873
+      ],
+      [
+       76.12857327205677,
+       29.974179284589002
+      ],
+      [
+       76.12856511209499,
+       29.97345745342738
+      ],
+      [
+       76.12939419510231,
+       29.973450346576097
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p033_012",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 654,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.09034814936805,
+       29.96656031994922
+      ],
+      [
+       76.09035603085003,
+       29.967282161226887
+      ],
+      [
+       76.08952698807252,
+       29.96728902109114
+      ],
+      [
+       76.08951911258026,
+       29.966567179614763
+      ],
+      [
+       76.09034814936805,
+       29.96656031994922
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p040_122",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 425,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18148062754504,
+       29.960721185035105
+      ],
+      [
+       76.18148916567242,
+       29.96144300410148
+      ],
+      [
+       76.18066019759057,
+       29.961450436154433
+      ],
+      [
+       76.18065166545043,
+       29.960728616872757
+      ],
+      [
+       76.18148062754504,
+       29.960721185035105
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p047_070",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 401,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.1383166135832,
+       29.95604791418136
+      ],
+      [
+       76.13832483827267,
+       29.956769744811943
+      ],
+      [
+       76.13749589628009,
+       29.956776904276172
+      ],
+      [
+       76.13748767757677,
+       29.956055073438154
+      ],
+      [
+       76.1383166135832,
+       29.95604791418136
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p049_074",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 541,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.14161585825083,
+       29.954575565180654
+      ],
+      [
+       76.14162410628593,
+       29.955297395142406
+      ],
+      [
+       76.14079517746121,
+       29.955304575043638
+      ],
+      [
+       76.14078693541181,
+       29.954582744873868
+      ],
+      [
+       76.14161585825083,
+       29.954575565180654
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p067_071",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 746,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.13898099852162,
+       29.94160412420147
+      ],
+      [
+       76.13898922322228,
+       29.9423259562482
+      ],
+      [
+       76.13816040121026,
+       29.942333116774545
+      ],
+      [
+       76.13815218249141,
+       29.941611284520278
+      ],
+      [
+       76.13898099852162,
+       29.94160412420147
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p096_048",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 432,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.11968375603153,
+       29.92083419141917
+      ],
+      [
+       76.11969183463562,
+       29.921556030552445
+      ],
+      [
+       76.11886317920481,
+       29.921563065324623
+      ],
+      [
+       76.11885510657646,
+       29.92084122598738
+      ],
+      [
+       76.11968375603153,
+       29.92083419141917
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p135_037",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 511,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.11025632088803,
+       29.892759408768104
+      ],
+      [
+       76.11026432241555,
+       29.893481253296383
+      ],
+      [
+       76.10943589666802,
+       29.893488222913735
+      ],
+      [
+       76.10942790110786,
+       29.892766378183243
+      ],
+      [
+       76.11025632088803,
+       29.892759408768104
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p148_013",
+    "stratum": "near+sig",
+    "stratum_size": 527,
+    "fire_dist_m": 556,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.09027203440436,
+       29.883541190720944
+      ],
+      [
+       76.09027988900219,
+       29.88426304111233
+      ],
+      [
+       76.08945153390495,
+       29.884269883341133
+      ],
+      [
+       76.08944368527187,
+       29.883548032751197
+      ],
+      [
+       76.09027203440436,
+       29.883541190720944
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p003_128",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 352,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18677184085655,
+       29.98738368785052
+      ],
+      [
+       76.18678042643114,
+       29.988105502610015
+      ],
+      [
+       76.18595123853493,
+       29.988112973948883
+      ],
+      [
+       76.18594265895554,
+       29.987391158973054
+      ],
+      [
+       76.18677184085655,
+       29.98738368785052
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p010_040",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 188,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.1137462677986,
+       29.982968331268488
+      ],
+      [
+       76.11375432371295,
+       29.983690165054558
+      ],
+      [
+       76.11292515121158,
+       29.983697175626705
+      ],
+      [
+       76.11291710129173,
+       29.982975341637623
+      ],
+      [
+       76.1137462677986,
+       29.982968331268488
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p012_036",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 304,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.11041353702066,
+       29.98155267199357
+      ],
+      [
+       76.11042156837391,
+       29.98227450675306
+      ],
+      [
+       76.1095924066938,
+       29.982281496044045
+      ],
+      [
+       76.10958438133463,
+       29.981559661082144
+      ],
+      [
+       76.11041353702066,
+       29.98155267199357
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p014_130",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 162,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18833565110339,
+       29.979428766982995
+      ],
+      [
+       76.18834424523611,
+       29.980150582205038
+      ],
+      [
+       76.18751512389844,
+       29.980158061600182
+      ],
+      [
+       76.1875065357585,
+       29.97943624616155
+      ],
+      [
+       76.18833565110339,
+       29.979428766982995
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p015_124",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 150,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18335239649701,
+       29.978751747187772
+      ],
+      [
+       76.1833609543622,
+       29.979473563788527
+      ],
+      [
+       76.18253183715008,
+       29.979481011660717
+      ],
+      [
+       76.18252328527753,
+       29.978759194844276
+      ],
+      [
+       76.18335239649701,
+       29.978751747187772
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p016_127",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 138,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.18583115275896,
+       29.978007556878534
+      ],
+      [
+       76.18583972829067,
+       29.97872937291274
+      ],
+      [
+       76.1850106180038,
+       29.97873683622199
+      ],
+      [
+       76.18500204846447,
+       29.978015019971668
+      ],
+      [
+       76.18583115275896,
+       29.978007556878534
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p025_135",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 268,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.19238637874159,
+       29.971451331945943
+      ],
+      [
+       76.19239499939506,
+       29.97217314697841
+      ],
+      [
+       76.19156594552763,
+       29.97218065007205
+      ],
+      [
+       76.1915573308645,
+       29.97145883482226
+      ],
+      [
+       76.19238637874159,
+       29.971451331945943
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p136_091",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 247,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.15498222823322,
+       29.89165350495468
+      ],
+      [
+       76.15499055168304,
+       29.892375338421303
+      ],
+      [
+       76.15416214790929,
+       29.89238258863067
+      ],
+      [
+       76.15415383042613,
+       29.8916607549537
+      ],
+      [
+       76.15498222823322,
+       29.89165350495468
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "p145_095",
+    "stratum": "on+sig",
+    "stratum_size": 418,
+    "fire_dist_m": 280,
+    "round": 2
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       76.15822070423243,
+       29.88512795569738
+      ],
+      [
+       76.15822904882008,
+       29.885849789051523
+      ],
+      [
+       76.15740069994901,
+       29.885857058161278
+      ],
+      [
+       76.15739236132603,
+       29.885135224596215
+      ],
+      [
+       76.15822070423243,
+       29.88512795569738
       ]
      ]
     ]

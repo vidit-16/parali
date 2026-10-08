@@ -68,3 +68,27 @@ def test_labels_roundtrip(tmp_path):
     assert read_labels(p) == {}
     write_labels(p, {"p2": "burnt", "p1": "unsure"})
     assert read_labels(p) == {"p1": "unsure", "p2": "burnt"}
+
+
+def test_signal_strata_split_existing_and_add_from_signal():
+    from parali.plots import add_signal_strata
+    st = stack(h=40, w=40)
+    # add a late date where the top-left 8x8 cropland pixels turn near-black after a NIR drop
+    import numpy as np
+    from datetime import date as _d
+    new = st.refl[-1:].copy()
+    for b, v in dict(red=0.03, green=0.03, blue=0.03, nir08=0.10, swir16=0.17, swir22=0.18).items():
+        new[0, BANDS.index(b), :8, :8] = encode(np.full((8, 8), v, dtype="float32"))
+    st.refl = np.concatenate([st.refl, new])
+    st.scl = np.concatenate([st.scl, st.scl[-1:]])
+    st.dates = st.dates + [_d(2025, 11, 5)]
+    fires = [fire_at(st, 2, 2)]
+    old = sample_plots(st, fires, per_stratum=2, cells=4)
+    out = add_signal_strata(st, fires, old, extra=4, cells=4)
+    assert len(out) > len(old)
+    added = [p for p in out if p.props.get("round") == 2]
+    assert added and all(p.props["stratum"].endswith("+sig") for p in added)
+    for p in added:
+        r, c = map(int, p.id[1:].split("_"))
+        assert r < 2 and c < 2  # only the burnt 8x8 corner = 2x2 cells
+    assert len({p.id for p in out}) == len(out)
