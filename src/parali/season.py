@@ -2,11 +2,29 @@
 
 Advance rule: a field gets the advance only if last season's check came out clean. One clean season is
 enough to earn it back after a burn.
+
+Rates are per state, because the incentive is a state scheme. The advance is half, so it covers hiring a
+baler or a happy seeder in the weeks between harvest and sowing, which is when the money is short.
 """
+from dataclasses import dataclass
+
 SEASON = ("2025-10-01", "2025-11-30")       # claim window: harvest to sowing
 PREV_SEASON = ("2024-10-01", "2024-11-30")  # decides the advance
-RATE_PER_ACRE = 1200       # Haryana crop residue management incentive, 2025
-ADVANCE_SHARE = 0.25       # share paid before harvest
+
+
+@dataclass(frozen=True)
+class Scheme:
+    state: str
+    rate_per_acre: int
+    advance_share: float
+    basis: str
+
+
+SCHEMES = {
+    "HR": Scheme("Haryana", 1000, 0.5, "Haryana Rajya Vishisht Yojana (2024): Rs 1,000 per acre for not burning"),
+    "PB": Scheme("Punjab", 1000, 0.5, "No Punjab per-acre scheme is paying out; the pilot uses Haryana's rate"),
+}
+DEFAULT_STATE = "PB"  # the labelled study area is Patran tehsil, Patiala
 
 CLEAN = ("auto_approved", "officer_approved")
 PENDING = ("submitted", "needs_review", "possible_burn")
@@ -15,12 +33,17 @@ PENDING = ("submitted", "needs_review", "possible_burn")
 COMPENSATION_TIERS = ((2.0, 5000), (5.0, 10000), (float("inf"), 30000))
 
 
-def full_amount(acres: float) -> int:
-    return round(acres * RATE_PER_ACRE)
+def scheme(state: str | None) -> Scheme:
+    return SCHEMES.get(state or DEFAULT_STATE, SCHEMES[DEFAULT_STATE])
 
 
-def advance_amount(acres: float) -> int:
-    return round(acres * RATE_PER_ACRE * ADVANCE_SHARE)
+def full_amount(acres: float, state: str | None = None) -> int:
+    return round(acres * scheme(state).rate_per_acre)
+
+
+def advance_amount(acres: float, state: str | None = None) -> int:
+    s = scheme(state)
+    return round(acres * s.rate_per_acre * s.advance_share)
 
 
 def advance_eligible(prev_outcome: str | None) -> bool:
@@ -31,9 +54,9 @@ def environmental_compensation(acres: float) -> int:
     return next(amount for limit, amount in COMPENSATION_TIERS if acres < limit)
 
 
-def settle(status: str, acres: float, advance_paid: int) -> dict:
+def settle(status: str, acres: float, advance_paid: int, state: str | None = None) -> dict:
     """What happens to the money once the season's check is decided."""
-    total = full_amount(acres)
+    total = full_amount(acres, state)
     if status in CLEAN:
         return {"state": "balance_due", "balance": total - advance_paid, "recover": 0, "total": total}
     if status == "officer_confirmed_burnt":

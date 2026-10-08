@@ -54,7 +54,7 @@ numbers = {
         "upfront_trial_gain_pp": "8-11",
         "upfront_trial_source": "Jack, Jayachandran, Kala, Pande; J-PAL / MIT CEEPR working paper (Punjab RCT)",
         "kaithal_applied": "18,329 of 49,215",
-        "incentive_per_acre": 1200,
+        "incentive_per_acre": 1000, "advance_share": 50,
     },
 }
 out = ROOT / "web/data/numbers.json"

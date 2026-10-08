@@ -49,7 +49,7 @@ def test_file_claim_then_status(store):
     sent = processed(store)
     assert len(sent) == 1
     r = agent.respond(store, "f1", "मेरा दावा कहाँ तक पहुँचा?", lambda _: None)
-    assert r.tools == ["claim_status"] and "स्वीकृत" in r.hi and "2,250" in r.hi
+    assert r.tools == ["claim_status"] and "स्वीकृत" in r.hi and "1,250" in r.hi
     assert r.mode == "scripted"
 
 
@@ -68,7 +68,7 @@ def test_filing_twice_says_already_filed(store):
 def test_advance_answer(store):
     processed(store)
     r = agent.respond(store, "f1", "advance milega kya", lambda _: None)
-    assert "750" in r.hi
+    assert "1,250" in r.hi
 
 
 @pytest.mark.parametrize("attack", [

@@ -1,6 +1,6 @@
 """Claim workflow, shared by the Lambda handlers and the local demo server.
 
-Before harvest: assess_advance checks last season; a clean field is offered a 25% advance.
+Before harvest: assess_advance checks last season; a clean field is offered a 50% advance.
 After harvest:  submitted -> auto_approved | needs_review | possible_burn
                 needs_review | possible_burn -> officer_approved | officer_confirmed_burnt (officer id required)
 Settlement follows the final status: balance released, or the advance recovered (notice drafted for the officer).
@@ -56,6 +56,7 @@ def create_claim(store: Store, field_id: str, season_start: str, season_end: str
         "field_name_hi": f.get("name_hi", ""),
         "village": f.get("village", ""),
         "acres": f.get("acres"),
+        "state_code": f.get("state", season.DEFAULT_STATE),
         "season_start": season_start,
         "season_end": season_end,
         "as_of": as_of or season_end,
@@ -92,7 +93,7 @@ def assess_advance(store: Store, claim_id: str, stacks: StackProvider, fires: "l
         "prev_rule": d.rule,
         "prev_reason": d.reason,
         "eligible": eligible,
-        "amount": season.advance_amount(claim.get("acres") or 0) if eligible else 0,
+        "amount": season.advance_amount(claim.get("acres") or 0, claim.get("state_code")) if eligible else 0,
         "status": "offered" if eligible else "not_eligible",
     }
     store.put("claims", claim_id, claim)
@@ -116,7 +117,7 @@ def disburse_advance(store: Store, claim_id: str, by: str) -> dict:
 def _settle(store: Store, claim: dict) -> None:
     adv = claim.get("advance") or {}
     paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
-    claim["settlement"] = season.settle(claim["status"], claim.get("acres") or 0, paid)
+    claim["settlement"] = season.settle(claim["status"], claim.get("acres") or 0, paid, claim.get("state_code"))
     if claim["settlement"]["state"] == "recover_advance" and claim.get("evidence_key"):
         key = f"notices/{claim['id']}.html"
         store.put_blob(key, notice.render(claim, store.blob_url(claim["evidence_key"])).encode(), "text/html; charset=utf-8")

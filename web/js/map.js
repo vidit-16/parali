@@ -92,7 +92,7 @@ function renderCheck(item) {
   const prev = item.result.previous, cur = item.result.current;
   return `<div class="card">
     <h2 style="font-size:22px">Your field: ${esc(item.acres)} acres</h2>
-    <p>${item.advance_eligible ? `<span class="badge b-ok">Advance eligible</span> Clean in ${esc(prev.season)}: this field would get 25% before harvest.`
+    <p>${item.advance_eligible ? `<span class="badge b-ok">Advance eligible</span> Clean in ${esc(prev.season)}: this field would get half before harvest.`
       : `<span class="badge b-muted">No advance</span> Not clearly clean in ${esc(prev.season)}: full payment only after this season's check.`}</p>
     <div class="grid g2">${col(prev, "Last season")}${col(cur, "This season")}</div>
     <p class="small muted" style="margin-top:10px">Field outlines drawn on a map are approximate; registered fields would come from land records.</p>

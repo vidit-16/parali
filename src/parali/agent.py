@@ -265,7 +265,7 @@ class BedrockBackend:
 
         @tool
         def advance_status() -> dict:
-            """Whether the farmer gets the 25% advance before harvest, and why."""
+            """Whether the farmer gets the 50% advance before harvest, and why."""
             return tool_advance_status(ctx)
 
         @tool

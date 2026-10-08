@@ -94,7 +94,7 @@ export function moneyRow(c) {
   if (s.state === "recover_advance") last = `<div><b style="color:var(--ember)">${rupees(s.recover)}</b><span>advance to recover</span></div>`;
   if (s.state === "not_payable") last = `<div><b>₹0</b><span>not payable</span></div>`;
   return `<div class="money">
-    <div><b>${rupees(s.total)}</b><span>season total (₹1,200/acre)</span></div>
+    <div><b>${rupees(s.total)}</b><span>season total (₹1,000/acre)</span></div>
     <div><b>${rupees(paid)}</b><span>advance before harvest</span></div>
     ${last}
   </div>`;

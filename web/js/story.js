@@ -68,7 +68,7 @@ const RENDER = {
         <div class="card" style="box-shadow:none"><h3>The stick</h3><p>Thermal fire alerts trigger a <b>red entry</b>: no MSP sale
           for two seasons, an FIR, and up to ₹30,000 in compensation. In our measurement the alerts flagged
           <b>${n.firms.clean_flagged}%</b> of clean fields and caught <b>${n.firms.burns_caught}%</b> of burns.</p></div>
-        <div class="card" style="box-shadow:none"><h3>The carrot</h3><p>₹1,200 an acre for not burning, paid <b>after</b> a slow
+        <div class="card" style="box-shadow:none"><h3>The carrot</h3><p>₹1,000 an acre for not burning, paid <b>after</b> a slow
           manual check. A randomised trial in Punjab found that only paying upfront changed behaviour:
           <b>+${n.context.upfront_trial_gain_pp} points</b> compliance.</p></div>
       </div>
@@ -84,7 +84,7 @@ const RENDER = {
         <td class="num">${a.eligible ? `<span style="color:var(--green)">${rupees(a.amount)} paid</span>` : `<span class="muted">no advance</span>`}</td></tr>`;
     };
     body.innerHTML = `<p>Before harvest, each registered field is checked against <b>last season's</b> images. Clean last season:
-      25% of the incentive now, when it can pay for a baler or a happy seeder.</p>
+      half the incentive now, when it can pay for a baler or a happy seeder.</p>
       <table class="plain"><tr><th>Farmer</th><th>Last season</th><th>Advance</th></tr>
       ${row("kamlesh", "3.8 acres")}${row("baljeet", "5.7 acres")}${row("satbir", "2.7 acres")}</table>
       <p class="small muted" style="margin-top:10px">Satbir's field had a partly dark patch in 2024, so no advance this year.

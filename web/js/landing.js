@@ -56,7 +56,7 @@ export async function landing(app) {
     <h2>Advance, verify, settle</h2>
     <div class="grid g3 steps">
       <div class="card step"><h3>Before harvest</h3><p>Each registered field is checked against <b>last season's</b>
-        images. Clean last season: 25% of the incentive is paid now. Burnt last season: no advance; one clean
+        images. Clean last season: half the incentive is paid now. Burnt last season: no advance; one clean
         season earns it back.</p><p class="small muted">${a.eligible_share}% of cropland qualified for 2025.</p></div>
       <div class="card step"><h3>After harvest</h3><p>Every clear Sentinel-2 image of the field from 1 Oct to 30 Nov is
         read from the AWS Open Data registry. Fixed rules look for the signature of a burn: near-infrared drops in one
