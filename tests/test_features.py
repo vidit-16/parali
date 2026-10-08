@@ -63,3 +63,15 @@ def test_dark_area_class_not_masked():
     scl = np.full((1, 4), 2, dtype="uint8")
     [d] = field_features(history([BURNT], scl=scl))
     assert d.n_valid == 4
+
+
+def test_dark_share_follows_threshold():
+    rows = [CROP]
+    h = history(rows)
+    h.values[0, BANDS.index("nir08"), :2] = 0.10   # two pixels NBR ~ -0.09
+    h.values[0, BANDS.index("nir08"), 2:] = 0.06   # two pixels NBR ~ -0.33
+    [d] = field_features(h)
+    assert d.dark(-0.05) == 1.0
+    assert d.dark(-0.20) == 0.5
+    assert d.dark(-0.40) == 0.0
+    assert "nbr_px" not in d.as_dict()

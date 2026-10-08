@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import date
 
 import numpy as np
@@ -36,7 +36,14 @@ class DateFeatures:
     nbr: float
     mirbi: float
     brightness: float
-    dark_share: float  # share of valid pixels with NBR below dark_nbr
+    dark_share: float  # share of valid pixels with NBR below -0.10, kept for display
+    nbr_px: np.ndarray | None = field(default=None, repr=False, compare=False)
+
+    def dark(self, threshold: float) -> float:
+        """Share of valid pixels with NBR below threshold."""
+        if self.nbr_px is None:
+            return self.dark_share
+        return float(np.mean(self.nbr_px < threshold)) if self.nbr_px.size else 0.0
 
     @property
     def valid_share(self) -> float:
@@ -44,6 +51,7 @@ class DateFeatures:
 
     def as_dict(self):
         d = asdict(self)
+        d.pop("nbr_px")
         d["date"] = self.date.isoformat()
         d["valid_share"] = round(self.valid_share, 3)
         return d
@@ -72,5 +80,6 @@ def field_features(h: FieldHistory, dark_nbr: float = -0.10) -> list[DateFeature
             mirbi=float(np.median(mirbi(s1, s2))),
             brightness=float(np.median(brightness(v[bi["red"], ok], v[bi["green"], ok], v[bi["blue"], ok]))),
             dark_share=float(np.mean(px_nbr < dark_nbr)),
+            nbr_px=px_nbr.astype("float32"),
         ))
     return out
