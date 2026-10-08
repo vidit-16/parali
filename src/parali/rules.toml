@@ -1,6 +1,5 @@
-# Decision thresholds, chosen on 185 hand-labelled plots in west Kaithal (2025 season).
-# See data/eval/results.json and `parali evaluate`. Only 5 of those plots were burnt, so treat these as a
-# first fit, not a final calibration.
+# Decision thresholds, chosen on 262 hand-labelled plots in west Kaithal (2025 season), 13 of them burnt.
+# See data/eval/results.json and `parali evaluate`. Small burnt sample: a first calibration, not a final one.
 
 # A date counts as a clear image for a field when at least this share of its pixels is usable.
 min_valid_share = 0.6
@@ -19,7 +18,8 @@ nir_drop = 0.35
 # every labelled burn was visible on a single image only.
 persist_images = 1
 # A dark share between this and burn_share at any point -> needs review (part of the field).
-partial_share = 0.25
+# 0.15, not 0.25: at 0.25 one labelled burn (19% dark at its darkest) was auto-approved.
+partial_share = 0.15
 # Median visible brightness of the field on the burn image must be at most this. 0 disables.
 max_burn_brightness = 0.07
 

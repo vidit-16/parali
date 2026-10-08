@@ -101,7 +101,7 @@ GRID = {
     "dark_nbr": (-0.10, -0.15, -0.20),
     "dark_max_brightness": (0.0, 0.07, 0.08, 0.09),
     "max_burn_brightness": (0.0, 0.07),
-    "partial_share": (0.10, 0.25),
+    "partial_share": (0.10, 0.15, 0.25),
     "persist_images": (1, 2),
     "nir_drop": (0.25, 0.35),
     "fire_radius_m": (0, 375, 750),
