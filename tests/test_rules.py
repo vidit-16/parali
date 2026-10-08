@@ -155,3 +155,30 @@ def test_dropping_the_nir_step_check_would_flag_harvest():
     feats = [day(i, nir=v, dark=0.35 if i >= 5 else 0.0) for i, v in enumerate(nirs)]
     assert decide(feats, TH).outcome != POSSIBLE_BURN
     assert decide(feats, th).outcome == POSSIBLE_BURN
+
+
+def test_nir_drop_exact_boundary_counts():
+    th = replace(TH, nir_drop=0.5)
+    feats = burnt()
+    feats[3] = replace(feats[3], nir=0.5)
+    feats[4] = replace(feats[4], nir=0.25)  # exactly 50%
+    assert decide(feats, th).outcome == POSSIBLE_BURN
+
+
+def test_min_clear_images_exact_boundary():
+    feats = [replace(f, n_valid=5) for f in unburnt()]
+    for i in range(4):
+        feats[i] = day(i, nir=unburnt()[i].nir)
+    assert decide(feats, TH).outcome == APPROVED          # exactly 4 clear
+    feats[3] = replace(feats[3], n_valid=5)
+    assert decide(feats, TH).rule == "too_few_clear_images"  # 3 clear
+
+
+def test_persistence_uses_the_fitted_dark_threshold():
+    import numpy as np
+    th = replace(TH, dark_nbr=-0.25)
+    feats = unburnt()
+    feats[4] = replace(day(4, nir=0.12, dark=0.9), nbr_px=np.full(20, -0.30, dtype="float32"))
+    # next image: dark at -0.10 (dark_share says 0.9) but not at the fitted -0.25
+    feats[5] = replace(day(5, nir=0.13, dark=0.9), nbr_px=np.full(20, -0.20, dtype="float32"))
+    assert decide(feats, th).rule == "dark_on_one_image"
