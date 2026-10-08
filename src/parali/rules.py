@@ -29,6 +29,10 @@ class Thresholds:
     partial_share: float
     max_burn_brightness: float
     fire_radius_m: float
+    dark_max_brightness: float = 0.0
+
+    def dark(self, f: DateFeatures) -> float:
+        return f.dark(self.dark_nbr, self.dark_max_brightness)
 
     @classmethod
     def load(cls, path: Path = RULES_FILE) -> "Thresholds":
@@ -69,12 +73,12 @@ def burn_events(clear: list[DateFeatures], th: Thresholds) -> list[tuple[int, bo
         if a.nir <= 0:
             continue
         drop = (a.nir - b.nir) / a.nir
-        dark = b.dark(th.dark_nbr) >= th.burn_share
+        dark = th.dark(b) >= th.burn_share
         if th.max_burn_brightness > 0:
             dark = dark and b.brightness <= th.max_burn_brightness
         if drop >= th.nir_drop and dark:
             after = clear[i:i + th.persist_images]
-            persists = len(after) == th.persist_images and all(x.dark(th.dark_nbr) >= th.burn_share for x in after)
+            persists = len(after) == th.persist_images and all(th.dark(x) >= th.burn_share for x in after)
             out.append((i, persists))
     return out
 
@@ -91,7 +95,7 @@ def decide(feats: list[DateFeatures], th: Thresholds, fires_nearby: int = 0,
     clear_all = clear_images(feats, th)
     in_dates = {f.date for f in inside}
     clear_in = [f for f in clear_all if f.date in in_dates]
-    max_dark = max((f.dark(th.dark_nbr) for f in clear_in), default=0.0)
+    max_dark = max((th.dark(f) for f in clear_in), default=0.0)
     base = dict(clear_dates=[f.date for f in clear_in], max_dark_share=max_dark, fires_nearby=fires_nearby)
 
     if len(clear_in) < th.min_clear_images:
@@ -103,7 +107,7 @@ def decide(feats: list[DateFeatures], th: Thresholds, fires_nearby: int = 0,
     if lasting:
         e = lasting[0]
         return Decision(POSSIBLE_BURN, "burn_scar_persistent",
-                        f"NIR fell sharply and {e.dark(th.dark_nbr):.0%} of the field stayed dark from {e.date}. "
+                        f"NIR fell sharply and {th.dark(e):.0%} of the field stayed dark from {e.date}. "
                         "Officer to confirm.", burn_date=e.date, **base)
     if events:
         e = events[0][0]

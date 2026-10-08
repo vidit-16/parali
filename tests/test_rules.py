@@ -182,3 +182,18 @@ def test_persistence_uses_the_fitted_dark_threshold():
     # next image: dark at -0.10 (dark_share says 0.9) but not at the fitted -0.25
     feats[5] = replace(day(5, nir=0.13, dark=0.9), nbr_px=np.full(20, -0.20, dtype="float32"))
     assert decide(feats, th).rule == "dark_on_one_image"
+
+
+def test_bright_low_nbr_pixels_are_not_dark_when_pixel_brightness_is_checked():
+    import numpy as np
+    th = replace(TH, dark_nbr=-0.15, dark_max_brightness=0.07)
+    feats = unburnt()
+    # bare dry soil: NBR below the cut but bright in visible light
+    for i in (4, 5):
+        feats[i] = replace(day(i, nir=0.12, dark=0.9), nbr_px=np.full(20, -0.25, dtype="float32"),
+                           bright_px=np.full(20, 0.12, dtype="float32"))
+    assert decide(feats, th).outcome == APPROVED
+    # same NBR but near-black: char
+    for i in (4, 5):
+        feats[i] = replace(feats[i], bright_px=np.full(20, 0.04, dtype="float32"))
+    assert decide(feats, th).outcome == POSSIBLE_BURN

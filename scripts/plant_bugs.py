@@ -15,7 +15,7 @@ TARGET = "src/parali/rules.py"
 
 BUGS = [
     ("drop >= nir_drop becomes >", "if drop >= th.nir_drop and dark:", "if drop > th.nir_drop and dark:"),
-    ("burn share check flipped", "dark = b.dark(th.dark_nbr) >= th.burn_share", "dark = b.dark(th.dark_nbr) > th.burn_share"),
+    ("burn share check flipped", "dark = th.dark(b) >= th.burn_share", "dark = th.dark(b) > th.burn_share"),
     ("persistence ignored", "if lasting:", "if events:"),
     ("persist length off by one", "len(after) == th.persist_images", "len(after) >= th.persist_images - 1"),
     ("partial share boundary", "if max_dark >= th.partial_share:", "if max_dark > th.partial_share:"),
@@ -28,8 +28,8 @@ BUGS = [
     ("small field check removed", "if inside and inside[0].n_pixels < config.MIN_FIELD_PIXELS:", "if False:"),
     ("possible burn becomes final", 'return Decision(POSSIBLE_BURN, "burn_scar_persistent",',
      'return Decision("rejected", "burn_scar_persistent",'),
-    ("dark threshold ignored", "x.dark(th.dark_nbr) >= th.burn_share for x in after",
-     "x.dark_share >= th.burn_share for x in after"),
+    ("dark threshold ignored", "return f.dark(self.dark_nbr, self.dark_max_brightness)", "return f.dark_share"),
+    ("pixel brightness ignored", "return f.dark(self.dark_nbr, self.dark_max_brightness)", "return f.dark(self.dark_nbr)"),
 ]
 
 
