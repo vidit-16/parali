@@ -10,5 +10,6 @@ BANDS = ("red", "green", "blue", "nir08", "swir16", "swir22")
 SCL_MASKED = (0, 1, 8, 9, 10)
 
 PIXEL_SIZE_M = 20
-FIELD_INNER_BUFFER_M = 20
+# Half a pixel: a 20 m pixel whose centre is 10 m inside the boundary lies wholly inside the field.
+FIELD_INNER_BUFFER_M = 10
 MIN_FIELD_PIXELS = 8

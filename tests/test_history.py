@@ -28,10 +28,11 @@ def scenes():
 
 
 def test_build_histories_with_fake_reader():
-    fields = [utm_field("a", 500040, 3299760, 500240, 3299960), utm_field("b", 500000, 3299800, 500100, 3299900)]
+    # 1 m inside pixel edges: only pixels wholly inside each field should be kept
+    fields = [utm_field("a", 500041, 3299761, 500239, 3299959), utm_field("b", 500001, 3299801, 500099, 3299899)]
     out = build_histories(fields, "x", "y", scenes=scenes(), reader=fake_reader, log=lambda *_: None)
     assert out["a"].values.shape == (2, len(BANDS), 64)
-    assert out["b"].values.shape[2] == 9  # 100 m field, 20 m ring removed -> 60 m -> 3x3
+    assert out["b"].values.shape[2] == 9  # ~100 m field -> 3x3 whole pixels
     assert np.allclose(out["a"].band("nir08")[0], 0.3)
     assert np.allclose(out["a"].band("nir08")[1], 0.1)
 
