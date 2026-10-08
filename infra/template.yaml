@@ -1,0 +1,187 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Parali Check - satellite verification of no-burn paddy residue claims
+
+Parameters:
+  OfficerPin:
+    Type: String
+    NoEcho: true
+    Description: PIN the village officer view sends with review actions
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures: [x86_64]
+    CodeUri: ../src
+    Layers: [!Ref DepsLayer]
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref Table
+        BUCKET_NAME: !Ref Bucket
+
+Resources:
+  DepsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ../layer
+      CompatibleRuntimes: [python3.12]
+    Metadata:
+      BuildMethod: python3.12
+
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+        - { AttributeName: sk, AttributeType: S }
+        - { AttributeName: kind, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+        - { AttributeName: sk, KeyType: RANGE }
+      GlobalSecondaryIndexes:
+        - IndexName: kind-index
+          KeySchema:
+            - { AttributeName: kind, KeyType: HASH }
+            - { AttributeName: pk, KeyType: RANGE }
+          Projection: { ProjectionType: ALL }
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub envhacks-parali-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: { Service: cloudfront.amazonaws.com }
+            Action: s3:GetObject
+            Resource:
+              - !Sub ${Bucket.Arn}/web/*
+              - !Sub ${Bucket.Arn}/blobs/*
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${Cdn}
+
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: envhacks-parali-decisions
+
+  ProcessFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: parali.aws.process_handler
+      Timeout: 600
+      MemorySize: 2048
+      Environment:
+        Variables:
+          TOPIC_ARN: !Ref Topic
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+        - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt Topic.TopicName }
+        - Statement:
+            - Effect: Allow
+              Action: polly:SynthesizeSpeech
+              Resource: "*"
+      Events:
+        DailySweep:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: cron(30 1 * * ? *)
+            ScheduleExpressionTimezone: Asia/Kolkata
+            Input: '{"sweep": true}'
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: parali.aws.api_handler
+      Timeout: 29
+      MemorySize: 1024
+      Environment:
+        Variables:
+          PROCESS_FUNCTION: !Ref ProcessFunction
+          OFFICER_PIN: !Ref OfficerPin
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+        - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - LambdaInvokePolicy: { FunctionName: !Ref ProcessFunction }
+        - Statement:
+            - Effect: Allow
+              Action: polly:SynthesizeSpeech
+              Resource: "*"
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /api/{proxy+}
+            Method: ANY
+
+  Oac:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub envhacks-parali-oac-${AWS::StackName}
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  Cdn:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: Parali Check
+        DefaultRootObject: index.html
+        HttpVersion: http2
+        PriceClass: PriceClass_200
+        Origins:
+          - Id: web
+            DomainName: !GetAtt Bucket.RegionalDomainName
+            OriginPath: /web
+            S3OriginConfig: { OriginAccessIdentity: "" }
+            OriginAccessControlId: !GetAtt Oac.Id
+          - Id: blobs
+            DomainName: !GetAtt Bucket.RegionalDomainName
+            S3OriginConfig: { OriginAccessIdentity: "" }
+            OriginAccessControlId: !GetAtt Oac.Id
+          - Id: api
+            DomainName: !Sub ${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com
+            CustomOriginConfig: { OriginProtocolPolicy: https-only }
+        DefaultCacheBehavior:
+          TargetOriginId: web
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6        # CachingOptimized
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: api
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad      # CachingDisabled
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # AllViewerExceptHostHeader
+          - PathPattern: /blobs/*
+            TargetOriginId: blobs
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+
+Outputs:
+  Url:
+    Value: !Sub https://${Cdn.DomainName}
+  Bucket:
+    Value: !Ref Bucket
+  Table:
+    Value: !Ref Table
+  TopicArn:
+    Value: !Ref Topic
+  DistributionId:
+    Value: !Ref Cdn

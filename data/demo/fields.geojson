@@ -10,7 +10,8 @@
     "village": "West Kaithal",
     "acres": 2.7,
     "farmer_hi": "सतबीर सिंह",
-    "name_hi": "किल्ला 14/7"
+    "name_hi": "किल्ला 14/7",
+    "tile": "MGRS-43RFP"
    },
    "geometry": {
     "type": "Polygon",
@@ -49,7 +50,8 @@
     "village": "West Kaithal",
     "acres": 3.8,
     "farmer_hi": "कमलेश देवी",
-    "name_hi": "किल्ला 22/3"
+    "name_hi": "किल्ला 22/3",
+    "tile": "MGRS-43RFP"
    },
    "geometry": {
     "type": "Polygon",
@@ -112,7 +114,8 @@
     "village": "West Kaithal",
     "acres": 4.4,
     "farmer_hi": "राजेश कुमार",
-    "name_hi": "किल्ला 9/12"
+    "name_hi": "किल्ला 9/12",
+    "tile": "MGRS-43RFP"
    },
    "geometry": {
     "type": "Polygon",
@@ -213,7 +216,8 @@
     "village": "West Kaithal",
     "acres": 5.7,
     "farmer_hi": "बलजीत सिंह",
-    "name_hi": "किल्ला 31/5"
+    "name_hi": "किल्ला 31/5",
+    "tile": "MGRS-43RFP"
    },
    "geometry": {
     "type": "Polygon",
@@ -316,7 +320,8 @@
     "village": "West Kaithal",
     "acres": 3.7,
     "farmer_hi": "महेंद्र सैनी",
-    "name_hi": "किल्ला 18/20"
+    "name_hi": "किल्ला 18/20",
+    "tile": "MGRS-43RFP"
    },
    "geometry": {
     "type": "Polygon",
