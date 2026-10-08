@@ -97,7 +97,7 @@ export async function landing(app) {
     <div class="card">
       <div class="kicker">What only code and people do</div>
       <ul class="tick cross">
-        <li>Decide a claim: fixed rules in <code>rules.py</code>, thresholds in one file, 130+ tests.</li>
+        <li>Decide a claim: fixed rules in <code>rules.py</code>, thresholds in one file, 140 tests.</li>
         <li>Say what was decided: the farmer hears text built from the decision record, not the model's words.</li>
         <li>Confirm a burn, recover money, fine or file a case: the village officer.</li>
       </ul>
