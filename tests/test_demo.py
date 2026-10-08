@@ -30,16 +30,20 @@ def test_every_demo_field_gets_a_decision(deps):
     th = Thresholds.load()
     fires = firms.load(server.ROOT / "data" / "firms" / "kaithal_2025.csv")
     stacks = server.demo_stacks(server.DEMO / "stacks")
-    outcomes = {}
+    outcomes, advances = {}, {}
     for f in fields:
         _, c = call(deps, "POST", "/api/claims", {"field_id": f["id"]})
-        done = service.process_claim(deps.store, c["id"], stacks, fires, th)
+        done = service.run_season(deps.store, c["id"], stacks, fires, th)
         outcomes[f["id"]] = done["status"]
+        advances[f["id"]] = done["advance"]["status"]
         assert done["message"]["hi"] and done["evidence_key"]
         assert deps.store.get_blob(done["evidence_key"]).startswith(b"\x89PNG")
     # the demo needs one of each: approved, sent to officer, possible burn
     assert {"auto_approved", "needs_review", "possible_burn"} <= set(outcomes.values())
     assert outcomes["f-satbir"] == "needs_review"   # fire point nearby, clean field
+    # advance only where 2024 was clean; both 2025 burns had received one
+    assert advances["f-kamlesh"] == "paid" and advances["f-rajesh"] == "not_eligible"
+    assert advances["f-baljeet"] == "paid" and outcomes["f-baljeet"] == "possible_burn"
 
 
 def test_reset_clears_claims(deps):

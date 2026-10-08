@@ -27,7 +27,7 @@ def seed(store: LocalStore, fields_path: Path) -> None:
 
 def demo_stacks(stacks_dir: Path):
     def provider(field, start, end):
-        return AreaStack.load(stacks_dir / f"{field.id}.npz")
+        return AreaStack.load(stacks_dir / f"{field.id}_{start.year}.npz")
     return provider
 
 
@@ -41,7 +41,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None) -> 
 
     def run(claim_id):
         try:
-            service.process_claim(store, claim_id, stacks, fires, th, speaker)
+            service.run_season(store, claim_id, stacks, fires, th, speaker)
         except Exception as e:  # keep the server up; show the failure on the claim
             c = store.get("claims", claim_id)
             c["error"] = str(e)

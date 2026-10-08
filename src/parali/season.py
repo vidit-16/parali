@@ -3,6 +3,8 @@
 Advance rule: a field gets the advance only if last season's check came out clean. One clean season is
 enough to earn it back after a burn.
 """
+SEASON = ("2025-10-01", "2025-11-30")       # claim window: harvest to sowing
+PREV_SEASON = ("2024-10-01", "2024-11-30")  # decides the advance
 RATE_PER_ACRE = 1200       # Haryana crop residue management incentive, 2025
 ADVANCE_SHARE = 0.25       # share paid before harvest
 

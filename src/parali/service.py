@@ -164,6 +164,16 @@ def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: lis
     return claim
 
 
+def run_season(store: Store, claim_id: str, stacks: StackProvider, fires: list[Fire], th: Thresholds,
+               speaker: Speaker | None = None) -> dict:
+    """Demo path for one claim: last-season check, advance paid if eligible (by the department, before
+    harvest), then this season's check and settlement."""
+    claim = assess_advance(store, claim_id, stacks, fires, th, *season.PREV_SEASON)
+    if claim["advance"]["eligible"]:
+        disburse_advance(store, claim_id, "department")
+    return process_claim(store, claim_id, stacks, fires, th, speaker)
+
+
 def review(store: Store, claim_id: str, officer_id: str, verdict: str, note: str = "",
            speaker: Speaker | None = None) -> dict:
     claim = store.get("claims", claim_id)

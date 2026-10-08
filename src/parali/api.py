@@ -6,10 +6,8 @@ import re
 from dataclasses import dataclass
 from typing import Callable
 
-from parali import service
+from parali import season, service
 from parali.store import Store
-
-SEASON = ("2025-10-01", "2025-11-30")
 
 
 @dataclass
@@ -60,7 +58,7 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
                 return _json(404, {"error": "not found"})
             return _json(200, {**_claim_view(s, c), "events": s.events(c["id"])})
         if method == "POST" and path == "/api/claims":
-            c = service.create_claim(s, str(data.get("field_id", "")), *SEASON)
+            c = service.create_claim(s, str(data.get("field_id", "")), *season.SEASON)
             deps.dispatch(c["id"])
             return _json(201, _claim_view(s, c))
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/review", path)

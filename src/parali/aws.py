@@ -106,7 +106,7 @@ def process_handler(event, context):
     done = []
     for cid in ids:
         try:
-            c = service.process_claim(st, cid, stacks, fires(), th, _speaker())
+            c = service.run_season(st, cid, stacks, fires(), th, _speaker())
             _notify(c)
             done.append({"id": cid, "status": c["status"]})
         except Exception as e:
