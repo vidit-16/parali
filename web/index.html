@@ -7,83 +7,124 @@
 <meta name="description" content="Satellite is the witness. A human is the judge. Pay farmers before harvest for not burning, verify every field from orbit after.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Mukta:wght@500;700;800&family=Noto+Sans+Gurmukhi:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Mukta:wght@500;600;700;800&family=Noto+Sans+Gurmukhi:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <link rel="stylesheet" href="css/explorer.css">
 <link rel="icon" href="img/logo.svg" type="image/svg+xml">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="1" x2="0.35" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="0.5" stop-color="#D9468C"/><stop offset="1" stop-color="#3D6BFF"/></linearGradient>
+    <path id="sa" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/>
+    <path id="orb" d="M7 38 A25 7 0 0 0 57 38 A25 7 0 0 0 7 38"/>
+    <clipPath id="ring-back"><rect x="0" y="0" width="64" height="38"/></clipPath>
+    <clipPath id="ring-front"><rect x="0" y="38" width="64" height="26"/></clipPath>
+    <clipPath id="scanclip"><rect x="0" y="0" width="64" height="0"><animate attributeName="height" values="0;64;64;0" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect></clipPath>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="13.5" y="5" width="4" height="14" rx="1" fill="currentColor"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-frame" viewBox="0 0 24 24"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 12h17M12 3.5c2.6 2.5 3.8 5.3 3.8 8.5s-1.2 6-3.8 8.5c-2.6-2.5-3.8-5.3-3.8-8.5s1.2-6 3.8-8.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 5 6v5.5c0 4.3 3 7.8 7 9 4-1.2 7-4.7 7-9V6l-7-2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2.2 2.2L15.5 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 20v-8M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m6 12.5 4 4L18 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c.6 3.3 4.8 5.2 4.8 10a4.8 4.8 0 1 1-9.6 0c0-2.2 1.2-3.7 2.4-4.6.1 1.6.9 2.8 2.1 3.2C11 9.4 11.4 6 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M4 12h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
 <div id="map" aria-label="Satellite map of the Patiala-Kaithal border belt"></div>
+
 <div class="loader" id="loader" aria-live="polite">
   <svg viewBox="0 0 64 64" aria-hidden="true">
-    <defs><clipPath id="scanclip"><rect x="0" y="0" width="64" height="0"><animate attributeName="height" values="0;64;64;0" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect></clipPath>
-      <linearGradient id="sky2" x1="0" y1="1" x2="0.35" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="0.5" stop-color="#D9468C"/><stop offset="1" stop-color="#3D6BFF"/></linearGradient></defs>
-    <rect x="4" y="4" width="56" height="56" rx="16" fill="#1A2440"/><path fill="#2A3A63" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/>
-    <g clip-path="url(#scanclip)"><rect x="4" y="4" width="56" height="56" rx="16" fill="url(#sky2)"/><path fill="#fff" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/></g>
-    <rect x="6" y="4" width="52" height="1.4" rx="0.7" fill="#9FE3FF"><animate attributeName="y" values="4;60;60;4" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect>
+    <rect width="64" height="64" rx="16" fill="#1A2440"/>
+    <use href="#sa" fill="#2A3A63" transform="translate(32 30) scale(.8) translate(-32 -33)"/>
+    <g clip-path="url(#scanclip)"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></g>
+    <rect x="4" y="0" width="56" height="1.6" rx="0.8" fill="#9FE3FF"><animate attributeName="y" values="0;62;62;0" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect>
   </svg>
-  <p>Loading the season from orbit</p>
+  <p data-i18n="loading">Loading the season from orbit</p>
 </div>
 
 <header class="bar">
-  <a class="brand" href="index.html" aria-label="Saakshi home">
+  <a class="brand glass" href="index.html" aria-label="Saakshi home">
     <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-      <defs><linearGradient id="sky" x1="0" y1="1" x2="0.35" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="0.5" stop-color="#D9468C"/><stop offset="1" stop-color="#3D6BFF"/></linearGradient>
-        <path id="orb" d="M3 34 A29 8 0 0 0 61 34 A29 8 0 0 0 3 34"/></defs>
-      <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#sky)"/>
-      <path fill="#fff" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/>
-      <g transform="rotate(-18 32 34)"><path d="M3 34 A29 8 0 0 0 61 34" fill="none" stroke="#fff" stroke-width="2.6"/>
-        <circle r="3" fill="#fff"><animateMotion dur="6s" repeatCount="indefinite"><mpath href="#orb"/></animateMotion></circle></g>
+      <rect width="64" height="64" rx="16" fill="url(#sky)"/>
+      <g transform="rotate(-12 32 38)" clip-path="url(#ring-back)"><use href="#orb" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2.4"/></g>
+      <use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/>
+      <g transform="rotate(-12 32 38)"><g clip-path="url(#ring-front)"><use href="#orb" fill="none" stroke="#fff" stroke-width="2.6"/></g>
+        <circle r="3.2" fill="#fff"><animateMotion dur="7s" repeatCount="indefinite"><mpath href="#orb"/></animateMotion></circle></g>
     </svg>
-    <span class="name">Saakshi</span><span class="name-hi" lang="hi">साक्षी</span>
+    <span class="name">Saakshi</span><span class="name-local" id="name-local">साक्षी</span>
   </a>
   <div class="spacer"></div>
-  <nav class="modes" aria-label="Views">
-    <a class="on" href="index.html" data-i18n="explore">Explore</a>
-    <a href="app.html#/officer" data-i18n="officer">Officer</a>
-    <a href="app.html#/farmer" data-i18n="farmer">Farmer</a>
+  <nav class="modes glass" aria-label="Views">
+    <a class="on" href="index.html"><svg><use href="#i-map"/></svg><span data-i18n="explore">Explore</span></a>
+    <a href="app.html#/officer"><svg><use href="#i-shield"/></svg><span data-i18n="officer">Officer</span></a>
+    <a href="app.html#/farmer"><svg><use href="#i-sprout"/></svg><span data-i18n="farmer">Farmer</span></a>
   </nav>
-  <div class="langs" role="group" aria-label="Language">
-    <button data-lang="en">EN</button><button data-lang="hi" lang="hi">हिं</button><button data-lang="pa" lang="pa">ਪੰ</button><button data-lang="hr" lang="hi">हरि</button>
+  <div class="lang">
+    <button class="glass lang-btn" id="lang-btn" aria-haspopup="listbox" aria-expanded="false"><svg><use href="#i-globe"/></svg><b id="lang-cur">EN</b><svg class="chev"><use href="#i-chev"/></svg></button>
+    <ul class="glass lang-menu" id="lang-menu" role="listbox" hidden>
+      <li role="option" data-lang="en"><b>English</b><span>EN</span></li>
+      <li role="option" data-lang="hi" lang="hi"><b>हिन्दी</b><span>Hindi</span></li>
+      <li role="option" data-lang="pa" lang="pa"><b>ਪੰਜਾਬੀ</b><span>Punjabi</span></li>
+      <li role="option" data-lang="hr" lang="hi"><b>हरियाणवी</b><span>Haryanvi</span></li>
+    </ul>
   </div>
 </header>
 
-<section class="hero" id="hero" hidden>
+<section class="hero glass" id="hero" hidden>
   <p class="kicker" data-i18n="kicker">Patiala–Kaithal border belt · kharif 2025</p>
-  <h1 data-i18n="headline">9 in 10 burnt hectares never got a fire alert.</h1>
+  <h1 data-i18n="headline"></h1>
   <div class="vs">
     <div class="row"><span data-i18n="alerts">Fire alerts</span><div class="track"><i class="bad" style="--w:14.1%"></i></div><b>14.1%</b></div>
     <div class="row"><span>Saakshi</span><div class="track"><i class="good" style="--w:2.6%"></i></div><b>2.6%</b></div>
-    <p class="cap" data-i18n="vscap">clean fields wrongly flagged · 314 fields checked by hand</p>
+    <p class="cap" data-i18n="vscap"></p>
   </div>
   <div class="actions">
-    <button class="primary" id="play-season"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="play">Play the season</span></button>
-    <button class="ghost" id="explore" data-i18n="explorebtn">Explore the map</button>
+    <button class="btn primary" id="play-season"><svg><use href="#i-play"/></svg><span data-i18n="play">Play the season</span></button>
+    <button class="btn ghost" id="explore" data-i18n="explorebtn">Explore the map</button>
   </div>
-  <p class="fine" data-i18n="fine">Burn-like ground seen by Sentinel-2. Every flag goes to an officer.</p>
+  <p class="fine" data-i18n="fine"></p>
 </section>
 
-<aside class="panel" id="panel" hidden>
-  <button class="close" id="panel-close" aria-label="Close">×</button>
+<aside class="panel glass" id="panel" hidden>
+  <button class="icon-btn close" id="panel-close" aria-label="Close"><svg><use href="#i-x"/></svg></button>
   <div id="panel-body"></div>
 </aside>
 
-<div class="layers" role="group" aria-label="Layers">
-  <button data-layer="burns" class="on"><i class="sw burn"></i><span data-i18n="l_burns">Burns</span></button>
-  <button data-layer="fires" class="on"><i class="sw fire"></i><span data-i18n="l_fires">Fire alerts</span></button>
-  <button data-layer="fields" class="on"><i class="sw field"></i><span data-i18n="l_fields">Fields</span></button>
+<div class="rail">
+  <div class="glass stack" role="group" aria-label="Zoom">
+    <button class="icon-btn" id="zoom-in" aria-label="Zoom in"><svg><use href="#i-plus"/></svg></button>
+    <button class="icon-btn" id="zoom-out" aria-label="Zoom out"><svg><use href="#i-minus"/></svg></button>
+    <button class="icon-btn" id="zoom-fit" aria-label="Whole region"><svg><use href="#i-frame"/></svg></button>
+  </div>
+  <div class="glass stack layers" role="group" aria-label="Layers">
+    <button data-layer="burns" class="on" aria-pressed="true"><i class="sw burn"></i><span data-i18n="l_burns">Burns</span></button>
+    <button data-layer="fires" class="on" aria-pressed="true"><i class="sw fire"></i><span data-i18n="l_fires">Fire alerts</span></button>
+    <button data-layer="fields" class="on" aria-pressed="true"><i class="sw field"></i><span data-i18n="l_fields">Fields</span></button>
+  </div>
 </div>
 
-<footer class="timeline" id="timeline">
-  <button class="play" id="play" aria-label="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M8 5v14l11-7z"/></svg></button>
+<footer class="timeline glass" id="timeline">
+  <button class="play" id="play" aria-label="Play">
+    <svg class="ring" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="25" class="ring-bg"/><circle cx="28" cy="28" r="25" class="ring-fg" id="ring"/></svg>
+    <svg class="glyph"><use href="#i-play" id="play-glyph"/></svg>
+  </button>
   <div class="when"><b id="when"></b><span id="stage"></span></div>
-  <div class="scrub">
-    <div class="ramp"></div>
-    <div class="fill" id="fill"></div>
+  <div class="scrub" id="scrub">
+    <svg class="spark" id="spark" preserveAspectRatio="none" aria-hidden="true"></svg>
     <div class="ticks" id="ticks"></div>
+    <input type="range" id="slider" min="0" max="7" step="1" value="0" aria-label="Season date">
   </div>
-  <div class="count"><b id="ha">0</b><span data-i18n="ha">ha burn-like</span></div>
-  <div class="count"><b id="fa">0</b><span data-i18n="fa">fire alerts</span></div>
+  <div class="stat burn"><b id="ha">0</b><span data-i18n="ha">ha burn-like</span></div>
+  <div class="stat fire"><b id="fa">0</b><span data-i18n="fa">fire alerts</span></div>
 </footer>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>

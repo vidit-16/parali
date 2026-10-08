@@ -52,7 +52,10 @@ BURN_NBR = -0.15
 BURN_MAX_BRIGHT = 0.07
 BURN_NIR_DROP = 0.30
 MIN_PATCH_PX = 3
-DISPLAY_GAIN = 0.18                   # reflectance shown as full white
+DISPLAY_GAIN = 0.20                   # reflectance shown as full white
+SATURATION = 1.3
+CONTRAST = 1.08
+WEBP_QUALITY = 88
 STALE_DIM = 0.7                       # brightness of grey pixels carried over from another window
 
 
@@ -135,8 +138,11 @@ class S3Sink:
 
 def to_display(red, green, blue) -> np.ndarray:
     """Reflectance [H, W] x3 -> uint8 [H, W, 3]; NaN becomes 0."""
-    a = np.dstack([red, green, blue]) / DISPLAY_GAIN
-    return (np.clip(np.nan_to_num(a), 0, 1) ** 0.9 * 255).astype("uint8")
+    a = np.clip(np.nan_to_num(np.dstack([red, green, blue]) / DISPLAY_GAIN), 0, 1) ** 0.8
+    lum = a.mean(axis=2, keepdims=True)
+    a = lum + (a - lum) * SATURATION          # dry-season Punjab is beige; a little colour helps fields read
+    a = 0.5 + (a - 0.5) * CONTRAST
+    return (np.clip(a, 0, 1) * 255).astype("uint8")
 
 
 def composite(frames: list[np.ndarray], clear: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
@@ -249,8 +255,16 @@ def downsample2(a: np.ndarray) -> np.ndarray:
 def encode_webp(rgba: np.ndarray) -> bytes:
     from PIL import Image
     buf = io.BytesIO()
-    Image.fromarray(rgba, "RGBA").save(buf, "WEBP", quality=80, method=4)
+    Image.fromarray(rgba, "RGBA").save(buf, "WEBP", quality=WEBP_QUALITY, method=4)
     return buf.getvalue()
+
+
+def sharpen(img):
+    """Unsharp mask on the colour only: 10 m pixels shown at 8 m need a little edge back."""
+    from PIL import Image, ImageFilter
+    r, g, b, a = img.split()
+    rgb = Image.merge("RGB", (r, g, b)).filter(ImageFilter.UnsharpMask(radius=1.3, percent=70, threshold=2))
+    return Image.merge("RGBA", (*rgb.split(), a))
 
 
 def write_block_tiles(sink: Sink, window: str, bx: int, by: int, rgba: np.ndarray) -> int:
@@ -262,6 +276,8 @@ def write_block_tiles(sink: Sink, window: str, bx: int, by: int, rgba: np.ndarra
         k = 2 ** (z - BLOCK_Z)
         size = TILE * k
         level = img if size == FULL else img.resize((size, size), Image.BOX)
+        if z >= MAX_Z - 1:
+            level = sharpen(level)
         arr = np.asarray(level)
         for j in range(k):
             for i in range(k):
