@@ -1,4 +1,4 @@
-# Decision thresholds, chosen on 262 hand-labelled plots in west Kaithal (2025 season), 13 of them burnt.
+# Decision thresholds, chosen on 314 hand-labelled plots in west Kaithal (2025 season), 20 of them burnt.
 # See data/eval/results.json and `parali evaluate`. Small burnt sample: a first calibration, not a final one.
 
 # A date counts as a clear image for a field when at least this share of its pixels is usable.
