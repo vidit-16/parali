@@ -23,6 +23,28 @@ Open http://127.0.0.1:8080. File a claim for any of the five demo fields (real f
 season). The officer view uses PIN `2468`. Saved imagery for the demo fields is in `data/demo/stacks`, so nothing
 is downloaded.
 
+## Architecture (AWS, us-west-2)
+
+```mermaid
+flowchart LR
+  F[Farmer / officer<br>browser] --> CF[CloudFront]
+  CF -->|/ and /blobs| S3[(S3: web app,<br>evidence, audio)]
+  CF -->|/api| GW[API Gateway<br>HTTP API]
+  GW --> API[Lambda: api]
+  API --> DB[(DynamoDB:<br>fields, claims, audit)]
+  API -->|async invoke| P[Lambda: process]
+  EB[EventBridge Scheduler<br>daily sweep] --> P
+  P -->|STAC search| ES[Earth Search]
+  P -->|range reads| OD[(Sentinel-2 L2A COGs<br>AWS Open Data)]
+  P --> DB
+  P --> S3
+  P --> PO[Polly: Hindi audio]
+  P --> SNS[SNS: decision alerts]
+```
+
+The process function reads only the pixel window around each field from the Sentinel-2 cloud-optimised GeoTIFFs
+in the AWS Open Data bucket, in the same region. It runs the same Python code as the local demo.
+
 ## How it decides
 
 For every clear image of the field from 1 Oct to 30 Nov it computes the burn index (NBR), near-infrared,
