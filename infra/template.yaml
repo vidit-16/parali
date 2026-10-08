@@ -26,7 +26,7 @@ Resources:
       ContentUri: ../layer
       CompatibleRuntimes: [python3.12]
     Metadata:
-      BuildMethod: python3.12
+      BuildMethod: makefile
 
   Table:
     Type: AWS::DynamoDB::Table
