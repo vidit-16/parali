@@ -10,6 +10,8 @@ never rejects a claim on its own; a burn finding is always "possible burn, offic
 
 Environmental Hacks 2026, Air track. Work started 8 Oct 2026.
 
+**Live:** https://d5gpae5oilzws.cloudfront.net (officer view PIN `2468`; "Reset demo" clears all claims)
+
 ## Run it locally (no AWS account needed)
 
 Needs Python 3.12 and [uv](https://docs.astral.sh/uv/).
