@@ -28,12 +28,20 @@ def outputs(session):
             for o in session.client("cloudformation").describe_stacks(StackName=STACK)["Stacks"][0]["Outputs"]}
 
 
-def run_blocks(session, fn, region, blocks):
+def run_blocks(session, fn, region, blocks, workers=6):
     lam = session.client("lambda", config=Config(read_timeout=910, connect_timeout=10, retries={"max_attempts": 0}))
 
     def one(b):
         t = time.time()
-        r = lam.invoke(FunctionName=fn, Payload=json.dumps({"block": list(b), "region": mapping(region)}).encode())
+        for attempt in range(20):
+            try:
+                r = lam.invoke(FunctionName=fn, Payload=json.dumps({"block": list(b), "region": mapping(region),
+                                                                    "workers": workers}).encode())
+                break
+            except lam.exceptions.TooManyRequestsException:  # account concurrency limit: wait for a slot
+                time.sleep(20 + attempt * 5)
+        else:
+            return b, False, {"error": "throttled"}
         body = json.loads(r["Payload"].read())
         ok = "FunctionError" not in r
         print(f"block {b}: {'ok' if ok else 'FAILED'} in {time.time() - t:.0f}s  {json.dumps(body)[:300]}", flush=True)
@@ -76,6 +84,9 @@ def main():
     p.add_argument("--profile", default="envhacks")
     p.add_argument("--blocks", nargs="*", help="only these z11 blocks, as x,y")
     p.add_argument("--skip-blocks", action="store_true", help="reuse block outputs already in S3")
+    p.add_argument("--workers", type=int, default=6, help="dates read at once per block (fewer = less memory)")
+    p.add_argument("--old-totals-cover-missing", action="store_true",
+                   help="blocks without a stored summary are counted from the previous manifest")
     a = p.parse_args()
 
     s = boto3.Session(profile_name=a.profile, region_name=REGION)
@@ -85,21 +96,31 @@ def main():
     sink = tiles.S3Sink(out["Bucket"], "tiles/", client=s.client("s3"))
     print(f"{len(blocks)} blocks", flush=True)
 
-    summaries = []
     if not a.skip_blocks:
-        results = run_blocks(s, out["TilesFunction"], region, blocks)
+        results = run_blocks(s, out["TilesFunction"], region, blocks, a.workers)
         failed = [b for b, ok, _ in results if not ok]
         if failed:
             print("failed blocks:", failed)
-        summaries = [body for _, ok, body in results if ok]
-        blocks = [b for b, ok, _ in results if ok]
 
+    # Everything after the block jobs covers the whole region, so rerunning one block keeps the rest.
+    every = tiles.blocks_for(region)
     for w, _, _ in tiles.WINDOWS:
-        print(f"pyramid {w}: {tiles.pyramid(sink, w, blocks)} tiles", flush=True)
-    print("burn patches:", merge_burns(sink, blocks))
+        print(f"pyramid {w}: {tiles.pyramid(sink, w, every)} tiles", flush=True)
+    print("burn patches:", merge_burns(sink, every))
     print("fire alerts in region:", fire_layer(sink, region))
 
     burn_ha: dict[int, float] = {}
+    summaries, missing = [], []
+    for bx, by in every:
+        data = sink.get(f"burns/{bx}_{by}.json")
+        (summaries.append(json.loads(data)) if data else missing.append((bx, by)))
+    if missing and a.old_totals_cover_missing:
+        # blocks built before per-block summaries were stored: their totals are in the previous manifest
+        old = json.loads((ROOT / "data/tiles_manifest.json").read_text())
+        summaries.append({"burn_ha": old["burn_ha_by_day"]})
+        missing = []
+    if missing:
+        print("no summary for blocks:", missing)
     for sm in summaries:
         for d, ha in sm.get("burn_ha", {}).items():
             burn_ha[int(d)] = round(burn_ha.get(int(d), 0) + ha, 2)

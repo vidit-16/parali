@@ -53,6 +53,7 @@ BURN_MAX_BRIGHT = 0.07
 BURN_NIR_DROP = 0.30
 MIN_PATCH_PX = 3
 DISPLAY_GAIN = 0.18                   # reflectance shown as full white
+STALE_ALPHA = 70                      # opacity for pixels carried over from another window
 
 
 # ---- web mercator tile maths ----
@@ -188,22 +189,40 @@ class DateBands:
     bright: np.ndarray   # mean visible reflectance, coarse grid
 
 
-def burn_days(dates: list[DateBands]) -> np.ndarray:
-    """uint8 [H, W]: day number (from DAY0) when the pixel first turned burn-like, 0 if never."""
-    from parali.features import nbr
-    first = None
-    prev = None
-    for d in sorted(dates, key=lambda d: d.day):
-        if first is None:
-            first = np.zeros(d.nir.shape, "uint8")
+class BurnTracker:
+    """Feed dates in order; keeps only the first-burn day and the last clear NIR, not the whole season."""
+
+    def __init__(self):
+        self.first = None
+        self.prev = None
+        self.last_day = None
+
+    def add(self, d: DateBands) -> None:
+        from parali.features import nbr
+        if self.last_day is not None and d.day < self.last_day:
+            raise ValueError("dates must come in order")
+        self.last_day = d.day
+        if self.first is None:
+            self.first = np.zeros(d.nir.shape, "uint8")
         nir = d.nir
-        if prev is not None and d.day.month >= 10:
+        if self.prev is not None and d.day.month >= 10:
             with np.errstate(all="ignore"):
                 hit = ((nbr(nir, d.swir22) < BURN_NBR) & (d.bright <= BURN_MAX_BRIGHT)
-                       & ((prev - nir) / prev >= BURN_NIR_DROP))
-            first[(first == 0) & hit] = (d.day - DAY0).days
-        prev = nir.copy() if prev is None else np.where(np.isnan(nir), prev, nir)
-    return first if first is not None else np.zeros((0, 0), "uint8")
+                       & ((self.prev - nir) / self.prev >= BURN_NIR_DROP))
+            self.first[(self.first == 0) & hit] = (d.day - DAY0).days
+        self.prev = nir.copy() if self.prev is None else np.where(np.isnan(nir), self.prev, nir)
+
+    @property
+    def days(self) -> np.ndarray:
+        return self.first if self.first is not None else np.zeros((0, 0), "uint8")
+
+
+def burn_days(dates: list[DateBands]) -> np.ndarray:
+    """uint8 [H, W]: day number (from DAY0) when the pixel first turned burn-like, 0 if never."""
+    tr = BurnTracker()
+    for d in sorted(dates, key=lambda d: d.day):
+        tr.add(d)
+    return tr.days
 
 
 def drop_specks(days: np.ndarray, min_px: int = MIN_PATCH_PX) -> np.ndarray:
@@ -324,6 +343,13 @@ def _read(href, bounds, size, resampling):
 
 def read_date(scenes: list, bounds) -> dict[str, np.ndarray]:
     """One date over one block, merging tiles: fine RGB reflectance, coarse NIR, SWIR, SCL."""
+    import rasterio
+    from parali.imagery import GDAL_ENV
+    with rasterio.Env(**GDAL_ENV, GDAL_CACHEMAX=128):
+        return _read_date(scenes, bounds)
+
+
+def _read_date(scenes: list, bounds) -> dict[str, np.ndarray]:
     from rasterio.enums import Resampling
     out: dict[str, np.ndarray] = {}
     plan = [("red", FULL, Resampling.bilinear), ("green", FULL, Resampling.bilinear),
@@ -366,17 +392,23 @@ def build_block(bx: int, by: int, region_lonlat, sink: Sink, log: Callable[[str]
     inside_fine = region_mask(region_lonlat, bounds, FULL)
     inside_coarse = region_mask(region_lonlat, bounds, COARSE)
 
-    frames: dict[str, list] = {w: [] for w, _, _ in WINDOWS}
-    clears: dict[str, list] = {w: [] for w, _, _ in WINDOWS}
-    burn_input: list[DateBands] = []
+    tracker = BurnTracker()
+    done: dict[str, tuple] = {}
+    state = {"w": None, "frames": [], "clears": []}
 
     def window_of(d: date) -> str | None:
         iso = d.isoformat()
         return next((w for w, s, e in WINDOWS if s <= iso <= e), None)
 
+    def close_window():
+        if state["w"] is not None:
+            done[state["w"]] = composite(state["frames"], state["clears"])
+        state["frames"], state["clears"] = [], []
+
+    pending = sorted(by_date.items())
     with ThreadPoolExecutor(workers) as ex:
-        # read ahead at most `workers` dates, so a block never holds the whole season in memory
-        pending = list(by_date.items())
+        # Read ahead at most `workers` dates and fold each one in, in date order, as it arrives: the
+        # block holds one window of frames at a time and never the whole season.
         futures = [(d, ex.submit(reader, s, bounds)) for d, s in pending[:workers]]
         nxt = workers
         while futures:
@@ -386,18 +418,22 @@ def build_block(bx: int, by: int, region_lonlat, sink: Sink, log: Callable[[str]
                 futures.append((pending[nxt][0], ex.submit(reader, pending[nxt][1], bounds)))
                 nxt += 1
             usable_c = ~np.isin(b["scl"], config.SCL_MASKED)
-            nir = np.where(usable_c, b["nir08"], np.nan)
             vis = [b[k] for k in ("red", "green", "blue")]
             bright = (downsample2(vis[0]) + downsample2(vis[1]) + downsample2(vis[2])) / 3
-            burn_input.append(DateBands(d, nir, np.where(usable_c, b["swir22"], np.nan), bright))
+            tracker.add(DateBands(d, np.where(usable_c, b["nir08"], np.nan),
+                                  np.where(usable_c, b["swir22"], np.nan), bright))
             w = window_of(d)
+            if w != state["w"]:
+                close_window()
+                state["w"] = w
             if w:
-                usable_f = np.kron(usable_c, np.ones((2, 2), bool)) & np.isfinite(vis[0])
-                frames[w].append(to_display(*vis))
-                clears[w].append(usable_f)
+                state["frames"].append(to_display(*vis))
+                state["clears"].append(np.kron(usable_c, np.ones((2, 2), bool)) & np.isfinite(vis[0]))
+            b = vis = None
             log(f"  {d}")
+        close_window()
 
-    days = drop_specks(np.where(inside_coarse, burn_days(burn_input), 0).astype("uint8"))
+    days = drop_specks(np.where(inside_coarse, tracker.days, 0).astype("uint8"))
     pix_m = (bounds[2] - bounds[0]) / COARSE * math.cos(math.radians((bbox[1] + bbox[3]) / 2))
     vals, counts = np.unique(days[days > 0], return_counts=True)
     burn_ha = {int(v): round(float(c) * pix_m * pix_m / 1e4, 2) for v, c in zip(vals, counts)}
@@ -405,11 +441,16 @@ def build_block(bx: int, by: int, region_lonlat, sink: Sink, log: Callable[[str]
     sink.put(f"burns/{bx}_{by}.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
                                                     separators=(",", ":")).encode(), "application/geo+json")
 
-    filled = fill_gaps([composite(frames[w], clears[w]) for w, _, _ in WINDOWS])
+    fresh = [done.get(w, (None, None))[1] for w, _, _ in WINDOWS]
+    filled = fill_gaps([done.get(w, (None, None)) for w, _, _ in WINDOWS])
     tiles = 0
-    for (w, _, _), (rgb, seen) in zip(WINDOWS, filled):
-        alpha = ((seen & inside_fine) * 255).astype("uint8")
+    for (w, _, _), (rgb, seen), new in zip(WINDOWS, filled, fresh):
+        # pixels the satellite saw in this window are solid; ones carried over from another window
+        # (clouds all ten days) are faded, so an old green field does not pass for November
+        alpha = np.where(new if new is not None else False, 255, STALE_ALPHA) * seen * inside_fine
+        alpha = alpha.astype("uint8")
         tiles += write_block_tiles(sink, w, bx, by, np.dstack([rgb, alpha]))
     summary = {"block": [bx, by], "dates": len(by_date), "tiles": tiles, "patches": len(feats), "burn_ha": burn_ha}
+    sink.put(f"burns/{bx}_{by}.json", json.dumps(summary).encode(), "application/json")
     log(json.dumps(summary))
     return summary

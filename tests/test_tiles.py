@@ -100,3 +100,10 @@ def test_burn_features_are_lonlat_with_day(tmp_path):
     lon, lat = feats[0]["geometry"]["coordinates"][0][0]
     w, s, e, n = tiles.tile_lonlat_bounds(1462, 843, 11)
     assert w < lon < e and s < lat < n
+
+
+def test_tracker_refuses_dates_out_of_order():
+    tr = tiles.BurnTracker()
+    tr.add(bands(date(2025, 10, 5), 0.3, 0.15, 0.1))
+    with pytest.raises(ValueError):
+        tr.add(bands(date(2025, 10, 1), 0.3, 0.15, 0.1))

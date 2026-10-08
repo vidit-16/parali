@@ -12,4 +12,4 @@ PREFIX = "tiles/"
 def handler(event, context):
     region = shape(event["region"])
     bx, by = event["block"]
-    return tiles.build_block(bx, by, region, tiles.S3Sink(BUCKET, PREFIX), workers=int(event.get("workers", 12)))
+    return tiles.build_block(bx, by, region, tiles.S3Sink(BUCKET, PREFIX), workers=int(event.get("workers", 6)))
