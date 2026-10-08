@@ -11,3 +11,4 @@ dist/
 data/cache/
 node_modules/
 data/eval/chips/
+data/local/

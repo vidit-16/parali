@@ -30,14 +30,15 @@ def farmer_text(claim: dict) -> dict:
     """Returns {"hi": ..., "en": ...} for the claim's current status."""
     status = claim["status"]
     dec = claim.get("decision") or {}
-    name = claim.get("farmer_name", "")
+    name = claim.get("farmer_name_hi") or claim.get("farmer_name", "")
     greet_hi = f"नमस्ते {name} जी। " if name else "नमस्ते। "
     field = claim.get("field_name", "")
+    field_hi = claim.get("field_name_hi") or field
 
     if status == "auto_approved":
         n = len(dec.get("clear_dates", []))
         return {
-            "hi": greet_hi + f"{field} खेत के लिए आपका दावा स्वीकृत हो गया है। उपग्रह की {n} साफ़ तस्वीरों में "
+            "hi": greet_hi + f"{field_hi} खेत के लिए आपका दावा स्वीकृत हो गया है। उपग्रह की {n} साफ़ तस्वीरों में "
                   "पराली जलाने का कोई निशान नहीं मिला। राशि के लिए आपका दावा आगे भेज दिया गया है।",
             "en": f"Your claim for {field} is approved. {n} clear satellite images show no sign of burning. "
                   "It has been sent on for payment.",
@@ -45,7 +46,7 @@ def farmer_text(claim: dict) -> dict:
     if status == "needs_review":
         rule = dec.get("rule", "")
         return {
-            "hi": greet_hi + f"{field} खेत का दावा ग्राम अधिकारी को जाँच के लिए भेजा गया है। "
+            "hi": greet_hi + f"{field_hi} खेत का दावा ग्राम अधिकारी को जाँच के लिए भेजा गया है। "
                   + REASON_HI.get(rule, "") + " आपको अभी कुछ करने की ज़रूरत नहीं है।",
             "en": f"Your claim for {field} has gone to the village officer for a check. "
                   + REASON_EN.get(rule, "") + " You do not need to do anything now.",
@@ -55,24 +56,24 @@ def farmer_text(claim: dict) -> dict:
         when_hi = f"{hi_date(when)} के आसपास " if when else ""
         when_en = f"around {date.fromisoformat(when):%d %b} " if when else ""
         return {
-            "hi": greet_hi + f"उपग्रह तस्वीरों में {when_hi}{field} खेत में जलने जैसा निशान दिखा है। "
+            "hi": greet_hi + f"उपग्रह तस्वीरों में {when_hi}{field_hi} खेत में जलने जैसा निशान दिखा है। "
                   "यह अंतिम फ़ैसला नहीं है। ग्राम अधिकारी तस्वीरें देखकर तय करेंगे, और आप अपनी बात रख सकते हैं।",
             "en": f"Satellite images show a burn-like mark on {field} {when_en}. This is not a final decision. "
                   "The village officer will look at the images, and you can give your side.",
         }
     if status == "officer_approved":
         return {
-            "hi": greet_hi + f"ग्राम अधिकारी ने {field} खेत के लिए आपका दावा स्वीकृत कर दिया है।",
+            "hi": greet_hi + f"ग्राम अधिकारी ने {field_hi} खेत के लिए आपका दावा स्वीकृत कर दिया है।",
             "en": f"The village officer approved your claim for {field}.",
         }
     if status == "officer_confirmed_burnt":
         return {
-            "hi": greet_hi + f"ग्राम अधिकारी ने जाँच के बाद पाया कि {field} खेत में पराली जलाई गई थी, "
+            "hi": greet_hi + f"ग्राम अधिकारी ने जाँच के बाद पाया कि {field_hi} खेत में पराली जलाई गई थी, "
                   "इसलिए दावा स्वीकृत नहीं हुआ। आप इस फ़ैसले पर आपत्ति दर्ज कर सकते हैं।",
             "en": f"After checking, the village officer found that straw was burnt on {field}, so the claim "
                   "was not approved. You can object to this decision.",
         }
     return {
-        "hi": greet_hi + f"{field} खेत का दावा मिल गया है। उपग्रह तस्वीरों की जाँच चल रही है।",
+        "hi": greet_hi + f"{field_hi} खेत का दावा मिल गया है। उपग्रह तस्वीरों की जाँच चल रही है।",
         "en": f"Your claim for {field} has been received. The satellite check is running.",
     }

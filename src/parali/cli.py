@@ -98,6 +98,16 @@ def cmd_evaluate(a):
     print(f"-> {a.out}")
 
 
+def cmd_demo(a):
+    from parali.server import serve
+    speaker = None
+    if a.polly:
+        from functools import partial
+        from parali.tts import polly_mp3
+        speaker = partial(polly_mp3, region="us-west-2")
+    serve(Path(a.state), port=a.port, speaker=speaker, officer_pin=a.pin)
+
+
 def cmd_features(a):
     paths = sorted(Path(a.history).glob("*.npz"))
     w = csv.writer(sys.stdout)
@@ -163,6 +173,13 @@ def main(argv=None):
     s.add_argument("--end", default="2025-11-30")
     s.add_argument("--out", default="data/eval/results.json")
     s.set_defaults(func=cmd_evaluate)
+
+    s = sub.add_parser("demo", help="run the web app locally on saved 2025 data")
+    s.add_argument("--state", default="data/local")
+    s.add_argument("--port", type=int, default=8080)
+    s.add_argument("--pin", default="2468", help="officer PIN for the demo")
+    s.add_argument("--polly", action="store_true", help="use Amazon Polly for Hindi audio (needs AWS credentials)")
+    s.set_defaults(func=cmd_demo)
 
     s = sub.add_parser("features", help="print per-date features as CSV")
     s.add_argument("--history", required=True)

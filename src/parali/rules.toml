@@ -1,12 +1,13 @@
-# Decision thresholds. Placeholder values until they are fitted on the hand-labelled plots.
+# Decision thresholds. Interim values from looking at west Kaithal 2025 images;
+# to be replaced by the values fitted on the hand-labelled plots (parali evaluate).
 
 # A date counts as a clear image for a field when at least this share of its pixels is usable.
 min_valid_share = 0.6
 # Fewer clear images than this inside the claim window -> needs review.
 min_clear_images = 4
 
-# Pixel counts as dark (burn-like) when NBR is below this.
-dark_nbr = -0.10
+# Pixel counts as dark (burn-like) when NBR is below this. Bare harvested soil here reaches -0.1.
+dark_nbr = -0.20
 # Field-level burn: at least this share of the field dark...
 burn_share = 0.30
 # ...right after NIR fell by at least this fraction since the previous clear image...
@@ -15,8 +16,9 @@ nir_drop = 0.35
 persist_images = 2
 # A dark share between this and burn_share at any point -> needs review (part of the field).
 partial_share = 0.10
-# Char is near-black in visible light. 0 disables this check.
-max_burn_brightness = 0.0
+# Char is near-black in visible light; wet soil is dark brown. 0 disables this check.
+max_burn_brightness = 0.07
 
 # Fire point from FIRMS within this distance of the field during the window -> cannot auto-approve.
-fire_radius_m = 750
+# 375 m is about one VIIRS pixel.
+fire_radius_m = 375

@@ -45,6 +45,8 @@ def create_claim(store: Store, field_id: str, season_start: str, season_end: str
         "field_id": field_id,
         "field_name": f.get("name", field_id),
         "farmer_name": f.get("farmer", ""),
+        "farmer_name_hi": f.get("farmer_hi", ""),
+        "field_name_hi": f.get("name_hi", ""),
         "village": f.get("village", ""),
         "acres": f.get("acres"),
         "season_start": season_start,

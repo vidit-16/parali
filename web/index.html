@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parali Check</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">Parali Check <span class="sub">no-burn claim verification</span></div>
+  <nav>
+    <button data-view="farmer" class="tab active">Farmer / किसान</button>
+    <button data-view="officer" class="tab">Village officer</button>
+  </nav>
+</header>
+
+<main>
+  <section id="farmer" class="view">
+    <p class="intro">Pick your field and file a no-burn claim for the 2025 paddy season. The check uses free
+      Sentinel-2 satellite images from 1 Oct to 30 Nov. Clear cases are approved on the spot; anything unclear goes
+      to the village officer with the images attached.</p>
+    <div id="fields" class="cards"></div>
+    <div id="claim" class="panel hidden"></div>
+  </section>
+
+  <section id="officer" class="view hidden">
+    <div class="officer-bar">
+      <label>Officer ID <input id="officer-id" placeholder="e.g. VO-KTL-07" autocomplete="off"></label>
+      <label>PIN <input id="officer-pin" type="password" autocomplete="off"></label>
+      <button id="reset" class="ghost">Reset demo</button>
+    </div>
+    <h2>Waiting for review</h2>
+    <div id="queue" class="list"></div>
+    <div id="detail" class="panel hidden"></div>
+    <h2>All claims</h2>
+    <table id="all"><thead><tr><th>Field</th><th>Farmer</th><th>Status</th><th>Rule</th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+
+<footer>
+  Satellite data: Copernicus Sentinel-2 via AWS Open Data. Fire points: NASA FIRMS. The system approves or refers;
+  it never rejects a claim on its own.
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
