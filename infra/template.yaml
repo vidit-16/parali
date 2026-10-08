@@ -75,6 +75,7 @@ Resources:
             Resource:
               - !Sub ${Bucket.Arn}/web/*
               - !Sub ${Bucket.Arn}/blobs/*
+              - !Sub ${Bucket.Arn}/tiles/*
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${Cdn}
@@ -135,6 +136,16 @@ Resources:
           Properties:
             Path: /api/{proxy+}
             Method: ANY
+
+  TilesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: parali.aws_tiles.handler
+      Layers: [!Ref DepsLayer]
+      Timeout: 900
+      MemorySize: 3008
+      Policies:
+        - S3CrudPolicy: { BucketName: !Ref Bucket }
 
   AgentFunction:
     Type: AWS::Serverless::Function
@@ -216,6 +227,10 @@ Resources:
             TargetOriginId: blobs
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          - PathPattern: /tiles/*
+            TargetOriginId: blobs
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
 
 Outputs:
   Url:
@@ -228,3 +243,5 @@ Outputs:
     Value: !Ref Topic
   DistributionId:
     Value: !Ref Cdn
+  TilesFunction:
+    Value: !Ref TilesFunction
