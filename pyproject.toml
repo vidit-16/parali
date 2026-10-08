@@ -11,9 +11,11 @@ dependencies = [
     "shapely>=2.0",
     "pyproj>=3.6",
     "requests>=2.32",
+    "pillow>=10",
 ]
 
 [project.optional-dependencies]
+aws = ["boto3>=1.35"]
 dev = ["pytest>=8", "pytest-cov>=5"]
 plot = ["matplotlib>=3.9"]
 

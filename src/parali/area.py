@@ -41,6 +41,18 @@ class AreaStack:
         return cls(bbox=tuple(z["bbox"]), dates=[date.fromisoformat(d) for d in z["dates"]], crs=str(z["crs"]),
                    transform=Affine(*z["transform"]), refl=z["refl"], scl=z["scl"])
 
+    def subset(self, bbox_lonlat) -> "AreaStack":
+        from rasterio.warp import transform_bounds
+        x0, y0, x1, y1 = transform_bounds("EPSG:4326", self.crs, *bbox_lonlat)
+        inv = ~self.transform
+        c0, r0 = inv @ (x0, y1)
+        c1, r1 = inv @ (x1, y0)
+        h, w = self.scl.shape[1:]
+        r0, c0 = max(int(r0), 0), max(int(c0), 0)
+        r1, c1 = min(int(np.ceil(r1)), h), min(int(np.ceil(c1)), w)
+        return AreaStack(tuple(bbox_lonlat), list(self.dates), self.crs, self.transform @ Affine.translation(c0, r0),
+                         self.refl[:, :, r0:r1, c0:c1].copy(), self.scl[:, r0:r1, c0:c1].copy())
+
     def histories(self, fields: list[Field], inner_buffer_m: float = config.FIELD_INNER_BUFFER_M) -> dict[str, FieldHistory]:
         hw = self.scl.shape[1:]
         out = {}
