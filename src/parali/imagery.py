@@ -89,7 +89,22 @@ def valid_mask(chip_bands: dict[str, np.ndarray], scl: np.ndarray) -> np.ndarray
     return ok & ~np.isin(scl, config.SCL_MASKED)
 
 
+GDAL_ENV = dict(
+    AWS_NO_SIGN_REQUEST="YES",
+    GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR",
+    GDAL_HTTP_MERGE_CONSECUTIVE_RANGES="YES",
+    GDAL_HTTP_MULTIPLEX="YES",
+    GDAL_HTTP_MAX_RETRY="4",
+    GDAL_HTTP_RETRY_DELAY="2",
+)
+
+
 def read_chip(scene: Scene, bbox_lonlat) -> Chip:
+    with rasterio.Env(**GDAL_ENV):
+        return _read_chip(scene, bbox_lonlat)
+
+
+def _read_chip(scene: Scene, bbox_lonlat) -> Chip:
     with rasterio.open(scene.hrefs["scl"]) as src:
         crs = src.crs
         b = transform_bounds("EPSG:4326", crs, *bbox_lonlat)
