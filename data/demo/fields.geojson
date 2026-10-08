@@ -7,12 +7,13 @@
     "id": "f-satbir",
     "name": "Killa 14/7",
     "farmer": "Satbir Singh",
-    "village": "West Kaithal",
+    "village": "Patran, Patiala",
     "acres": 2.7,
     "farmer_hi": "सतबीर सिंह",
     "name_hi": "किल्ला 14/7",
     "tile": "MGRS-43RFP",
-    "state": "PB"
+    "state": "PB",
+    "village_hi": "पातड़ां, पटियाला"
    },
    "geometry": {
     "type": "Polygon",
@@ -48,12 +49,13 @@
     "id": "f-kamlesh",
     "name": "Killa 22/3",
     "farmer": "Kamlesh Devi",
-    "village": "West Kaithal",
+    "village": "Patran, Patiala",
     "acres": 3.8,
     "farmer_hi": "कमलेश देवी",
     "name_hi": "किल्ला 22/3",
     "tile": "MGRS-43RFP",
-    "state": "PB"
+    "state": "PB",
+    "village_hi": "पातड़ां, पटियाला"
    },
    "geometry": {
     "type": "Polygon",
@@ -113,12 +115,13 @@
     "id": "f-rajesh",
     "name": "Killa 9/12",
     "farmer": "Rajesh Kumar",
-    "village": "West Kaithal",
+    "village": "Patran, Patiala",
     "acres": 4.4,
     "farmer_hi": "राजेश कुमार",
     "name_hi": "किल्ला 9/12",
     "tile": "MGRS-43RFP",
-    "state": "PB"
+    "state": "PB",
+    "village_hi": "पातड़ां, पटियाला"
    },
    "geometry": {
     "type": "Polygon",
@@ -216,12 +219,13 @@
     "id": "f-baljeet",
     "name": "Killa 31/5",
     "farmer": "Baljeet Singh",
-    "village": "West Kaithal",
+    "village": "Patran, Patiala",
     "acres": 5.7,
     "farmer_hi": "बलजीत सिंह",
     "name_hi": "किल्ला 31/5",
     "tile": "MGRS-43RFP",
-    "state": "PB"
+    "state": "PB",
+    "village_hi": "पातड़ां, पटियाला"
    },
    "geometry": {
     "type": "Polygon",
@@ -321,12 +325,13 @@
     "id": "f-mahender",
     "name": "Killa 18/20",
     "farmer": "Mahender Saini",
-    "village": "West Kaithal",
+    "village": "Patran, Patiala",
     "acres": 3.7,
     "farmer_hi": "महेंद्र सैनी",
     "name_hi": "किल्ला 18/20",
     "tile": "MGRS-43RFP",
-    "state": "PB"
+    "state": "PB",
+    "village_hi": "पातड़ां, पटियाला"
    },
    "geometry": {
     "type": "Polygon",

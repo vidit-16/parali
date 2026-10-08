@@ -3,31 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Parali Check</title>
-<meta name="description" content="Pay farmers before harvest for not burning straw, verify every field by satellite after.">
+<title>Saakshi</title>
+<meta name="description" content="Satellite is the witness. A human is the judge. Pay farmers before harvest for not burning, verify every field from orbit after.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="css/app.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6b3a'/%3E%3Cpath d='M9 23c6-1 10-6 12-14M15 23c3-2 6-6 7-10' stroke='%23e8c766' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Mukta:wght@500;700;800&family=Noto+Sans+Gurmukhi:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="css/explorer.css">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
 </head>
 <body>
-<header class="top">
-  <a class="brand" href="#/"><span class="logo"></span>Parali Check <span class="brand-hi" lang="hi">पराली जाँच</span></a>
-  <nav>
-    <a href="#/story" data-nav="story">Story</a>
-    <a href="#/farmer" data-nav="farmer">Farmer <span lang="hi">किसान</span></a>
-    <a href="#/officer" data-nav="officer">Officer</a>
-    <a href="#/map" data-nav="map">Map</a>
+<div id="map" aria-label="Satellite map of the Patiala-Kaithal border belt"></div>
+<div class="loader" id="loader" aria-live="polite">
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <defs><clipPath id="scanclip"><rect x="0" y="0" width="64" height="0"><animate attributeName="height" values="0;64;64;0" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect></clipPath>
+      <linearGradient id="sky2" x1="0" y1="1" x2="0.35" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="0.5" stop-color="#D9468C"/><stop offset="1" stop-color="#3D6BFF"/></linearGradient></defs>
+    <rect x="4" y="4" width="56" height="56" rx="16" fill="#1A2440"/><path fill="#2A3A63" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/>
+    <g clip-path="url(#scanclip)"><rect x="4" y="4" width="56" height="56" rx="16" fill="url(#sky2)"/><path fill="#fff" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/></g>
+    <rect x="6" y="4" width="52" height="1.4" rx="0.7" fill="#9FE3FF"><animate attributeName="y" values="4;60;60;4" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect>
+  </svg>
+  <p>Loading the season from orbit</p>
+</div>
+
+<header class="bar">
+  <a class="brand" href="index.html" aria-label="Saakshi home">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="sky" x1="0" y1="1" x2="0.35" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="0.5" stop-color="#D9468C"/><stop offset="1" stop-color="#3D6BFF"/></linearGradient>
+        <path id="orb" d="M3 34 A29 8 0 0 0 61 34 A29 8 0 0 0 3 34"/></defs>
+      <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#sky)"/>
+      <path fill="#fff" d="M25.66 44.79 20.06 48.0 11.94 35.72Q11.18 34.55 10.81 33.72Q10.45 32.88 10.45 32.12Q10.45 30.85 11.51 30.11Q12.57 29.36 14.42 29.36L15.15 30.31Q15.55 30.85 16.07 31.21Q16.59 31.57 17.18 31.57Q18.35 31.57 19.14 30.63Q19.93 29.68 19.93 27.74Q19.93 26.03 19.41 24.72Q18.89 23.41 18.35 22.69H9.33V18.0H42.12V22.69H38.51V46.96H32.29V36.58Q31.75 36.81 30.82 36.96Q29.90 37.12 28.41 37.12Q26.78 37.12 25.09 36.69Q23.40 36.27 22.14 35.54Q20.56 36.36 18.98 36.36H18.80ZM27.73 32.12Q29.36 32.12 30.44 31.78Q31.52 31.44 32.29 30.81V22.69H24.71Q25.16 23.32 25.70 24.74Q26.24 26.16 26.24 28.37Q26.24 29.41 26.06 30.27Q25.88 31.12 25.57 31.89Q26.06 32.03 26.67 32.07Q27.28 32.12 27.73 32.12ZM44.83 22.69H41.22V18.0H54.66V22.69H51.06V46.96H44.83Z"/>
+      <g transform="rotate(-18 32 34)"><path d="M3 34 A29 8 0 0 0 61 34" fill="none" stroke="#fff" stroke-width="2.6"/>
+        <circle r="3" fill="#fff"><animateMotion dur="6s" repeatCount="indefinite"><mpath href="#orb"/></animateMotion></circle></g>
+    </svg>
+    <span class="name">Saakshi</span><span class="name-hi" lang="hi">साक्षी</span>
+  </a>
+  <div class="spacer"></div>
+  <nav class="modes" aria-label="Views">
+    <a class="on" href="index.html" data-i18n="explore">Explore</a>
+    <a href="app.html#/officer" data-i18n="officer">Officer</a>
+    <a href="app.html#/farmer" data-i18n="farmer">Farmer</a>
   </nav>
+  <div class="langs" role="group" aria-label="Language">
+    <button data-lang="en">EN</button><button data-lang="hi" lang="hi">हिं</button><button data-lang="pa" lang="pa">ਪੰ</button><button data-lang="hr" lang="hi">हरि</button>
+  </div>
 </header>
-<main id="app" tabindex="-1"></main>
-<footer class="foot">
-  <span>Satellite images: Copernicus Sentinel-2 via the AWS Open Data registry. Fire points: NASA FIRMS (VIIRS).</span>
-  <span>The system approves or refers. It never rejects a claim or penalises anyone on its own.</span>
+
+<section class="hero" id="hero" hidden>
+  <p class="kicker" data-i18n="kicker">Patiala–Kaithal border belt · kharif 2025</p>
+  <h1 data-i18n="headline">9 in 10 burnt hectares never got a fire alert.</h1>
+  <div class="vs">
+    <div class="row"><span data-i18n="alerts">Fire alerts</span><div class="track"><i class="bad" style="--w:14.1%"></i></div><b>14.1%</b></div>
+    <div class="row"><span>Saakshi</span><div class="track"><i class="good" style="--w:2.6%"></i></div><b>2.6%</b></div>
+    <p class="cap" data-i18n="vscap">clean fields wrongly flagged · 314 fields checked by hand</p>
+  </div>
+  <div class="actions">
+    <button class="primary" id="play-season"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="play">Play the season</span></button>
+    <button class="ghost" id="explore" data-i18n="explorebtn">Explore the map</button>
+  </div>
+  <p class="fine" data-i18n="fine">Burn-like ground seen by Sentinel-2. Every flag goes to an officer.</p>
+</section>
+
+<aside class="panel" id="panel" hidden>
+  <button class="close" id="panel-close" aria-label="Close">×</button>
+  <div id="panel-body"></div>
+</aside>
+
+<div class="layers" role="group" aria-label="Layers">
+  <button data-layer="burns" class="on"><i class="sw burn"></i><span data-i18n="l_burns">Burns</span></button>
+  <button data-layer="fires" class="on"><i class="sw fire"></i><span data-i18n="l_fires">Fire alerts</span></button>
+  <button data-layer="fields" class="on"><i class="sw field"></i><span data-i18n="l_fields">Fields</span></button>
+</div>
+
+<footer class="timeline" id="timeline">
+  <button class="play" id="play" aria-label="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M8 5v14l11-7z"/></svg></button>
+  <div class="when"><b id="when"></b><span id="stage"></span></div>
+  <div class="scrub">
+    <div class="ramp"></div>
+    <div class="fill" id="fill"></div>
+    <div class="ticks" id="ticks"></div>
+  </div>
+  <div class="count"><b id="ha">0</b><span data-i18n="ha">ha burn-like</span></div>
+  <div class="count"><b id="fa">0</b><span data-i18n="fa">fire alerts</span></div>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script type="module" src="js/main.js"></script>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script type="module" src="js/explorer.js"></script>
 </body>
 </html>

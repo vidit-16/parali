@@ -215,6 +215,7 @@ Resources:
         DefaultCacheBehavior:
           TargetOriginId: web
           ViewerProtocolPolicy: redirect-to-https
+          Compress: true
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6        # CachingOptimized
         CacheBehaviors:
           - PathPattern: /api/*
@@ -230,6 +231,7 @@ Resources:
           - PathPattern: /tiles/*
             TargetOriginId: blobs
             ViewerProtocolPolicy: redirect-to-https
+            Compress: true
             CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
 
 Outputs:

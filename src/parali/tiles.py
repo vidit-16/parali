@@ -53,7 +53,7 @@ BURN_MAX_BRIGHT = 0.07
 BURN_NIR_DROP = 0.30
 MIN_PATCH_PX = 3
 DISPLAY_GAIN = 0.18                   # reflectance shown as full white
-STALE_ALPHA = 70                      # opacity for pixels carried over from another window
+STALE_DIM = 0.7                       # brightness of grey pixels carried over from another window
 
 
 # ---- web mercator tile maths ----
@@ -445,10 +445,13 @@ def build_block(bx: int, by: int, region_lonlat, sink: Sink, log: Callable[[str]
     filled = fill_gaps([done.get(w, (None, None)) for w, _, _ in WINDOWS])
     tiles = 0
     for (w, _, _), (rgb, seen), new in zip(WINDOWS, filled, fresh):
-        # pixels the satellite saw in this window are solid; ones carried over from another window
-        # (clouds all ten days) are faded, so an old green field does not pass for November
-        alpha = np.where(new if new is not None else False, 255, STALE_ALPHA) * seen * inside_fine
-        alpha = alpha.astype("uint8")
+        # Pixels the satellite saw in this window keep their colour. Ones carried over from another window
+        # (no clear view for ten days) turn grey and dim, so an old green field does not pass for November.
+        stale = ~(new if new is not None else np.zeros(seen.shape, bool)) & seen
+        if stale.any():
+            grey = (rgb.mean(axis=2, keepdims=True) * STALE_DIM).astype("uint8")
+            rgb = np.where(stale[..., None], np.repeat(grey, 3, axis=2), rgb)
+        alpha = (seen & inside_fine).astype("uint8") * 255
         tiles += write_block_tiles(sink, w, bx, by, np.dstack([rgb, alpha]))
     summary = {"block": [bx, by], "dates": len(by_date), "tiles": tiles, "patches": len(feats), "burn_ha": burn_ha}
     sink.put(f"burns/{bx}_{by}.json", json.dumps(summary).encode(), "application/json")

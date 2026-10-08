@@ -44,14 +44,15 @@ def main():
     s3 = s.client("s3")
 
     web = ROOT / "web"
-    types = {".js": "text/javascript", ".css": "text/css", ".html": "text/html", ".json": "application/json",
+    types = {".geojson": "application/json", ".js": "text/javascript", ".css": "text/css", ".html": "text/html", ".json": "application/json",
              ".png": "image/png", ".svg": "image/svg+xml"}
     for f in sorted(p for p in web.rglob("*") if p.is_file()):
         rel = f.relative_to(web).as_posix()
         ctype = types.get(f.suffix, mimetypes.guess_type(f.name)[0] or "application/octet-stream")
         if ctype.startswith("text/") or ctype == "application/json":
             ctype += "; charset=utf-8"
-        s3.upload_file(str(f), bucket, f"web/{rel}", ExtraArgs={"ContentType": ctype})
+        # no-cache: browsers revalidate (cheap 304s) instead of running a stale script after a deploy
+        s3.upload_file(str(f), bucket, f"web/{rel}", ExtraArgs={"ContentType": ctype, "CacheControl": "no-cache"})
         print("web/", rel)
     s3.upload_file(str(ROOT / "data/firms/kaithal_2025.csv"), bucket, "data/firms.csv")
 

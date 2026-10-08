@@ -58,7 +58,7 @@ def merge_burns(sink, blocks):
         if data:
             feats += json.loads(data)["features"]
     sink.put("burns.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
-                                         separators=(",", ":")).encode(), "application/geo+json")
+                                         separators=(",", ":")).encode(), "application/json")  # CloudFront compresses application/json
     return len(feats)
 
 
@@ -75,7 +75,7 @@ def fire_layer(sink, region):
               "geometry": {"type": "Point", "coordinates": [round(f.lon, 5), round(f.lat, 5)]}}
              for f in fs if region.contains(Point(f.lon, f.lat))]
     sink.put("fires.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
-                                         separators=(",", ":")).encode(), "application/geo+json")
+                                         separators=(",", ":")).encode(), "application/json")  # CloudFront compresses application/json
     return len(feats)
 
 
