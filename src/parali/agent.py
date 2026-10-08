@@ -22,6 +22,7 @@ from parali.store import Store
 
 MODEL_ID = os.environ.get("AGENT_MODEL_ID", "us.amazon.nova-2-lite-v1:0")
 DAILY_MODEL_TURNS = int(os.environ.get("AGENT_DAILY_TURNS", "400"))
+MODEL_TIMEOUT_S = float(os.environ.get("AGENT_TIMEOUT_S", "15"))
 
 
 @dataclass
@@ -296,10 +297,18 @@ class BedrockBackend:
             """The fields registered to this farmer."""
             return tool_my_fields(ctx)
 
-        model = BedrockModel(model_id=self.model_id, region_name=self.region, temperature=0.0, max_tokens=300)
+        from botocore.config import Config
+        try:
+            from strands import ModelRetryStrategy
+        except ImportError:
+            from strands.event_loop._retry import ModelRetryStrategy
+
+        # Fail fast: a farmer waiting on a phone gets the rule-based answer instead of a minute of backoff.
+        model = BedrockModel(model_id=self.model_id, region_name=self.region, temperature=0.0, max_tokens=300,
+                             boto_client_config=Config(retries={"max_attempts": 1}, connect_timeout=3, read_timeout=12))
         return Agent(model=model, system_prompt=SYSTEM, messages=list(history),
                      tools=[claim_status, advance_status, file_claim, explain, contest, request_callback, my_fields],
-                     callback_handler=None)
+                     callback_handler=None, retry_strategy=ModelRetryStrategy(max_attempts=1))
 
     def respond(self, ctx: Context, text: str, history: list) -> Reply:
         result = self._agent(ctx, history)(text)
@@ -330,13 +339,22 @@ def respond(store: Store, farmer_id: str, text: str, dispatch: Callable[[str], N
             r = ScriptedBackend().respond(ctx, text, [])
             r.mode, r.note = "scripted-fallback", "daily model limit reached"
             return r
+        from concurrent.futures import ThreadPoolExecutor
+        from concurrent.futures import TimeoutError as Timeout
+        pool = ThreadPoolExecutor(1)
         try:
-            return backend.respond(ctx, text, history or [])
-        except Exception as e:  # model unavailable: the farmer still gets an answer, and the mode says so
-            ctx.effects.clear()
-            r = ScriptedBackend().respond(ctx, text, [])
-            r.mode, r.note = "scripted-fallback", f"model unavailable: {type(e).__name__}"
+            return pool.submit(backend.respond, ctx, text, history or []).result(timeout=MODEL_TIMEOUT_S)
+        except Exception as e:  # model unavailable or slow: the farmer still gets an answer, and the mode says so
+            if ctx.effects:  # a tool already ran: answer from what it did, never run it twice
+                hi, en = compose(list(ctx.effects))
+                return Reply(hi, en, [n for n, _ in ctx.effects], "bedrock", note="model did not finish its reply")
+            fresh = Context(store, farmer_id, dispatch)
+            r = ScriptedBackend().respond(fresh, text, [])
+            r.mode = "scripted-fallback"
+            r.note = "model too slow" if isinstance(e, Timeout) else f"model unavailable: {type(e).__name__}"
             return r
+        finally:
+            pool.shutdown(wait=False)
     return backend.respond(ctx, text, history or [])
 
 

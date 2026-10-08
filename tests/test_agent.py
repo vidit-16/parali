@@ -152,3 +152,18 @@ def test_daily_cap_falls_back(store, monkeypatch):
     r = agent.respond(store, "f1", "नमस्ते", lambda _: None, backend=ChattyBedrock())
     assert r.mode == "scripted-fallback" and "limit" in r.note
 
+
+
+class SlowBedrock(agent.BedrockBackend):
+    def respond(self, ctx, text, history):
+        import time
+        time.sleep(2)
+        return agent.Reply("late", "", [], self.mode)
+
+
+def test_slow_model_falls_back_fast(store, monkeypatch):
+    import time
+    monkeypatch.setattr(agent, "MODEL_TIMEOUT_S", 0.3)
+    t = time.time()
+    r = agent.respond(store, "f1", "मेरा दावा कहाँ तक पहुँचा?", lambda _: None, backend=SlowBedrock())
+    assert time.time() - t < 1.5 and r.mode == "scripted-fallback" and "slow" in r.note

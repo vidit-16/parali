@@ -4,44 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Parali Check</title>
-<link rel="stylesheet" href="style.css">
+<meta name="description" content="Pay farmers before harvest for not burning straw, verify every field by satellite after.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6b3a'/%3E%3Cpath d='M9 23c6-1 10-6 12-14M15 23c3-2 6-6 7-10' stroke='%23e8c766' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 </head>
 <body>
-<header>
-  <div class="brand">Parali Check <span class="sub">no-burn claim verification</span></div>
+<header class="top">
+  <a class="brand" href="#/"><span class="logo"></span>Parali Check <span class="brand-hi" lang="hi">पराली जाँच</span></a>
   <nav>
-    <button data-view="farmer" class="tab active">Farmer / किसान</button>
-    <button data-view="officer" class="tab">Village officer</button>
+    <a href="#/story" data-nav="story">Story</a>
+    <a href="#/farmer" data-nav="farmer">Farmer <span lang="hi">किसान</span></a>
+    <a href="#/officer" data-nav="officer">Officer</a>
+    <a href="#/map" data-nav="map">Map</a>
   </nav>
 </header>
-
-<main>
-  <section id="farmer" class="view">
-    <p class="intro">Pick your field and file a no-burn claim for the 2025 paddy season. The check uses free
-      Sentinel-2 satellite images from 1 Oct to 30 Nov. Clear cases are approved on the spot; anything unclear goes
-      to the village officer with the images attached.</p>
-    <div id="fields" class="cards"></div>
-    <div id="claim" class="panel hidden"></div>
-  </section>
-
-  <section id="officer" class="view hidden">
-    <div class="officer-bar">
-      <label>Officer ID <input id="officer-id" placeholder="e.g. VO-KTL-07" autocomplete="off"></label>
-      <label>PIN <input id="officer-pin" type="password" autocomplete="off"></label>
-      <button id="reset" class="ghost">Reset demo</button>
-    </div>
-    <h2>Waiting for review</h2>
-    <div id="queue" class="list"></div>
-    <div id="detail" class="panel hidden"></div>
-    <h2>All claims</h2>
-    <table id="all"><thead><tr><th>Field</th><th>Farmer</th><th>Status</th><th>Rule</th></tr></thead><tbody></tbody></table>
-  </section>
-</main>
-
-<footer>
-  Satellite data: Copernicus Sentinel-2 via AWS Open Data. Fire points: NASA FIRMS. The system approves or refers;
-  it never rejects a claim on its own.
+<main id="app" tabindex="-1"></main>
+<footer class="foot">
+  <span>Satellite images: Copernicus Sentinel-2 via the AWS Open Data registry. Fire points: NASA FIRMS (VIIRS).</span>
+  <span>The system approves or refers. It never rejects a claim or penalises anyone on its own.</span>
 </footer>
-<script src="app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -107,7 +107,7 @@ def decide(feats: list[DateFeatures], th: Thresholds, fires_nearby: int = 0,
     if lasting:
         e = lasting[0]
         return Decision(POSSIBLE_BURN, "burn_scar_persistent",
-                        f"NIR fell sharply and {th.dark(e):.0%} of the field stayed dark from {e.date}. "
+                        f"NIR fell sharply and {th.dark(e):.0%} of the field turned near-black on {e.date}. "
                         "Officer to confirm.", burn_date=e.date, **base)
     if events:
         e = events[0][0]

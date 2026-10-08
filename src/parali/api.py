@@ -19,6 +19,7 @@ class Deps:
     reset: Callable[[], None] | None = None
     agent_backend: object | None = None                      # None: scripted assistant
     transcriber: Callable[[bytes], str] | None = None        # 16 kHz PCM -> Hindi text
+    fires: Callable[[], list] | None = None                  # FIRMS points for the season
 
 
 def _json(status: int, body) -> tuple[int, dict, bytes]:
@@ -51,6 +52,9 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             return _json(200, s.list("fields"))
         if method == "GET" and path == "/api/claims":
             return _json(200, [_claim_view(s, c) for c in s.list("claims")])
+        if method == "GET" and path == "/api/fires":
+            pts = deps.fires() if deps.fires else []
+            return _json(200, [{"lat": f.lat, "lon": f.lon, "date": f.date.isoformat(), "source": f.source} for f in pts])
         if method == "GET" and path == "/api/stats":
             return _json(200, _stats(s))
         if method == "GET" and path == "/api/config":

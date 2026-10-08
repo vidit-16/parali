@@ -55,7 +55,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
 
     return Deps(store=store, dispatch=lambda cid: threading.Thread(target=run, args=(cid,), daemon=True).start(),
                 officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
-                agent_backend=agent_backend)
+                agent_backend=agent_backend, fires=lambda: fires)
 
 
 class Handler(BaseHTTPRequestHandler):

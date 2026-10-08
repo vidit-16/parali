@@ -82,7 +82,7 @@ def api_handler(event, context):
     elif body:
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
-                reset=_reset)
+                reset=_reset, fires=fires)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps)
     return {"statusCode": status, "headers": headers, "body": out.decode()}
 
