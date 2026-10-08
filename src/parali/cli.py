@@ -120,12 +120,17 @@ def cmd_evaluate(a):
 
 def cmd_demo(a):
     from parali.server import serve
-    speaker = None
-    if a.polly:
+    speaker = transcriber = backend = None
+    if a.aws:  # real Polly, Transcribe and Bedrock with your AWS credentials
         from functools import partial
+        from parali.agent import BedrockBackend
+        from parali.speech import transcribe_pcm
         from parali.tts import polly_mp3
         speaker = partial(polly_mp3, region="us-west-2")
-    serve(Path(a.state), port=a.port, speaker=speaker, officer_pin=a.pin)
+        transcriber = partial(transcribe_pcm, region="us-west-2")
+        backend = BedrockBackend()
+    serve(Path(a.state), port=a.port, speaker=speaker, officer_pin=a.pin, transcriber=transcriber,
+          agent_backend=backend)
 
 
 def cmd_features(a):
@@ -206,7 +211,7 @@ def main(argv=None):
     s.add_argument("--state", default="data/local")
     s.add_argument("--port", type=int, default=8080)
     s.add_argument("--pin", default="2468", help="officer PIN for the demo")
-    s.add_argument("--polly", action="store_true", help="use Amazon Polly for Hindi audio (needs AWS credentials)")
+    s.add_argument("--aws", action="store_true", help="use Polly, Transcribe and Bedrock (needs AWS credentials)")
     s.set_defaults(func=cmd_demo)
 
     s = sub.add_parser("features", help="print per-date features as CSV")

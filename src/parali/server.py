@@ -31,7 +31,8 @@ def demo_stacks(stacks_dir: Path):
     return provider
 
 
-def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None) -> Deps:
+def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, transcriber=None,
+              agent_backend=None) -> Deps:
     store = LocalStore(state_dir)
     if not store.list("fields"):
         seed(store, DEMO / "fields.geojson")
@@ -53,7 +54,8 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None) -> 
             shutil.rmtree(state_dir / sub, ignore_errors=True)
 
     return Deps(store=store, dispatch=lambda cid: threading.Thread(target=run, args=(cid,), daemon=True).start(),
-                officer_pin=officer_pin, speaker=speaker, reset=reset)
+                officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
+                agent_backend=agent_backend)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -93,7 +95,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {"Content-Type": mimetypes.guess_type(path)[0] or "application/octet-stream"}, data)
         name = "index.html" if path in ("/", "") else path.lstrip("/")
         p = (WEB / name).resolve()
-        if p.parent != WEB.resolve() or not p.is_file():
+        if WEB.resolve() not in p.parents or not p.is_file():
             return self._send(404, {}, b"")
         ctype = mimetypes.guess_type(p.name)[0] or "application/octet-stream"
         if ctype.startswith("text/") or ctype.endswith("javascript"):
@@ -101,8 +103,9 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, {"Content-Type": ctype}, p.read_bytes())
 
 
-def serve(state_dir: Path, port: int = 8080, speaker=None, officer_pin: str | None = None) -> None:
-    deps = make_deps(state_dir, speaker, officer_pin)
+def serve(state_dir: Path, port: int = 8080, speaker=None, officer_pin: str | None = None, transcriber=None,
+          agent_backend=None) -> None:
+    deps = make_deps(state_dir, speaker, officer_pin, transcriber, agent_backend)
     srv = ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, deps=deps))
     print(f"Parali Check demo at http://127.0.0.1:{port}  (state in {state_dir})"
           + (f"  officer PIN {officer_pin}" if officer_pin else ""))

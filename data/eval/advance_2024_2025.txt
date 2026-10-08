@@ -1,13 +1,14 @@
 2024 rule verdict x 2025 label (counts / weighted):
-  burn     2024 -> burnt      2025:   1 plots, weight 61
-  burn     2024 -> not_burnt  2025:   5 plots, weight 194
-  clean    2024 -> burnt      2025:   7 plots, weight 195
-  clean    2024 -> not_burnt  2025: 150 plots, weight 11413
-  unclear  2024 -> burnt      2025:   5 plots, weight 246
-  unclear  2024 -> not_burnt  2025:  50 plots, weight 2941
-burnt in 2025 among 2024-clean: 1.7%  (weight 11608)
-burnt in 2025 among 2024-unclear: 7.7%  (weight 3188)
-burnt in 2025 among 2024-burn: 23.8%  (weight 255)
+  burn     2024 -> burnt      2025:   1 plots, weight 26
+  burn     2024 -> not_burnt  2025:   9 plots, weight 289
+  clean    2024 -> burnt      2025:  12 plots, weight 212
+  clean    2024 -> not_burnt  2025: 177 plots, weight 11561
+  unclear  2024 -> burnt      2025:   7 plots, weight 257
+  unclear  2024 -> not_burnt  2025:  56 plots, weight 2704
+burnt in 2025 among 2024-clean: 1.8%  (weight 11774)
+burnt in 2025 among 2024-unclear: 8.7%  (weight 2961)
+burnt in 2025 among 2024-burn: 8.3%  (weight 315)
 burnt in 2025 overall: 3.3%
-share of fields eligible for advance (2024 clean): 77.1%
-2025 burnt plots and their 2024 verdict: [('p150_134', 'unclear'), ('p100_128', 'clean'), ('p141_032', 'unclear'), ('p032_073', 'unclear'), ('p100_007', 'clean'), ('p094_014', 'clean'), ('p058_027', 'clean'), ('p140_000', 'burn'), ('p023_059', 'clean'), ('p049_074', 'clean'), ('p010_040', 'clean'), ('p015_124', 'unclear'), ('p016_127', 'unclear')]
+share of fields eligible for advance (2024 clean): 78.2%
+2025 burnt plots and their 2024 verdict: [('p150_134', 'unclear'), ('p100_128', 'clean'), ('p141_032', 'unclear'), ('p032_073', 'unclear'), ('p100_007', 'clean'), ('p094_014', 'clean'), ('p058_027', 'clean'), ('p140_000', 'burn'), ('p023_059', 'clean'), ('p049_074', 'clean'), ('p010_040', 'clean'), ('p015_124', 'unclear'), ('p016_127', 'unclear'), ('p018_030', 'unclear'), ('p056_020', 'clean'), ('p057_019', 'clean'), ('p078_033', 'unclear'), ('p000_007', 'clean'), ('p018_037', 'clean'), ('p039_064', 'clean')]
+burnt in 2025 among 2024-not-clean: 8.6%  (weight 3276)

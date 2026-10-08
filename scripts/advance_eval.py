@@ -52,3 +52,6 @@ eligible = share("clean")[1] / all_tot
 print(f"share of fields eligible for advance (2024 clean): {eligible:.1%}")
 burnt25 = [p.id for p in lab if labels[p.id] == "burnt"]
 print("2025 burnt plots and their 2024 verdict:", [(i, v24[i]) for i in burnt25])
+nc = sum(x for (a, b), x in tab.items() if a != "clean")
+nc_b = sum(x for (a, b), x in tab.items() if a != "clean" and b == "burnt")
+print(f"burnt in 2025 among 2024-not-clean: {nc_b / nc:.1%}  (weight {nc:.0f})")

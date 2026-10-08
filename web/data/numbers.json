@@ -1,0 +1,48 @@
+{
+ "labelled_plots": 314,
+ "burnt_labels": 20,
+ "rules": {
+  "burnt_auto_approved": 0.0,
+  "auto_approved": 75.8,
+  "review": 20.5,
+  "possible_burn": 3.7,
+  "clean_flagged": 2.6
+ },
+ "firms": {
+  "clean_flagged": 14.1,
+  "burns_caught": 14.1
+ },
+ "held_out": {
+  "auto_approved": [
+   84.0,
+   81.7
+  ],
+  "burnt_auto_approved": [
+   0.0,
+   6.4
+  ],
+  "clean_flagged": [
+   4.8,
+   4.9
+  ],
+  "firms_clean_flagged": [
+   13.5,
+   14.7
+  ]
+ },
+ "advance": {
+  "eligible_share": 78.2,
+  "burnt_if_clean_last_year": 1.8,
+  "burnt_if_burnt_last_year": 8.3,
+  "burnt_if_not_clean_last_year": 8.6,
+  "burnt_overall": 3.3
+ },
+ "context": {
+  "delhi_pm25_share_peak": 26.2,
+  "delhi_pm25_source": "IITM decision support system via CPCB bulletin, 22 Nov 2024",
+  "upfront_trial_gain_pp": "8-11",
+  "upfront_trial_source": "Jack, Jayachandran, Kala, Pande; J-PAL / MIT CEEPR working paper (Punjab RCT)",
+  "kaithal_applied": "18,329 of 49,215",
+  "incentive_per_acre": 1200
+ }
+}

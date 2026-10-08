@@ -51,6 +51,11 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             return _json(200, s.list("fields"))
         if method == "GET" and path == "/api/claims":
             return _json(200, [_claim_view(s, c) for c in s.list("claims")])
+        if method == "GET" and path == "/api/stats":
+            return _json(200, _stats(s))
+        if method == "GET" and path == "/api/config":
+            return _json(200, {"voice_in": deps.transcriber is not None, "voice_out": deps.speaker is not None,
+                               "model": getattr(deps.agent_backend, "mode", "scripted")})
         if method == "GET" and path == "/api/queue":
             return _json(200, [_claim_view(s, c) for c in service.queue(s)])
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})", path)
@@ -80,6 +85,21 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
     except service.WorkflowError as e:
         return _json(409, {"error": str(e)})
     return _json(404, {"error": "no such route"})
+
+
+def _stats(s: Store) -> dict:
+    claims = s.list("claims")
+    by = {}
+    for c in claims:
+        by[c["status"]] = by.get(c["status"], 0) + 1
+    adv = [c.get("advance") or {} for c in claims]
+    return {
+        "claims": len(claims),
+        "by_status": by,
+        "advances_paid": sum(1 for a in adv if a.get("status") == "paid"),
+        "advance_amount": sum(a.get("amount", 0) for a in adv if a.get("status") == "paid"),
+        "to_recover": sum((c.get("settlement") or {}).get("recover") or 0 for c in claims),
+    }
 
 
 def _agent_turn(deps: Deps, data: dict) -> dict:
