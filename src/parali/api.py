@@ -20,6 +20,7 @@ class Deps:
     agent_backend: object | None = None                      # None: scripted assistant
     transcriber: Callable[[bytes], str] | None = None        # 16 kHz PCM -> Hindi text
     fires: Callable[[], list] | None = None                  # FIRMS points for the season
+    dispatch_check: Callable[[str], None] | None = None      # start a check-any-field job
 
 
 def _json(status: int, body) -> tuple[int, dict, bytes]:
@@ -79,6 +80,24 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             c = service.review(s, m.group(1), str(data.get("officer_id", "")), str(data.get("verdict", "")),
                                str(data.get("note", ""))[:500], deps.speaker)
             return _json(200, _claim_view(s, c))
+        if method == "POST" and path == "/api/check":
+            from parali import check
+            if deps.dispatch_check is None:
+                return _json(503, {"error": "field checks are not available here"})
+            try:
+                item = check.create(s, data.get("geometry") or {})
+            except check.CheckError as e:
+                return _json(400, {"error": str(e)})
+            deps.dispatch_check(item["id"])
+            return _json(201, item)
+        m = re.fullmatch(r"/api/check/([0-9a-f]{12})", path)
+        if method == "GET" and m:
+            item = s.get("checks", m.group(1))
+            if item is None:
+                return _json(404, {"error": "not found"})
+            for r in (item.get("result") or {}).values():
+                r["evidence_url"] = s.blob_url(r["evidence_key"])
+            return _json(200, item)
         if method == "POST" and path == "/api/agent":
             return _json(200, _agent_turn(deps, data))
         if method == "POST" and path == "/api/demo/reset":

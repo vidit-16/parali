@@ -13,13 +13,20 @@ Globals:
     Runtime: python3.12
     Architectures: [x86_64]
     CodeUri: ../src
-    Layers: [!Ref DepsLayer]
     Environment:
       Variables:
         TABLE_NAME: !Ref Table
         BUCKET_NAME: !Ref Bucket
 
 Resources:
+  AgentLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ../layer-agent
+      CompatibleRuntimes: [python3.12]
+    Metadata:
+      BuildMethod: python3.12
+
   DepsLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -81,6 +88,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: parali.aws.process_handler
+      Layers: [!Ref DepsLayer]
       Timeout: 600
       MemorySize: 2048
       Environment:
@@ -106,6 +114,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: parali.aws.api_handler
+      Layers: [!Ref DepsLayer]
       Timeout: 29
       MemorySize: 1024
       Environment:
@@ -126,6 +135,40 @@ Resources:
           Properties:
             Path: /api/{proxy+}
             Method: ANY
+
+  AgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: parali.aws_agent.handler
+      Layers: [!Ref AgentLayer]
+      Timeout: 29
+      MemorySize: 1024
+      Environment:
+        Variables:
+          PROCESS_FUNCTION: !Ref ProcessFunction
+          AGENT_MODEL_ID: us.amazon.nova-2-lite-v1:0
+          AGENT_DAILY_TURNS: "400"
+          AGENT_TIMEOUT_S: "15"
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref Table }
+        - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - LambdaInvokePolicy: { FunctionName: !Ref ProcessFunction }
+        - Statement:
+            - Effect: Allow
+              Action: [polly:SynthesizeSpeech, transcribe:StartStreamTranscription,
+                       bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream, bedrock:Converse, bedrock:ConverseStream]
+              Resource: "*"
+      Events:
+        Agent:
+          Type: HttpApi
+          Properties:
+            Path: /api/agent
+            Method: POST
+        Config:
+          Type: HttpApi
+          Properties:
+            Path: /api/config
+            Method: GET
 
   Oac:
     Type: AWS::CloudFront::OriginAccessControl

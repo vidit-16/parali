@@ -43,12 +43,16 @@ def main():
     bucket, table = out["Bucket"], out["Table"]
     s3 = s.client("s3")
 
-    for f in sorted((ROOT / "web").iterdir()):
-        ctype = mimetypes.guess_type(f.name)[0] or "application/octet-stream"
-        if ctype.startswith("text/") or ctype.endswith("javascript"):
+    web = ROOT / "web"
+    types = {".js": "text/javascript", ".css": "text/css", ".html": "text/html", ".json": "application/json",
+             ".png": "image/png", ".svg": "image/svg+xml"}
+    for f in sorted(p for p in web.rglob("*") if p.is_file()):
+        rel = f.relative_to(web).as_posix()
+        ctype = types.get(f.suffix, mimetypes.guess_type(f.name)[0] or "application/octet-stream")
+        if ctype.startswith("text/") or ctype == "application/json":
             ctype += "; charset=utf-8"
-        s3.upload_file(str(f), bucket, f"web/{f.name}", ExtraArgs={"ContentType": ctype})
-        print("web/", f.name)
+        s3.upload_file(str(f), bucket, f"web/{rel}", ExtraArgs={"ContentType": ctype})
+        print("web/", rel)
     s3.upload_file(str(ROOT / "data/firms/kaithal_2025.csv"), bucket, "data/firms.csv")
 
     tbl = s.resource("dynamodb").Table(table)

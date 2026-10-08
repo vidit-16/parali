@@ -61,6 +61,11 @@ def _dispatch(claim_id: str) -> None:
         FunctionName=PROCESS_FN, InvocationType="Event", Payload=json.dumps({"claim_id": claim_id}).encode())
 
 
+def _dispatch_check(check_id: str) -> None:
+    boto3.client("lambda", region_name=REGION).invoke(
+        FunctionName=PROCESS_FN, InvocationType="Event", Payload=json.dumps({"check_id": check_id}).encode())
+
+
 def _reset() -> None:
     st = store()
     for c in st.list("claims"):
@@ -82,7 +87,7 @@ def api_handler(event, context):
     elif body:
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
-                reset=_reset, fires=fires)
+                reset=_reset, fires=fires, dispatch_check=_dispatch_check)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps)
     return {"statusCode": status, "headers": headers, "body": out.decode()}
 
@@ -99,6 +104,15 @@ def _notify(claim: dict) -> None:
 def process_handler(event, context):
     st = store()
     th = Thresholds.load()
+    if event.get("check_id"):
+        from parali import check
+        try:
+            return check.run(st, event["check_id"], stacks, fires(), th)["status"]
+        except Exception as e:
+            item = st.get("checks", event["check_id"]) or {"id": event["check_id"]}
+            item.update(status="error", error=str(e))
+            st.put("checks", event["check_id"], item)
+            raise
     if event.get("claim_id"):
         ids = [event["claim_id"]]
     else:  # scheduled sweep: anything still waiting for a decision

@@ -25,6 +25,23 @@ def seed(store: LocalStore, fields_path: Path) -> None:
         store.put("fields", f.id, {"id": f.id, **f.props, "geometry": mapping(f.geometry)})
 
 
+def local_or_live_stacks(field, start, end):
+    """Any field: cut from the cached study area if it covers the field, otherwise read live (slow from India)."""
+    from datetime import timedelta
+
+    from parali.area import fetch_area
+    cache = ROOT / "data" / "cache" / f"west_kaithal_{start.year}.npz"
+    x0, y0, x1, y1 = field.bbox
+    pad = 0.0018
+    bbox = (x0 - pad, y0 - pad, x1 + pad, y1 + pad)
+    if cache.exists():
+        st = AreaStack.load(cache)
+        cx0, cy0, cx1, cy1 = st.bbox
+        if cx0 <= bbox[0] and bbox[2] <= cx1 and cy0 <= bbox[1] and bbox[3] <= cy1:
+            return st.subset(bbox)
+    return fetch_area(bbox, (start - timedelta(days=7)).isoformat(), end.isoformat(), log=lambda *_: None)
+
+
 def demo_stacks(stacks_dir: Path):
     def provider(field, start, end):
         return AreaStack.load(stacks_dir / f"{field.id}_{start.year}.npz")
@@ -49,13 +66,24 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
             store.put("claims", claim_id, c)
             raise
 
+    def run_check(check_id):
+        from parali import check
+        try:
+            check.run(store, check_id, local_or_live_stacks, fires, th)
+        except Exception as e:
+            item = store.get("checks", check_id)
+            item.update(status="error", error=str(e))
+            store.put("checks", check_id, item)
+            raise
+
     def reset():
         for sub in ("claims", "events", "blobs"):
             shutil.rmtree(state_dir / sub, ignore_errors=True)
 
     return Deps(store=store, dispatch=lambda cid: threading.Thread(target=run, args=(cid,), daemon=True).start(),
                 officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
-                agent_backend=agent_backend, fires=lambda: fires)
+                agent_backend=agent_backend, fires=lambda: fires,
+                dispatch_check=lambda cid: threading.Thread(target=run_check, args=(cid,), daemon=True).start())
 
 
 class Handler(BaseHTTPRequestHandler):
