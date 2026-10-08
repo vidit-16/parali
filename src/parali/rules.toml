@@ -1,0 +1,22 @@
+# Decision thresholds. Placeholder values until they are fitted on the hand-labelled plots.
+
+# A date counts as a clear image for a field when at least this share of its pixels is usable.
+min_valid_share = 0.6
+# Fewer clear images than this inside the claim window -> needs review.
+min_clear_images = 4
+
+# Pixel counts as dark (burn-like) when NBR is below this.
+dark_nbr = -0.10
+# Field-level burn: at least this share of the field dark...
+burn_share = 0.30
+# ...right after NIR fell by at least this fraction since the previous clear image...
+nir_drop = 0.35
+# ...and still dark on this many consecutive clear images.
+persist_images = 2
+# A dark share between this and burn_share at any point -> needs review (part of the field).
+partial_share = 0.10
+# Char is near-black in visible light. 0 disables this check.
+max_burn_brightness = 0.0
+
+# Fire point from FIRMS within this distance of the field during the window -> cannot auto-approve.
+fire_radius_m = 750
