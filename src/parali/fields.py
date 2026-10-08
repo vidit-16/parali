@@ -37,6 +37,7 @@ def save_fields(fields: list[Field], path: str | Path) -> None:
         {"type": "Feature", "properties": {"id": f.id, **f.props}, "geometry": mapping(f.geometry)}
         for f in fields
     ]}
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps(fc, indent=1), encoding="utf-8")
 
 

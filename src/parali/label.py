@@ -22,7 +22,7 @@ def plot_window(stack: AreaStack, plot: Field, pad: int):
     return (r0, c0, r1, c1), (max(r0 - pad, 0), max(c0 - pad, 0), r1 + pad, c1 + pad)
 
 
-def render_strip(stack: AreaStack, plot: Field, out: Path, pad: int = 12, max_dates: int = 14) -> None:
+def render_strip(stack: AreaStack, plot: Field, out: Path, pad: int = 16, max_dates: int = 12) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -37,7 +37,7 @@ def render_strip(stack: AreaStack, plot: Field, out: Path, pad: int = 12, max_da
     if len(keep) > max_dates:
         keep = [keep[i] for i in np.linspace(0, len(keep) - 1, max_dates).round().astype(int)]
 
-    fig, axes = plt.subplots(2, max(len(keep), 1), figsize=(1.6 * max(len(keep), 1), 3.6), squeeze=False)
+    fig, axes = plt.subplots(2, max(len(keep), 1), figsize=(2.1 * max(len(keep), 1), 4.6), squeeze=False)
     for j, t in enumerate(keep):
         def win(b):
             return stack.band(t, b)[r0:r1, c0:c1]
@@ -84,9 +84,11 @@ button{font-size:16px;padding:8px 16px;margin-right:8px}
 #bar{margin:10px 0}
 .help{color:#555;font-size:13px;max-width:900px}
 </style>
-<p class=help>Yellow square = the plot (80 m). Top row: true colour. Bottom row: SWIR/NIR/red, where a fresh burn
-shows as a dark patch. Mark <b>burnt</b> if most of the square goes black/dark grey on any date,
-<b>not burnt</b> if it only fades to brown/tan, <b>unsure</b> if it is mixed, partly burnt, or unclear.</p>
+<p class=help>Yellow square = the plot (80 m). Judge only what is inside it.<br>
+<b>Burnt</b>: most of the square turns dark grey or black in the top row on some date after harvest, usually for one
+or more dates in a row. In the bottom row a burn looks dark red / maroon.<br>
+<b>Not burnt</b>: it fades to tan or brown, or goes dark <i>blue</i> in the bottom row (wet soil after irrigation), then turns green.<br>
+<b>Unsure</b>: only part of the square is dark, the edge of a dark field crosses it, or you cannot tell.</p>
 <div id=bar><b id=pid></b> &nbsp; <span id=prog></span></div>
 <img id=img>
 <div id=bar>

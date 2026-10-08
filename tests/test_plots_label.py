@@ -41,9 +41,9 @@ def test_sample_plots_only_on_cropland_with_strata():
         r, c = map(int, p.id[1:].split("_"))
         assert c < 5  # cell column in left (cropland) half: 40 px / 4 = 10 cells, half = 5
     strata = {p.props["stratum"] for p in plots}
-    assert "near" in strata
-    near = [p for p in plots if p.props["stratum"] == "near"]
-    assert all(p.props["fire_dist_m"] < 750 for p in near)
+    assert "on" in strata
+    near = [p for p in plots if p.props["stratum"] == "on"]
+    assert all(p.props["fire_dist_m"] < 400 for p in near)
     assert all(p.props["stratum_size"] >= len(near) for p in near)
 
 

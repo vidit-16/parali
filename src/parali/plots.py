@@ -14,7 +14,7 @@ from parali.features import nbr
 from parali.fields import Field, reproject
 from parali.firms import Fire, distance_m
 
-STRATA = (("near", 0, 750), ("mid", 750, 2000), ("far", 2000, float("inf")))
+STRATA = (("on", 0, 400), ("near", 400, 750), ("mid", 750, 2000), ("far", 2000, float("inf")))
 
 
 @dataclass

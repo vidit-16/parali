@@ -10,3 +10,4 @@ dist/
 .env
 data/cache/
 node_modules/
+data/eval/chips/
