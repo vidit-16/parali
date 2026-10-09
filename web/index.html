@@ -48,12 +48,10 @@
 <div class="vignette" aria-hidden="true"></div>
 
 <div class="loader" id="loader" aria-live="polite">
-  <svg viewBox="0 0 64 64" aria-hidden="true">
-    <rect width="64" height="64" rx="16" fill="#1A2440"/>
-    <use href="#sa" fill="#2A3A63" transform="translate(32 30) scale(.8) translate(-32 -33)"/>
-    <g clip-path="url(#scanclip)"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></g>
-    <rect x="4" y="0" width="56" height="1.6" rx="0.8" fill="#9FE3FF"><animate attributeName="y" values="0;62;62;0" keyTimes="0;0.5;0.85;1" dur="2.4s" repeatCount="indefinite"/></rect>
-  </svg>
+  <div class="loader-mark">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></svg>
+    <i class="scanline"></i>
+  </div>
   <p data-i18n="loading">Loading the season from orbit</p>
 </div>
 
@@ -120,7 +118,8 @@
   </div>
 </div>
 <div class="tip glass" id="tip" hidden></div>
-<p class="caption" id="caption" hidden></p>
+<div class="caption glass" id="caption" hidden></div>
+<button class="btn ghost small skip" id="skip" hidden data-i18n="skip">Skip</button>
 <p class="chip glass" id="refchip" hidden data-i18n="refphoto"></p>
 <p class="toast glass" id="toast" hidden></p>
 <footer class="timeline glass" id="timeline">

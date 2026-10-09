@@ -90,11 +90,17 @@ body.panel-open .rail { right: 416px; }
 .tip[hidden] { display: none; }
 
 /* ---- opening over India ---- */
-.caption { position: fixed; left: 50%; top: 16%; transform: translateX(-50%); z-index: 4; margin: 0; width: min(640px, calc(100% - 40px)); text-align: center; font-size: 26px; line-height: 1.3; font-weight: 700; letter-spacing: -.02em; text-shadow: 0 2px 24px rgba(0, 0, 0, .9); animation: fade 1s var(--ease) both; pointer-events: none; }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-.caption:lang(hi), .caption:lang(pa) { letter-spacing: 0; }
+.caption { position: fixed; left: 50%; top: 84px; z-index: 4; width: min(560px, calc(100% - 32px)); margin: 0; padding: 20px 24px 18px; border-radius: var(--r-l); transform: translateX(-50%); animation: fade .8s var(--ease) both; pointer-events: none; display: grid; gap: 8px; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 .caption[hidden] { display: none; }
-.caption small { display: block; margin-top: 10px; font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.caption b { font-size: 25px; line-height: 1.2; letter-spacing: -.025em; font-weight: 800; }
+.caption:lang(hi) b, .caption:lang(pa) b { letter-spacing: 0; line-height: 1.35; }
+.caption span { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
+.caption em { display: flex; align-items: center; gap: 8px; font: 500 12.5px Geist, sans-serif; font-style: normal; color: var(--muted); margin-top: 2px; }
+.caption em i { width: 8px; height: 8px; border-radius: 50%; background: var(--alert); box-shadow: 0 0 8px rgba(245, 197, 66, .7); }
+.skip { position: fixed; left: 50%; bottom: 108px; transform: translateX(-50%); z-index: 6; }
+.skip[hidden] { display: none; }
 .delhi { display: flex; align-items: center; gap: 8px; color: var(--ink); font: 700 13px Geist, sans-serif; text-shadow: 0 1px 6px #000; white-space: nowrap; pointer-events: none; }
 .delhi i { position: relative; width: 11px; height: 11px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, .25); }
 .delhi i::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .6); animation: ping 2s ease-out infinite; }
@@ -155,7 +161,7 @@ body.panel-open .rail { right: 416px; }
 .ticks span::before { content: ""; position: absolute; left: 0; top: -9px; width: 1px; height: 5px; background: var(--line-2); }
 .ticks span:lang(hi), .ticks span:lang(pa) { font-family: inherit; font-size: 11.5px; }
 #slider { position: absolute; left: 0; right: 0; top: -6px; bottom: 0; width: 100%; height: calc(100% + 6px); margin: 0; opacity: 0; cursor: pointer; }
-.thumb { position: absolute; top: 2px; bottom: 19px; width: 1px; background: var(--ink); pointer-events: none; }
+.thumb { position: absolute; left: 0; top: 2px; bottom: 19px; width: 1px; background: var(--ink); pointer-events: none; will-change: transform; }
 .thumb::after { content: ""; position: absolute; left: -5px; bottom: -6px; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px rgba(17, 18, 22, .95); }
 .stat { flex: none; display: flex; flex-direction: column; align-items: flex-end; min-width: 88px; }
 .stat b { font-size: 23px; font-variant-numeric: tabular-nums; letter-spacing: -.03em; line-height: 1.1; }
@@ -238,7 +244,12 @@ body.panel-open .rail { right: 416px; }
 
 /* ---- loader ---- */
 .loader { position: fixed; inset: 0; z-index: 20; display: grid; place-content: center; justify-items: center; gap: 16px; background: radial-gradient(circle at 50% 45%, #1A1C22, var(--bg) 60%); transition: opacity .6s var(--ease); }
-.loader svg { width: 80px; height: 80px; border-radius: 20px; }
+.loader-mark { position: relative; width: 80px; height: 80px; border-radius: 20px; overflow: hidden; animation: breathe 2.4s ease-in-out infinite; }
+.loader-mark svg { width: 80px; height: 80px; display: block; }
+/* transform-only animations run on the compositor, so they stay smooth while the page is busy loading */
+.scanline { position: absolute; left: 0; right: 0; top: 0; height: 2px; background: #9FE3FF; box-shadow: 0 0 14px 3px rgba(159, 227, 255, .6); animation: scan 1.6s cubic-bezier(.45, 0, .55, 1) infinite; will-change: transform; }
+@keyframes scan { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(78px); opacity: 0; } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 .loader p { margin: 0; font-size: 13px; color: var(--muted); }
 .loader.gone { opacity: 0; pointer-events: none; }
 
@@ -259,8 +270,7 @@ body.panel-open .rail { right: 416px; }
   .rail { top: auto; bottom: 100px; transform: none; right: 10px; }
   .layers { display: none; }
   body.panel-open .rail, body.hero-open .rail { opacity: 0; pointer-events: none; right: 10px; }
-  .caption { font-size: 20px; top: 14%; }
-  .hero { left: 10px; right: 10px; width: auto; bottom: 96px; padding: 18px 16px 14px; }
+    .hero { left: 10px; right: 10px; width: auto; bottom: 96px; padding: 18px 16px 14px; }
   .hero h1 { font-size: 23px; }
   .vs .row { grid-template-columns: 76px minmax(0, 1fr) 46px; }
   .timeline { left: 10px; right: 10px; bottom: 10px; height: 72px; gap: 12px; padding: 0 14px 0 10px; }

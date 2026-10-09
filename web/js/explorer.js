@@ -14,7 +14,7 @@ const T = {
   en: {
     loading: "Loading the season from orbit", explore: "Explore", officer: "Officer", farmer: "Farmer",
     caption: "Every November, Delhi's air turns hazardous.<small>Part of that smoke is straw burnt in Punjab and Haryana. Each dot is a NASA fire alert from the 2025 season.</small>",
-    delhi: "Delhi", km: (n) => `${n} km from the belt`, study: "Study area · Patran, Punjab",
+    delhi: "Delhi", seasonLbl: "2025 season", skip: "Skip", km: (n) => `${n} km from the belt`, study: "Study area · Patran, Punjab",
     kicker: "Patiala–Kaithal border belt · kharif 2025",
     headline: "<em>9 in 10</em> hectares that looked burnt got no fire alert.",
     alerts: "Fire alerts", vslbl: "Clean fields wrongly flagged (lower is better)", vscap: "399 fields checked by hand, in Punjab and Haryana",
@@ -27,14 +27,14 @@ const T = {
     vline: { clean: (n) => `No burn in any of ${n} clear images`, burn: (d) => `Burn signature on ${d}`, review: () => "Unclear: the officer looks at it" },
     signal: "Plant signal through the season", signalNote: "A burn drops it below zero overnight.",
     clear: "Clear images", nearest: "Fire alerts within 375 m", none: "none", last: "Last season (2024)",
-    checked: (d) => `Checked ${d}`, again: "Run again", check: "Run the satellite check",
+    checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
   },
   hi: {
     loading: "उपग्रह से सीज़न ला रहे हैं", explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     caption: "हर नवंबर दिल्ली की हवा ख़तरनाक हो जाती है।<small>उस धुएँ का एक हिस्सा पंजाब और हरियाणा में जली पराली है। हर बिंदु 2025 सीज़न का NASA आग अलर्ट है।</small>",
-    delhi: "दिल्ली", km: (n) => `क्षेत्र से ${n} किमी`, study: "अध्ययन क्षेत्र · पातड़ां, पंजाब",
+    delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `क्षेत्र से ${n} किमी`, study: "अध्ययन क्षेत्र · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल सीमा क्षेत्र · खरीफ़ 2025",
     headline: "जले दिखने वाले हर <em>10 में से 9</em> हेक्टेयर पर आग का कोई अलर्ट नहीं आया।",
     alerts: "आग अलर्ट", vslbl: "साफ़ खेत जिन्हें गलती से संदिग्ध बताया (कम बेहतर)", vscap: "पंजाब और हरियाणा के 399 खेत, हाथ से जाँचे",
@@ -47,14 +47,14 @@ const T = {
     vline: { clean: (n) => `${n} साफ़ तस्वीरों में कहीं जलना नहीं`, burn: (d) => `${d} को जलने का निशान`, review: () => "साफ़ नहीं: अधिकारी देखेंगे" },
     signal: "सीज़न भर पौधों का संकेत", signalNote: "जलने पर यह एक रात में शून्य से नीचे गिरता है।",
     clear: "साफ़ तस्वीरें", nearest: "375 मीटर में आग अलर्ट", none: "कोई नहीं", last: "पिछला सीज़न (2024)",
-    checked: (d) => `${d} को जाँचा`, again: "फिर जाँचें", check: "उपग्रह जाँच चलाएँ",
+    checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
   },
   pa: {
     loading: "ਉਪਗ੍ਰਹਿ ਤੋਂ ਸੀਜ਼ਨ ਲਿਆ ਰਹੇ ਹਾਂ", explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
     caption: "ਹਰ ਨਵੰਬਰ ਦਿੱਲੀ ਦੀ ਹਵਾ ਖ਼ਤਰਨਾਕ ਹੋ ਜਾਂਦੀ ਹੈ।<small>ਉਸ ਧੂੰਏਂ ਦਾ ਇੱਕ ਹਿੱਸਾ ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਵਿੱਚ ਸਾੜੀ ਪਰਾਲੀ ਹੈ। ਹਰ ਬਿੰਦੂ 2025 ਸੀਜ਼ਨ ਦਾ NASA ਅੱਗ ਅਲਰਟ ਹੈ।</small>",
-    delhi: "ਦਿੱਲੀ", km: (n) => `ਖੇਤਰ ਤੋਂ ${n} ਕਿਮੀ`, study: "ਅਧਿਐਨ ਖੇਤਰ · ਪਾਤੜਾਂ, ਪੰਜਾਬ",
+    delhi: "ਦਿੱਲੀ", seasonLbl: "2025 ਸੀਜ਼ਨ", skip: "ਛੱਡੋ", km: (n) => `ਖੇਤਰ ਤੋਂ ${n} ਕਿਮੀ`, study: "ਅਧਿਐਨ ਖੇਤਰ · ਪਾਤੜਾਂ, ਪੰਜਾਬ",
     kicker: "ਪਟਿਆਲਾ–ਕੈਥਲ ਸਰਹੱਦੀ ਖੇਤਰ · ਸਾਉਣੀ 2025",
     headline: "ਸੜੇ ਦਿਸਦੇ ਹਰ <em>10 ਵਿੱਚੋਂ 9</em> ਹੈਕਟੇਅਰ ਲਈ ਕੋਈ ਅੱਗ ਅਲਰਟ ਨਹੀਂ ਆਇਆ।",
     alerts: "ਅੱਗ ਅਲਰਟ", vslbl: "ਸਾਫ਼ ਖੇਤ ਜਿਨ੍ਹਾਂ ਨੂੰ ਗਲਤੀ ਨਾਲ ਸ਼ੱਕੀ ਕਿਹਾ (ਘੱਟ ਬਿਹਤਰ)", vscap: "ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ 399 ਖੇਤ, ਹੱਥੀਂ ਜਾਂਚੇ",
@@ -67,14 +67,14 @@ const T = {
     vline: { clean: (n) => `${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ`, burn: (d) => `${d} ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ`, review: () => "ਸਾਫ਼ ਨਹੀਂ: ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ" },
     signal: "ਸੀਜ਼ਨ ਭਰ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ", signalNote: "ਸਾੜ ਨਾਲ ਇਹ ਇੱਕ ਰਾਤ ਵਿੱਚ ਸਿਫ਼ਰ ਤੋਂ ਹੇਠਾਂ ਡਿੱਗਦਾ ਹੈ।",
     clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", nearest: "375 ਮੀਟਰ ਵਿੱਚ ਅੱਗ ਅਲਰਟ", none: "ਕੋਈ ਨਹੀਂ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ (2024)",
-    checked: (d) => `${d} ਨੂੰ ਜਾਂਚਿਆ`, again: "ਦੁਬਾਰਾ ਜਾਂਚੋ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
+    checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
   },
   hr: {
     loading: "उपग्रह तै सीज़न ल्यावां सां", explore: "देक्खो", officer: "अफसर", farmer: "किसान",
     caption: "हर नवंबर म्ह दिल्ली की हवा खतरनाक हो ज्यावै सै।<small>उस धुम्मे का एक हिस्सा पंजाब अर हरियाणा म्ह जळी पराळी सै। हर बिंदु 2025 सीज़न का NASA आग अलर्ट सै।</small>",
-    delhi: "दिल्ली", km: (n) => `इलाके तै ${n} किमी`, study: "अध्ययन इलाका · पातड़ां, पंजाब",
+    delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `इलाके तै ${n} किमी`, study: "अध्ययन इलाका · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल बॉर्डर इलाका · खरीफ़ 2025",
     headline: "जळे दिक्खण आळे हर <em>10 म्ह तै 9</em> हेक्टेयर पै कोए आग का अलर्ट कोनी आया।",
     alerts: "आग अलर्ट", vslbl: "साफ खेत जिन पै गलती तै शक करया (कम आच्छा)", vscap: "पंजाब अर हरियाणा के 399 खेत, हाथ तै जांचे",
@@ -87,7 +87,7 @@ const T = {
     vline: { clean: (n) => `${n} साफ फोटुआं म्ह कितै जळाणा कोनी`, burn: (d) => `${d} नै जळण का निसान`, review: () => "साफ कोनी: अफसर देक्खैगा" },
     signal: "सीज़न भर पौधां का संकेत", signalNote: "जळण पै यो एक रात म्ह जीरो तै तळै गिरै सै।",
     clear: "साफ फोटू", nearest: "375 मीटर म्ह आग अलर्ट", none: "कोए ना", last: "पाछला सीज़न (2024)",
-    checked: (d) => `${d} नै जांच्या`, again: "फेर जांचो", check: "उपग्रह जांच चलाओ",
+    checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
   },
@@ -155,7 +155,7 @@ function buildSpark() {
     <path class="all" d="${path}"/><path class="past" d="${path}" clip-path="url(#sparkclip)"/>`;
   $("#scrub").insertAdjacentHTML("beforeend", `<div class="thumb" id="thumb"></div>`);
   const slider = $("#slider");
-  slider.min = D0; slider.max = D1; slider.step = 1;
+  slider.min = D0; slider.max = D1; slider.step = 0.1;  // fine steps so dragging glides; the map snaps to days
 }
 function buildTicks() {
   const marks = [D0];
@@ -165,22 +165,27 @@ function buildTicks() {
     return `<span style="left:${((d - D0) / (D1 - D0)) * 100}%">${esc(lab)}</span>`;
   }).join("");
 }
-function renderTimeline() {
-  const frac = (state.day - D0) / (D1 - D0);
+function renderProgress(x) {
+  const frac = Math.max(0, Math.min(1, (x - D0) / (D1 - D0)));
+  $("#sparkcut")?.setAttribute("width", (frac * 1000).toFixed(1));
+  const th = $("#thumb");
+  if (th) th.style.transform = `translateX(${(frac * $("#scrub").clientWidth).toFixed(1)}px)`;
+  $("#ring").style.strokeDashoffset = (151 * (1 - frac)).toFixed(1);
+}
+function renderTimeline(x = state.day) {
+  renderProgress(x);
   $("#when").textContent = fmtDay(state.day);
   $("#stage").textContent = t().stages[windowIndex(state.day)];
-  $("#sparkcut")?.setAttribute("width", String(frac * 1000));
-  const th = $("#thumb");
-  if (th) th.style.left = `${frac * 100}%`;
-  $("#slider").value = state.day;
-  $("#ring").style.strokeDashoffset = String(151 * (1 - frac));
+  if (document.activeElement !== $("#slider")) $("#slider").value = state.day;
   $("#ha").textContent = Math.round(cumHa[state.day - D0] || 0).toLocaleString("en-IN");
   $("#fa").textContent = (cumFires[state.day - D0] || 0).toLocaleString("en-IN");
 }
 
 const zoomFade = (v) => ["interpolate", ["linear"], ["zoom"], 14.3, v, 15.3, 0];
-function setDay(d) {
+function setDay(d, x = null) {
   d = Math.max(D0, Math.min(D1, Math.round(d)));
+  if (d === state.day && state.ready) { renderProgress(x ?? d); return; }
+  state.ready = true;
   state.day = d;
   // between the middles of two ten-day windows, fade from one picture to the next
   let j = 0;
@@ -189,10 +194,11 @@ function setDay(d) {
   const f = k === j ? 0 : Math.max(0, Math.min(1, (d - centers[j]) / (centers[k] - centers[j])));
   // only the two pictures in play (and the next one, preloading) fetch tiles
   const want = new Set([j, k, Math.min(k + 1, windows.length - 1)]);
+  state.opacity = state.opacity || {};
   windows.forEach((w, m) => {
-    const id = `img-${w.id}`;
+    const id = `img-${w.id}`, o = m === j ? 1 : m === k ? Math.round(f * 20) / 20 : 0;
     if (want.has(m) !== state.visible.has(m)) map.setLayoutProperty(id, "visibility", want.has(m) ? "visible" : "none");
-    map.setPaintProperty(id, "raster-opacity", zoomFade(m === j ? 1 : m === k ? f : 0));
+    if (state.opacity[id] !== o) { map.setPaintProperty(id, "raster-opacity", zoomFade(o)); state.opacity[id] = o; }
   });
   state.visible = want;
   map.setFilter("burns", ["<=", ["get", "d"], d]);
@@ -200,7 +206,7 @@ function setDay(d) {
   map.setFilter("fires", ["<=", ["get", "d"], d]);
   map.setFilter("fires-states", ["<=", ["get", "d"], d]);
   map.setLayoutProperty("fires", "icon-size", ["case", [">", ["get", "d"], d - 3], 1, 0.62]);
-  renderTimeline();
+  renderTimeline(x ?? d);
 }
 
 function play(speed = 6, onEnd = null, from = null) {
@@ -214,7 +220,9 @@ function play(speed = 6, onEnd = null, from = null) {
   const tick = (now) => {
     acc += ((now - last) / 1000) * (reduced ? speed / 2 : speed);
     last = now;
-    if (Math.round(acc) !== state.day) { setDay(acc); state.onDay && state.onDay(state.day); }
+    const before = state.day;
+    setDay(acc, acc);
+    if (state.day !== before && state.onDay) state.onDay(state.day);
     if (state.day >= D1) { stop(); onEnd && onEnd(); return; }
     state.raf = requestAnimationFrame(tick);
   };
@@ -261,7 +269,7 @@ function playSeason() {
 }
 
 // ---- the opening: India, the smoke, then into the belt ----
-let delhiMarker = null, studyMarker = null;
+let delhiMarker = null, studyMarker = null, stateFireCount = 0;
 function haversineKm([lon1, lat1], [lon2, lat2]) {
   const r = Math.PI / 180, a = Math.sin(((lat2 - lat1) * r) / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(((lon2 - lon1) * r) / 2) ** 2;
   return 6371 * 2 * Math.asin(Math.sqrt(a));
@@ -271,25 +279,31 @@ function delhiHtml() {
   return `<i></i><b>${esc(t().delhi)}</b><span>${esc(t().km(km))}</span>`;
 }
 function runIntro() {
-  const cap = $("#caption");
-  cap.innerHTML = t().caption;
+  const cap = $("#caption"), [title, sub] = t().caption.split("<small>");
+  cap.innerHTML = `<b>${title}</b><span>${sub.replace("</small>", "")}</span>
+    <em><i></i>${(stateFireCount || 0).toLocaleString("en-IN")} ${esc(t().fa)} · ${esc(t().seasonLbl)}</em>`;
   cap.hidden = false;
+  const skipBtn = $("#skip");
+  skipBtn.hidden = false;
   setDay(D1);
   let skipped = false;
   const land = () => {
     cap.hidden = true;
+    skipBtn.hidden = true;
     play(9, () => { if (state.intro) { setDay(D0 + 42); showHero(); toast(t().toast); } }, D0);
   };
   const skip = () => {
     if (skipped) return;
     skipped = true;
     cap.hidden = true;
+    skipBtn.hidden = true;
     stop();
     map.stop();
     fitRegion(0);
     setDay(D0 + 42);
     showHero();
   };
+  skipBtn.onclick = skip;
   ["mousedown", "wheel", "touchstart", "keydown"].forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
   setTimeout(() => {
     if (skipped) return;
@@ -301,7 +315,6 @@ function runIntro() {
       land();
     });
   }, 3200);
-  store.set("saakshi-intro", "1");
 }
 
 // ---- fields and the case file ----
@@ -398,7 +411,7 @@ function renderPanel() {
       <div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
         <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
       <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
-      <div class="foot"><span>${c.checked_at ? esc(L.checked(fmtIso(c.checked_at))) : ""}</span><button class="btn ghost small" id="run-check">${esc(L.again)}</button></div>`;
+      <div class="foot"><span>${c.checked_at ? esc(L.checked(fmtIso(c.checked_at))) : ""}</span><button class="btn primary small" id="run-check">${icon("i-scan")}<span>${esc(L.again)}</span></button></div>`;
   } else if (c && c.status !== "done" && !c.failed) {
     const s = Math.min(c.step || 0, L.steps.length - 1);
     html += `<div class="scanning">${SCAN_SVG}<p>${esc(L.steps[s])}</p><div class="dots">${L.steps.map((_, j) => `<i class="${j <= s ? "on" : ""}"></i>`).join("")}</div></div>`;
@@ -472,7 +485,7 @@ async function init() {
   state.day = D0;
   buildSpark();
 
-  const intro = params.get("intro") === "1" || (params.get("intro") !== "0" && !store.get("saakshi-intro") && !reduced);
+  const intro = params.get("intro") !== "0" && !reduced;  // every visit; any click, key or the Skip button skips it
   map = new maplibregl.Map({
     container: "map", attributionControl: false, maxZoom: 17.5, minZoom: 3,
     ...(intro ? INDIA : { bounds: regionBounds(), fitBoundsOptions: { padding: 60 } }),
@@ -510,6 +523,7 @@ async function init() {
   while (!(map.style && map.style._loaded)) await new Promise((ok) => setTimeout(ok, 30));
   const [region, states, firesFc, stateFires, fieldsList] = await data;
   beltFires = firesFc.features;
+  stateFireCount = stateFires.features.length;
   let fa = 0;
   const byDay = {};
   beltFires.forEach((f) => { byDay[f.properties.d] = (byDay[f.properties.d] || 0) + 1; });
@@ -615,7 +629,8 @@ async function init() {
 
   // controls
   $("#play").onclick = () => { state.intro = false; hideHero(); state.playing ? stop() : play(6); };
-  $("#slider").oninput = (e) => { state.intro = false; stop(); setDay(Number(e.target.value)); };
+  $("#slider").oninput = (e) => { state.intro = false; stop(); const x = Number(e.target.value); setDay(x, x); };
+  $("#slider").onchange = (e) => setDay(Number(e.target.value));
   $("#play-season").onclick = playSeason;
   $("#explore").onclick = () => { hideHero(); toast(t().toast); };
   $("#panel-close").onclick = closePanel;
