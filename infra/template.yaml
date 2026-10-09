@@ -17,6 +17,7 @@ Globals:
       Variables:
         TABLE_NAME: !Ref Table
         BUCKET_NAME: !Ref Bucket
+        SARVAM_PARAM: /saakshi/sarvam/api_key
 
 Resources:
   AgentLayer:
@@ -98,6 +99,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy: { TableName: !Ref Table }
         - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - SSMParameterReadPolicy: { ParameterName: saakshi/* }
         - SNSPublishMessagePolicy: { TopicName: !GetAtt Topic.TopicName }
         - Statement:
             - Effect: Allow
@@ -125,6 +127,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy: { TableName: !Ref Table }
         - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - SSMParameterReadPolicy: { ParameterName: saakshi/* }
         - LambdaInvokePolicy: { FunctionName: !Ref ProcessFunction }
         - Statement:
             - Effect: Allow
@@ -163,6 +166,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy: { TableName: !Ref Table }
         - S3CrudPolicy: { BucketName: !Ref Bucket }
+        - SSMParameterReadPolicy: { ParameterName: saakshi/* }
         - LambdaInvokePolicy: { FunctionName: !Ref ProcessFunction }
         - Statement:
             - Effect: Allow

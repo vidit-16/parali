@@ -150,6 +150,14 @@ def _speak(store: Store, claim: dict, speaker: Speaker | None) -> None:
     key = f"audio/{claim['id']}-{claim['status']}.mp3"
     store.put_blob(key, speaker(text["hi"]), "audio/mpeg")
     claim["audio_key"] = key
+    claim.pop("audio_key_pa", None)
+    # Punjab's farmers also hear it in Punjabi; without Sarvam they get the Hindi audio
+    if claim.get("state_code") == "PB" and hasattr(speaker, "speak_pa"):
+        mp3 = speaker.speak_pa(text["pa"])
+        if mp3:
+            key = f"audio/{claim['id']}-{claim['status']}-pa.mp3"
+            store.put_blob(key, mp3, "audio/mpeg")
+            claim["audio_key_pa"] = key
 
 
 def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: "list[Fire]", th: "Thresholds",

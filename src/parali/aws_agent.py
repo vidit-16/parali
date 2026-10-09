@@ -14,7 +14,7 @@ from parali.agent import BedrockBackend
 from parali.api import Deps, handle
 from parali.speech import transcribe_pcm
 from parali.store import AwsStore
-from parali.tts import polly_mp3
+from parali.tts import Voice
 
 REGION = os.environ.get("AWS_REGION", "us-west-2")
 
@@ -29,7 +29,7 @@ def _deps() -> Deps:
     return Deps(
         store=AwsStore(os.environ["TABLE_NAME"], os.environ["BUCKET_NAME"], REGION),
         dispatch=dispatch,
-        speaker=partial(polly_mp3, region=REGION),
+        speaker=Voice(REGION),
         transcriber=partial(transcribe_pcm, region=REGION),
         agent_backend=BedrockBackend(region=REGION),
     )

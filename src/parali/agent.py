@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Callable
 
 from parali import service
-from parali.messages import advance_text, farmer_text
+from parali.messages import advance_text, farmer_text, to_gurmukhi
 from parali.store import Store
 
 MODEL_ID = os.environ.get("AGENT_MODEL_ID", "us.amazon.nova-2-lite-v1:0")
@@ -40,6 +40,7 @@ class Reply:
     tools: list
     mode: str                          # "bedrock" | "scripted" | "scripted-fallback"
     note: str = ""
+    pa: str = ""                       # set when the reply came from templates; empty for the model's own words
 
 
 # ---------- tools: the only things the assistant can do ----------
@@ -134,68 +135,99 @@ def _join(parts):
     return " ".join(p for p in parts if p).strip()
 
 
-def compose(effects: list) -> tuple[str, str]:
-    hi, en = [], []
+def _pa(hi_name, name):
+    return to_gurmukhi(hi_name) if hi_name else name
+
+
+def compose(effects: list) -> tuple[str, str, str]:
+    """(hi, en, pa) for what the tools did this turn."""
+    hi, en, pa = [], [], []
+
+    def say(h, e, p):
+        hi.append(h)
+        en.append(e)
+        pa.append(p)
+
     for name, r in effects:
         if name == "my_fields":
-            names_hi = ", ".join(f.get("name_hi") or f.get("name") for f in r["fields"])
-            names_en = ", ".join(f.get("name") for f in r["fields"])
-            hi.append(f"आपके नाम पर ये खेत दर्ज हैं: {names_hi}।" if r["fields"] else "आपके नाम पर कोई खेत दर्ज नहीं मिला।")
-            en.append(f"Your registered fields: {names_en}." if r["fields"] else "No field is registered in your name.")
+            if r["fields"]:
+                say(f"आपके नाम पर ये खेत दर्ज हैं: {', '.join(f.get('name_hi') or f.get('name') for f in r['fields'])}।",
+                    f"Your registered fields: {', '.join(f.get('name') for f in r['fields'])}.",
+                    f"ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਇਹ ਖੇਤ ਦਰਜ ਹਨ: {', '.join(_pa(f.get('name_hi'), f.get('name')) for f in r['fields'])}।")
+            else:
+                say("आपके नाम पर कोई खेत दर्ज नहीं मिला।", "No field is registered in your name.",
+                    "ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਕੋਈ ਖੇਤ ਦਰਜ ਨਹੀਂ ਮਿਲਿਆ।")
         elif name in ("claim_status", "explain"):
             if not r["claims"]:
-                hi.append("अभी आपका कोई दावा दर्ज नहीं है। कहें तो मैं दावा दर्ज कर दूँ।")
-                en.append("You have no claim yet. I can file one if you want.")
+                say("अभी आपका कोई दावा दर्ज नहीं है। कहें तो मैं दावा दर्ज कर दूँ।",
+                    "You have no claim yet. I can file one if you want.",
+                    "ਹਾਲੇ ਤੁਹਾਡਾ ਕੋਈ ਦਾਅਵਾ ਦਰਜ ਨਹੀਂ ਹੈ। ਕਹੋ ਤਾਂ ਮੈਂ ਦਾਅਵਾ ਦਰਜ ਕਰ ਦਿਆਂ।")
             for c in r["claims"]:
                 t = farmer_text(c)
-                hi.append(t["hi"])
-                en.append(t["en"])
+                say(t["hi"], t["en"], t["pa"])
         elif name == "advance_status":
             if not r["claims"]:
-                hi.append("अग्रिम राशि की जाँच दावा दर्ज होने पर होती है।")
-                en.append("The advance is checked when a claim is filed.")
+                say("अग्रिम राशि की जाँच दावा दर्ज होने पर होती है।", "The advance is checked when a claim is filed.",
+                    "ਅਗਾਊਂ ਰਕਮ ਦੀ ਜਾਂਚ ਦਾਅਵਾ ਦਰਜ ਹੋਣ ਉੱਤੇ ਹੁੰਦੀ ਹੈ।")
             for c in r["claims"]:
                 t = advance_text(c)
-                hi.append(t["hi"])
-                en.append(t["en"])
+                say(t["hi"], t["en"], t["pa"])
         elif name == "file_claim":
             for c in r["filed"]:
-                hi.append(f"{c.get('field_name_hi') or c['field_name']} खेत का दावा दर्ज हो गया। पिछले और इस सीज़न की "
-                          "उपग्रह तस्वीरें जाँची जा रही हैं, नतीजा कुछ ही देर में मिलेगा।")
-                en.append(f"Claim filed for {c['field_name']}. Last season's and this season's satellite images are "
-                          "being checked; the result will be ready shortly.")
+                say(f"{c.get('field_name_hi') or c['field_name']} खेत का दावा दर्ज हो गया। पिछले और इस सीज़न की "
+                    "उपग्रह तस्वीरें जाँची जा रही हैं, नतीजा कुछ ही देर में मिलेगा।",
+                    f"Claim filed for {c['field_name']}. Last season's and this season's satellite images are "
+                    "being checked; the result will be ready shortly.",
+                    f"{_pa(c.get('field_name_hi'), c['field_name'])} ਖੇਤ ਦਾ ਦਾਅਵਾ ਦਰਜ ਹੋ ਗਿਆ। ਪਿਛਲੇ ਅਤੇ ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ "
+                    "ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ, ਨਤੀਜਾ ਕੁਝ ਹੀ ਦੇਰ ਵਿੱਚ ਮਿਲੇਗਾ।")
             for f in r["already_filed"]:
-                hi.append(f"{f.get('name_hi') or f.get('name')} खेत का दावा पहले से दर्ज है।")
-                en.append(f"A claim for {f.get('name')} is already filed.")
+                say(f"{f.get('name_hi') or f.get('name')} खेत का दावा पहले से दर्ज है।",
+                    f"A claim for {f.get('name')} is already filed.",
+                    f"{_pa(f.get('name_hi'), f.get('name'))} ਖੇਤ ਦਾ ਦਾਅਵਾ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਹੈ।")
         elif name == "contest":
             if r["claims"]:
-                hi.append("आपकी आपत्ति दर्ज कर ली गई है और उपग्रह तस्वीरों के साथ ग्राम अधिकारी को भेज दी गई है।")
-                en.append("Your objection is recorded and sent to the village officer with the satellite images.")
+                say("आपकी आपत्ति दर्ज कर ली गई है और उपग्रह तस्वीरों के साथ ग्राम अधिकारी को भेज दी गई है।",
+                    "Your objection is recorded and sent to the village officer with the satellite images.",
+                    "ਤੁਹਾਡਾ ਇਤਰਾਜ਼ ਦਰਜ ਕਰ ਲਿਆ ਗਿਆ ਹੈ ਅਤੇ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਸਮੇਤ ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਭੇਜ ਦਿੱਤਾ ਗਿਆ ਹੈ।")
             else:
-                hi.append("आपत्ति दर्ज करने के लिए पहले दावा होना चाहिए।")
-                en.append("A claim is needed before an objection can be recorded.")
+                say("आपत्ति दर्ज करने के लिए पहले दावा होना चाहिए।", "A claim is needed before an objection can be recorded.",
+                    "ਇਤਰਾਜ਼ ਦਰਜ ਕਰਨ ਲਈ ਪਹਿਲਾਂ ਦਾਅਵਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।")
         elif name == "callback":
-            hi.append("ग्राम अधिकारी को आपको फ़ोन करने के लिए कह दिया गया है।" if r["claims"] else "पहले दावा दर्ज करना होगा।")
-            en.append("The village officer has been asked to call you." if r["claims"] else "A claim is needed first.")
-    return _join(hi), _join(en)
+            if r["claims"]:
+                say("ग्राम अधिकारी को आपको फ़ोन करने के लिए कह दिया गया है।", "The village officer has been asked to call you.",
+                    "ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਤੁਹਾਨੂੰ ਫ਼ੋਨ ਕਰਨ ਲਈ ਕਹਿ ਦਿੱਤਾ ਗਿਆ ਹੈ।")
+            else:
+                say("पहले दावा दर्ज करना होगा।", "A claim is needed first.", "ਪਹਿਲਾਂ ਦਾਅਵਾ ਦਰਜ ਕਰਨਾ ਪਵੇਗਾ।")
+    return _join(hi), _join(en), _join(pa)
 
 
 HELP = ("मैं आपके खेत की पराली जाँच के बारे में बता सकती हूँ: दावा दर्ज करना, दावे की स्थिति, अग्रिम राशि, "
         "फ़ैसले का कारण, या गलत फ़ैसले पर आपत्ति। बोलिए, क्या जानना है?",
         "I can file your no-burn claim, tell you its status, the advance, why it was decided, or record an "
-        "objection. What would you like?")
+        "objection. What would you like?",
+        "ਮੈਂ ਤੁਹਾਡੇ ਖੇਤ ਦੀ ਪਰਾਲੀ ਜਾਂਚ ਬਾਰੇ ਦੱਸ ਸਕਦੀ ਹਾਂ: ਦਾਅਵਾ ਦਰਜ ਕਰਨਾ, ਦਾਅਵੇ ਦੀ ਸਥਿਤੀ, ਅਗਾਊਂ ਰਕਮ, "
+        "ਫ਼ੈਸਲੇ ਦਾ ਕਾਰਨ, ਜਾਂ ਗ਼ਲਤ ਫ਼ੈਸਲੇ ਉੱਤੇ ਇਤਰਾਜ਼। ਦੱਸੋ, ਕੀ ਜਾਣਨਾ ਹੈ?")
+
+
+def _help(mode, tools=(), note=""):
+    return Reply(HELP[0], HELP[1], list(tools), mode, note=note, pa=HELP[2])
+
+
+def _from_effects(effects, mode, note=""):
+    hi, en, pa = compose(effects)
+    return Reply(hi, en, [n for n, _ in effects], mode, note=note, pa=pa)
 
 
 # ---------- scripted backend ----------
 
 INTENTS = [
-    ("contest", r"गलत|आपत्ति|रेड\s*एंट्री|red\s*entry|wrong|appeal|objection|galat|aapatti"),
-    ("request_callback", r"फ़?फोन|कॉल|call\s*me|बात\s*कर|अधिकारी\s*से|officer"),
-    ("advance_status", r"अग्रिम|एडवांस|advance|pehle\s*paise|पहले\s*पैसे"),
-    ("explain", r"क्यों|कारण|why|reason|kyun|kyon"),
-    ("file_claim", r"दर्ज|आवेदन|अप्लाई|apply|file|register|दावा\s*कर|claim\s*kar"),
-    ("claim_status", r"दावा|स्थिति|स्टेटस|status|क्या\s*हुआ|कहाँ\s*तक|पैसे|राशि|payment|paisa|kab\s*milega|claim"),
-    ("my_fields", r"मेरे\s*खेत|कौन\s*से\s*खेत|my\s*fields?|khet"),
+    ("contest", r"गलत|आपत्ति|रेड\s*एंट्री|red\s*entry|wrong|appeal|objection|galat|aapatti|ਗ਼?ਲਤ|ਗ਼ਲਤ|ਇਤਰਾਜ਼?"),
+    ("request_callback", r"फ़?फोन|कॉल|call\s*me|बात\s*कर|अधिकारी\s*से|officer|ਫ਼?ਫੋਨ|ਫ਼ੋਨ|ਕਾਲ|ਅਧਿਕਾਰੀ\s*ਨਾਲ"),
+    ("advance_status", r"अग्रिम|एडवांस|advance|pehle\s*paise|पहले\s*पैसे|ਅਗਾਊਂ|ਐਡਵਾਂਸ|ਪਹਿਲਾਂ\s*ਪੈਸੇ"),
+    ("explain", r"क्यों|कारण|why|reason|kyun|kyon|ਕਿਉਂ|ਕਾਰਨ"),
+    ("file_claim", r"दर्ज|आवेदन|अप्लाई|apply|file|register|दावा\s*कर|claim\s*kar|ਦਰਜ|ਅਪਲਾਈ|ਦਾਅਵਾ\s*ਕਰ"),
+    ("claim_status", r"दावा|स्थिति|स्टेटस|status|क्या\s*हुआ|कहाँ\s*तक|पैसे|राशि|payment|paisa|kab\s*milega|claim|ਦਾਅਵ|ਸਥਿਤੀ|ਸਟੇਟਸ|ਕੀ\s*ਹੋਇਆ|ਪੈਸੇ|ਰਕਮ|ਕਦੋਂ\s*ਮਿਲ"),
+    ("my_fields", r"मेरे\s*खेत|कौन\s*से\s*खेत|my\s*fields?|khet|ਮੇਰੇ\s*ਖੇਤ|ਕਿਹੜੇ\s*ਖੇਤ"),
 ]
 
 
@@ -219,16 +251,15 @@ class ScriptedBackend:
             else:
                 TOOLS[name](ctx)
         if not ctx.effects:
-            return Reply(HELP[0], HELP[1], [], self.mode)
-        hi, en = compose(ctx.effects)
-        return Reply(hi, en, [n for n, _ in ctx.effects], self.mode)
+            return _help(self.mode)
+        return _from_effects(ctx.effects, self.mode)
 
 
 # ---------- Bedrock backend (Strands Agents SDK) ----------
 
-SYSTEM = """You are the assistant inside Parali Check, a Haryana government-style app that verifies farmers'
+SYSTEM = """You are the assistant inside Saakshi, a Punjab and Haryana government-style app that verifies farmers'
 no-burn (crop residue) incentive claims with satellite images. The user is a farmer, usually speaking Hindi
-or Hinglish.
+or Hinglish, sometimes Punjabi.
 
 Your only job is to understand what the farmer wants and call the right tool:
 - claim_status: status of their claim / payment / what happened
@@ -314,11 +345,10 @@ class BedrockBackend:
         result = self._agent(ctx, history)(text)
         tools = [n for n, _ in ctx.effects]
         if ctx.effects:
-            hi, en = compose(ctx.effects)
-            return Reply(hi, en, tools, self.mode)
+            return _from_effects(ctx.effects, self.mode)
         said = str(result).strip()
         if DECISION_WORDS.search(said):   # the model tried to state a decision without a tool result
-            return Reply(HELP[0], HELP[1], tools, self.mode, note="model reply dropped: stated a decision")
+            return _help(self.mode, tools, note="model reply dropped: stated a decision")
         return Reply(said[:400], "", tools, self.mode)
 
 
@@ -331,7 +361,7 @@ def respond(store: Store, farmer_id: str, text: str, dispatch: Callable[[str], N
             backend=None, history: list | None = None) -> Reply:
     text = (text or "").strip()[:500]
     if not text:
-        return Reply(HELP[0], HELP[1], [], "scripted")
+        return _help("scripted")
     backend = backend or ScriptedBackend()
     ctx = Context(store, farmer_id, dispatch)
     if isinstance(backend, BedrockBackend):
@@ -346,8 +376,7 @@ def respond(store: Store, farmer_id: str, text: str, dispatch: Callable[[str], N
             return pool.submit(backend.respond, ctx, text, history or []).result(timeout=MODEL_TIMEOUT_S)
         except Exception as e:  # model unavailable or slow: the farmer still gets an answer, and the mode says so
             if ctx.effects:  # a tool already ran: answer from what it did, never run it twice
-                hi, en = compose(list(ctx.effects))
-                return Reply(hi, en, [n for n, _ in ctx.effects], "bedrock", note="model did not finish its reply")
+                return _from_effects(list(ctx.effects), "bedrock", note="model did not finish its reply")
             fresh = Context(store, farmer_id, dispatch)
             r = ScriptedBackend().respond(fresh, text, [])
             r.mode = "scripted-fallback"

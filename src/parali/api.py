@@ -36,7 +36,7 @@ def _pin_ok(deps: Deps, headers: dict) -> bool:
 
 def _claim_view(store: Store, c: dict) -> dict:
     out = dict(c)
-    for k in ("evidence_key", "audio_key", "notice_key"):
+    for k in ("evidence_key", "audio_key", "audio_key_pa", "notice_key"):
         if c.get(k):
             out[k.replace("_key", "_url")] = store.blob_url(c[k])
     return out
@@ -147,7 +147,18 @@ def _agent_turn(deps: Deps, data: dict) -> dict:
     r = agent.respond(deps.store, farmer_id, text, deps.dispatch, backend=deps.agent_backend)
     out = {"transcript": transcript, "text": text, "hi": r.hi, "en": r.en, "tools": r.tools, "mode": r.mode,
            "note": r.note}
-    if deps.speaker and r.hi:
+    pa = mp3 = None
+    if data.get("lang") == "pa" and r.hi:
+        # templates carry their own Punjabi; only the model's free-text question needs translating
+        pa = r.pa or (deps.speaker.translate_pa(r.hi) if hasattr(deps.speaker, "translate_pa") else None)
+        mp3 = deps.speaker.speak_pa(pa) if pa and hasattr(deps.speaker, "speak_pa") else None
+    if pa:
+        out["pa"] = pa
+    if mp3:
+        key = f"agent/{uuid.uuid4().hex[:12]}-pa.mp3"
+        deps.store.put_blob(key, mp3, "audio/mpeg")
+        out["audio_url"] = deps.store.blob_url(key)
+    elif deps.speaker and r.hi:
         key = f"agent/{uuid.uuid4().hex[:12]}.mp3"
         deps.store.put_blob(key, deps.speaker(r.hi), "audio/mpeg")
         out["audio_url"] = deps.store.blob_url(key)

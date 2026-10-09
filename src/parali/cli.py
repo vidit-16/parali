@@ -140,8 +140,8 @@ def cmd_demo(a):
         from functools import partial
         from parali.agent import BedrockBackend
         from parali.speech import transcribe_pcm
-        from parali.tts import polly_mp3
-        speaker = partial(polly_mp3, region="us-west-2")
+        from parali.tts import Voice
+        speaker = Voice("us-west-2")
         transcriber = partial(transcribe_pcm, region="us-west-2")
         backend = BedrockBackend()
     serve(Path(a.state), port=a.port, speaker=speaker, officer_pin=a.pin, transcriber=transcriber,

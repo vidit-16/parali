@@ -3,7 +3,7 @@ import base64
 import json
 import os
 from datetime import timedelta
-from functools import lru_cache, partial
+from functools import lru_cache
 from pathlib import Path
 
 import boto3
@@ -14,7 +14,7 @@ from parali.api import Deps, handle, officer_pin_from_env
 from parali.area import AreaStack, fetch_area
 from parali.rules import Thresholds
 from parali.store import AwsStore
-from parali.tts import polly_mp3
+from parali.tts import Voice
 
 REGION = os.environ.get("AWS_REGION", "us-west-2")
 TABLE = os.environ.get("TABLE_NAME", "")
@@ -76,7 +76,7 @@ def _reset() -> None:
 
 
 def _speaker():
-    return partial(polly_mp3, region=REGION)
+    return Voice(REGION)
 
 
 def api_handler(event, context):

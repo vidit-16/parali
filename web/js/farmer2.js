@@ -103,13 +103,14 @@ function render() {
   const k = c ? kindOf(c.status) : "wait";
   const d = c?.decision || {};
   const bw = d.burn_date ? S.windows.findIndex((w) => w.start <= d.burn_date && d.burn_date <= w.end) : -1;
-  const msg = c?.message ? (lang === "en" ? c.message.en : c.message.hi) : "";
+  const msg = c?.message ? (lang === "en" ? c.message.en : (lang === "pa" && c.message.pa) || c.message.hi) : "";
+  const audio = c && ((lang === "pa" && c.audio_url_pa) || c.audio_url);
   const canAppeal = c && ["possible_burn", "needs_review", "officer_confirmed_burnt"].includes(c.status);
   $("#phone").innerHTML = `<section class="hello"><h1>${esc(L.hello(local(f.farmer, f.farmer_hi)))}</h1>
       <p class="cap">${esc(local(f.name, f.name_hi))} · ${f.acres} ${lang === "en" ? "acres" : "एकड़"} · ${esc(local(f.village, f.village_hi))} · <button class="link" id="switch">${esc(L.switch)}</button></p></section>
     ${c ? `<section class="card glass status-card ${k}"><div class="band ${k}"><div class="ic">${icon(k === "clean" ? "i-check" : k === "burn" ? "i-flame" : "i-eye")}</div>
         <div><b>${esc(L.status[k])}</b><p>${esc(msg)}</p></div></div>
-        ${c.audio_url ? `<button class="btn ghost small listen" id="listen">${icon("i-play")}<span>${esc(L.listen)}</span></button><audio id="audio" src="${esc(c.audio_url)}" preload="none"></audio>` : ""}
+        ${audio ? `<button class="btn ghost small listen" id="listen">${icon("i-play")}<span>${esc(L.listen)}</span></button><audio id="audio" src="${esc(audio)}" preload="none"></audio>` : ""}
         ${c.appeal ? `<p class="cap appealed">${esc(L.appealed(fmtDate(c.appeal.at, lang)))}</p>` : canAppeal ? `<button class="btn ghost wide" id="appeal">${esc(L.appeal)}</button>` : ""}
         <div id="appeal-box"></div></section>
       <section class="card glass"><h2>${esc(L.money)}</h2><ol class="book">${moneyRows(c).map((r) => `<li class="${r.cls}"><span class="tx">${esc(r.text)}${r.when ? `<small>${esc(r.when)}</small>` : ""}</span><b>${esc(r.amt)}</b></li>`).join("")}</ol>
@@ -137,7 +138,7 @@ function renderChat() {
   $("#chat").innerHTML = S.chat.map((m) => m.me
     ? `<div class="msg me"><small>${esc(L.you)}</small><p>${esc(m.text)}</p></div>`
     : m.pending ? `<div class="msg bot pending">${ORBIT}<p>${esc(L.thinking)}…</p></div>`
-    : `<div class="msg bot"><p>${esc(lang === "en" ? m.en : m.hi)}</p>${m.audio ? `<button class="link" data-audio="${esc(m.audio)}">${icon("i-play")} ${esc(L.listen)}</button>` : ""}</div>`).join("");
+    : `<div class="msg bot"><p>${esc(lang === "en" ? m.en : (lang === "pa" && m.pa) || m.hi)}</p>${m.audio ? `<button class="link" data-audio="${esc(m.audio)}">${icon("i-play")} ${esc(L.listen)}</button>` : ""}</div>`).join("");
   $$("#chat [data-audio]").forEach((b) => { b.onclick = () => new Audio(b.dataset.audio).play(); });
   const el = $("#chat");
   el.scrollTop = el.scrollHeight;
@@ -148,10 +149,10 @@ async function ask(payload) {
   S.chat.push({ pending: true });
   renderChat();
   try {
-    const r = await getJSON("/api/agent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ farmer_id: S.me, ...payload }) });
+    const r = await getJSON("/api/agent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ farmer_id: S.me, lang, ...payload }) });
     S.chat.pop();
     if (r.transcript) S.chat.push({ me: true, text: r.transcript });
-    S.chat.push({ hi: r.hi, en: r.en, audio: r.audio_url });
+    S.chat.push({ hi: r.hi, en: r.en, pa: r.pa, audio: r.audio_url });
     renderChat();
     if (r.audio_url && lang !== "en") new Audio(r.audio_url).play().catch(() => {});
     if ((r.tools || []).some((x) => x === "contest" || x === "file_claim")) refresh();
