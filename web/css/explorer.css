@@ -91,7 +91,8 @@ body.panel-open .rail { right: 416px; }
 
 /* ---- opening over India ---- */
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-.caption { position: fixed; left: 50%; top: 84px; z-index: 4; width: min(560px, calc(100% - 32px)); margin: 0; padding: 20px 24px 18px; border-radius: var(--r-l); transform: translateX(-50%); animation: fade .8s var(--ease) both; pointer-events: none; display: grid; gap: 8px; }
+/* bottom left, where the headline card sits later: the map of India above stays clear */
+.caption { position: fixed; left: 16px; bottom: 106px; z-index: 4; width: min(480px, calc(100% - 32px)); margin: 0; padding: 20px 22px 18px; border-radius: var(--r-l); animation: fade .8s var(--ease) both; pointer-events: none; display: grid; gap: 8px; }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 .caption[hidden] { display: none; }
 .caption b { font-size: 25px; line-height: 1.2; letter-spacing: -.025em; font-weight: 800; }
@@ -99,7 +100,7 @@ body.panel-open .rail { right: 416px; }
 .caption span { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
 .caption em { display: flex; align-items: center; gap: 8px; font: 500 12.5px Geist, sans-serif; font-style: normal; color: var(--muted); margin-top: 2px; }
 .caption em i { width: 8px; height: 8px; border-radius: 50%; background: var(--alert); box-shadow: 0 0 8px rgba(245, 197, 66, .7); }
-.skip { position: fixed; left: 50%; bottom: 108px; transform: translateX(-50%); z-index: 6; }
+.skip { position: fixed; right: 56px; bottom: 104px; z-index: 6; }
 .skip[hidden] { display: none; }
 .delhi { display: flex; align-items: center; gap: 8px; color: var(--ink); font: 700 13px Geist, sans-serif; text-shadow: 0 1px 6px #000; white-space: nowrap; pointer-events: none; }
 .delhi i { position: relative; width: 11px; height: 11px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, .25); }
@@ -236,6 +237,21 @@ body.panel-open .rail { right: 416px; }
 .dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(159, 227, 255, .25); transition: background .3s; }
 .dots i.on { background: var(--scan); }
 .err { color: #FF8A5C; font-size: 14px; }
+
+/* ---- field filmstrip ---- */
+.viewer { position: relative; aspect-ratio: 16 / 10; background: #000; overflow: hidden; }
+.viewer canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: 0; transition: opacity .25s; }
+.viewer canvas.on { opacity: 1; }
+.viewer .tag { position: absolute; left: 10px; bottom: 10px; padding: 4px 9px; border-radius: 7px; background: rgba(0, 0, 0, .72); font: 600 12px Geist, sans-serif; color: #fff; }
+.viewer .tag:lang(hi), .viewer .tag:lang(pa) { font-family: inherit; }
+.viewer .tag.burnt { left: auto; right: 10px; background: rgba(255, 106, 61, .9); color: #111; }
+.strip { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; padding: 6px 8px 2px; }
+.strip button { position: relative; display: grid; gap: 3px; padding: 0 0 4px; border-radius: 6px; color: var(--muted); font: 500 10.5px "Geist Mono", monospace; text-align: center; border-bottom: 2px solid transparent; }
+.strip canvas { width: 100%; aspect-ratio: 16 / 10; border-radius: 4px; image-rendering: pixelated; opacity: .55; transition: opacity .2s; }
+.strip button.on canvas, .strip button:hover canvas { opacity: 1; }
+.strip button.on { color: var(--ink); }
+.strip button.burnt { border-bottom-color: var(--burn); color: #FF8A5C; }
+.scanning .elapsed { font: 500 12px "Geist Mono", monospace; color: var(--muted); }
 
 /* ---- small messages ---- */
 .chip { position: fixed; left: 50%; top: 76px; transform: translateX(-50%); z-index: 5; margin: 0; padding: 7px 12px; font-size: 12.5px; color: var(--ink-2); border-radius: 999px; white-space: nowrap; }

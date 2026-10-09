@@ -30,6 +30,8 @@ const T = {
     checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
+    saved: (d) => `The live check is not answering right now; this is the result it gave on ${d}`, liveNow: (n) => `Live check, just now · ${n} s`, rerun: "Run again",
+    reading: "Reading every clear image of this field, September to December", checkNote: "Runs the check an officer would: every clear Sentinel-2 image of this field, this season and last. About 20 seconds.",
   },
   hi: {
     loading: "उपग्रह से सीज़न ला रहे हैं", explore: "देखें", officer: "अधिकारी", farmer: "किसान",
@@ -50,6 +52,8 @@ const T = {
     checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
+    saved: (d) => `लाइव जाँच अभी जवाब नहीं दे रही; यह ${d} की जाँच का नतीजा है`, liveNow: (n) => `लाइव जाँच, अभी · ${n} सेकंड`, rerun: "फिर चलाएँ",
+    reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "वही जाँच जो अधिकारी करते हैं: इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर। लगभग 20 सेकंड।",
   },
   pa: {
     loading: "ਉਪਗ੍ਰਹਿ ਤੋਂ ਸੀਜ਼ਨ ਲਿਆ ਰਹੇ ਹਾਂ", explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
@@ -70,6 +74,8 @@ const T = {
     checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    saved: (d) => `ਲਾਈਵ ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ; ਇਹ ${d} ਦੀ ਜਾਂਚ ਦਾ ਨਤੀਜਾ ਹੈ`, liveNow: (n) => `ਲਾਈਵ ਜਾਂਚ, ਹੁਣੇ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਚਲਾਓ",
+    reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਉਹੀ ਜਾਂਚ ਜੋ ਅਧਿਕਾਰੀ ਕਰਦਾ ਹੈ: ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
   },
   hr: {
     loading: "उपग्रह तै सीज़न ल्यावां सां", explore: "देक्खो", officer: "अफसर", farmer: "किसान",
@@ -90,6 +96,8 @@ const T = {
     checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
+    saved: (d) => `लाइव जांच इब्ब जवाब कोनी देरी; यो ${d} की जांच का नतीजा सै`, liveNow: (n) => `लाइव जांच, इब्बे · ${n} सेकंड`, rerun: "फेर चलाओ",
+    reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "वाए जांच जो अफसर करै सै: इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटो। करीब 20 सेकंड।",
   },
 };
 const HTML_LANG = { en: "en", hi: "hi", pa: "pa", hr: "hi" };
@@ -100,7 +108,7 @@ const CODE = { en: "EN", hi: "हिं", pa: "ਪੰ", hr: "हरि" };
 const BURN_RAMP = [[30, "#FF9D5C"], [50, "#FF6A3D"], [62, "#E8384F"], [80, "#C2187E"], [100, "#7B2CBF"]];
 const DELHI = [77.209, 28.6139];
 const STUDY_BOX = [76.06, 29.86, 76.22, 30.01]; // the hand-labelled Patran area, glued to the Kaithal outline
-const INDIA = { center: [79.5, 23.2], zoom: 3.6 };
+const INDIA = { center: [78.6, 25.2], zoom: 4.35 };
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -114,6 +122,8 @@ if (!T[lang]) lang = "en";
 const t = () => T[lang];
 
 const state = { day: 0, playing: false, raf: 0, layers: { burns: true, fires: true, fields: true, missed: false }, intro: true, field: null, check: null, visible: new Set() };
+const dotKinds = {};
+let refreshDots = () => {};
 let map, manifest, windows = [], day0, D0, D1, centers = [], cumHa = [], cumFires = [], beltFires = [], demo = {}, fieldsById = {}, syncPins = () => {};
 
 // ---- language ----
@@ -329,10 +339,8 @@ const fieldName = (p) => (lang === "en" ? p.name : p.name_hi || p.name);
 function openField(f) {
   stop();
   state.field = f;
-  state.check = demo[f.properties.id] ? { status: "done", ...demo[f.properties.id] } : null;
-  // jump the season to the day that matters for this field, so the map shows what the card says
-  const bd = state.check?.result?.current?.decision?.burn_date;
-  setDay(bd ? dayNum(bd) + 1 : D1);
+  state.check = null;  // the answer comes from running the check, not from opening the card
+  state.frame = 0;
   const narrow = innerWidth <= 640;
   map.flyTo({ center: centroid(f.geometry), zoom: 15.2, duration: reduced ? 0 : 2200, essential: true,
     offset: narrow ? [0, -innerHeight * 0.22] : [-200, 0] });
@@ -340,16 +348,17 @@ function openField(f) {
   renderPanel();
   $("#panel").hidden = false;
   document.body.classList.add("panel-open");
+  playFrames();
 }
-function closePanel() { state.field = null; state.check = null; $("#panel").hidden = true; document.body.classList.remove("panel-open"); }
+function closePanel() { clearInterval(state.frameTimer); state.field = null; state.check = null; $("#panel").hidden = true; document.body.classList.remove("panel-open"); }
 
-// before/after cut from our own tiles: late September against the window of the burn (or early November)
+// the field cut out of our own tiles, one picture per ten-day window
 function lonLatToPx([lon, lat], z) {
   const s = 256 * 2 ** z, y = Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
   return [((lon + 180) / 360) * s, (1 - y / Math.PI) / 2 * s];
 }
-async function drawCut(canvas, windowId, geom) {
-  const z = 14, W = 128, H = 80, scale = 3;
+async function drawCut(canvas, windowId, geom, W = 128, H = 80, scale = 3) {
+  const z = 14;
   const pts = geom.coordinates[0].map((c) => lonLatToPx(c, z));
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
@@ -367,28 +376,33 @@ async function drawCut(canvas, windowId, geom) {
     img.src = `/tiles/${windowId}/${z}/${tx}/${ty}.webp`;
   })));
   ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 2;
+  ctx.lineWidth = Math.max(1.5, scale * 0.7);
   ctx.beginPath();
   pts.forEach(([x, y], i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, (x - x0) * scale, (y - y0) * scale));
   ctx.closePath();
   ctx.stroke();
 }
-
-function signalSvg(series, burnIso) {
-  const pts = series.filter((s) => s.nbr !== null && s.valid >= 0.5);
-  if (pts.length < 2) return "";
-  const W = 340, H = 96, padL = 26, padB = 16, x0 = new Date(series[0].date), x1 = new Date(series.at(-1).date);
-  const X = (iso) => padL + ((new Date(iso) - x0) / (x1 - x0)) * (W - padL - 4);
-  const Y = (v) => 6 + (1 - (v + 0.4) / 1.2) * (H - padB - 6);  // NBR -0.4 .. 0.8
-  const line = pts.map((p, i) => `${i ? "L" : "M"}${X(p.date).toFixed(1)},${Y(p.nbr).toFixed(1)}`).join(" ");
-  const dots = pts.map((p) => `<circle class="dot" cx="${X(p.date).toFixed(1)}" cy="${Y(p.nbr).toFixed(1)}" r="2"/>`).join("");
-  const months = [];
-  for (let m = new Date(x0.getFullYear(), x0.getMonth() + 1, 1); m <= x1; m = new Date(m.getFullYear(), m.getMonth() + 1, 1))
-    months.push(`<text x="${X(m.toISOString()).toFixed(1)}" y="${H - 3}">${esc(m.toLocaleDateString(LOCALE[lang], { month: MONTH() }))}</text>`);
-  const mark = burnIso ? `<line class="mark" x1="${X(burnIso)}" x2="${X(burnIso)}" y1="4" y2="${H - padB}"/>` : "";
-  return `<svg class="signal" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-    <line class="grid" x1="${padL}" x2="${W}" y1="${Y(0)}" y2="${Y(0)}"/><text x="0" y="${Y(0) + 3}">0</text>
-    <text x="0" y="${Y(0.6) + 3}">0.6</text>${mark}<path class="line" d="${line}"/>${dots}${months.join("")}</svg>`;
+function burnWindow() {
+  const d = state.check?.status === "done" ? state.check.result.current.decision.burn_date : null;
+  return d ? windowIndex(dayNum(d)) : -1;
+}
+function showFrame(i) {
+  state.frame = i;
+  $$("#viewer canvas").forEach((c, j) => c.classList.toggle("on", j === i));
+  $$("#strip button").forEach((b, j) => b.classList.toggle("on", j === i));
+  const tag = $("#viewer .tag");
+  if (tag) tag.textContent = fmtRange(windows[i]);
+}
+function playFrames(endAt = null) {
+  clearInterval(state.frameTimer);
+  if (reduced) { showFrame(endAt ?? windows.length - 1); return; }
+  let i = 0;
+  showFrame(0);
+  const last = endAt ?? windows.length - 1;
+  state.frameTimer = setInterval(() => {
+    if (i >= last) { clearInterval(state.frameTimer); return; }
+    showFrame(++i);
+  }, 520);
 }
 
 const SCAN_SVG = `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1A2440"/>
@@ -398,46 +412,58 @@ const SCAN_SVG = `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" h
 function renderPanel() {
   const f = state.field, p = f.properties, L = t(), c = state.check;
   const village = lang === "en" ? p.village : p.village_hi || p.village;
-  let html = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>`;
+  const bw = burnWindow();
+  let html = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>
+    <div class="viewer" id="viewer">${windows.map(() => "<canvas></canvas>").join("")}<span class="tag"></span>
+      ${bw >= 0 ? `<span class="tag burnt" id="burntag">${esc(L.vline.burn(fmtIso(c.result.current.decision.burn_date)))}</span>` : ""}</div>
+    <div class="strip" id="strip">${windows.map((w, j) => `<button class="${j === bw ? "burnt" : ""}" aria-label="${esc(fmtRange(w))}"><canvas></canvas><span>${esc(new Date(w.start).getDate() === 1 || j === 0 ? fmtDay(dayNum(w.start), "short") : String(new Date(w.start).getDate()))}</span></button>`).join("")}</div>`;
   if (c && c.status === "done") {
     const cur = c.result.current, prev = c.result.previous, d = cur.decision, k = kindOf(d.outcome), kp = kindOf(prev.decision.outcome);
-    const after = d.burn_date ? windows[windowIndex(dayNum(d.burn_date))] : windows[4];
     const vline = k === "burn" ? L.vline.burn(fmtIso(d.burn_date)) : k === "clean" ? L.vline.clean(d.clear_dates.length) : L.vline.review();
-    html += `<div class="compare" id="compare"><canvas class="before"></canvas><canvas class="after"></canvas><div class="handle"></div>
-        <input type="range" min="0" max="100" value="50" aria-label="Before and after">
-        <span class="tag l">${esc(fmtRange(windows[0]))}</span><span class="tag r">${esc(fmtRange(after))}</span></div>
-      <div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div><b>${esc(L.v[k])}</b><p>${esc(vline)}</p></div></div>
-      <div class="sec"><h3>${esc(L.signal)}</h3>${signalSvg(cur.series, d.burn_date)}<p class="cap">${esc(L.signalNote)}</p></div>
+    html += `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div><b>${esc(L.v[k])}</b><p>${esc(vline)}</p></div></div>
       <div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
         <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
       <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
-      <div class="foot"><span>${c.checked_at ? esc(L.checked(fmtIso(c.checked_at))) : ""}</span><button class="btn primary small" id="run-check">${icon("i-scan")}<span>${esc(L.again)}</span></button></div>`;
+      <div class="foot"><span>${esc(c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds))}</span><button class="btn ghost small" id="run-check">${esc(L.rerun)}</button></div>`;
   } else if (c && c.status !== "done" && !c.failed) {
-    const s = Math.min(c.step || 0, L.steps.length - 1);
-    html += `<div class="scanning">${SCAN_SVG}<p>${esc(L.steps[s])}</p><div class="dots">${L.steps.map((_, j) => `<i class="${j <= s ? "on" : ""}"></i>`).join("")}</div></div>`;
+    html += `<div class="scanning">${SCAN_SVG}<p>${esc(L.reading)}</p><span class="elapsed">${c.elapsed || 0} s</span></div>`;
   } else {
-    html += `<div class="sec">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : ""}<button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button></div>`;
+    html += `<div class="sec">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : `<p class="cap" style="margin:0 0 10px">${esc(L.checkNote)}</p>`}
+      <button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button></div>`;
   }
   $("#panel-body").innerHTML = html;
   $("#run-check")?.addEventListener("click", runCheck);
-  const cmp = $("#compare");
-  if (cmp) {
-    const d = c.result.current.decision, after = d.burn_date ? windows[windowIndex(dayNum(d.burn_date))] : windows[4];
-    drawCut($(".before", cmp), windows[0].id, f.geometry);
-    drawCut($(".after", cmp), after.id, f.geometry);
-    $("input", cmp).oninput = (e) => cmp.style.setProperty("--cut", `${e.target.value}%`);
-  }
+  const big = $$("#viewer canvas"), small = $$("#strip canvas");
+  windows.forEach((w, j) => { drawCut(big[j], w.id, f.geometry); drawCut(small[j], w.id, f.geometry, 128, 80, 1); });
+  $$("#strip button").forEach((b, j) => { b.onclick = () => { clearInterval(state.frameTimer); showFrame(j); }; });
+  showFrame(state.frame || 0);
 }
 
 async function runCheck() {
-  const f = state.field;
-  state.check = { status: "queued", step: 0 };
+  const f = state.field, t0 = performance.now();
+  state.check = { status: "queued", elapsed: 0 };
   renderPanel();
-  const stepper = setInterval(() => {
-    if (!state.check || state.check.status === "done" || state.field !== f) return clearInterval(stepper);
-    state.check.step = Math.min((state.check.step || 0) + 1, t().steps.length - 1);
+  playFrames();
+  const tick = setInterval(() => {
+    if (!state.check || state.check.status === "done" || state.field !== f) return clearInterval(tick);
+    state.check.elapsed = Math.round((performance.now() - t0) / 1000);
+    const el = $("#panel .elapsed");
+    if (el) el.textContent = `${state.check.elapsed} s`;
+  }, 1000);
+  const finish = (check) => {
+    clearInterval(tick);
+    if (state.field !== f) return;
+    state.check = check;
     renderPanel();
-  }, 4200);
+    const d = check.status === "done" ? check.result.current.decision : null;
+    if (d) {
+      if (d.burn_date) setDay(dayNum(d.burn_date) + 1);
+      clearInterval(state.frameTimer);
+      showFrame(d.burn_date ? windowIndex(dayNum(d.burn_date)) : windows.length - 1);
+      dotKinds[f.properties.id] = kindOf(d.outcome);
+      refreshDots();
+    }
+  };
   try {
     const r = await fetch("/api/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ geometry: f.geometry }) });
     if (!r.ok) throw new Error(String(r.status));
@@ -445,16 +471,14 @@ async function runCheck() {
     for (let k = 0; k < 60 && state.field === f; k++) {
       await new Promise((ok) => setTimeout(ok, 2000));
       const item = await (await fetch(`/api/check/${id}`)).json();
-      if (item.status === "done" || item.status === "error") {
-        clearInterval(stepper);
-        if (state.field === f) { state.check = item.status === "done" ? { ...item, checked_at: item.done_at } : { failed: true }; renderPanel(); }
-        return;
-      }
+      if (item.status === "done") return finish({ ...item, status: "done", checked_at: item.done_at, seconds: Math.round((performance.now() - t0) / 1000) });
+      if (item.status === "error") throw new Error(item.error || "error");
     }
     throw new Error("timeout");
   } catch {
-    clearInterval(stepper);
-    if (state.field === f) { state.check = { failed: true }; renderPanel(); }
+    // the live check could not finish: fall back to the result this field got from an earlier live run, said as such
+    const saved = demo[f.properties.id];
+    finish(saved ? { status: "done", saved: true, ...saved } : { failed: true });
   }
 }
 
@@ -552,8 +576,8 @@ async function init() {
 
   map.addSource("fires-states", { type: "geojson", data: stateFires });
   map.addLayer({ id: "fires-states", type: "circle", source: "fires-states", maxzoom: 9.5, paint: {
-    "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 0.7, 6, 1.4, 9, 2.2],
-    "circle-color": "#F5C542", "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.7, 8.5, 0.6, 9.5, 0] } });
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 1.5, 5, 1.8, 7, 2, 9, 2.4],
+    "circle-color": "#F5C542", "circle-blur": 0.25, "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.85, 8.5, 0.7, 9.5, 0] } });
   map.addSource("fires", { type: "geojson", data: firesFc });
   map.addLayer({ id: "fires", type: "symbol", source: "fires", minzoom: 8.5, layout: {
     "icon-image": "diamond", "icon-allow-overlap": true, "icon-ignore-placement": true, "icon-size": 0.62 },
@@ -566,10 +590,16 @@ async function init() {
 
   const fieldsFc = { type: "FeatureCollection", features: fieldsList.map(({ geometry, ...p }) => ({ type: "Feature", id: p.id, properties: p, geometry })) };
   fieldsFc.features.forEach((f) => { fieldsById[f.properties.id] = f; });
-  const kindFor = (id) => (demo[id] ? kindOf(demo[id].result.current.decision.outcome) : "none");
+  // dots stay neutral until a field is checked in this visit, so the map does not give the answer away
+  const kindFor = (id) => dotKinds[id] || "none";
   const dotsFc = { type: "FeatureCollection", features: fieldsFc.features.map((f) => ({ type: "Feature", properties: { id: f.properties.id, k: kindFor(f.properties.id) }, geometry: { type: "Point", coordinates: centroid(f.geometry) } })) };
   map.addSource("fields", { type: "geojson", data: fieldsFc });
   map.addSource("field-dots", { type: "geojson", data: dotsFc });
+  refreshDots = () => {
+    dotsFc.features.forEach((d) => { d.properties.k = kindFor(d.properties.id); });
+    map.getSource("field-dots").setData(dotsFc);
+    syncPins();
+  };
   map.addLayer({ id: "fields-hit", type: "fill", source: "fields", minzoom: 12.5, paint: { "fill-color": "#FFFFFF", "fill-opacity": 0.04 } });
   map.addLayer({ id: "fields", type: "line", source: "fields", minzoom: 12.5, paint: { "line-color": "#FFFFFF", "line-width": ["interpolate", ["linear"], ["zoom"], 12.5, 1.2, 15, 2.5] } });
   const dotColor = ["match", ["get", "k"], "clean", "#43C485", "burn", "#FF6A3D", "review", "#F5C542", "#FFFFFF"];
