@@ -28,6 +28,11 @@
     <symbol id="i-frame" viewBox="0 0 24 24"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 12h17M12 3.5c2.6 2.5 3.8 5.3 3.8 8.5s-1.2 6-3.8 8.5c-2.6-2.5-3.8-5.3-3.8-8.5s1.2-6 3.8-8.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clip" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 4.5h6v2.5H9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 13 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-burn" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="13" y="13" width="7" height="7" rx="1.5" fill="currentColor" opacity=".55"/><rect x="13" y="4" width="7" height="7" rx="1.5" fill="currentColor" opacity=".3"/></symbol>
+    <symbol id="i-diamond" viewBox="0 0 24 24"><path d="M12 4.5 19.5 12 12 19.5 4.5 12z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-field" viewBox="0 0 24 24"><path d="M5 6.5 14 5l5 4-2 9.5-11-1.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-missed" viewBox="0 0 24 24"><rect x="4.5" y="4.5" width="15" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 16 16 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 5 6v5.5c0 4.3 3 7.8 7 9 4-1.2 7-4.7 7-9V6l-7-2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2.2 2.2L15.5 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 20v-8M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m6 12.5 4 4L18 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -40,6 +45,7 @@
 </svg>
 
 <div id="map" aria-label="Satellite map of the Patiala-Kaithal border belt"></div>
+<div class="vignette" aria-hidden="true"></div>
 
 <div class="loader" id="loader" aria-live="polite">
   <svg viewBox="0 0 64 64" aria-hidden="true">
@@ -65,7 +71,7 @@
   <div class="spacer"></div>
   <nav class="modes glass" aria-label="Views">
     <a class="on" href="index.html"><svg><use href="#i-map"/></svg><span data-i18n="explore">Explore</span></a>
-    <a href="app.html#/officer"><svg><use href="#i-shield"/></svg><span data-i18n="officer">Officer</span></a>
+    <a href="app.html#/officer"><svg><use href="#i-clip"/></svg><span data-i18n="officer">Officer</span></a>
     <a href="app.html#/farmer"><svg><use href="#i-sprout"/></svg><span data-i18n="farmer">Farmer</span></a>
   </nav>
   <div class="lang">
@@ -83,6 +89,7 @@
   <p class="kicker" data-i18n="kicker">Patiala–Kaithal border belt · kharif 2025</p>
   <h1 data-i18n="headline"></h1>
   <div class="vs">
+    <p class="lbl" data-i18n="vslbl">Clean fields wrongly flagged (lower is better)</p>
     <div class="row"><span data-i18n="alerts">Fire alerts</span><div class="track"><i class="bad" style="--w:14.1%"></i></div><b>14.1%</b></div>
     <div class="row"><span>Saakshi</span><div class="track"><i class="good" style="--w:2.6%"></i></div><b>2.6%</b></div>
     <p class="cap" data-i18n="vscap"></p>
@@ -101,17 +108,21 @@
 
 <div class="rail">
   <div class="glass stack" role="group" aria-label="Zoom">
-    <button class="icon-btn" id="zoom-in" aria-label="Zoom in"><svg><use href="#i-plus"/></svg></button>
-    <button class="icon-btn" id="zoom-out" aria-label="Zoom out"><svg><use href="#i-minus"/></svg></button>
-    <button class="icon-btn" id="zoom-fit" aria-label="Whole region"><svg><use href="#i-frame"/></svg></button>
+    <button class="icon-btn" id="zoom-in" aria-label="Zoom in" title="Zoom in"><svg><use href="#i-plus"/></svg></button>
+    <button class="icon-btn" id="zoom-out" aria-label="Zoom out" title="Zoom out"><svg><use href="#i-minus"/></svg></button>
+    <button class="icon-btn" id="zoom-fit" aria-label="Whole belt" title="Whole belt"><svg><use href="#i-frame"/></svg></button>
   </div>
   <div class="glass stack layers" role="group" aria-label="Layers">
-    <button data-layer="burns" class="on" aria-pressed="true"><i class="sw burn"></i><span data-i18n="l_burns">Burns</span></button>
-    <button data-layer="fires" class="on" aria-pressed="true"><i class="sw fire"></i><span data-i18n="l_fires">Fire alerts</span></button>
-    <button data-layer="fields" class="on" aria-pressed="true"><i class="sw field"></i><span data-i18n="l_fields">Fields</span></button>
+    <button class="icon-btn on" data-layer="burns" aria-pressed="true" data-tip="l_burns"><svg class="c-burn"><use href="#i-burn"/></svg></button>
+    <button class="icon-btn on" data-layer="fires" aria-pressed="true" data-tip="l_fires"><svg class="c-fire"><use href="#i-diamond"/></svg></button>
+    <button class="icon-btn on" data-layer="fields" aria-pressed="true" data-tip="l_fields"><svg><use href="#i-field"/></svg></button>
+    <button class="icon-btn" data-layer="missed" aria-pressed="false" data-tip="l_missed"><svg class="c-missed"><use href="#i-missed"/></svg></button>
   </div>
 </div>
-
+<div class="tip glass" id="tip" hidden></div>
+<p class="caption" id="caption" hidden></p>
+<p class="chip glass" id="refchip" hidden data-i18n="refphoto"></p>
+<p class="toast glass" id="toast" hidden></p>
 <footer class="timeline glass" id="timeline">
   <button class="play" id="play" aria-label="Play">
     <svg class="ring" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="25" class="ring-bg"/><circle cx="28" cy="28" r="25" class="ring-fg" id="ring"/></svg>

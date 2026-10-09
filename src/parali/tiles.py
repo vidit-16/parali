@@ -259,11 +259,11 @@ def encode_webp(rgba: np.ndarray) -> bytes:
     return buf.getvalue()
 
 
-def sharpen(img):
+def sharpen(img, percent: int = 70):
     """Unsharp mask on the colour only: 10 m pixels shown at 8 m need a little edge back."""
     from PIL import Image, ImageFilter
     r, g, b, a = img.split()
-    rgb = Image.merge("RGB", (r, g, b)).filter(ImageFilter.UnsharpMask(radius=1.3, percent=70, threshold=2))
+    rgb = Image.merge("RGB", (r, g, b)).filter(ImageFilter.UnsharpMask(radius=1.2, percent=percent, threshold=2))
     return Image.merge("RGBA", (*rgb.split(), a))
 
 
@@ -275,9 +275,9 @@ def write_block_tiles(sink: Sink, window: str, bx: int, by: int, rgba: np.ndarra
     for z in range(MAX_Z, BLOCK_Z - 1, -1):
         k = 2 ** (z - BLOCK_Z)
         size = TILE * k
-        level = img if size == FULL else img.resize((size, size), Image.BOX)
-        if z >= MAX_Z - 1:
-            level = sharpen(level)
+        # Lanczos keeps field edges; BOX averaging (the old way) went soft by z11
+        level = img if size == FULL else img.resize((size, size), Image.LANCZOS)
+        level = sharpen(level, 70 if z >= MAX_Z - 1 else 45)
         arr = np.asarray(level)
         for j in range(k):
             for i in range(k):
@@ -308,8 +308,8 @@ def pyramid(sink: Sink, window: str, blocks: list[tuple[int, int]], min_z: int =
                         any_child = True
             if not any_child:
                 continue
-            sink.put(f"{window}/{z}/{px}/{py}.webp", encode_webp(np.asarray(canvas.resize((TILE, TILE), Image.BOX))),
-                     "image/webp")
+            small = sharpen(canvas.resize((TILE, TILE), Image.LANCZOS), 40)
+            sink.put(f"{window}/{z}/{px}/{py}.webp", encode_webp(np.asarray(small)), "image/webp")
             made.add((px, py))
             n += 1
         have = made

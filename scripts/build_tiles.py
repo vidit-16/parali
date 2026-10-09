@@ -51,12 +51,23 @@ def run_blocks(session, fn, region, blocks, workers=6):
         return list(ex.map(one, blocks))
 
 
-def merge_burns(sink, blocks):
+def merge_burns(sink, blocks, fire_feats=()):
+    """One burn layer for the map. Each patch gets a=1 if any fire alert of the season fell within
+    375 m of it (the radius the rules use), so the map can show the burns no alert caught."""
     feats = []
     for bx, by in blocks:
         data = sink.get(f"burns/{bx}_{by}.geojson")
         if data:
             feats += json.loads(data)["features"]
+    if fire_feats:
+        from pyproj import Transformer
+        from shapely import STRtree, transform
+        from shapely.geometry import shape
+        utm = Transformer.from_crs(4326, 32643, always_xy=True)
+        to_m = lambda g: transform(g, lambda xy: list(zip(*utm.transform(xy[:, 0], xy[:, 1]))))  # noqa: E731
+        tree = STRtree([to_m(shape(f["geometry"])) for f in fire_feats])
+        for f in feats:
+            f["properties"]["a"] = int(len(tree.query(to_m(shape(f["geometry"])), predicate="dwithin", distance=375)) > 0)
     sink.put("burns.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
                                          separators=(",", ":")).encode(), "application/json")  # CloudFront compresses application/json
     return len(feats)
@@ -76,7 +87,7 @@ def fire_layer(sink, region):
              for f in fs if region.contains(Point(f.lon, f.lat))]
     sink.put("fires.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
                                          separators=(",", ":")).encode(), "application/json")  # CloudFront compresses application/json
-    return len(feats)
+    return feats
 
 
 def main():
@@ -84,6 +95,7 @@ def main():
     p.add_argument("--profile", default="envhacks")
     p.add_argument("--blocks", nargs="*", help="only these z11 blocks, as x,y")
     p.add_argument("--skip-blocks", action="store_true", help="reuse block outputs already in S3")
+    p.add_argument("--skip-pyramid", action="store_true", help="only redo the burn, fire and manifest files")
     p.add_argument("--workers", type=int, default=6, help="dates read at once per block (fewer = less memory)")
     p.add_argument("--old-totals-cover-missing", action="store_true",
                    help="blocks without a stored summary are counted from the previous manifest")
@@ -104,10 +116,12 @@ def main():
 
     # Everything after the block jobs covers the whole region, so rerunning one block keeps the rest.
     every = tiles.blocks_for(region)
-    for w, _, _ in tiles.WINDOWS:
-        print(f"pyramid {w}: {tiles.pyramid(sink, w, every)} tiles", flush=True)
-    print("burn patches:", merge_burns(sink, every))
-    print("fire alerts in region:", fire_layer(sink, region))
+    if not a.skip_pyramid:
+        for w, _, _ in tiles.WINDOWS:
+            print(f"pyramid {w}: {tiles.pyramid(sink, w, every)} tiles", flush=True)
+    fire_feats = fire_layer(sink, region)
+    print("fire alerts in region:", len(fire_feats))
+    print("burn patches:", merge_burns(sink, every, fire_feats))
 
     burn_ha: dict[int, float] = {}
     summaries, missing = [], []
