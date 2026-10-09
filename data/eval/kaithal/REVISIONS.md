@@ -19,3 +19,13 @@ The headline numbers use only the labeller's own labels (labels.csv -> data/eval
 enters the test set. The revised labels (labels_revised.csv -> data/eval/results_revised_labels.json) are a
 sensitivity check: with them, clean fields wrongly flagged drop from 1.9% to 1.5% (fire alerts 8.7% -> 8.8%).
 
+
+## Second batch (labelled 10 Oct)
+
+| plot | first label | revised | reason |
+|---|---|---|---|
+| p045_100 | not_burnt | burnt | 25 Oct: dark burn signature inside the box, grey-dark in true colour |
+| p035_041 | not_burnt | burnt | 15 Oct: dark burn signature inside the box, dark brown in true colour |
+| p075_090 | not_burnt | unsure | 6 Nov: dark, but not the burn colour |
+| p040_059 | not_burnt | kept | the dark patch is above the box |
+| p016_131 (Patran) | not_burnt | kept | nothing burnt in the box |

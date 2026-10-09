@@ -1,33 +1,33 @@
 {
- "labelled_plots": 466,
- "burnt_labels": 26,
+ "labelled_plots": 549,
+ "burnt_labels": 37,
  "rules": {
   "burnt_auto_approved": 0.0,
-  "auto_approved": 80.0,
-  "review": 17.3,
-  "possible_burn": 2.6,
-  "clean_flagged": 1.9
+  "auto_approved": 80.5,
+  "review": 17.1,
+  "possible_burn": 2.4,
+  "clean_flagged": 1.5
  },
  "firms": {
-  "clean_flagged": 8.7,
-  "burns_caught": 19.3
+  "clean_flagged": 8.8,
+  "burns_caught": 19.0
  },
  "held_out": {
   "auto_approved": [
-   84.1,
-   84.0
+   84.4,
+   84.6
   ],
   "burnt_auto_approved": [
    0.0,
-   5.7
+   3.9
   ],
   "clean_flagged": [
-   3.7,
-   3.9
+   3.4,
+   4.2
   ],
   "firms_clean_flagged": [
    8.6,
-   8.8
+   9.0
   ]
  },
  "advance": {

@@ -17,7 +17,7 @@ const T = {
     delhi: "Delhi", seasonLbl: "2025 season", skip: "Skip", km: (n) => `${n} km from the belt`, study: "Study area · Patran, Punjab",
     kicker: "Patiala–Kaithal border belt · kharif 2025",
     headline: "<em>9 in 10</em> hectares that looked burnt got no fire alert.",
-    alerts: "Fire alerts", vslbl: "Clean fields wrongly flagged (lower is better)", vscap: "399 fields checked by hand, in Punjab and Haryana",
+    alerts: "Fire alerts", vslbl: "Clean fields wrongly flagged (lower is better)", vscap: "458 fields checked by hand, in Punjab and Haryana",
     play: "Play the season", explorebtn: "Explore the map",
     fine: "Burn-like: ground that turned near-black right after its plant signal collapsed, seen by Sentinel-2.",
     l_burns: "Burns", l_fires: "Fire alerts", l_fields: "Fields", l_missed: "Only burns no alert caught", ha: "ha burn-like", fa: "fire alerts",
@@ -30,6 +30,7 @@ const T = {
     checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
+    burnView: "Infrared view of every clear image (a fresh burn turns dark blue)",
     saved: (d) => `The live check is not answering right now; this is the result it gave on ${d}`, liveNow: (n) => `Live check, just now · ${n} s`, rerun: "Run again",
     reading: "Reading every clear image of this field, September to December", checkNote: "Runs the check an officer would: every clear Sentinel-2 image of this field, this season and last. About 20 seconds.",
   },
@@ -39,7 +40,7 @@ const T = {
     delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `क्षेत्र से ${n} किमी`, study: "अध्ययन क्षेत्र · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल सीमा क्षेत्र · खरीफ़ 2025",
     headline: "जले दिखने वाले हर <em>10 में से 9</em> हेक्टेयर पर आग का कोई अलर्ट नहीं आया।",
-    alerts: "आग अलर्ट", vslbl: "साफ़ खेत जिन्हें गलती से संदिग्ध बताया (कम बेहतर)", vscap: "पंजाब और हरियाणा के 399 खेत, हाथ से जाँचे",
+    alerts: "आग अलर्ट", vslbl: "साफ़ खेत जिन्हें गलती से संदिग्ध बताया (कम बेहतर)", vscap: "पंजाब और हरियाणा के 458 खेत, हाथ से जाँचे",
     play: "पूरा सीज़न देखें", explorebtn: "नक्शा देखें",
     fine: "जले जैसा: वह ज़मीन जो पौधों का संकेत गिरते ही लगभग काली हो गई, Sentinel-2 उपग्रह से देखी गई।",
     l_burns: "जले खेत", l_fires: "आग अलर्ट", l_fields: "खेत", l_missed: "केवल वे जले खेत जिन पर अलर्ट नहीं आया", ha: "हेक्टेयर जले जैसे", fa: "आग अलर्ट",
@@ -52,6 +53,7 @@ const T = {
     checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
+    burnView: "हर साफ़ तस्वीर का इन्फ्रारेड दृश्य (ताज़ा जला खेत गहरा नीला दिखता है)",
     saved: (d) => `लाइव जाँच अभी जवाब नहीं दे रही; यह ${d} की जाँच का नतीजा है`, liveNow: (n) => `लाइव जाँच, अभी · ${n} सेकंड`, rerun: "फिर चलाएँ",
     reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "वही जाँच जो अधिकारी करते हैं: इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर। लगभग 20 सेकंड।",
   },
@@ -61,7 +63,7 @@ const T = {
     delhi: "ਦਿੱਲੀ", seasonLbl: "2025 ਸੀਜ਼ਨ", skip: "ਛੱਡੋ", km: (n) => `ਖੇਤਰ ਤੋਂ ${n} ਕਿਮੀ`, study: "ਅਧਿਐਨ ਖੇਤਰ · ਪਾਤੜਾਂ, ਪੰਜਾਬ",
     kicker: "ਪਟਿਆਲਾ–ਕੈਥਲ ਸਰਹੱਦੀ ਖੇਤਰ · ਸਾਉਣੀ 2025",
     headline: "ਸੜੇ ਦਿਸਦੇ ਹਰ <em>10 ਵਿੱਚੋਂ 9</em> ਹੈਕਟੇਅਰ ਲਈ ਕੋਈ ਅੱਗ ਅਲਰਟ ਨਹੀਂ ਆਇਆ।",
-    alerts: "ਅੱਗ ਅਲਰਟ", vslbl: "ਸਾਫ਼ ਖੇਤ ਜਿਨ੍ਹਾਂ ਨੂੰ ਗਲਤੀ ਨਾਲ ਸ਼ੱਕੀ ਕਿਹਾ (ਘੱਟ ਬਿਹਤਰ)", vscap: "ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ 399 ਖੇਤ, ਹੱਥੀਂ ਜਾਂਚੇ",
+    alerts: "ਅੱਗ ਅਲਰਟ", vslbl: "ਸਾਫ਼ ਖੇਤ ਜਿਨ੍ਹਾਂ ਨੂੰ ਗਲਤੀ ਨਾਲ ਸ਼ੱਕੀ ਕਿਹਾ (ਘੱਟ ਬਿਹਤਰ)", vscap: "ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ 458 ਖੇਤ, ਹੱਥੀਂ ਜਾਂਚੇ",
     play: "ਪੂਰਾ ਸੀਜ਼ਨ ਵੇਖੋ", explorebtn: "ਨਕਸ਼ਾ ਵੇਖੋ",
     fine: "ਸੜੇ ਵਰਗੀ: ਉਹ ਜ਼ਮੀਨ ਜੋ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ ਡਿੱਗਦੇ ਹੀ ਲਗਭਗ ਕਾਲੀ ਹੋ ਗਈ, Sentinel-2 ਉਪਗ੍ਰਹਿ ਤੋਂ ਵੇਖੀ।",
     l_burns: "ਸੜੇ ਖੇਤ", l_fires: "ਅੱਗ ਅਲਰਟ", l_fields: "ਖੇਤ", l_missed: "ਸਿਰਫ਼ ਉਹ ਸੜੇ ਖੇਤ ਜਿਨ੍ਹਾਂ ਉੱਤੇ ਅਲਰਟ ਨਹੀਂ ਆਇਆ", ha: "ਹੈਕਟੇਅਰ ਸੜੇ ਵਰਗੇ", fa: "ਅੱਗ ਅਲਰਟ",
@@ -74,6 +76,7 @@ const T = {
     checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    burnView: "ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਦਾ ਇਨਫ੍ਰਾਰੈੱਡ ਦ੍ਰਿਸ਼ (ਤਾਜ਼ਾ ਸੜਿਆ ਖੇਤ ਗੂੜ੍ਹਾ ਨੀਲਾ ਦਿਸਦਾ ਹੈ)",
     saved: (d) => `ਲਾਈਵ ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ; ਇਹ ${d} ਦੀ ਜਾਂਚ ਦਾ ਨਤੀਜਾ ਹੈ`, liveNow: (n) => `ਲਾਈਵ ਜਾਂਚ, ਹੁਣੇ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਚਲਾਓ",
     reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਉਹੀ ਜਾਂਚ ਜੋ ਅਧਿਕਾਰੀ ਕਰਦਾ ਹੈ: ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
   },
@@ -83,7 +86,7 @@ const T = {
     delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `इलाके तै ${n} किमी`, study: "अध्ययन इलाका · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल बॉर्डर इलाका · खरीफ़ 2025",
     headline: "जळे दिक्खण आळे हर <em>10 म्ह तै 9</em> हेक्टेयर पै कोए आग का अलर्ट कोनी आया।",
-    alerts: "आग अलर्ट", vslbl: "साफ खेत जिन पै गलती तै शक करया (कम आच्छा)", vscap: "पंजाब अर हरियाणा के 399 खेत, हाथ तै जांचे",
+    alerts: "आग अलर्ट", vslbl: "साफ खेत जिन पै गलती तै शक करया (कम आच्छा)", vscap: "पंजाब अर हरियाणा के 458 खेत, हाथ तै जांचे",
     play: "पूरा सीज़न देक्खो", explorebtn: "नक्सा देक्खो",
     fine: "जळे बरगी: वा धरती जो पौधां का संकेत गिरते ए काळी हो गी, Sentinel-2 नै देक्खी।",
     l_burns: "जळे खेत", l_fires: "आग अलर्ट", l_fields: "खेत", l_missed: "सिर्फ वे जळे खेत जिन पै अलर्ट कोनी आया", ha: "हेक्टेयर जळे बरगे", fa: "आग अलर्ट",
@@ -96,6 +99,7 @@ const T = {
     checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
+    burnView: "हर साफ फोटो का इन्फ्रारेड नजारा (ताजा जळया खेत गहरा नीला दिक्खै)",
     saved: (d) => `लाइव जांच इब्ब जवाब कोनी देरी; यो ${d} की जांच का नतीजा सै`, liveNow: (n) => `लाइव जांच, इब्बे · ${n} सेकंड`, rerun: "फेर चलाओ",
     reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "वाए जांच जो अफसर करै सै: इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटो। करीब 20 सेकंड।",
   },
@@ -203,7 +207,7 @@ function setDay(d, x = null) {
   const k = Math.min(j + 1, windows.length - 1);
   const f = k === j ? 0 : Math.max(0, Math.min(1, (d - centers[j]) / (centers[k] - centers[j])));
   // only the two pictures in play (and the next one, preloading) fetch tiles
-  const want = new Set([j, k, Math.min(k + 1, windows.length - 1)]);
+  const want = new Set([j, k]);
   state.opacity = state.opacity || {};
   windows.forEach((w, m) => {
     const id = `img-${w.id}`, o = m === j ? 1 : m === k ? Math.round(f * 20) / 20 : 0;
@@ -288,6 +292,13 @@ function delhiHtml() {
   const [w, s, e, n] = manifest.bounds, km = Math.round(haversineKm(DELHI, [(w + e) / 2, (s + n) / 2]) / 10) * 10;
   return `<i></i><b>${esc(t().delhi)}</b><span>${esc(t().km(km))}</span>`;
 }
+function fadeOut(el) {
+  if (el.hidden) return;
+  el.classList.add("out");
+  setTimeout(() => { el.hidden = true; el.classList.remove("out"); }, 600);
+}
+// One continuous run of the season: it starts over India with no alerts, the alerts fill in as the days
+// pass, the camera flies into the belt part-way, and the run ends on the headline.
 function runIntro() {
   const cap = $("#caption"), [title, sub] = t().caption.split("<small>");
   cap.innerHTML = `<b>${title}</b><span>${sub.replace("</small>", "")}</span>
@@ -295,18 +306,15 @@ function runIntro() {
   cap.hidden = false;
   const skipBtn = $("#skip");
   skipBtn.hidden = false;
-  setDay(D1);
-  let skipped = false;
-  const land = () => {
-    cap.hidden = true;
-    skipBtn.hidden = true;
-    play(9, () => { if (state.intro) { setDay(D0 + 42); showHero(); toast(t().toast); } }, D0);
-  };
+  setDay(D0);
+  let skipped = false, flying = false;
+  const events = ["mousedown", "wheel", "touchstart", "keydown"];
+  const done = () => { events.forEach((ev) => removeEventListener(ev, skip)); fadeOut(skipBtn); };
   const skip = () => {
     if (skipped) return;
     skipped = true;
-    cap.hidden = true;
-    skipBtn.hidden = true;
+    done();
+    fadeOut(cap);
     stop();
     map.stop();
     fitRegion(0);
@@ -314,17 +322,25 @@ function runIntro() {
     showHero();
   };
   skipBtn.onclick = skip;
-  ["mousedown", "wheel", "touchstart", "keydown"].forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
+  events.forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
+  state.onDay = (d) => {
+    if (flying || skipped || d < D0 + 30) return;
+    flying = true;
+    fadeOut(cap);
+    const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
+    map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: 4600, curve: 1.4, essential: true });
+  };
   setTimeout(() => {
     if (skipped) return;
-    const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
-    map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: 4200, curve: 1.5, essential: true });
-    map.once("moveend", () => {
+    play(7, () => {
+      state.onDay = null;
       if (skipped) return;
-      ["mousedown", "wheel", "touchstart", "keydown"].forEach((ev) => removeEventListener(ev, skip));
-      land();
-    });
-  }, 3200);
+      done();
+      setDay(D0 + 42);
+      showHero();
+      toast(t().toast);
+    }, D0);
+  }, 1600);
 }
 
 // ---- fields and the case file ----
@@ -405,9 +421,8 @@ function playFrames(endAt = null) {
   }, 520);
 }
 
-const SCAN_SVG = `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1A2440"/>
-  <use href="#sa" fill="#2A3A63" transform="translate(32 30) scale(.8) translate(-32 -33)"/>
-  <g clip-path="url(#scanclip)"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></g></svg>`;
+const ORBIT = `<div class="orbit" aria-hidden="true"><svg class="o-mark" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></svg>
+  <svg class="o-ring" viewBox="0 0 120 120"><ellipse cx="60" cy="60" rx="56" ry="16"/></svg><div class="o-path"><i class="o-sat"></i></div></div>`;
 
 function renderPanel() {
   const f = state.field, p = f.properties, L = t(), c = state.check;
@@ -423,10 +438,11 @@ function renderPanel() {
     html += `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div><b>${esc(L.v[k])}</b><p>${esc(vline)}</p></div></div>
       <div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
         <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
+      ${cur.evidence_url ? `<details class="sec burnview"><summary>${esc(L.burnView)}</summary><img src="${esc(cur.evidence_url)}" alt="" loading="lazy"></details>` : ""}
       <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
       <div class="foot"><span>${esc(c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds))}</span><button class="btn ghost small" id="run-check">${esc(L.rerun)}</button></div>`;
   } else if (c && c.status !== "done" && !c.failed) {
-    html += `<div class="scanning">${SCAN_SVG}<p>${esc(L.reading)}</p><span class="elapsed">${c.elapsed || 0} s</span></div>`;
+    html += `<div class="scanning">${ORBIT}<p>${esc(L.reading)}</p><span class="elapsed">${c.elapsed || 0} s</span></div>`;
   } else {
     html += `<div class="sec">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : `<p class="cap" style="margin:0 0 10px">${esc(L.checkNote)}</p>`}
       <button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button></div>`;
@@ -511,7 +527,7 @@ async function init() {
 
   const intro = params.get("intro") !== "0" && !reduced;  // every visit; any click, key or the Skip button skips it
   map = new maplibregl.Map({
-    container: "map", attributionControl: false, maxZoom: 17.5, minZoom: 3,
+    container: "map", attributionControl: false, fadeDuration: 0, maxZoom: 17.5, minZoom: 3,
     ...(intro ? INDIA : { bounds: regionBounds(), fitBoundsOptions: { padding: 60 } }),
     style: {
       version: 8,
@@ -556,7 +572,7 @@ async function init() {
 
   // high-density screens and in-between zooms stretch 256 px tiles: ask for the next zoom's tiles instead
   windows.forEach((w) => {
-    map.addSource(`img-${w.id}`, { type: "raster", tileSize: 128, minzoom: manifest.minzoom, maxzoom: manifest.maxzoom, bounds: manifest.bounds,
+    map.addSource(`img-${w.id}`, { type: "raster", tileSize: devicePixelRatio >= 1.5 ? 128 : 256, minzoom: manifest.minzoom, maxzoom: manifest.maxzoom, bounds: manifest.bounds,
       tiles: [`${location.origin}/tiles/${w.id}/{z}/{x}/{y}.webp`] });
     map.addLayer({ id: `img-${w.id}`, type: "raster", source: `img-${w.id}`, layout: { visibility: "none" },
       paint: { "raster-opacity": 0, "raster-opacity-transition": { duration: 0 }, "raster-fade-duration": 120 } });
@@ -636,7 +652,6 @@ async function init() {
     delhiMarker.getElement().style.display = z < 10.5 ? "" : "none";
     if (z >= 8.5 && z < 12.5) studyMarker.addTo(map); else studyMarker.remove();
     stateLabels.forEach((m) => (z >= 5.5 && z < 9.5 ? m.addTo(map) : m.remove()));
-    $("#refchip").hidden = z < 14.6;
   };
   map.on("zoom", onZoom);
   applyLang();
