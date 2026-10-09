@@ -18,7 +18,6 @@ import re
 import urllib.error
 import urllib.request
 import uuid
-from functools import lru_cache
 
 from parali import agent
 from parali.messages import to_gurmukhi
@@ -29,11 +28,21 @@ PARAMS = "/saakshi/whatsapp/"
 CHANGE = re.compile(r"^\s*(change|menu|badlo|बदलो|बदलें|ਬਦਲੋ|ਬਦਲੋ ਜੀ)\s*$", re.I)
 
 
-@lru_cache(maxsize=1)
+_config: dict = {}
+
+
 def config() -> dict:
-    """token, phone_number_id, app_secret, verify_token: from SSM on Lambda, WA_* variables locally."""
+    """token, phone_number_id, app_secret, verify_token: from SSM on Lambda, WA_* variables locally.
+    Kept for the life of the container once complete; read again while any is missing."""
     if os.environ.get("WA_TOKEN"):
         return {k: os.environ.get("WA_" + k.upper(), "") for k in ("token", "phone_number_id", "app_secret", "verify_token")}
+    if not all(_config.get(k) for k in ("token", "phone_number_id", "app_secret", "verify_token")):
+        _config.clear()
+        _config.update(_read_ssm())
+    return _config
+
+
+def _read_ssm() -> dict:
     import boto3
     ssm = boto3.client("ssm")
     out, kw = {}, {}
