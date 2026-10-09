@@ -1,4 +1,4 @@
-"""Lambda for the farmer's voice assistant: /api/agent and /api/config.
+"""Lambda for the farmer's voice assistant: /api/agent, /api/config and the WhatsApp webhook.
 
 Kept apart from parali.aws so it does not load the imagery stack (rasterio, numpy): this function ships
 with the Strands Agents SDK and the Transcribe streaming SDK instead.
@@ -10,6 +10,7 @@ from functools import lru_cache, partial
 
 import boto3
 
+from parali import sarvam, whatsapp
 from parali.agent import BedrockBackend
 from parali.api import Deps, handle
 from parali.speech import transcribe_pcm
@@ -35,12 +36,40 @@ def _deps() -> Deps:
     )
 
 
+def _whatsapp_webhook(event, context, body: bytes | None) -> dict:
+    cfg = whatsapp.config()
+    if event["requestContext"]["http"]["method"] == "GET":
+        status, text = whatsapp.verify(event.get("queryStringParameters") or {}, cfg)
+        return {"statusCode": status, "headers": {"Content-Type": "text/plain"}, "body": text}
+    headers = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
+    if not whatsapp.signature_ok(body or b"", headers.get("x-hub-signature-256", ""), cfg.get("app_secret", "")):
+        return {"statusCode": 401, "body": ""}
+    # answer Meta now; each message is handled in its own async run of this function
+    for msg in whatsapp.messages(json.loads(body or b"{}")):
+        boto3.client("lambda", region_name=REGION).invoke(
+            FunctionName=context.invoked_function_arn, InvocationType="Event",
+            Payload=json.dumps({"wa_message": msg}).encode())
+    return {"statusCode": 200, "body": ""}
+
+
+def _whatsapp_message(msg: dict) -> str:
+    d = _deps()
+    done = whatsapp.handle(d.store, msg, whatsapp.Client(whatsapp.config()), d.dispatch, backend=d.agent_backend,
+                           voice=d.speaker, transcribe=sarvam.transcribe)
+    print(json.dumps({"wa": msg["id"][-8:], "type": msg.get("type"), "done": done}))
+    return done
+
+
 def handler(event, context):
+    if "wa_message" in event:
+        return _whatsapp_message(event["wa_message"])
     http = event["requestContext"]["http"]
     body = event.get("body")
     if body and event.get("isBase64Encoded"):
         body = base64.b64decode(body)
     elif body:
         body = body.encode()
+    if event["rawPath"] == "/api/whatsapp":
+        return _whatsapp_webhook(event, context, body)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, _deps())
     return {"statusCode": status, "headers": headers, "body": out.decode()}

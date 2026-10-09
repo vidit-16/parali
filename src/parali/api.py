@@ -21,6 +21,7 @@ class Deps:
     transcriber: Callable[[bytes], str] | None = None        # 16 kHz PCM -> Hindi text
     fires: Callable[[], list] | None = None                  # FIRMS points for the season
     dispatch_check: Callable[[str], None] | None = None      # start a check-any-field job
+    notify: Callable[[dict], None] | None = None             # tell the farmer an officer decided (WhatsApp)
 
 
 def _json(status: int, body) -> tuple[int, dict, bytes]:
@@ -85,6 +86,8 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
                 return _json(403, {"error": "officer PIN required"})
             c = service.review(s, m.group(1), str(data.get("officer_id", "")), str(data.get("verdict", "")),
                                str(data.get("note", ""))[:500], deps.speaker)
+            if deps.notify:
+                deps.notify(c)
             return _json(200, _claim_view(s, c))
         if method == "POST" and path == "/api/check":
             from parali import check

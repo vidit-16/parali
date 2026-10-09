@@ -155,7 +155,7 @@ Resources:
     Properties:
       Handler: parali.aws_agent.handler
       Layers: [!Ref AgentLayer]
-      Timeout: 29
+      Timeout: 60                     # API calls are cut at 30 s; a WhatsApp reply runs async and may take longer
       MemorySize: 1024
       Environment:
         Variables:
@@ -173,6 +173,9 @@ Resources:
               Action: [polly:SynthesizeSpeech, transcribe:StartStreamTranscription,
                        bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream, bedrock:Converse, bedrock:ConverseStream]
               Resource: "*"
+            - Effect: Allow               # WhatsApp: the webhook hands each message to an async run of itself
+              Action: lambda:InvokeFunction
+              Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-AgentFunction-*
       Events:
         Agent:
           Type: HttpApi
@@ -184,6 +187,16 @@ Resources:
           Properties:
             Path: /api/config
             Method: GET
+        WhatsAppVerify:
+          Type: HttpApi
+          Properties:
+            Path: /api/whatsapp
+            Method: GET
+        WhatsAppIn:
+          Type: HttpApi
+          Properties:
+            Path: /api/whatsapp
+            Method: POST
 
   Oac:
     Type: AWS::CloudFront::OriginAccessControl

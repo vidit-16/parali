@@ -74,6 +74,28 @@ def translate_pa(text_hi: str) -> str | None:
     return text if _faithful(text_hi, text) else None
 
 
+def transcribe(audio: bytes, mime: str = "audio/ogg") -> tuple[str, str] | None:
+    """(transcript, language code such as "pa-IN") for a voice note in any Indian language, or None."""
+    key = api_key()
+    if not key or not audio:
+        return None
+    import uuid
+    b = uuid.uuid4().hex
+    fields = [("model", "saarika:v2.5"), ("language_code", "unknown")]
+    body = b"".join(f'--{b}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode() for k, v in fields)
+    body += (f'--{b}\r\nContent-Disposition: form-data; name="file"; filename="voice.{mime.split("/")[-1].split(";")[0]}"\r\n'
+             f"Content-Type: {mime.split(';')[0]}\r\n\r\n").encode() + audio + f"\r\n--{b}--\r\n".encode()
+    req = urllib.request.Request(API + "/speech-to-text", body,
+                                 {"api-subscription-key": key, "Content-Type": f"multipart/form-data; boundary={b}"})
+    try:
+        with urllib.request.urlopen(req, timeout=25) as r:
+            out = json.loads(r.read())
+        return (out.get("transcript") or "").strip(), out.get("language_code") or ""
+    except ERRORS + (urllib.error.HTTPError,) as e:
+        print(f"sarvam transcribe failed: {type(e).__name__}")
+        return None
+
+
 def speak_pa(text_pa: str) -> bytes | None:
     key = api_key()
     if not key or not text_pa:

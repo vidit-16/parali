@@ -87,12 +87,24 @@ def api_handler(event, context):
     elif body:
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
-                reset=_reset, fires=fires, dispatch_check=_dispatch_check)
+                reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps)
     return {"statusCode": status, "headers": headers, "body": out.decode()}
 
 
+def _notify_whatsapp(claim: dict) -> None:
+    """Farmers who chatted on WhatsApp hear the decision there too; a failure here never blocks the decision."""
+    from parali import whatsapp
+    try:
+        cfg = whatsapp.config()
+        if cfg.get("token"):
+            whatsapp.notify(store(), claim, whatsapp.Client(cfg))
+    except Exception as e:
+        print(f"whatsapp notify failed: {type(e).__name__}")
+
+
 def _notify(claim: dict) -> None:
+    _notify_whatsapp(claim)
     if not TOPIC:
         return
     msg = claim.get("message", {})
