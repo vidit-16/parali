@@ -100,19 +100,34 @@ def cmd_evaluate(a):
     from parali.label import read_labels
     from parali.rules import Thresholds
     start, end = date.fromisoformat(a.start), date.fromisoformat(a.end)
+    from parali.fields import Field
     th = Thresholds.load()
-    plots = load_fields(a.plots)
-    labels = read_labels(Path(a.labels))
-    hist = AreaStack.load(Path(a.area)).histories(plots, inner_buffer_m=0)
-    cases = build_cases(plots, labels, hist, firms.load(Path(a.firms)), start, end)
+    if not len(a.area) == len(a.plots) == len(a.labels):
+        raise SystemExit("give one --plots and one --labels per --area")
+    # Each area was sampled on its own, so its cases carry its own stratum weights; together they
+    # estimate rates over the union of the areas. Plot ids from later areas get a prefix so the
+    # cross-validation folds stay distinct.
+    fire_list = [f for p in a.firms for f in firms.load(Path(p))]
+    cases, per_area = [], {}
+    for i, (area, plots_path, labels_path) in enumerate(zip(a.area, a.plots, a.labels)):
+        tag = Path(plots_path).parent.name if i else ""
+        plots = [Field(f"{tag}:{p.id}" if tag else p.id, p.geometry, p.props) for p in load_fields(plots_path)]
+        labels = {(f"{tag}:{k}" if tag else k): v for k, v in read_labels(Path(labels_path)).items()}
+        hist = AreaStack.load(Path(area)).histories(plots, inner_buffer_m=0)
+        area_cases = build_cases(plots, labels, hist, fire_list, start, end)
+        per_area[tag or Path(plots_path).parent.name] = score(area_cases, th, start, end)
+        cases += area_cases
+    if len(per_area) > 1:
+        for name, s in per_area.items():
+            _print_score(f"Current rules.toml, {name} only", s)
     current = score(cases, th, start, end)
-    _print_score("Current rules.toml", current)
+    _print_score("Current rules.toml" + (", all areas" if len(per_area) > 1 else ""), current)
     cv = cross_validate(cases, th, start, end)
     for i, r in enumerate(cv, 1):
         _print_score(f"Held-out half {i} (thresholds fitted on the other half)", r["test"])
     best, best_s = fit(cases, th, start, end)
     print(f"\nFitted on all labels: {asdict(best)}")
-    out = {"current": current, "cross_validation": [{"thresholds": asdict(r["thresholds"]), "test": r["test"]} for r in cv],
+    out = {"current": current, "per_area": per_area, "cross_validation": [{"thresholds": asdict(r["thresholds"]), "test": r["test"]} for r in cv],
            "fitted_all": {"thresholds": asdict(best), "score": best_s}}
     Path(a.out).write_text(json.dumps(out, indent=1, default=str), encoding="utf-8")
     print(f"-> {a.out}")
@@ -198,10 +213,10 @@ def main(argv=None):
     s.set_defaults(func=cmd_label)
 
     s = sub.add_parser("evaluate", help="score rules and FIRMS baseline against hand labels")
-    s.add_argument("--area", required=True)
-    s.add_argument("--plots", required=True)
-    s.add_argument("--labels", required=True)
-    s.add_argument("--firms", required=True)
+    s.add_argument("--area", required=True, nargs="+", help="one cached area per study area")
+    s.add_argument("--plots", required=True, nargs="+")
+    s.add_argument("--labels", required=True, nargs="+")
+    s.add_argument("--firms", required=True, nargs="+")
     s.add_argument("--start", default="2025-10-01")
     s.add_argument("--end", default="2025-11-30")
     s.add_argument("--out", default="data/eval/results.json")

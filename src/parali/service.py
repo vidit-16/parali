@@ -178,9 +178,16 @@ def run_season(store: Store, claim_id: str, stacks: StackProvider, fires: "list[
                speaker: Speaker | None = None) -> dict:
     """Demo path for one claim: last-season check, advance paid if eligible (by the department, before
     harvest), then this season's check and settlement."""
-    claim = assess_advance(store, claim_id, stacks, fires, th, *season.PREV_SEASON)
-    if claim["advance"]["eligible"]:
+    # Safe to run twice: Lambda retries a failed async run, and a retry must not assess or pay the
+    # advance again, or fail because it was already paid.
+    claim = _get(store, claim_id)
+    if not claim.get("advance"):
+        claim = assess_advance(store, claim_id, stacks, fires, th, *season.PREV_SEASON)
+    if claim["advance"].get("status") == "offered":
         disburse_advance(store, claim_id, "department")
+    claim = _get(store, claim_id)
+    if claim["status"] not in ("submitted",) + REVIEW_STATES:
+        return claim  # already decided by an earlier run
     return process_claim(store, claim_id, stacks, fires, th, speaker)
 
 

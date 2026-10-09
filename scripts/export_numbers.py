@@ -20,7 +20,8 @@ def grab(label):
     return float(m.group(1)) if m else None
 
 
-labels = [l.split(",")[1] for l in (ROOT / "data/eval/labels.csv").read_text().splitlines()[1:]]
+labels = [l.split(",")[1] for p in ("data/eval/labels.csv", "data/eval/kaithal/labels.csv")
+          for l in (ROOT / p).read_text().splitlines()[1:]]  # Patran and Kaithal study areas
 numbers = {
     "labelled_plots": len(labels),
     "burnt_labels": labels.count("burnt"),

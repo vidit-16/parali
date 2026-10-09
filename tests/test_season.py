@@ -111,3 +111,13 @@ def test_officer_clears_possible_burn_releases_balance(store):
     r = service.review(store, c["id"], "VO-7", "approve", "site visit: baler used")
     assert r["settlement"]["state"] == "balance_due" and r["settlement"]["balance"] == 1250
     assert "notice_key" not in r
+
+
+def test_run_season_twice_is_safe(store):
+    c = service.create_claim(store, "f1", "2025-10-01", "2025-11-30")
+    first = service.run_season(store, c["id"], stacks_by_year(None, None), [], TH)
+    again = service.run_season(store, c["id"], stacks_by_year(None, None), [], TH)
+    c = first
+    assert again["advance"]["status"] == "paid" and again["status"] == c["status"]
+    paid = [e for e in store.events(c["id"]) if e["type"] == "advance_paid"]
+    assert len(paid) == 1

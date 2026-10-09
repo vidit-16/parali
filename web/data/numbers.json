@@ -1,33 +1,33 @@
 {
- "labelled_plots": 314,
- "burnt_labels": 20,
+ "labelled_plots": 466,
+ "burnt_labels": 26,
  "rules": {
   "burnt_auto_approved": 0.0,
-  "auto_approved": 75.8,
-  "review": 20.5,
-  "possible_burn": 3.7,
-  "clean_flagged": 2.6
+  "auto_approved": 80.0,
+  "review": 17.3,
+  "possible_burn": 2.6,
+  "clean_flagged": 1.9
  },
  "firms": {
-  "clean_flagged": 14.1,
-  "burns_caught": 14.1
+  "clean_flagged": 8.7,
+  "burns_caught": 19.3
  },
  "held_out": {
   "auto_approved": [
-   84.0,
-   81.7
+   84.1,
+   84.0
   ],
   "burnt_auto_approved": [
    0.0,
-   6.4
+   5.7
   ],
   "clean_flagged": [
-   4.8,
-   4.9
+   3.7,
+   3.9
   ],
   "firms_clean_flagged": [
-   13.5,
-   14.7
+   8.6,
+   8.8
   ]
  },
  "advance": {
@@ -43,6 +43,7 @@
   "upfront_trial_gain_pp": "8-11",
   "upfront_trial_source": "Jack, Jayachandran, Kala, Pande; J-PAL / MIT CEEPR working paper (Punjab RCT)",
   "kaithal_applied": "18,329 of 49,215",
-  "incentive_per_acre": 1200
+  "incentive_per_acre": 1000,
+  "advance_share": 50
  }
 }
