@@ -138,6 +138,15 @@ def _money(claim: dict) -> dict:
         return {"hi": hi, "en": en, "pa": pa}
     if s.get("state") == "recover_advance":
         r = rupees(s["recover"])
+        rec = claim.get("recovery") or {}
+        if rec.get("status") == "paid":
+            return {"hi": f" अग्रिम राशि के ₹{r} वापस मिल गए हैं। अब कुछ बाकी नहीं है।",
+                    "en": f" The advance of Rs {r} has been returned. Nothing more is due.",
+                    "pa": f" ਅਗਾਊਂ ਰਕਮ ਦੇ ₹{r} ਵਾਪਸ ਮਿਲ ਗਏ ਹਨ। ਹੁਣ ਕੁਝ ਬਾਕੀ ਨਹੀਂ ਹੈ।"}
+        if rec.get("status") == "issued":
+            return {"hi": f" पहले दी गई ₹{r} की अग्रिम राशि वापस करनी होगी। इसका लिंक ऐप और WhatsApp पर भेजा गया है।",
+                    "en": f" The advance of Rs {r} has to be returned. A payment link is in the app and on WhatsApp.",
+                    "pa": f" ਪਹਿਲਾਂ ਦਿੱਤੀ ₹{r} ਦੀ ਅਗਾਊਂ ਰਕਮ ਵਾਪਸ ਕਰਨੀ ਪਵੇਗੀ। ਇਸ ਦਾ ਲਿੰਕ ਐਪ ਅਤੇ WhatsApp ਉੱਤੇ ਭੇਜਿਆ ਗਿਆ ਹੈ।"}
         return {"hi": f" पहले दी गई ₹{r} की अग्रिम राशि वापस करनी होगी; ग्राम अधिकारी आपको लिखित सूचना देंगे।",
                 "en": f" The advance of Rs {r} has to be returned; the village officer will send a written notice.",
                 "pa": f" ਪਹਿਲਾਂ ਦਿੱਤੀ ₹{r} ਦੀ ਅਗਾਊਂ ਰਕਮ ਵਾਪਸ ਕਰਨੀ ਪਵੇਗੀ; ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਤੁਹਾਨੂੰ ਲਿਖਤੀ ਸੂਚਨਾ ਭੇਜਣਗੇ।"}

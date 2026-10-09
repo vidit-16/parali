@@ -132,6 +132,29 @@ class Client:
         self._call(f"{GRAPH}/{self.cfg['phone_number_id']}/messages", json.dumps(body).encode())
 
 
+def setup(cfg: dict, waba: str | None = None) -> dict:
+    """Check the token and subscribe the app to the WhatsApp Business Account that owns the number, without
+    which Meta sends no message webhooks. Returns only non-secret details."""
+    c = Client(cfg)
+
+    def safe(url, body=None):
+        try:
+            return c._call(url, body, "application/x-www-form-urlencoded") if body is not None else c._call(url)
+        except urllib.error.HTTPError as e:
+            return {"error": e.code, "message": json.loads(e.read() or b"{}").get("error", {}).get("message")}
+
+    d = safe(f"{GRAPH}/debug_token?input_token={cfg['token']}").get("data", {})
+    wabas = sorted({t for s in d.get("granular_scopes", []) if s.get("scope", "").startswith("whatsapp")
+                    for t in s.get("target_ids", [])} | ({waba} if waba else set()))
+    out = {"token_valid": d.get("is_valid"), "token_type": d.get("type"), "expires_at": d.get("expires_at"),
+           "scopes": d.get("scopes"), "wabas": {},
+           "phone": safe(f"{GRAPH}/{cfg['phone_number_id']}?fields=display_phone_number,verified_name")}
+    for w in wabas:
+        out["wabas"][w] = {"before": safe(f"{GRAPH}/{w}/subscribed_apps"),
+                           "subscribe": safe(f"{GRAPH}/{w}/subscribed_apps", b"")}
+    return out
+
+
 # ---------- conversation ----------
 
 def lang_of(text: str) -> str:
@@ -238,8 +261,10 @@ def notify(store: Store, claim: dict, client, voice=None) -> int:
             continue
         msg = claim.get("message") or {}
         pa = claim.get("state_code") == "PB" and msg.get("pa")
+        rec = claim.get("recovery") or {}
+        pay = f"\n\n₹{rec['amount']}: {rec['url']}" if rec.get("status") == "issued" and rec.get("url") else ""
         try:
-            client.send_text(link["id"], pa or msg.get("hi", ""))
+            client.send_text(link["id"], (pa or msg.get("hi", "")) + pay)
             key = claim.get("audio_key_pa") if pa else claim.get("audio_key")
             mp3 = store.get_blob(key) if key else None
             if mp3:

@@ -20,7 +20,7 @@ const T = {
     rows: {
       adv: (x) => `Advance paid for a clean 2024`, noadv: "No advance: 2024 was not clearly clean",
       held: "Balance held until you decide", released: "Balance released to the farmer's account",
-      recover: "Advance to be repaid; notice drafted", notpay: "Balance not payable", appeal: "Farmer appealed",
+      recover: "Advance to be repaid; notice drafted", link: "Payment link sent to the farmer (Razorpay, test mode)", repaid: "Advance repaid by the farmer (Razorpay, test mode)", linkOff: "Payment link cancelled: farmer appealed", notpay: "Balance not payable", appeal: "Farmer appealed",
       review: (id, v) => `${id} ${v === "approve" ? "approved the claim" : "confirmed the burn"}`,
     },
     rail: "Bank transfer is simulated in this demo",
@@ -48,7 +48,7 @@ const T = {
     rows: {
       adv: () => "साफ़ 2024 के लिए अग्रिम दिया", noadv: "कोई अग्रिम नहीं: 2024 साफ़ नहीं दिखा",
       held: "आपके फ़ैसले तक बाकी राशि रोकी गई", released: "बाकी राशि किसान के खाते में भेजी",
-      recover: "अग्रिम वापस होगा; नोटिस का मसौदा तैयार", notpay: "बाकी राशि देय नहीं", appeal: "किसान ने अपील की",
+      recover: "अग्रिम वापस होगा; नोटिस का मसौदा तैयार", link: "किसान को भुगतान लिंक भेजा (Razorpay, टेस्ट मोड)", repaid: "किसान ने अग्रिम लौटाई (Razorpay, टेस्ट मोड)", linkOff: "भुगतान लिंक रद्द: किसान ने अपील की", notpay: "बाकी राशि देय नहीं", appeal: "किसान ने अपील की",
       review: (id, v) => `${id} ने ${v === "approve" ? "दावा मंज़ूर किया" : "जलना पक्का किया"}`,
     },
     rail: "इस डेमो में बैंक भुगतान नकली है",
@@ -129,7 +129,11 @@ function bookRows(c) {
   ev.filter((e) => e.type === "reviewed").forEach((e) => rows.push({ when: fmtDate(e.at, lang), text: R.review(e.by, e.verdict), amt: "", cls: "note", note: e.note }));
   if (st.state === "pending") rows.push({ when: L.when.after, text: R.held, amt: rupees((st.total || 0) - (adv.status === "paid" ? adv.amount : 0)), cls: "held" });
   if (st.state === "balance_due") rows.push({ when: st.released_at ? fmtDate(st.released_at, lang) : L.when.after, text: R.released, amt: `+${rupees(st.balance)}`, cls: "in" });
-  if (st.state === "recover_advance") rows.push({ when: L.when.now, text: R.recover, amt: `−${rupees(st.recover)}`, cls: "out" });
+  const rec = c.recovery || {};
+  ev.filter((e) => e.type === "recovery_cancelled").forEach((e) => rows.push({ when: fmtDate(e.at, lang), text: R.linkOff, amt: "", cls: "note" }));
+  if (st.state === "recover_advance" && rec.status === "paid") rows.push({ when: fmtDate(rec.paid_at, lang), text: R.repaid, amt: `−${rupees(st.recover)}`, cls: "out", note: rec.payment_id });
+  else if (st.state === "recover_advance" && rec.status === "issued") rows.push({ when: fmtDate(rec.issued_at, lang), text: R.link, amt: `−${rupees(st.recover)}`, cls: "held" });
+  else if (st.state === "recover_advance") rows.push({ when: L.when.now, text: R.recover, amt: `−${rupees(st.recover)}`, cls: "out" });
   if (st.state === "not_payable") rows.push({ when: L.when.after, text: R.notpay, amt: "—", cls: "" });
   return rows;
 }

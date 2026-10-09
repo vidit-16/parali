@@ -12,6 +12,7 @@ from parali import firms, service
 from parali.api import Deps, handle
 from parali.area import AreaStack
 from parali.fields import load_fields
+from parali.payments import Razorpay, public_url
 from parali.rules import Thresholds
 from parali.store import LocalStore
 
@@ -97,6 +98,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
     return Deps(store=store, dispatch=lambda cid: threading.Thread(target=run, args=(cid,), daemon=True).start(),
                 officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
                 agent_backend=agent_backend, fires=lambda: fires,
+                payments=Razorpay.from_keys, base_url=public_url,  # Razorpay only with RAZORPAY_KEY_* set
                 dispatch_check=lambda cid: threading.Thread(target=run_check, args=(cid,), daemon=True).start())
 
 
@@ -134,7 +136,9 @@ class Handler(BaseHTTPRequestHandler):
     def _api(self, method):
         n = int(self.headers.get("Content-Length") or 0)
         body = self.rfile.read(n) if n else None
-        self._send(*handle(method, self.path.split("?")[0], body, dict(self.headers), self.deps))
+        from urllib.parse import parse_qsl, urlsplit
+        u = urlsplit(self.path)
+        self._send(*handle(method, u.path, body, dict(self.headers), self.deps, dict(parse_qsl(u.query))))
 
     def do_POST(self):
         if self.path.startswith("/api/"):

@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from typing import Callable
 
-from parali import season, service
+from parali import payments, season, service
 from parali.store import Store
 
 
@@ -22,6 +22,8 @@ class Deps:
     fires: Callable[[], list] | None = None                  # FIRMS points for the season
     dispatch_check: Callable[[str], None] | None = None      # start a check-any-field job
     notify: Callable[[dict], None] | None = None             # tell the farmer an officer decided (WhatsApp)
+    payments: Callable[[], object] | None = None             # Razorpay client for recovering advances, or None
+    base_url: Callable[[], str] | None = None                # public address Razorpay sends the payer back to
 
 
 def _json(status: int, body) -> tuple[int, dict, bytes]:
@@ -43,8 +45,15 @@ def _claim_view(store: Store, c: dict) -> dict:
     return out
 
 
-def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps) -> tuple[int, dict, bytes]:
+def _rp(deps: Deps):
+    return deps.payments() if deps.payments else None
+
+
+def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps,
+           query: dict | None = None) -> tuple[int, dict, bytes]:
     s = deps.store
+    if method == "GET" and path == "/api/razorpay/return":
+        return _razorpay_return(deps, query or {})
     try:
         data = json.loads(body) if body else {}
     except json.JSONDecodeError:
@@ -79,13 +88,24 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/appeal", path)
         if method == "POST" and m:
             c = service.appeal(s, m.group(1), str(data.get("note", "")), deps.speaker)
+            c = payments.cancel(s, c, _rp(deps))
             return _json(200, _claim_view(s, c))
+        m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/recovery/check", path)
+        if method == "POST" and m:
+            c = s.get("claims", m.group(1))
+            if c is None:
+                return _json(404, {"error": "not found"})
+            return _json(200, _claim_view(s, payments.check(s, c, _rp(deps))))
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/review", path)
         if method == "POST" and m:
             if not _pin_ok(deps, headers):
                 return _json(403, {"error": "officer PIN required"})
             c = service.review(s, m.group(1), str(data.get("officer_id", "")), str(data.get("verdict", "")),
                                str(data.get("note", ""))[:500], deps.speaker)
+            if (c.get("settlement") or {}).get("state") == "recover_advance":
+                c = payments.issue_recovery(s, c, _rp(deps), deps.base_url() if deps.base_url else "")
+                if (c.get("recovery") or {}).get("status") == "issued":
+                    c = service.respeak(s, c, deps.speaker)  # the message now points to the link
             if deps.notify:
                 deps.notify(c)
             return _json(200, _claim_view(s, c))
@@ -117,6 +137,19 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
     except service.WorkflowError as e:
         return _json(409, {"error": str(e)})
     return _json(404, {"error": "no such route"})
+
+
+def _razorpay_return(deps: Deps, q: dict) -> tuple[int, dict, bytes]:
+    """Razorpay sends the payer here after a payment link. Signed with our key secret, so it cannot be forged."""
+    rp = _rp(deps)
+    ref = q.get("razorpay_payment_link_reference_id", "")
+    claim = deps.store.get("claims", ref.split("-")[0]) if re.fullmatch(r"[0-9a-f]{6,32}-\d+", ref) else None
+    ok = rp is not None and claim is not None and payments.signature_ok(q, rp.key_secret)
+    if ok and q.get("razorpay_payment_link_status") == "paid" \
+            and (claim.get("recovery") or {}).get("link_id") == q.get("razorpay_payment_link_id"):
+        payments.mark_paid(deps.store, claim, q["razorpay_payment_id"])
+        return 302, {"Location": f"/farmer.html?paid={claim['id']}"}, b""
+    return 302, {"Location": "/farmer.html?paid=failed"}, b""
 
 
 def _stats(s: Store) -> dict:

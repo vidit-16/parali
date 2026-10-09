@@ -229,6 +229,13 @@ def review(store: Store, claim_id: str, officer_id: str, verdict: str, note: str
     return claim
 
 
+def respeak(store: Store, claim: dict, speaker: Speaker | None = None) -> dict:
+    """Rewrite the farmer's message after something outside the workflow changed the claim (a payment link)."""
+    _speak(store, claim, speaker)
+    store.put("claims", claim["id"], claim)
+    return claim
+
+
 APPEALABLE = REVIEW_STATES + ("officer_confirmed_burnt",)
 
 

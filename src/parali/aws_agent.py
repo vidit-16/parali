@@ -63,6 +63,8 @@ def _whatsapp_message(msg: dict) -> str:
 def handler(event, context):
     if "wa_message" in event:
         return _whatsapp_message(event["wa_message"])
+    if "wa_setup" in event:  # run once by hand: aws lambda invoke ... --payload '{"wa_setup": true}'
+        return whatsapp.setup(whatsapp.config(), event.get("waba"))
     http = event["requestContext"]["http"]
     body = event.get("body")
     if body and event.get("isBase64Encoded"):

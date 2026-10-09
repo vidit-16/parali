@@ -12,7 +12,8 @@ const T = {
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
     listen: "Listen", money: "Your money", field: "Your field this season",
     rows: { adv: "Advance before harvest", noadv: "No advance this year: last season was not clearly clean", bal: "Rest of the money",
-      balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", repay: "Advance to return", notpay: "Not payable this season" },
+      balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
+    pay: (a) => `Return ${a} online`, payNote: "Razorpay test mode: no real money moves.",
     total: (t) => `Full amount for your field: ${rupees(t)}`,
     ask: "Ask anything", askHint: "Hold the mic and speak in Hindi, or type.", send: "Send", listening: "Listening… let go to send",
     suggest: ["When will my money come?", "Why is my claim held?", "How do I appeal?"],
@@ -28,7 +29,8 @@ const T = {
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
     listen: "सुनें", money: "आपकी राशि", field: "इस सीज़न आपका खेत",
     rows: { adv: "कटाई से पहले अग्रिम", noadv: "इस साल अग्रिम नहीं: पिछला सीज़न साफ़ नहीं दिखा", bal: "बाकी राशि",
-      balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं" },
+      balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
+    pay: (a) => `${a} ऑनलाइन लौटाएँ`, payNote: "Razorpay टेस्ट मोड: असली पैसा नहीं कटता।",
     total: (t) => `आपके खेत की पूरी राशि: ${rupees(t)}`,
     ask: "कुछ भी पूछें", askHint: "माइक दबाकर हिंदी में बोलें, या लिखें।", send: "भेजें", listening: "सुन रहे हैं… छोड़ते ही भेजेंगे",
     suggest: ["मेरा पैसा कब आएगा?", "मेरा दावा क्यों रुका है?", "अपील कैसे करूँ?"],
@@ -44,7 +46,8 @@ const T = {
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਉਪਗ੍ਰਹਿ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
     listen: "ਸੁਣੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", field: "ਇਸ ਸੀਜ਼ਨ ਤੁਹਾਡਾ ਖੇਤ",
     rows: { adv: "ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ ਅਗਾਊਂ", noadv: "ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ: ਪਿਛਲਾ ਸੀਜ਼ਨ ਸਾਫ਼ ਨਹੀਂ ਦਿਸਿਆ", bal: "ਬਾਕੀ ਰਕਮ",
-      balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ" },
+      balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
+    pay: (a) => `${a} ਆਨਲਾਈਨ ਵਾਪਸ ਕਰੋ`, payNote: "Razorpay ਟੈਸਟ ਮੋਡ: ਅਸਲ ਪੈਸਾ ਨਹੀਂ ਕੱਟਦਾ।",
     total: (t) => `ਤੁਹਾਡੇ ਖੇਤ ਦੀ ਪੂਰੀ ਰਕਮ: ${rupees(t)}`,
     ask: "ਕੁਝ ਵੀ ਪੁੱਛੋ", askHint: "ਮਾਈਕ ਦਬਾ ਕੇ ਹਿੰਦੀ ਵਿੱਚ ਬੋਲੋ, ਜਾਂ ਲਿਖੋ।", send: "ਭੇਜੋ", listening: "ਸੁਣ ਰਹੇ ਹਾਂ… ਛੱਡਦੇ ਹੀ ਭੇਜਾਂਗੇ",
     suggest: ["ਮੇਰਾ ਪੈਸਾ ਕਦੋਂ ਆਵੇਗਾ?", "ਮੇਰਾ ਦਾਅਵਾ ਕਿਉਂ ਰੁਕਿਆ ਹੈ?", "ਅਪੀਲ ਕਿਵੇਂ ਕਰਾਂ?"],
@@ -60,7 +63,8 @@ const T = {
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
     listen: "सुणो", money: "थारी रकम", field: "इस सीज़न थारा खेत",
     rows: { adv: "कटाई तै पहल्यां एडवांस", noadv: "इस साल एडवांस कोनी: पाछला सीज़न साफ कोनी दिख्या", bal: "बाकी रकम",
-      balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी" },
+      balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
+    pay: (a) => `${a} ऑनलाइन उल्टा दो`, payNote: "Razorpay टेस्ट मोड: असली पीसा कोनी कटदा।",
     total: (t) => `थारे खेत की पूरी रकम: ${rupees(t)}`,
     ask: "कुछ भी पूछो", askHint: "माइक दबा कै हिंदी म्ह बोलो, या लिखो।", send: "भेजो", listening: "सुणण लाग रे सां… छोड्डते ए भेजांगे",
     suggest: ["मेरा पीसा कद आवैगा?", "मेरा दावा क्यूं रुक रया सै?", "अपील क्यूकर करूं?"],
@@ -90,6 +94,7 @@ function moneyRows(c) {
   rows.push(adv.status === "paid" ? { text: R.adv, amt: `+${rupees(adv.amount)}`, cls: "in", when: fmtDate(adv.paid_at, lang) } : { text: R.noadv, amt: "—", cls: "" });
   const rest = (st.total || 0) - (adv.status === "paid" ? adv.amount : 0);
   if (st.state === "balance_due") rows.push({ text: `${R.bal}: ${R.balPaid}`, amt: `+${rupees(st.balance)}`, cls: "in", when: fmtDate(st.released_at, lang) });
+  else if (st.state === "recover_advance" && c.recovery?.status === "paid") rows.push({ text: R.returned, amt: `−${rupees(st.recover)}`, cls: "out", when: fmtDate(c.recovery.paid_at, lang) });
   else if (st.state === "recover_advance") rows.push({ text: R.repay, amt: `−${rupees(st.recover)}`, cls: "out" });
   else if (st.state === "not_payable") rows.push({ text: `${R.bal}: ${R.notpay}`, amt: "—", cls: "" });
   else rows.push({ text: `${R.bal}: ${R.balHeld}`, amt: rupees(rest), cls: "held" });
@@ -111,6 +116,7 @@ function render() {
     ${c ? `<section class="card glass status-card ${k}"><div class="band ${k}"><div class="ic">${icon(k === "clean" ? "i-check" : k === "burn" ? "i-flame" : "i-eye")}</div>
         <div><b>${esc(L.status[k])}</b><p>${esc(msg)}</p></div></div>
         ${audio ? `<button class="btn ghost small listen" id="listen">${icon("i-play")}<span>${esc(L.listen)}</span></button><audio id="audio" src="${esc(audio)}" preload="none"></audio>` : ""}
+        ${c.recovery?.status === "issued" ? `<a class="btn primary wide" href="${esc(c.recovery.url)}">${esc(L.pay(rupees(c.recovery.amount)))}</a><p class="cap">${esc(L.payNote)}</p>` : ""}
         ${c.appeal ? `<p class="cap appealed">${esc(L.appealed(fmtDate(c.appeal.at, lang)))}</p>` : canAppeal ? `<button class="btn ghost wide" id="appeal">${esc(L.appeal)}</button>` : ""}
         <div id="appeal-box"></div></section>
       <section class="card glass"><h2>${esc(L.money)}</h2><ol class="book">${moneyRows(c).map((r) => `<li class="${r.cls}"><span class="tx">${esc(r.text)}${r.when ? `<small>${esc(r.when)}</small>` : ""}</span><b>${esc(r.amt)}</b></li>`).join("")}</ol>
@@ -204,6 +210,13 @@ async function refresh() { S.claims = await getJSON("/api/claims"); render(); }
 async function load() {
   const [fields, claims, mf] = await Promise.all([getJSON("/api/fields"), getJSON("/api/claims"), getJSON("/tiles/manifest.json")]);
   S.fields = fields.sort((a, b) => a.farmer.localeCompare(b.farmer)); S.claims = claims; S.windows = mf.windows;
+  // back from a Razorpay payment link: ask Razorpay too, in case the return was missed
+  const paid = new URLSearchParams(location.search).get("paid");
+  if (paid && /^[0-9a-f]{6,32}$/.test(paid)) {
+    await getJSON(`/api/claims/${paid}/recovery/check`, { method: "POST" }).catch(() => {});
+    S.claims = await getJSON("/api/claims");
+  }
+  if (paid) history.replaceState(null, "", location.pathname);
   render();
 }
 setupHeader(lang, (l) => { lang = l; labelText(); render(); });

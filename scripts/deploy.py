@@ -65,6 +65,8 @@ def main():
 
     s.client("cloudfront").create_invalidation(DistributionId=out["DistributionId"], InvalidationBatch={
         "Paths": {"Quantity": 1, "Items": ["/*"]}, "CallerReference": str(time.time())})
+    # where Razorpay sends a payer back to after a payment link
+    s.client("ssm").put_parameter(Name="/saakshi/public_url", Value=out["Url"], Type="String", Overwrite=True)
     print(f"\nLive at {out['Url']}  (officer PIN {a.pin})")
 
 

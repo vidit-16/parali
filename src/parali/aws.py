@@ -12,6 +12,7 @@ from boto3.dynamodb.conditions import Key
 from parali import firms, service
 from parali.api import Deps, handle, officer_pin_from_env
 from parali.area import AreaStack, fetch_area
+from parali.payments import Razorpay, public_url
 from parali.rules import Thresholds
 from parali.store import AwsStore
 from parali.tts import Voice
@@ -87,8 +88,10 @@ def api_handler(event, context):
     elif body:
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
-                reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp)
-    status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps)
+                reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp,
+                payments=Razorpay.from_keys, base_url=public_url)
+    status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps,
+                                  event.get("queryStringParameters") or {})
     return {"statusCode": status, "headers": headers, "body": out.decode()}
 
 
