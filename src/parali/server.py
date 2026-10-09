@@ -1,5 +1,6 @@
 """Local demo: the same web app and API, backed by files on disk and saved 2025 imagery. No AWS account needed."""
 import json
+import os
 import mimetypes
 import shutil
 import threading
@@ -99,6 +100,21 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
                 dispatch_check=lambda cid: threading.Thread(target=run_check, args=(cid,), daemon=True).start())
 
 
+TILES_ORIGIN = os.environ.get("SAAKSHI_TILES", "https://d5gpae5oilzws.cloudfront.net")
+_tile_cache: dict[str, bytes | None] = {}
+
+
+def _tile(path: str) -> bytes | None:
+    if path not in _tile_cache:
+        import requests
+        try:
+            r = requests.get(TILES_ORIGIN + path, timeout=20)
+            _tile_cache[path] = r.content if r.ok else None
+        except requests.RequestException:
+            return None
+    return _tile_cache[path]
+
+
 class Handler(BaseHTTPRequestHandler):
     def __init__(self, *a, deps: Deps, **kw):
         self.deps = deps
@@ -129,6 +145,12 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?")[0]
         if path.startswith("/api/"):
             return self._api("GET")
+        if path.startswith("/tiles/") and ".." not in path:
+            # map tiles are built on AWS; the local demo shows the same ones, fetched once and kept in memory
+            data = _tile(path)
+            if data is None:
+                return self._send(404, {}, b"")
+            return self._send(200, {"Content-Type": mimetypes.guess_type(path)[0] or "application/json"}, data)
         if path.startswith("/blobs/"):
             data = self.deps.store.get_blob(path[len("/blobs/"):])
             if data is None or ".." in path:
@@ -148,6 +170,6 @@ def serve(state_dir: Path, port: int = 8080, speaker=None, officer_pin: str | No
           agent_backend=None) -> None:
     deps = make_deps(state_dir, speaker, officer_pin, transcriber, agent_backend)
     srv = ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, deps=deps))
-    print(f"Parali Check demo at http://127.0.0.1:{port}  (state in {state_dir})"
+    print(f"Saakshi demo at http://127.0.0.1:{port}  (state in {state_dir})"
           + (f"  officer PIN {officer_pin}" if officer_pin else ""))
     srv.serve_forever()

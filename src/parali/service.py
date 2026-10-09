@@ -117,7 +117,17 @@ def disburse_advance(store: Store, claim_id: str, by: str) -> dict:
 def _settle(store: Store, claim: dict) -> None:
     adv = claim.get("advance") or {}
     paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
+    before = (claim.get("settlement") or {}).get("state")
     claim["settlement"] = season.settle(claim["status"], claim.get("acres") or 0, paid, claim.get("state_code"))
+    st = claim["settlement"]
+    # the payment record: one event each time money is released or asked back (the rail is simulated)
+    if st["state"] != before:
+        if st["state"] == "balance_due" and st["balance"]:
+            st["released_at"] = now_iso()
+            store.add_event(claim["id"], {"type": "balance_released", "by": "system", "amount": st["balance"],
+                                          "rail": "DBT, simulated"})
+        elif st["state"] == "recover_advance":
+            store.add_event(claim["id"], {"type": "recovery_notice", "by": "system", "amount": st["recover"]})
     if claim["settlement"]["state"] == "recover_advance" and claim.get("evidence_key"):
         key = f"notices/{claim['id']}.html"
         store.put_blob(key, notice.render(claim, store.blob_url(claim["evidence_key"])).encode(), "text/html; charset=utf-8")
@@ -211,10 +221,32 @@ def review(store: Store, claim_id: str, officer_id: str, verdict: str, note: str
     return claim
 
 
+APPEALABLE = REVIEW_STATES + ("officer_confirmed_burnt",)
+
+
+def appeal(store: Store, claim_id: str, note: str, speaker: Speaker | None = None) -> dict:
+    """The farmer says the satellite is wrong. The note goes on the claim for the officer; a confirmed burn
+    goes back to the officer's queue, and nothing is recovered while the appeal is open."""
+    claim = _get(store, claim_id)
+    if claim["status"] not in APPEALABLE:
+        raise WorkflowError(f"claim is {claim['status']}; there is nothing to appeal")
+    note = (note or "").strip()[:500]
+    if not note:
+        raise WorkflowError("say in a line why the satellite is wrong")
+    claim["appeal"] = {"note": note, "at": now_iso()}
+    if claim["status"] == "officer_confirmed_burnt":
+        claim["status"] = "needs_review"
+        _settle(store, claim)
+    _speak(store, claim, speaker)  # the farmer's message must not still say "repay"
+    store.put("claims", claim_id, claim)
+    store.add_event(claim_id, {"type": "appeal", "by": "farmer", "note": note})
+    return claim
+
+
 def queue(store: Store) -> list[dict]:
     order = {"possible_burn": 0, "needs_review": 1}
     return sorted((c for c in store.list("claims") if c["status"] in REVIEW_STATES),
-                  key=lambda c: (order[c["status"]], c["created_at"]))
+                  key=lambda c: (0 if c.get("appeal") else 1, order[c["status"]], c["created_at"]))
 
 
 def _r(v):

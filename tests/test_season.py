@@ -77,7 +77,8 @@ def test_clean_last_season_gets_advance_then_balance(store):
     c = run(store)
     assert c["advance"]["eligible"] and c["advance"]["status"] == "paid" and c["advance"]["amount"] == 1250
     assert c["status"] == "auto_approved"
-    assert c["settlement"] == {"state": "balance_due", "balance": 1250, "recover": 0, "total": 2500}
+    assert {k: c["settlement"][k] for k in ("state", "balance", "recover", "total")} == {"state": "balance_due", "balance": 1250, "recover": 0, "total": 2500}
+    assert c["settlement"]["released_at"]
 
 
 def test_burnt_last_season_gets_no_advance(store):
@@ -121,3 +122,42 @@ def test_run_season_twice_is_safe(store):
     assert again["advance"]["status"] == "paid" and again["status"] == c["status"]
     paid = [e for e in store.events(c["id"]) if e["type"] == "advance_paid"]
     assert len(paid) == 1
+
+
+def test_release_and_recovery_are_on_the_record(store):
+    c = run(store, this_burn=None)
+    assert [e for e in store.events(c["id"]) if e["type"] == "balance_released"][0]["amount"] == 1250
+    c2 = service.create_claim(store, "f1", "2026-10-01", "2026-11-30")
+    st = stacks_by_year(None, 4)
+    service.assess_advance(store, c2["id"], st, [], TH, "2024-10-01", "2024-11-30")
+    service.disburse_advance(store, c2["id"], "dept")
+    service.process_claim(store, c2["id"], st, [], TH)
+    r = service.review(store, c2["id"], "VO-7", "confirm_burnt", "seen on site")
+    assert r["settlement"]["state"] == "recover_advance"
+    assert any(e["type"] == "recovery_notice" for e in store.events(c2["id"]))
+
+
+def test_appeal_reopens_a_confirmed_burn(store):
+    c = service.create_claim(store, "f1", "2025-10-01", "2025-11-30")
+    st = stacks_by_year(None, 4)
+    service.assess_advance(store, c["id"], st, [], TH, "2024-10-01", "2024-11-30")
+    service.disburse_advance(store, c["id"], "dept")
+    service.process_claim(store, c["id"], st, [], TH)
+    service.review(store, c["id"], "VO-7", "confirm_burnt")
+    with pytest.raises(service.WorkflowError):
+        service.appeal(store, c["id"], "  ")
+    a = service.appeal(store, c["id"], "I used a happy seeder; the dark patch is wet soil")
+    assert a["status"] == "needs_review" and a["settlement"]["state"] == "pending"
+    assert service.queue(store)[0]["id"] == c["id"]
+
+
+def test_appeal_rewrites_the_farmers_message(store):
+    c = service.create_claim(store, "f1", "2025-10-01", "2025-11-30")
+    st = stacks_by_year(None, 4)
+    service.assess_advance(store, c["id"], st, [], TH, "2024-10-01", "2024-11-30")
+    service.disburse_advance(store, c["id"], "dept")
+    service.process_claim(store, c["id"], st, [], TH)
+    r = service.review(store, c["id"], "VO-7", "confirm_burnt")
+    assert "returned" in r["message"]["en"]
+    a = service.appeal(store, c["id"], "it was wet soil")
+    assert "returned" not in a["message"]["en"]

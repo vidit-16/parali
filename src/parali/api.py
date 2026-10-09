@@ -61,6 +61,8 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
         if method == "GET" and path == "/api/config":
             return _json(200, {"voice_in": deps.transcriber is not None, "voice_out": deps.speaker is not None,
                                "model": getattr(deps.agent_backend, "mode", "scripted")})
+        if method == "GET" and path == "/api/officer/check":
+            return _json(200, {"ok": True}) if _pin_ok(deps, headers) else _json(403, {"error": "wrong PIN"})
         if method == "GET" and path == "/api/queue":
             return _json(200, [_claim_view(s, c) for c in service.queue(s)])
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})", path)
@@ -73,6 +75,10 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             c = service.create_claim(s, str(data.get("field_id", "")), *season.SEASON)
             deps.dispatch(c["id"])
             return _json(201, _claim_view(s, c))
+        m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/appeal", path)
+        if method == "POST" and m:
+            c = service.appeal(s, m.group(1), str(data.get("note", "")), deps.speaker)
+            return _json(200, _claim_view(s, c))
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/review", path)
         if method == "POST" and m:
             if not _pin_ok(deps, headers):
