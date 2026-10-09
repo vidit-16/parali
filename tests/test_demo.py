@@ -28,7 +28,7 @@ def test_every_demo_field_gets_a_decision(deps):
     fields = call(deps, "GET", "/api/fields")[1]
     assert len(fields) >= 5
     th = Thresholds.load()
-    fires = firms.load(server.ROOT / "data" / "firms" / "kaithal_2025.csv")
+    fires = server.demo_fires()
     stacks = server.demo_stacks(server.DEMO / "stacks")
     outcomes, advances = {}, {}
     for f in fields:

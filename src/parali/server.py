@@ -42,6 +42,19 @@ def local_or_live_stacks(field, start, end):
     return fetch_area(bbox, (start - timedelta(days=7)).isoformat(), end.isoformat(), log=lambda *_: None)
 
 
+def demo_fires():
+    """Season fire alerts for the demo fields: the Patran study area file plus the whole-belt file."""
+    seen, out = set(), []
+    for name in ("kaithal_2025.csv", "belt_2025.csv"):
+        p = ROOT / "data" / "firms" / name
+        for f in firms.load(p) if p.exists() else []:
+            key = (round(f.lat, 5), round(f.lon, 5), f.date, f.source)
+            if key not in seen:
+                seen.add(key)
+                out.append(f)
+    return out
+
+
 def demo_stacks(stacks_dir: Path):
     def provider(field, start, end):
         return AreaStack.load(stacks_dir / f"{field.id}_{start.year}.npz")
@@ -54,7 +67,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
     if not store.list("fields"):
         seed(store, DEMO / "fields.geojson")
     th = Thresholds.load()
-    fires = firms.load(ROOT / "data" / "firms" / "kaithal_2025.csv")
+    fires = demo_fires()
     stacks = demo_stacks(DEMO / "stacks")
 
     def run(claim_id):
