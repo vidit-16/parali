@@ -572,7 +572,9 @@ async function init() {
     return { f, el, m: new maplibregl.Marker({ element: el, anchor: "left", offset: [14, 0] }).setLngLat(centroid(f.geometry)) };
   });
   syncPins = () => pins.forEach(({ f, el, m }) => {
-    el.className = `pin ${kindFor(f.properties.id)}`;
+    // classList, not className: the map keeps its own positioning classes on the marker element
+    el.classList.remove("clean", "burn", "review", "none");
+    el.classList.add("pin", kindFor(f.properties.id));
     el.lang = HTML_LANG[lang];
     el.innerHTML = `<i></i>${esc(fieldName(f.properties))}`;
     if (map.getZoom() >= 12.5 && state.layers.fields) m.addTo(map); else m.remove();
