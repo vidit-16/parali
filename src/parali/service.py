@@ -117,6 +117,8 @@ def disburse_advance(store: Store, claim_id: str, by: str) -> dict:
 def _settle(store: Store, claim: dict) -> None:
     adv = claim.get("advance") or {}
     paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
+    if (claim.get("recovery") or {}).get("status") == "paid":
+        paid = 0  # the advance came back; if an appeal wins later, the whole amount is due
     before = (claim.get("settlement") or {}).get("state")
     claim["settlement"] = season.settle(claim["status"], claim.get("acres") or 0, paid, claim.get("state_code"))
     st = claim["settlement"]

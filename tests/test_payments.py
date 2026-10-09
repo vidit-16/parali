@@ -61,7 +61,8 @@ def test_confirmed_burn_gets_a_payment_link_and_the_message_says_so(store):  # n
 
 def test_signed_return_marks_the_advance_recovered(store):  # noqa: F811
     rp = FakeRazorpay()
-    d = deps(store, rp)
+    d, notified = deps(store, rp), []
+    d.notify = notified.append
     c = review(d, confirmed_burn(store))
     lid, ref = c["recovery"]["link_id"], f"{c['id']}-1"
     forged = {**signed(rp, lid, ref), "razorpay_signature": "0" * 64}
@@ -70,6 +71,7 @@ def test_signed_return_marks_the_advance_recovered(store):  # noqa: F811
     assert status == 302 and headers["Location"] == f"/farmer.html?paid={c['id']}"
     c = store.get("claims", c["id"])
     assert c["recovery"]["status"] == "paid" and "Nothing more is due" in c["message"]["en"]
+    assert notified and notified[-1]["recovery"]["status"] == "paid"
     assert [e for e in store.events(c["id"]) if e["type"] == "advance_recovered"][0]["payment_id"] == "pay_1"
 
 
@@ -97,3 +99,15 @@ def test_appeal_cancels_the_link_and_a_new_confirmation_issues_another(store):  
 def test_without_razorpay_nothing_changes(store):  # noqa: F811
     c = review(deps(store, None), confirmed_burn(store))
     assert "recovery" not in c and "written notice" in c["message"]["en"]
+
+
+def test_repaid_then_appeal_won_pays_the_full_amount(store):  # noqa: F811
+    rp = FakeRazorpay()
+    d = deps(store, rp)
+    c = review(d, confirmed_burn(store))
+    lid, ref = c["recovery"]["link_id"], f"{c['id']}-1"
+    api.handle("GET", "/api/razorpay/return", None, {}, d, signed(rp, lid, ref))
+    api.handle("POST", f"/api/claims/{c['id']}/appeal", json.dumps({"note": "it was wet soil"}).encode(), {}, d)
+    won = review(d, c["id"], "approve")
+    assert won["settlement"]["state"] == "balance_due" and won["settlement"]["balance"] == won["settlement"]["total"] == 2500
+    assert rp.cancelled == []  # nothing open to cancel: it was paid

@@ -147,7 +147,10 @@ def _razorpay_return(deps: Deps, q: dict) -> tuple[int, dict, bytes]:
     ok = rp is not None and claim is not None and payments.signature_ok(q, rp.key_secret)
     if ok and q.get("razorpay_payment_link_status") == "paid" \
             and (claim.get("recovery") or {}).get("link_id") == q.get("razorpay_payment_link_id"):
-        payments.mark_paid(deps.store, claim, q["razorpay_payment_id"])
+        claim = payments.mark_paid(deps.store, claim, q["razorpay_payment_id"])
+        claim = service.respeak(deps.store, claim, deps.speaker)  # the voice note says it is settled, too
+        if deps.notify:
+            deps.notify(claim)  # and WhatsApp confirms the payment
         return 302, {"Location": f"/farmer.html?paid={claim['id']}"}, b""
     return 302, {"Location": "/farmer.html?paid=failed"}, b""
 
