@@ -19,6 +19,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font: 15px/1.45 Geist, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 :lang(hi) { font-family: Mukta, Geist, sans-serif; }
 :lang(pa) { font-family: "Noto Sans Gurmukhi", Geist, sans-serif; }
@@ -321,3 +322,40 @@ body.panel-open .rail { right: 416px; }
 .burnview summary::before { content: "+ "; color: var(--muted); }
 .burnview[open] summary::before { content: "– "; }
 .burnview img { width: 100%; margin-top: 10px; border-radius: 8px; }
+
+/* ---- case file v4: action first, pictures second, details last ---- */
+.viewer { aspect-ratio: 2 / 1; }
+.strip canvas { aspect-ratio: 2 / 1; }
+.strip button span { white-space: nowrap; }
+#action { padding: 0 20px 14px; }
+.act .cap { margin: 8px 0 0; }
+.band { margin: 0 -20px; }
+.band .bt { min-width: 0; }
+.band small { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.link { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; font-size: 12px; font-weight: 600; }
+.status { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: var(--r-m); background: rgba(159, 227, 255, .06); box-shadow: 0 0 0 1px rgba(159, 227, 255, .18) inset; }
+.status .orbit { flex: none; width: 40px; height: 40px; margin: 6px; }
+.status .orbit .o-sat { offset-path: path("M 2.1 32 A 29.9 8.5 0 1 0 61.9 32 A 29.9 8.5 0 1 0 2.1 32"); width: 6px; height: 6px; margin: -3px 0 0 -3px; }
+.status p { margin: 0; }
+.st1 { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14.5px; }
+.st2 { margin-top: 3px !important; font-size: 13px; color: var(--ink-2); }
+.st3 { margin-top: 2px !important; font: 500 12px "Geist Mono", monospace; color: var(--muted); }
+.live { display: inline-flex; align-items: center; gap: 5px; padding: 2px 7px; border-radius: 5px; background: rgba(255, 75, 75, .16); color: #FF7070; font: 700 10.5px Geist, sans-serif; letter-spacing: .08em; }
+.live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #FF5A5A; animation: blink 1.2s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+/* a working line along the top of the card while a check runs */
+.panel.busy::before { content: ""; position: sticky; top: 0; display: block; height: 2px; margin-bottom: -2px; z-index: 3;
+  background: linear-gradient(90deg, transparent, #9FE3FF, transparent) 0 0 / 40% 100% no-repeat; animation: sweep-x 1.4s linear infinite; }
+@keyframes sweep-x { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+.panel.scrolls { -webkit-mask-image: linear-gradient(#000 calc(100% - 34px), transparent); mask-image: linear-gradient(#000 calc(100% - 34px), transparent); }
+#details .sec:last-child { padding-bottom: 26px; }
+
+/* ---- guided story bar ---- */
+.story { position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 7; display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px; border-radius: 999px; max-width: calc(100% - 520px); }
+.story[hidden] { display: none; }
+.story b { font-size: 13px; white-space: nowrap; }
+.story #story-step { font-size: 13px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.story .btn.small { height: 30px; border-radius: 999px; }
+.story .rec { width: 8px; height: 8px; border-radius: 50%; background: #FF5A5A; animation: blink 1.2s ease-in-out infinite; flex: none; }
+.story.out { opacity: 0; transition: opacity .6s var(--ease); }
+@media (max-width: 900px) { .story { top: auto; bottom: 100px; max-width: calc(100% - 20px); } }

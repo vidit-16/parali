@@ -56,15 +56,21 @@ def run(store: Store, check_id: str, stacks, fires, th) -> dict:
     g, _ = validate(item["geometry"])
     f = Field(f"check-{check_id}", g, {})
     out = {}
-    for name, (s, e) in (("previous", season.PREV_SEASON), ("current", season.SEASON)):
+    for name, (s, e) in (("current", season.SEASON), ("previous", season.PREV_SEASON)):
+        # record the stage as it happens, so the app can show real progress instead of a spinner
+        item.update(status="running", stage=name)
+        store.put("checks", check_id, item)
         s, e = date.fromisoformat(s), date.fromisoformat(e)
         stack, feats, near, d = _decide_season(f, stacks, fires, th, s, e)
+        if name == "current":
+            item["clear_images"] = len(d.clear_dates)
         key = f"checks/{check_id}-{name}.png"
         store.put_blob(key, evidence.render(stack, f, d.burn_date), "image/png")
         out[name] = {"season": str(s.year), "decision": d.as_dict(), "evidence_key": key,
                      "series": [{"date": x.date.isoformat(), "nbr": None if x.nbr != x.nbr else round(x.nbr, 4),
                                  "valid": round(x.valid_share, 2)} for x in feats],
                      "fires": [{"lat": p.lat, "lon": p.lon, "date": p.date.isoformat()} for p in near]}
+    item.pop("stage", None)
     item.update(status="done", result=out, advance_eligible=season.advance_eligible(out["previous"]["decision"]["outcome"]),
                 done_at=now_iso())
     store.put("checks", check_id, item)

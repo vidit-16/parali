@@ -59,3 +59,19 @@ def test_api_check_flow(tmp_path):
     assert st == 200 and got["result"]["current"]["evidence_url"].startswith("/blobs/")
     st, _, out = handle("POST", "/api/check", json.dumps({"geometry": {"type": "Point", "coordinates": [0, 0]}}).encode(), {}, deps)
     assert st == 400
+
+
+def test_run_records_its_stages(tmp_path):
+    seen = []
+
+    class Spy(LocalStore):
+        def put(self, kind, key, item):
+            if kind == "checks":
+                seen.append(item.get("stage") or item["status"])
+            super().put(kind, key, item)
+
+    s = Spy(tmp_path)
+    item = check.create(s, mapping(FIELD_GEOM))
+    done = check.run(s, item["id"], stacks(), [], TH)
+    assert seen[-3:] == ["current", "previous", "done"]
+    assert done["clear_images"] > 0 and "stage" not in done

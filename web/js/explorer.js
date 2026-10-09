@@ -30,6 +30,10 @@ const T = {
     checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
+    live: "LIVE", checking: "Checking this field on AWS", slow: "taking longer than usual",
+    stage: { queued: "Starting", current: "Reading this season, September to December", previous: "Reading last season, for the advance" },
+    imagesFound: (n) => `${n} clear images this season`, pause: "Pause", resume: "Resume", exit: "Exit",
+    storySteps: (f) => ["The 2025 season over the border belt", "Into Patran, where most fields burned in early November", `Live satellite check on ${f}`, "That is the whole loop: season, field, verdict"],
     burnView: "Infrared view of every clear image (a fresh burn turns dark blue)",
     saved: (d) => `The live check is not answering right now; this is the result it gave on ${d}`, liveNow: (n) => `Live check, just now · ${n} s`, rerun: "Run again",
     reading: "Reading every clear image of this field, September to December", checkNote: "Runs the check an officer would: every clear Sentinel-2 image of this field, this season and last. About 20 seconds.",
@@ -53,6 +57,10 @@ const T = {
     checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
+    live: "लाइव", checking: "AWS पर इस खेत की जाँच हो रही है", slow: "सामान्य से ज़्यादा समय लग रहा है",
+    stage: { queued: "शुरू हो रही है", current: "यह सीज़न पढ़ रहे हैं, सितंबर से दिसंबर", previous: "अग्रिम के लिए पिछला सीज़न पढ़ रहे हैं" },
+    imagesFound: (n) => `इस सीज़न की ${n} साफ़ तस्वीरें`, pause: "रोकें", resume: "जारी रखें", exit: "बंद करें",
+    storySteps: (f) => ["सीमा क्षेत्र पर 2025 का सीज़न", "पातड़ां की ओर, जहाँ नवंबर की शुरुआत में सबसे ज़्यादा खेत जले", `${f} की लाइव उपग्रह जाँच`, "पूरा चक्र यही है: सीज़न, खेत, फ़ैसला"],
     burnView: "हर साफ़ तस्वीर का इन्फ्रारेड दृश्य (ताज़ा जला खेत गहरा नीला दिखता है)",
     saved: (d) => `लाइव जाँच अभी जवाब नहीं दे रही; यह ${d} की जाँच का नतीजा है`, liveNow: (n) => `लाइव जाँच, अभी · ${n} सेकंड`, rerun: "फिर चलाएँ",
     reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "वही जाँच जो अधिकारी करते हैं: इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर। लगभग 20 सेकंड।",
@@ -76,6 +84,10 @@ const T = {
     checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    live: "ਲਾਈਵ", checking: "AWS ਉੱਤੇ ਇਸ ਖੇਤ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ", slow: "ਆਮ ਨਾਲੋਂ ਵੱਧ ਸਮਾਂ ਲੱਗ ਰਿਹਾ ਹੈ",
+    stage: { queued: "ਸ਼ੁਰੂ ਹੋ ਰਹੀ ਹੈ", current: "ਇਹ ਸੀਜ਼ਨ ਪੜ੍ਹ ਰਹੇ ਹਾਂ, ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ", previous: "ਅਗਾਊਂ ਲਈ ਪਿਛਲਾ ਸੀਜ਼ਨ ਪੜ੍ਹ ਰਹੇ ਹਾਂ" },
+    imagesFound: (n) => `ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ ${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ`, pause: "ਰੋਕੋ", resume: "ਜਾਰੀ ਰੱਖੋ", exit: "ਬੰਦ ਕਰੋ",
+    storySteps: (f) => ["ਸਰਹੱਦੀ ਖੇਤਰ ਉੱਤੇ 2025 ਦਾ ਸੀਜ਼ਨ", "ਪਾਤੜਾਂ ਵੱਲ, ਜਿੱਥੇ ਨਵੰਬਰ ਦੇ ਸ਼ੁਰੂ ਵਿੱਚ ਸਭ ਤੋਂ ਵੱਧ ਖੇਤ ਸੜੇ", `${f} ਦੀ ਲਾਈਵ ਉਪਗ੍ਰਹਿ ਜਾਂਚ`, "ਪੂਰਾ ਚੱਕਰ ਇਹੀ ਹੈ: ਸੀਜ਼ਨ, ਖੇਤ, ਫ਼ੈਸਲਾ"],
     burnView: "ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਦਾ ਇਨਫ੍ਰਾਰੈੱਡ ਦ੍ਰਿਸ਼ (ਤਾਜ਼ਾ ਸੜਿਆ ਖੇਤ ਗੂੜ੍ਹਾ ਨੀਲਾ ਦਿਸਦਾ ਹੈ)",
     saved: (d) => `ਲਾਈਵ ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ; ਇਹ ${d} ਦੀ ਜਾਂਚ ਦਾ ਨਤੀਜਾ ਹੈ`, liveNow: (n) => `ਲਾਈਵ ਜਾਂਚ, ਹੁਣੇ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਚਲਾਓ",
     reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਉਹੀ ਜਾਂਚ ਜੋ ਅਧਿਕਾਰੀ ਕਰਦਾ ਹੈ: ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
@@ -99,6 +111,10 @@ const T = {
     checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
+    live: "लाइव", checking: "AWS पै इस खेत की जांच होरी सै", slow: "आम तै घणा बखत लाग रया सै",
+    stage: { queued: "शुरू होरी सै", current: "यो सीज़न पढ़ण लाग रे सां, सितंबर तै दिसंबर", previous: "एडवांस खातर पाछला सीज़न पढ़ण लाग रे सां" },
+    imagesFound: (n) => `इस सीज़न के ${n} साफ फोटू`, pause: "रोक्को", resume: "चालू करो", exit: "बंद करो",
+    storySteps: (f) => ["बॉर्डर इलाके पै 2025 का सीज़न", "पातड़ां कान्नी, जित नवंबर के शुरू म्ह सब तै घणे खेत जळे", `${f} की लाइव उपग्रह जांच`, "पूरा चक्कर योए सै: सीज़न, खेत, फैसला"],
     burnView: "हर साफ फोटो का इन्फ्रारेड नजारा (ताजा जळया खेत गहरा नीला दिक्खै)",
     saved: (d) => `लाइव जांच इब्ब जवाब कोनी देरी; यो ${d} की जांच का नतीजा सै`, liveNow: (n) => `लाइव जांच, इब्बे · ${n} सेकंड`, rerun: "फेर चलाओ",
     reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "वाए जांच जो अफसर करै सै: इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटो। करीब 20 सेकंड।",
@@ -151,9 +167,17 @@ function applyLang() {
 const dayNum = (iso) => Math.round((new Date(iso) - day0) / 864e5);
 const dateOf = (d) => new Date(day0.getTime() + d * 864e5);
 const MONTH = () => (lang === "en" ? "short" : "long");
-const fmtDay = (d, month = MONTH()) => dateOf(d).toLocaleDateString(LOCALE[lang], { day: "numeric", month });
+const MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const fmtDay = (d, month = MONTH()) => {
+  const x = dateOf(d);
+  return lang === "en" ? `${x.getDate()} ${MONTHS_EN[x.getMonth()]}` : x.toLocaleDateString(LOCALE[lang], { day: "numeric", month });
+};
 const fmtIso = (iso) => new Date(iso).toLocaleDateString(LOCALE[lang], { day: "numeric", month: "long" });
-const fmtRange = (w) => { const s = new Date(w.start), e = new Date(w.end); return `${s.getDate()}–${e.getDate()} ${e.toLocaleDateString(LOCALE[lang], { month: MONTH() })}`; };
+const fmtRange = (w) => {
+  const s = new Date(w.start), e = new Date(w.end);
+  const m = lang === "en" ? MONTHS_EN[e.getMonth()] : e.toLocaleDateString(LOCALE[lang], { month: MONTH() });
+  return `${s.getDate()}–${e.getDate()} ${m}`;
+};
 const windowIndex = (d) => { let k = 0; windows.forEach((w, j) => { if (dayNum(w.start) <= d) k = j; }); return k; };
 
 // ---- timeline: one stop per day ----
@@ -219,7 +243,8 @@ function setDay(d, x = null) {
   map.setFilter("burns-new", ["all", [">", ["get", "d"], d - 4], ["<=", ["get", "d"], d]]);
   map.setFilter("fires", ["<=", ["get", "d"], d]);
   map.setFilter("fires-states", ["<=", ["get", "d"], d]);
-  map.setLayoutProperty("fires", "icon-size", ["case", [">", ["get", "d"], d - 3], 1, 0.62]);
+  const fresh = (big, small) => ["case", [">", ["get", "d"], d - 3], big, small];
+  map.setPaintProperty("fires", "circle-radius", ["interpolate", ["linear"], ["zoom"], 8, fresh(4, 2.4), 12, fresh(8, 5), 15, fresh(15, 10)]);
   renderTimeline(x ?? d);
 }
 
@@ -276,10 +301,23 @@ function playSeason() {
   hideHero();
   closePanel();
   fitRegion();
+  story.on = true;
+  story.paused = false;
+  storyStep(0);
   state.onDay = (d) => {
-    if (d === 58) map.flyTo({ center: [76.15, 29.935], zoom: 11.8, duration: reduced ? 0 : 2600, essential: true });
+    if (d === 58) { storyStep(1); map.flyTo({ center: [76.15, 29.935], zoom: 11.8, duration: reduced ? 0 : 2600, essential: true }); }
   };
-  setTimeout(() => play(5, () => { state.onDay = null; if (fieldsById["f-baljeet"]) openField(fieldsById["f-baljeet"]); }, D0), reduced ? 0 : 1300);
+  setTimeout(() => {
+    if (!story.on) return;
+    play(5, () => {
+      state.onDay = null;
+      if (!story.on) return;
+      const f = fieldsById["f-baljeet"];
+      if (!f) return endStory();
+      storyStep(2);
+      openField(f, { auto: true });
+    }, D0);
+  }, reduced ? 0 : 1300);
 }
 
 // ---- the opening: India, the smoke, then into the belt ----
@@ -318,7 +356,7 @@ function runIntro() {
     stop();
     map.stop();
     fitRegion(0);
-    setDay(D0 + 42);
+    setDay(D1);
     showHero();
   };
   skipBtn.onclick = skip;
@@ -336,7 +374,6 @@ function runIntro() {
       state.onDay = null;
       if (skipped) return;
       done();
-      setDay(D0 + 42);
       showHero();
       toast(t().toast);
     }, D0);
@@ -352,11 +389,15 @@ const kindOf = (o) => (o === "auto_approved" || o === "officer_approved" ? "clea
 const ICON = { clean: "i-check", burn: "i-flame", review: "i-eye" };
 const fieldName = (p) => (lang === "en" ? p.name : p.name_hi || p.name);
 
-function openField(f) {
+function setFieldState(id, st) { if (id) map.setFeatureState({ source: "fields", id }, st); }
+function openField(f, { auto = false } = {}) {
   stop();
+  if (state.field && state.field !== f) setFieldState(state.field.properties.id, { veil: false, checking: false });
   state.field = f;
   state.check = null;  // the answer comes from running the check, not from opening the card
   state.frame = 0;
+  const id = f.properties.id;
+  setFieldState(id, { veil: !dotKinds[id], checking: false });
   const narrow = innerWidth <= 640;
   map.flyTo({ center: centroid(f.geometry), zoom: 15.2, duration: reduced ? 0 : 2200, essential: true,
     offset: narrow ? [0, -innerHeight * 0.22] : [-200, 0] });
@@ -365,8 +406,16 @@ function openField(f) {
   $("#panel").hidden = false;
   document.body.classList.add("panel-open");
   playFrames();
+  if (auto) setTimeout(() => { if (state.field === f) runCheck(); }, reduced ? 0 : 2400);
 }
-function closePanel() { clearInterval(state.frameTimer); state.field = null; state.check = null; $("#panel").hidden = true; document.body.classList.remove("panel-open"); }
+function closePanel() {
+  clearInterval(state.frameTimer);
+  if (state.field) setFieldState(state.field.properties.id, { veil: false, checking: false });
+  state.field = null; state.check = null;
+  $("#panel").hidden = true;
+  $("#panel").classList.remove("busy");
+  document.body.classList.remove("panel-open");
+}
 
 // the field cut out of our own tiles, one picture per ten-day window
 function lonLatToPx([lon, lat], z) {
@@ -424,71 +473,124 @@ function playFrames(endAt = null) {
 const ORBIT = `<div class="orbit" aria-hidden="true"><svg class="o-mark" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="url(#sky)"/><use href="#sa" fill="#fff" transform="translate(32 30) scale(.8) translate(-32 -33)"/></svg>
   <svg class="o-ring" viewBox="0 0 120 120"><ellipse cx="60" cy="60" rx="56" ry="16"/></svg><div class="o-path"><i class="o-sat"></i></div></div>`;
 
-function renderPanel() {
-  const f = state.field, p = f.properties, L = t(), c = state.check;
-  const village = lang === "en" ? p.village : p.village_hi || p.village;
-  const bw = burnWindow();
-  let html = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>
-    <div class="viewer" id="viewer">${windows.map(() => "<canvas></canvas>").join("")}<span class="tag"></span>
-      ${bw >= 0 ? `<span class="tag burnt" id="burntag">${esc(L.vline.burn(fmtIso(c.result.current.decision.burn_date)))}</span>` : ""}</div>
-    <div class="strip" id="strip">${windows.map((w, j) => `<button class="${j === bw ? "burnt" : ""}" aria-label="${esc(fmtRange(w))}"><canvas></canvas><span>${esc(new Date(w.start).getDate() === 1 || j === 0 ? fmtDay(dayNum(w.start), "short") : String(new Date(w.start).getDate()))}</span></button>`).join("")}</div>`;
+function actionHtml() {
+  const L = t(), c = state.check;
   if (c && c.status === "done") {
-    const cur = c.result.current, prev = c.result.previous, d = cur.decision, k = kindOf(d.outcome), kp = kindOf(prev.decision.outcome);
+    const d = c.result.current.decision, k = kindOf(d.outcome);
     const vline = k === "burn" ? L.vline.burn(fmtIso(d.burn_date)) : k === "clean" ? L.vline.clean(d.clear_dates.length) : L.vline.review();
-    html += `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div><b>${esc(L.v[k])}</b><p>${esc(vline)}</p></div></div>
-      <div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
-        <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
-      ${cur.evidence_url ? `<details class="sec burnview"><summary>${esc(L.burnView)}</summary><img src="${esc(cur.evidence_url)}" alt="" loading="lazy"></details>` : ""}
-      <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
-      <div class="foot"><span>${esc(c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds))}</span><button class="btn ghost small" id="run-check">${esc(L.rerun)}</button></div>`;
-  } else if (c && c.status !== "done" && !c.failed) {
-    html += `<div class="scanning">${ORBIT}<p>${esc(L.reading)}</p><span class="elapsed">${c.elapsed || 0} s</span></div>`;
-  } else {
-    html += `<div class="sec">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : `<p class="cap" style="margin:0 0 10px">${esc(L.checkNote)}</p>`}
-      <button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button></div>`;
+    const meta = c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds);
+    return `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div class="bt"><b>${esc(L.v[k])}</b><p>${esc(vline)}</p>
+      <small>${esc(meta)} · <button class="link" id="run-check">${esc(L.rerun)}</button></small></div></div>`;
   }
-  $("#panel-body").innerHTML = html;
+  if (c && !c.failed) {
+    const st = L.stage[c.stage] || L.stage.queued;
+    const found = c.images ? ` · ${L.imagesFound(c.images)}` : "";
+    return `<div class="status">${ORBIT}<div><p class="st1"><span class="live">${esc(L.live)}</span>${esc(L.checking)}</p>
+      <p class="st2">${esc(st + found)}</p><p class="st3"><span class="elapsed">${c.elapsed || 0} s</span>${c.slow ? ` · ${esc(L.slow)}` : ""}</p></div></div>`;
+  }
+  return `<div class="act">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : ""}
+    <button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button>
+    <p class="cap">${esc(L.checkNote)}</p></div>`;
+}
+function detailsHtml() {
+  const L = t(), c = state.check;
+  if (!c || c.status !== "done") return "";
+  const cur = c.result.current, d = cur.decision, kp = kindOf(c.result.previous.decision.outcome);
+  return `<div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
+      <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
+    <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
+    ${cur.evidence_url ? `<details class="sec burnview"><summary>${esc(L.burnView)}</summary><img src="${esc(cur.evidence_url)}" alt="" loading="lazy"></details>` : ""}`;
+}
+// the parts that change while a check runs are redrawn alone, so the pictures do not reload
+function renderAction() {
+  const el = $("#action");
+  if (!el) return;
+  el.innerHTML = actionHtml();
+  $("#details").innerHTML = detailsHtml();
   $("#run-check")?.addEventListener("click", runCheck);
+  const busy = state.check && state.check.status !== "done" && !state.check.failed;
+  $("#panel").classList.toggle("busy", !!busy);
+  const bw = burnWindow();
+  $$("#strip button").forEach((b, j) => b.classList.toggle("burnt", j === bw));
+  const tag = $("#burntag");
+  if (bw >= 0) { tag.textContent = t().vline.burn(fmtIso(state.check.result.current.decision.burn_date)); tag.hidden = false; } else tag.hidden = true;
+  requestAnimationFrame(() => { const pn = $("#panel"); pn.classList.toggle("scrolls", pn.scrollHeight > pn.clientHeight + 4); });
+}
+function renderPanel() {
+  const f = state.field, p = f.properties, L = t();
+  const village = lang === "en" ? p.village : p.village_hi || p.village;
+  $("#panel-body").innerHTML = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>
+    <div id="action"></div>
+    <div class="viewer" id="viewer">${windows.map(() => "<canvas></canvas>").join("")}<span class="tag"></span><span class="tag burnt" id="burntag" hidden></span></div>
+    <div class="strip" id="strip">${windows.map((w, j) => `<button aria-label="${esc(fmtRange(w))}"><canvas></canvas><span>${esc(j === 0 || new Date(w.start).getDate() === 1 ? fmtDay(dayNum(w.start), "short") : String(new Date(w.start).getDate()))}</span></button>`).join("")}</div>
+    <div id="details"></div>`;
   const big = $$("#viewer canvas"), small = $$("#strip canvas");
-  windows.forEach((w, j) => { drawCut(big[j], w.id, f.geometry); drawCut(small[j], w.id, f.geometry, 128, 80, 1); });
+  windows.forEach((w, j) => { drawCut(big[j], w.id, f.geometry, 128, 64); drawCut(small[j], w.id, f.geometry, 128, 64, 1); });
   $$("#strip button").forEach((b, j) => { b.onclick = () => { clearInterval(state.frameTimer); showFrame(j); }; });
   showFrame(state.frame || 0);
+  renderAction();
+}
+
+function glowLoop(f) {
+  const id = f.properties.id;
+  const tick = (now) => {
+    if (!state.check || state.check.status === "done" || state.check.failed || state.field !== f) {
+      map.setPaintProperty("field-glow", "line-opacity", ["case", ["boolean", ["feature-state", "checking"], false], 0.6, 0]);
+      return;
+    }
+    const o = 0.35 + 0.35 * Math.sin(now / 300);
+    map.setPaintProperty("field-glow", "line-opacity", ["case", ["boolean", ["feature-state", "checking"], false], o, 0]);
+    requestAnimationFrame(tick);
+  };
+  setFieldState(id, { checking: true });
+  requestAnimationFrame(tick);
 }
 
 async function runCheck() {
-  const f = state.field, t0 = performance.now();
-  state.check = { status: "queued", elapsed: 0 };
-  renderPanel();
+  const f = state.field, id = f.properties.id, t0 = performance.now();
+  state.check = { status: "queued", stage: "queued", elapsed: 0 };
+  renderAction();
   playFrames();
+  glowLoop(f);
   const tick = setInterval(() => {
-    if (!state.check || state.check.status === "done" || state.field !== f) return clearInterval(tick);
+    if (!state.check || state.check.status === "done" || state.check.failed || state.field !== f) return clearInterval(tick);
     state.check.elapsed = Math.round((performance.now() - t0) / 1000);
+    state.check.slow = state.check.elapsed >= 30;
     const el = $("#panel .elapsed");
     if (el) el.textContent = `${state.check.elapsed} s`;
+    if (state.check.slow && !$("#panel .st3").textContent.includes("·")) renderAction();
   }, 1000);
   const finish = (check) => {
     clearInterval(tick);
     if (state.field !== f) return;
     state.check = check;
-    renderPanel();
+    setFieldState(id, { checking: false, veil: false });
     const d = check.status === "done" ? check.result.current.decision : null;
     if (d) {
+      dotKinds[id] = kindOf(d.outcome);
+      setFieldState(id, { k: dotKinds[id] });
+      refreshDots();
       if (d.burn_date) setDay(dayNum(d.burn_date) + 1);
       clearInterval(state.frameTimer);
       showFrame(d.burn_date ? windowIndex(dayNum(d.burn_date)) : windows.length - 1);
-      dotKinds[f.properties.id] = kindOf(d.outcome);
-      refreshDots();
     }
+    renderAction();
+    if (story.on) storyStep(3);
   };
   try {
     const r = await fetch("/api/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ geometry: f.geometry }) });
     if (!r.ok) throw new Error(String(r.status));
-    const { id } = await r.json();
-    for (let k = 0; k < 60 && state.field === f; k++) {
+    const { id: cid } = await r.json();
+    for (let k = 0; k < 20 && state.field === f; k++) {   // 40 s, then the saved result
       await new Promise((ok) => setTimeout(ok, 2000));
-      const item = await (await fetch(`/api/check/${id}`)).json();
+      const item = await (await fetch(`/api/check/${cid}`)).json();
       if (item.status === "done") return finish({ ...item, status: "done", checked_at: item.done_at, seconds: Math.round((performance.now() - t0) / 1000) });
       if (item.status === "error") throw new Error(item.error || "error");
+      if (state.check && state.field === f && (item.stage !== state.check.stage || item.clear_images !== state.check.images)) {
+        state.check.stage = item.stage || "queued";
+        state.check.images = item.clear_images;
+        renderAction();
+      }
     }
     throw new Error("timeout");
   } catch {
@@ -498,18 +600,23 @@ async function runCheck() {
   }
 }
 
-// ---- map ----
-function diamondImage(size = 22) {
-  const c = document.createElement("canvas");
-  c.width = c.height = size * 2;
-  const g = c.getContext("2d"), m = size, r = size * 0.62;
-  g.beginPath(); g.moveTo(m, m - r); g.lineTo(m + r, m); g.lineTo(m, m + r); g.lineTo(m - r, m); g.closePath();
-  g.fillStyle = "rgba(245,197,66,0.28)"; g.fill();
-  g.lineWidth = size * 0.3; g.strokeStyle = "rgba(0,0,0,0.65)"; g.stroke();
-  g.lineWidth = size * 0.16; g.strokeStyle = "#F5C542"; g.stroke();
-  return { width: c.width, height: c.height, data: g.getImageData(0, 0, c.width, c.height).data };
+// ---- the guided story ("Play the season"): a bar says where it is and lets the viewer pause or leave ----
+const story = { on: false, paused: false };
+function storyStep(i) {
+  const bar = $("#story"), L = t();
+  const name = fieldsById["f-baljeet"] ? fieldName(fieldsById["f-baljeet"].properties) : "";
+  $("#story-step").textContent = L.storySteps(name)[i];
+  $("#story-pause").hidden = i >= 2;
+  if (i === 3) setTimeout(() => { if (story.on) endStory(); }, 6000);
+  bar.hidden = false;
+}
+function endStory() {
+  story.on = false;
+  state.onDay = null;
+  fadeOut($("#story"));
 }
 
+// ---- map ----
 async function init() {
   const [mf, demoChecks] = await Promise.all([
     fetch("/tiles/manifest.json").then((r) => r.json()),
@@ -568,7 +675,6 @@ async function init() {
   const byDay = {};
   beltFires.forEach((f) => { byDay[f.properties.d] = (byDay[f.properties.d] || 0) + 1; });
   cumFires = Array.from({ length: D1 - D0 + 1 }, (_, i) => (fa += byDay[D0 + i] || 0));
-  map.addImage("diamond", diamondImage(), { pixelRatio: 2 });
 
   // high-density screens and in-between zooms stretch 256 px tiles: ask for the next zoom's tiles instead
   windows.forEach((w) => {
@@ -591,13 +697,14 @@ async function init() {
     "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1, 14, 2.2], "line-blur": 0.6, "line-opacity": 0.85 } });
 
   map.addSource("fires-states", { type: "geojson", data: stateFires });
-  map.addLayer({ id: "fires-states", type: "circle", source: "fires-states", maxzoom: 9.5, paint: {
-    "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 1.5, 5, 1.8, 7, 2, 9, 2.4],
-    "circle-color": "#F5C542", "circle-blur": 0.25, "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.85, 8.5, 0.7, 9.5, 0] } });
+  map.addLayer({ id: "fires-states", type: "circle", source: "fires-states", maxzoom: 8.2, paint: {
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 1.5, 5, 1.8, 7, 2.1],
+    "circle-color": "#F5C542", "circle-blur": 0.25, "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.85, 7.7, 0.8, 8.2, 0] } });
   map.addSource("fires", { type: "geojson", data: firesFc });
-  map.addLayer({ id: "fires", type: "symbol", source: "fires", minzoom: 8.5, layout: {
-    "icon-image": "diamond", "icon-allow-overlap": true, "icon-ignore-placement": true, "icon-size": 0.62 },
-    paint: { "icon-opacity": ["interpolate", ["linear"], ["zoom"], 8.5, 0, 9.5, 1] } });
+  map.addLayer({ id: "fires", type: "circle", source: "fires", minzoom: 7.7, paint: {
+    "circle-radius": 3, "circle-color": "rgba(245,197,66,0.18)", "circle-stroke-color": "#F5C542",
+    "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 8, 1.3, 12, 1.7, 15, 2.4],
+    "circle-opacity": ["interpolate", ["linear"], ["zoom"], 7.7, 0, 8.2, 1], "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], 7.7, 0, 8.2, 1] } });
 
   map.addLayer({ id: "labels", type: "raster", source: "labels", paint: {
     "raster-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.95, 11, 0.85, 12.5, 0] } });
@@ -609,7 +716,7 @@ async function init() {
   // dots stay neutral until a field is checked in this visit, so the map does not give the answer away
   const kindFor = (id) => dotKinds[id] || "none";
   const dotsFc = { type: "FeatureCollection", features: fieldsFc.features.map((f) => ({ type: "Feature", properties: { id: f.properties.id, k: kindFor(f.properties.id) }, geometry: { type: "Point", coordinates: centroid(f.geometry) } })) };
-  map.addSource("fields", { type: "geojson", data: fieldsFc });
+  map.addSource("fields", { type: "geojson", data: fieldsFc, promoteId: "id" });
   map.addSource("field-dots", { type: "geojson", data: dotsFc });
   refreshDots = () => {
     dotsFc.features.forEach((d) => { d.properties.k = kindFor(d.properties.id); });
@@ -617,6 +724,15 @@ async function init() {
     syncPins();
   };
   map.addLayer({ id: "fields-hit", type: "fill", source: "fields", minzoom: 12.5, paint: { "fill-color": "#FFFFFF", "fill-opacity": 0.04 } });
+  // an open, unchecked field is veiled so the burn map does not answer before the check does
+  map.addLayer({ id: "field-veil", type: "fill", source: "fields", paint: { "fill-color": "#0D0E11",
+    "fill-opacity": ["case", ["boolean", ["feature-state", "veil"], false], 0.72, 0] } });
+  map.addLayer({ id: "field-verdict", type: "fill", source: "fields", paint: {
+    "fill-color": ["match", ["feature-state", "k"], "clean", "#43C485", "burn", "#FF6A3D", "review", "#F5C542", "#000000"],
+    "fill-opacity": ["case", ["==", ["typeof", ["feature-state", "k"]], "string"], 0.3, 0] } });
+  map.addLayer({ id: "field-glow", type: "line", source: "fields", paint: { "line-color": "#9FE3FF", "line-blur": 5,
+    "line-width": ["interpolate", ["linear"], ["zoom"], 11, 4, 15, 10],
+    "line-opacity": ["case", ["boolean", ["feature-state", "checking"], false], 0.6, 0] } });
   map.addLayer({ id: "fields", type: "line", source: "fields", minzoom: 12.5, paint: { "line-color": "#FFFFFF", "line-width": ["interpolate", ["linear"], ["zoom"], 12.5, 1.2, 15, 2.5] } });
   const dotColor = ["match", ["get", "k"], "clean", "#43C485", "burn", "#FF6A3D", "review", "#F5C542", "#FFFFFF"];
   map.addLayer({ id: "field-dots-halo", type: "circle", source: "field-dots", minzoom: 7.5, maxzoom: 12.5, paint: {
@@ -629,7 +745,8 @@ async function init() {
     const el = document.createElement("button");
     el.className = "pin";
     el.onclick = (e) => { e.stopPropagation(); openField(f); };
-    return { f, el, m: new maplibregl.Marker({ element: el, anchor: "left", offset: [14, 0] }).setLngLat(centroid(f.geometry)) };
+    const ring = f.geometry.coordinates[0], east = ring.reduce((a, c) => (c[0] > a[0] ? c : a), ring[0]);
+    return { f, el, m: new maplibregl.Marker({ element: el, anchor: "left", offset: [10, 0] }).setLngLat([east[0], centroid(f.geometry)[1]]) };
   });
   syncPins = () => pins.forEach(({ f, el, m }) => {
     // classList, not className: the map keeps its own positioning classes on the marker element
@@ -677,6 +794,17 @@ async function init() {
   $("#slider").oninput = (e) => { state.intro = false; stop(); const x = Number(e.target.value); setDay(x, x); };
   $("#slider").onchange = (e) => setDay(Number(e.target.value));
   $("#play-season").onclick = playSeason;
+  $("#story-exit").onclick = () => { stop(); endStory(); };
+  $("#story-pause").onclick = () => {
+    story.paused = !story.paused;
+    $("#story-pause").textContent = story.paused ? t().resume : t().pause;
+    if (story.paused) stop(); else play(5, () => {
+      state.onDay = null;
+      if (!story.on) return;
+      storyStep(2);
+      openField(fieldsById["f-baljeet"], { auto: true });
+    });
+  };
   $("#explore").onclick = () => { hideHero(); toast(t().toast); };
   $("#panel-close").onclick = closePanel;
   $("#zoom-in").onclick = () => map.zoomIn();
@@ -729,9 +857,9 @@ async function init() {
     setTimeout(go, 4500);  // never hold the page hostage to the slowest tile
   });
   if (intro) { ready.then(runIntro); return; }
-  if (reduced) { ready.then(() => { setDay(D0 + 42); showHero(); }); return; }
+  if (reduced) { ready.then(() => { setDay(D1); showHero(); }); return; }
   map.once("dragstart", () => { if (state.intro) { stop(); showHero(); } });
-  ready.then(() => setTimeout(() => play(9, () => { if (state.intro) { setDay(D0 + 42); showHero(); toast(t().toast); } }, D0), 500));
+  ready.then(() => setTimeout(() => play(9, () => { if (state.intro) { showHero(); toast(t().toast); } }, D0), 500));
 }
 
 init().catch((e) => {
