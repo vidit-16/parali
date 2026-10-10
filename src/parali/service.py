@@ -252,12 +252,13 @@ def respeak(store: Store, claim: dict, speaker: Speaker | None = None) -> dict:
 
 
 def after_decision(store: Store, claim_id: str, speaker: Speaker | None = None, rp=None, base_url: str = "",
-                   notify: Callable[[dict], int | None] | None = None) -> dict:
+                   notify: Callable[[dict], int | None] | None = None, cf=None) -> dict:
     """The slow part of an officer's decision, run after the decision itself is saved: the payment link for an
     advance to recover, the notice that carries it, the farmer's voice notes, and the WhatsApp message. Each step
     leaves an event, so the officer's page can show them landing one by one."""
-    from parali import payments
+    from parali import payments, payouts
     claim = _get(store, claim_id)
+    claim = payouts.release(store, claim, cf)  # an approved balance goes to the farmer's bank
     if (claim.get("settlement") or {}).get("state") == "recover_advance":
         claim = payments.issue_recovery(store, claim, rp, base_url)
         if (claim.get("recovery") or {}).get("status") == "issued":

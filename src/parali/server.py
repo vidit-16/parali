@@ -12,7 +12,9 @@ from parali import firms, service
 from parali.api import Deps, handle
 from parali.area import AreaStack
 from parali.fields import load_fields
+from parali import payouts
 from parali.payments import Razorpay, public_url
+from parali.payouts import Cashfree
 from parali.rules import Thresholds
 from parali.store import LocalStore
 
@@ -74,7 +76,8 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
 
     def run(claim_id):
         try:
-            service.run_season(store, claim_id, stacks, fires, th, speaker)
+            c = service.run_season(store, claim_id, stacks, fires, th, speaker)
+            payouts.release(store, c, Cashfree.from_keys())
         except Exception as e:  # keep the server up; show the failure on the claim
             c = store.get("claims", claim_id)
             c["error"] = str(e)
@@ -92,7 +95,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
             raise
 
     def followup(claim_id):
-        service.after_decision(store, claim_id, speaker, Razorpay.from_keys(), public_url())
+        service.after_decision(store, claim_id, speaker, Razorpay.from_keys(), public_url(), cf=Cashfree.from_keys())
 
     def reset():
         for sub in ("claims", "events", "blobs"):

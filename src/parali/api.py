@@ -24,6 +24,7 @@ class Deps:
     notify: Callable[[dict], None] | None = None             # tell the farmer an officer decided (WhatsApp)
     followup: Callable[[str], None] | None = None            # run the slow part of a decision in the background
     payments: Callable[[], object] | None = None             # Razorpay client for recovering advances, or None
+    payouts: Callable[[], object] | None = None              # Cashfree client for paying balances, or None (simulated)
     base_url: Callable[[], str] | None = None                # public address Razorpay sends the payer back to
 
 
@@ -107,7 +108,8 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             if deps.followup:
                 deps.followup(c["id"])
             else:
-                c = service.after_decision(s, c["id"], deps.speaker, _rp(deps), deps.base_url() if deps.base_url else "", deps.notify)
+                c = service.after_decision(s, c["id"], deps.speaker, _rp(deps), deps.base_url() if deps.base_url else "", deps.notify,
+                                           deps.payouts() if deps.payouts else None)
             return _json(200, _claim_view(s, c))
         if method == "POST" and path == "/api/check":
             from parali import check

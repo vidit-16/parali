@@ -82,6 +82,11 @@ def main():
         s, adv = c["settlement"], c.get("advance") or {}
         paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
         ok(s["state"] == "balance_due" and s["balance"] + paid == s["total"], "balance plus advance is the full incentive")
+        po = c.get("payout") or {}
+        if po:
+            ok(po.get("status") == "SUCCESS" and po.get("amount") == s["balance"], f"balance paid through Cashfree: {po.get('status')} {po.get('cf_transfer_id')}")
+        else:
+            print("  note  no Cashfree keys: the payout stays simulated")
 
     print("assistant")
     pb = next(f for f in fields if f.get("state") == "PB")

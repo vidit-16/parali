@@ -12,7 +12,9 @@ from boto3.dynamodb.conditions import Key
 from parali import firms, service
 from parali.api import Deps, handle, officer_pin_from_env
 from parali.area import AreaStack, fetch_area
+from parali import payouts
 from parali.payments import Razorpay, public_url
+from parali.payouts import Cashfree
 from parali.rules import Thresholds
 from parali.store import AwsStore
 from parali.tts import Voice
@@ -126,7 +128,8 @@ def _notify(claim: dict) -> None:
 def process_handler(event, context):
     st = store()
     if event.get("followup"):
-        c = service.after_decision(st, event["followup"], _speaker(), Razorpay.from_keys(), public_url(), _notify_whatsapp)
+        c = service.after_decision(st, event["followup"], _speaker(), Razorpay.from_keys(), public_url(), _notify_whatsapp,
+                                   Cashfree.from_keys())
         return c["status"]
     if event.get("demo_reset"):  # daily: clear the demo and file one fresh claim per field, each in its own run
         from parali import season
@@ -155,6 +158,7 @@ def process_handler(event, context):
     for cid in ids:
         try:
             c = service.run_season(st, cid, stacks, fires(), th, _speaker())
+            c = payouts.release(st, c, Cashfree.from_keys())  # a clean field's balance goes out at once
             if not event.get("quiet"):
                 _notify(c)
             done.append({"id": cid, "status": c["status"]})

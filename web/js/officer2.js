@@ -28,9 +28,9 @@ const T = {
     ev: {
       submitted: "Claim filed", advance_assessed: "2024 checked for the advance", advance_paid: (x) => `Advance of ${rupees(x)} paid`,
       decided: "Satellite check done", appeal: "Farmer appealed", reviewed: (by, v) => `${by} ${v === "approve" ? "approved" : "confirmed the burn"}`,
-      balance_released: (x) => `${rupees(x)} released (DBT, simulated)`, recovery_notice: "Recovery notice drafted",
+      balance_released: (x) => `${rupees(x)} balance approved for payment`, recovery_notice: "Recovery notice drafted",
       recovery_link: (x) => `Payment link for ${rupees(x)} sent (Razorpay test)`, advance_recovered: (x) => `${rupees(x)} repaid by the farmer`,
-      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", appeal_whatsapp: "Farmer appealed on WhatsApp", callback_requested: "Farmer asked for a call",
+      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", appeal_whatsapp: "Farmer appealed on WhatsApp", payout_sent: (x) => `${rupees(x)} paid to the farmer's bank (Cashfree, test mode)`, payout_failed: (x) => `Payment of ${rupees(x)} failed; it will be sent again`, callback_requested: "Farmer asked for a call",
     },
     decide: "Your decision", note: "What you saw or checked on the ground",
     approve: (x) => `Approve · release ${rupees(x)}`, approveNo: "Approve", confirm: "Confirm burn",
@@ -38,7 +38,7 @@ const T = {
     stamp: { officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed" }, by: (id, at) => `${id} · ${at}`,
     notice: "Recovery notice", paylink: "Payment link", payWait: "Waiting for the farmer to pay", payDone: (x) => `${rupees(x)} received · case closed`,
     steps: { reviewed: "Decision recorded", recovery_notice: "Recovery notice drafted", recovery_link: "Payment link created",
-      balance_released: "Balance released to the farmer", farmer_told: "Farmer told in the app and on WhatsApp" },
+      balance_released: "Balance approved for payment", payout_sent: "Paid to the farmer's bank (Cashfree, test mode)", farmer_told: "Farmer told in the app and on WhatsApp" },
     colour: "Colour", infrared: "Infrared", irNote: "Burnt ground shows maroon, wet soil dark blue.", irWait: "Infrared frames come with the satellite check.",
     signal: "Plant signal (NBR) through the season: a burn drops it below zero",
     empty: "Nothing waiting. The rules settled every claim.", acres: "acres", scheme: (st) => `${st === "HR" ? "Haryana" : "Punjab"} · ₹1,000 an acre, half before harvest`,
@@ -67,9 +67,9 @@ const T = {
     ev: {
       submitted: "दावा दर्ज", advance_assessed: "अग्रिम के लिए 2024 जाँचा", advance_paid: (x) => `${rupees(x)} अग्रिम दिया`,
       decided: "उपग्रह जाँच पूरी", appeal: "किसान ने अपील की", reviewed: (by, v) => `${by} ने ${v === "approve" ? "मंज़ूर किया" : "जलना पक्का किया"}`,
-      balance_released: (x) => `${rupees(x)} भेजे (DBT, नकली)`, recovery_notice: "वसूली नोटिस बना",
+      balance_released: (x) => `${rupees(x)} बाकी राशि भुगतान के लिए मंज़ूर`, recovery_notice: "वसूली नोटिस बना",
       recovery_link: (x) => `${rupees(x)} का भुगतान लिंक भेजा (Razorpay टेस्ट)`, advance_recovered: (x) => `किसान ने ${rupees(x)} लौटाए`,
-      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", callback_requested: "किसान ने फ़ोन माँगा",
+      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", payout_sent: (x) => `${rupees(x)} किसान के बैंक खाते में भेजे (Cashfree, टेस्ट)`, payout_failed: (x) => `${rupees(x)} का भुगतान नहीं हुआ; दोबारा भेजा जाएगा`, callback_requested: "किसान ने फ़ोन माँगा",
     },
     decide: "आपका फ़ैसला", note: "आपने खेत पर क्या देखा या जाँचा",
     approve: (x) => `मंज़ूर करें · ${rupees(x)}`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
@@ -77,7 +77,7 @@ const T = {
     stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का" }, by: (id, at) => `${id} · ${at}`,
     notice: "वसूली नोटिस", paylink: "भुगतान लिंक", payWait: "किसान के भुगतान का इंतज़ार", payDone: (x) => `${rupees(x)} मिले · मामला बंद`,
     steps: { reviewed: "फ़ैसला दर्ज", recovery_notice: "वसूली नोटिस का मसौदा बना", recovery_link: "भुगतान लिंक बना",
-      balance_released: "बाकी राशि किसान को भेजी", farmer_told: "किसान को ऐप और WhatsApp पर बताया" },
+      balance_released: "बाकी राशि भुगतान के लिए मंज़ूर", payout_sent: "किसान के बैंक खाते में भेजी (Cashfree, टेस्ट)", farmer_told: "किसान को ऐप और WhatsApp पर बताया" },
     colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जली ज़मीन मैरून दिखती है, गीली मिट्टी गहरी नीली।", irWait: "इन्फ्रारेड तस्वीरें उपग्रह जाँच के साथ आती हैं।",
     signal: "सीज़न भर पौधों का संकेत (NBR): जलने पर यह शून्य से नीचे गिरता है",
     empty: "कुछ बाकी नहीं। नियमों ने हर दावा तय कर दिया।", acres: "एकड़", scheme: (st) => `${st === "HR" ? "हरियाणा" : "पंजाब"} · ₹1,000 प्रति एकड़, आधा कटाई से पहले`,
@@ -106,9 +106,9 @@ const T = {
     ev: {
       submitted: "ਦਾਅਵਾ ਦਰਜ", advance_assessed: "ਅਗਾਊਂ ਲਈ 2024 ਜਾਂਚਿਆ", advance_paid: (x) => `${rupees(x)} ਅਗਾਊਂ ਦਿੱਤੇ`,
       decided: "ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਪੂਰੀ", appeal: "ਕਿਸਾਨ ਨੇ ਅਪੀਲ ਕੀਤੀ", reviewed: (by, v) => `${by} ਨੇ ${v === "approve" ? "ਮਨਜ਼ੂਰ ਕੀਤਾ" : "ਸਾੜ ਪੱਕਾ ਕੀਤਾ"}`,
-      balance_released: (x) => `${rupees(x)} ਭੇਜੇ (DBT, ਨਕਲੀ)`, recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਬਣਿਆ",
+      balance_released: (x) => `${rupees(x)} ਬਾਕੀ ਰਕਮ ਭੁਗਤਾਨ ਲਈ ਮਨਜ਼ੂਰ`, recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਬਣਿਆ",
       recovery_link: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਲਿੰਕ ਭੇਜਿਆ (Razorpay ਟੈਸਟ)`, advance_recovered: (x) => `ਕਿਸਾਨ ਨੇ ${rupees(x)} ਵਾਪਸ ਕੀਤੇ`,
-      recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
+      recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", payout_sent: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ (Cashfree, ਟੈਸਟ)`, payout_failed: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ; ਦੁਬਾਰਾ ਭੇਜਿਆ ਜਾਵੇਗਾ`, callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
     },
     decide: "ਤੁਹਾਡਾ ਫ਼ੈਸਲਾ", note: "ਤੁਸੀਂ ਖੇਤ ਵਿੱਚ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ",
     approve: (x) => `ਮਨਜ਼ੂਰ ਕਰੋ · ${rupees(x)}`, approveNo: "ਮਨਜ਼ੂਰ ਕਰੋ", confirm: "ਸਾੜ ਪੱਕਾ ਕਰੋ",
@@ -116,7 +116,7 @@ const T = {
     stamp: { officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ" }, by: (id, at) => `${id} · ${at}`,
     notice: "ਵਸੂਲੀ ਨੋਟਿਸ", paylink: "ਭੁਗਤਾਨ ਲਿੰਕ", payWait: "ਕਿਸਾਨ ਦੇ ਭੁਗਤਾਨ ਦੀ ਉਡੀਕ", payDone: (x) => `${rupees(x)} ਮਿਲੇ · ਮਾਮਲਾ ਬੰਦ`,
     steps: { reviewed: "ਫ਼ੈਸਲਾ ਦਰਜ", recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਦਾ ਮਸੌਦਾ ਬਣਿਆ", recovery_link: "ਭੁਗਤਾਨ ਲਿੰਕ ਬਣਿਆ",
-      balance_released: "ਬਾਕੀ ਰਕਮ ਕਿਸਾਨ ਨੂੰ ਭੇਜੀ", farmer_told: "ਕਿਸਾਨ ਨੂੰ ਐਪ ਅਤੇ WhatsApp ਉੱਤੇ ਦੱਸਿਆ" },
+      balance_released: "ਬਾਕੀ ਰਕਮ ਭੁਗਤਾਨ ਲਈ ਮਨਜ਼ੂਰ", payout_sent: "ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ (Cashfree, ਟੈਸਟ)", farmer_told: "ਕਿਸਾਨ ਨੂੰ ਐਪ ਅਤੇ WhatsApp ਉੱਤੇ ਦੱਸਿਆ" },
     colour: "ਰੰਗੀਨ", infrared: "ਇਨਫ੍ਰਾਰੈੱਡ", irNote: "ਸੜੀ ਜ਼ਮੀਨ ਮੈਰੂਨ ਦਿਸਦੀ ਹੈ, ਗਿੱਲੀ ਮਿੱਟੀ ਗੂੜ੍ਹੀ ਨੀਲੀ।", irWait: "ਇਨਫ੍ਰਾਰੈੱਡ ਤਸਵੀਰਾਂ ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਨਾਲ ਆਉਂਦੀਆਂ ਹਨ।",
     signal: "ਸੀਜ਼ਨ ਭਰ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ (NBR): ਸਾੜਨ ਤੇ ਇਹ ਸਿਫ਼ਰ ਤੋਂ ਹੇਠਾਂ ਡਿੱਗਦਾ ਹੈ",
     empty: "ਕੁਝ ਬਾਕੀ ਨਹੀਂ। ਨਿਯਮਾਂ ਨੇ ਹਰ ਦਾਅਵਾ ਤੈਅ ਕਰ ਦਿੱਤਾ।", acres: "ਏਕੜ", scheme: (st) => `${st === "HR" ? "ਹਰਿਆਣਾ" : "ਪੰਜਾਬ"} · ₹1,000 ਪ੍ਰਤੀ ਏਕੜ, ਅੱਧਾ ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ`,
@@ -286,7 +286,7 @@ async function decide(verdict) {
 // after a decision the server finishes the rest in the background; tick each step off as its event lands
 async function followSteps(verdict) {
   const L = t(), id = S.sel;
-  const keys = verdict === "confirm_burnt" ? ["reviewed", "recovery_notice", "recovery_link", "farmer_told"] : ["reviewed", "balance_released", "farmer_told"];
+  const keys = verdict === "confirm_burnt" ? ["reviewed", "recovery_notice", "recovery_link", "farmer_told"] : ["reviewed", "balance_released", "payout_sent", "farmer_told"];
   const box = $(".decide");
   if (!box) return;
   box.classList.add("working");
@@ -294,7 +294,7 @@ async function followSteps(verdict) {
   for (let i = 0; i < 40; i++) {
     const c = await getJSON(`/api/claims/${id}`).catch(() => null);
     const seen = new Set((c?.events || []).map((e) => e.type));
-    if (c?.status === "officer_approved" && c.settlement?.state !== "balance_due") seen.add("balance_released");  // nothing left to pay
+    if (c?.status === "officer_approved" && c.settlement?.state !== "balance_due") { seen.add("balance_released"); seen.add("payout_sent"); }  // nothing left to pay
     const finished = seen.has("farmer_told");
     $$(".steps li", box).forEach((li) => {
       const k = li.dataset.k;
