@@ -3,170 +3,6 @@
   "advance_eligible": true,
   "acres": 5.7,
   "result": {
-   "previous": {
-    "season": "2024",
-    "decision": {
-     "outcome": "auto_approved",
-     "rule": "no_burn_signal",
-     "reason": "22 clear images, no burn-like change, no fire point nearby.",
-     "burn_date": null,
-     "clear_dates": [
-      "2024-10-03",
-      "2024-10-05",
-      "2024-10-08",
-      "2024-10-10",
-      "2024-10-13",
-      "2024-10-15",
-      "2024-10-18",
-      "2024-10-20",
-      "2024-10-23",
-      "2024-10-25",
-      "2024-10-28",
-      "2024-10-30",
-      "2024-11-02",
-      "2024-11-04",
-      "2024-11-07",
-      "2024-11-09",
-      "2024-11-12",
-      "2024-11-19",
-      "2024-11-22",
-      "2024-11-24",
-      "2024-11-27",
-      "2024-11-29"
-     ],
-     "max_dark_share": 0.0,
-     "fires_nearby": 0
-    },
-    "series": [
-     {
-      "date": "2024-09-25",
-      "nbr": null,
-      "valid": 0.0
-     },
-     {
-      "date": "2024-09-28",
-      "nbr": 0.6949,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-09-30",
-      "nbr": 0.6395,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-03",
-      "nbr": 0.6745,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-05",
-      "nbr": 0.6048,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-08",
-      "nbr": 0.5802,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-10",
-      "nbr": 0.5195,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-13",
-      "nbr": 0.4892,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-15",
-      "nbr": 0.3973,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-18",
-      "nbr": 0.1255,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-20",
-      "nbr": 0.0847,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-23",
-      "nbr": 0.055,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-25",
-      "nbr": -0.1967,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-28",
-      "nbr": -0.1453,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-30",
-      "nbr": -0.1308,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-02",
-      "nbr": -0.0689,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-04",
-      "nbr": -0.1708,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-07",
-      "nbr": -0.0637,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-09",
-      "nbr": -0.0984,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-12",
-      "nbr": -0.0526,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-19",
-      "nbr": -0.0597,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-22",
-      "nbr": 0.1296,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-24",
-      "nbr": 0.016,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-27",
-      "nbr": 0.0553,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-29",
-      "nbr": 0.4099,
-      "valid": 1.0
-     }
-    ],
-    "fires": [],
-    "evidence_url": "data/checks/f-baljeet-previous.png"
-   },
    "current": {
     "season": "2025",
     "decision": {
@@ -203,6 +39,16 @@
      "max_dark_share": 1.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-06",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -352,20 +198,13 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-baljeet-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:00Z"
- },
- "f-gurpreet": {
-  "advance_eligible": true,
-  "acres": 4.8,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
      "outcome": "auto_approved",
      "rule": "no_burn_signal",
-     "reason": "21 clear images, no burn-like change, no fire point nearby.",
+     "reason": "22 clear images, no burn-like change, no fire point nearby.",
      "burn_date": null,
      "clear_dates": [
       "2024-10-03",
@@ -384,6 +223,7 @@
       "2024-11-04",
       "2024-11-07",
       "2024-11-09",
+      "2024-11-12",
       "2024-11-19",
       "2024-11-22",
       "2024-11-24",
@@ -393,136 +233,153 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-28",
+     "2024-10-05",
+     "2024-10-15",
+     "2024-10-23",
+     "2024-10-30",
+     "2024-11-07",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.6686,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-09-28",
       "nbr": null,
       "valid": 0.0
      },
      {
+      "date": "2024-09-28",
+      "nbr": 0.6949,
+      "valid": 1.0
+     },
+     {
       "date": "2024-09-30",
-      "nbr": 0.595,
-      "valid": 0.78
+      "nbr": 0.6395,
+      "valid": 1.0
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.5942,
+      "nbr": 0.6745,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.5161,
+      "nbr": 0.6048,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.4974,
+      "nbr": 0.5802,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.4822,
+      "nbr": 0.5195,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.4157,
+      "nbr": 0.4892,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.2983,
+      "nbr": 0.3973,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.2322,
+      "nbr": 0.1255,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.167,
+      "nbr": 0.0847,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.025,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-25",
-      "nbr": -0.0521,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-28",
-      "nbr": -0.0227,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-30",
-      "nbr": -0.0045,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-02",
-      "nbr": -0.0383,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-04",
-      "nbr": -0.0659,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-07",
-      "nbr": -0.1049,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-09",
-      "nbr": -0.1689,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-12",
-      "nbr": null,
-      "valid": 0.0
-     },
-     {
-      "date": "2024-11-19",
-      "nbr": -0.1918,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-22",
       "nbr": 0.055,
       "valid": 1.0
      },
      {
+      "date": "2024-10-25",
+      "nbr": -0.1967,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-28",
+      "nbr": -0.1453,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-30",
+      "nbr": -0.1308,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-02",
+      "nbr": -0.0689,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-04",
+      "nbr": -0.1708,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-07",
+      "nbr": -0.0637,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-09",
+      "nbr": -0.0984,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-12",
+      "nbr": -0.0526,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-19",
+      "nbr": -0.0597,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-22",
+      "nbr": 0.1296,
+      "valid": 1.0
+     },
+     {
       "date": "2024-11-24",
-      "nbr": -0.1525,
+      "nbr": 0.016,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": 0.066,
+      "nbr": 0.0553,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.0508,
+      "nbr": 0.4099,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-gurpreet-previous.png"
-   },
+    "evidence_url": "data/checks/f-baljeet-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:05Z"
+ },
+ "f-gurpreet": {
+  "advance_eligible": true,
+  "acres": 4.8,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -559,6 +416,16 @@
      "max_dark_share": 1.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-06",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -713,20 +580,13 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-gurpreet-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:02Z"
- },
- "f-harjinder": {
-  "advance_eligible": true,
-  "acres": 3.1,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
      "outcome": "auto_approved",
      "rule": "no_burn_signal",
-     "reason": "22 clear images, no burn-like change, no fire point nearby.",
+     "reason": "21 clear images, no burn-like change, no fire point nearby.",
      "burn_date": null,
      "clear_dates": [
       "2024-10-03",
@@ -745,7 +605,6 @@
       "2024-11-04",
       "2024-11-07",
       "2024-11-09",
-      "2024-11-12",
       "2024-11-19",
       "2024-11-22",
       "2024-11-24",
@@ -755,136 +614,153 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-25",
+     "2024-10-05",
+     "2024-10-13",
+     "2024-10-20",
+     "2024-10-30",
+     "2024-11-07",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.6716,
-      "valid": 0.56
+      "nbr": 0.6686,
+      "valid": 1.0
      },
      {
       "date": "2024-09-28",
-      "nbr": 0.5822,
-      "valid": 0.44
-     },
-     {
-      "date": "2024-09-30",
       "nbr": null,
       "valid": 0.0
      },
      {
+      "date": "2024-09-30",
+      "nbr": 0.595,
+      "valid": 0.78
+     },
+     {
       "date": "2024-10-03",
-      "nbr": 0.5936,
+      "nbr": 0.5942,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.5342,
+      "nbr": 0.5161,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.5027,
+      "nbr": 0.4974,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.4532,
+      "nbr": 0.4822,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.3855,
+      "nbr": 0.4157,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.2479,
+      "nbr": 0.2983,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.3595,
+      "nbr": 0.2322,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.4071,
+      "nbr": 0.167,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.3517,
+      "nbr": 0.025,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.421,
+      "nbr": -0.0521,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": 0.3939,
+      "nbr": -0.0227,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.2804,
+      "nbr": -0.0045,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": 0.3307,
+      "nbr": -0.0383,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": 0.2389,
+      "nbr": -0.0659,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": 0.4097,
+      "nbr": -0.1049,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": 0.3053,
+      "nbr": -0.1689,
       "valid": 1.0
      },
      {
       "date": "2024-11-12",
-      "nbr": 0.3437,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-11-19",
-      "nbr": 0.212,
+      "nbr": -0.1918,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": 0.2973,
+      "nbr": 0.055,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": 0.1349,
+      "nbr": -0.1525,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": 0.2567,
+      "nbr": 0.066,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.2761,
+      "nbr": 0.0508,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-harjinder-previous.png"
-   },
+    "evidence_url": "data/checks/f-gurpreet-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:05Z"
+ },
+ "f-harjinder": {
+  "advance_eligible": true,
+  "acres": 3.1,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -922,6 +798,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-13",
+     "2025-10-20",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -1071,14 +957,7 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-harjinder-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:01Z"
- },
- "f-jaswant": {
-  "advance_eligible": true,
-  "acres": 2.8,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
@@ -1113,136 +992,153 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-10-03",
+     "2024-10-10",
+     "2024-10-18",
+     "2024-10-25",
+     "2024-11-02",
+     "2024-11-09",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.4969,
-      "valid": 0.25
+      "nbr": 0.6716,
+      "valid": 0.56
      },
      {
       "date": "2024-09-28",
-      "nbr": 0.5561,
-      "valid": 0.35
+      "nbr": 0.5822,
+      "valid": 0.44
      },
      {
       "date": "2024-09-30",
-      "nbr": 0.6994,
-      "valid": 0.9
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.6385,
+      "nbr": 0.5936,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.5768,
+      "nbr": 0.5342,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.5444,
+      "nbr": 0.5027,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.4976,
+      "nbr": 0.4532,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.4327,
+      "nbr": 0.3855,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.2981,
+      "nbr": 0.2479,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.2511,
+      "nbr": 0.3595,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.2397,
+      "nbr": 0.4071,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.2754,
+      "nbr": 0.3517,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.1205,
+      "nbr": 0.421,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": 0.0486,
+      "nbr": 0.3939,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.0203,
+      "nbr": 0.2804,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": 0.0222,
+      "nbr": 0.3307,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.0523,
+      "nbr": 0.2389,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": 0.0527,
+      "nbr": 0.4097,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.0348,
+      "nbr": 0.3053,
       "valid": 1.0
      },
      {
       "date": "2024-11-12",
-      "nbr": -0.0057,
+      "nbr": 0.3437,
       "valid": 1.0
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.0626,
+      "nbr": 0.212,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": 0.1168,
+      "nbr": 0.2973,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": 0.151,
+      "nbr": 0.1349,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": 0.1149,
+      "nbr": 0.2567,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.1286,
+      "nbr": 0.2761,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-jaswant-previous.png"
-   },
+    "evidence_url": "data/checks/f-harjinder-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:05Z"
+ },
+ "f-jaswant": {
+  "advance_eligible": true,
+  "acres": 2.8,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -1280,6 +1176,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-13",
+     "2025-10-20",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -1429,14 +1335,7 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-jaswant-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:01Z"
- },
- "f-kamlesh": {
-  "advance_eligible": true,
-  "acres": 3.8,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
@@ -1471,136 +1370,153 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-30",
+     "2024-10-08",
+     "2024-10-15",
+     "2024-10-23",
+     "2024-11-02",
+     "2024-11-09",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.5763,
-      "valid": 0.03
+      "nbr": 0.4969,
+      "valid": 0.25
      },
      {
       "date": "2024-09-28",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.5561,
+      "valid": 0.35
      },
      {
       "date": "2024-09-30",
-      "nbr": 0.5768,
-      "valid": 1.0
+      "nbr": 0.6994,
+      "valid": 0.9
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.5546,
+      "nbr": 0.6385,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.4217,
+      "nbr": 0.5768,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.4327,
+      "nbr": 0.5444,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.366,
+      "nbr": 0.4976,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.339,
+      "nbr": 0.4327,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.2593,
+      "nbr": 0.2981,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.2477,
+      "nbr": 0.2511,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.2132,
+      "nbr": 0.2397,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.0741,
+      "nbr": 0.2754,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.0224,
+      "nbr": 0.1205,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": 0.1511,
+      "nbr": 0.0486,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.1575,
+      "nbr": 0.0203,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": 0.1122,
+      "nbr": 0.0222,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": 0.0376,
+      "nbr": -0.0523,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": 0.1072,
+      "nbr": 0.0527,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": 0.0726,
+      "nbr": -0.0348,
       "valid": 1.0
      },
      {
       "date": "2024-11-12",
-      "nbr": 0.0918,
+      "nbr": -0.0057,
       "valid": 1.0
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.0634,
+      "nbr": -0.0626,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": 0.0786,
+      "nbr": 0.1168,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.0718,
+      "nbr": 0.151,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": -0.0872,
+      "nbr": 0.1149,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": -0.0686,
+      "nbr": 0.1286,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-kamlesh-previous.png"
-   },
+    "evidence_url": "data/checks/f-jaswant-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:05Z"
+ },
+ "f-kamlesh": {
+  "advance_eligible": true,
+  "acres": 3.8,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -1638,6 +1554,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-13",
+     "2025-10-20",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -1787,20 +1713,13 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-kamlesh-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:16Z"
- },
- "f-mahender": {
-  "advance_eligible": true,
-  "acres": 3.7,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
      "outcome": "auto_approved",
      "rule": "no_burn_signal",
-     "reason": "20 clear images, no burn-like change, no fire point nearby.",
+     "reason": "22 clear images, no burn-like change, no fire point nearby.",
      "burn_date": null,
      "clear_dates": [
       "2024-10-03",
@@ -1817,9 +1736,11 @@
       "2024-10-30",
       "2024-11-02",
       "2024-11-04",
+      "2024-11-07",
       "2024-11-09",
       "2024-11-12",
       "2024-11-19",
+      "2024-11-22",
       "2024-11-24",
       "2024-11-27",
       "2024-11-29"
@@ -1827,136 +1748,153 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-30",
+     "2024-10-08",
+     "2024-10-15",
+     "2024-10-23",
+     "2024-11-02",
+     "2024-11-09",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.7888,
-      "valid": 0.33
+      "nbr": 0.5763,
+      "valid": 0.03
      },
      {
       "date": "2024-09-28",
-      "nbr": 0.7428,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-09-30",
-      "nbr": 0.6739,
+      "nbr": 0.5768,
       "valid": 1.0
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.6904,
+      "nbr": 0.5546,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.6345,
+      "nbr": 0.4217,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.6264,
+      "nbr": 0.4327,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.5847,
+      "nbr": 0.366,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.5654,
+      "nbr": 0.339,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.4879,
+      "nbr": 0.2593,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.4632,
+      "nbr": 0.2477,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.3942,
+      "nbr": 0.2132,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.3747,
+      "nbr": 0.0741,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.2608,
+      "nbr": 0.0224,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": 0.1044,
+      "nbr": 0.1511,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.0012,
+      "nbr": 0.1575,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": -0.0156,
+      "nbr": 0.1122,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.0609,
+      "nbr": 0.0376,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.1072,
+      "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.1559,
+      "nbr": 0.0726,
       "valid": 1.0
      },
      {
       "date": "2024-11-12",
-      "nbr": -0.1256,
+      "nbr": 0.0918,
       "valid": 1.0
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.1457,
+      "nbr": -0.0634,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.0786,
+      "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.1378,
+      "nbr": -0.0718,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": -0.1461,
+      "nbr": -0.0872,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": -0.1231,
+      "nbr": -0.0686,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-mahender-previous.png"
-   },
+    "evidence_url": "data/checks/f-kamlesh-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:18Z"
+ },
+ "f-mahender": {
+  "advance_eligible": true,
+  "acres": 3.7,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -1992,6 +1930,16 @@
      "max_dark_share": 1.0,
      "fires_nearby": 2
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-05",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-06",
+     "2025-11-14",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -2152,21 +2100,14 @@
      }
     ],
     "evidence_url": "data/checks/f-mahender-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:16Z"
- },
- "f-omprakash": {
-  "advance_eligible": false,
-  "acres": 3.2,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
-     "outcome": "possible_burn",
-     "rule": "burn_scar_persistent",
-     "reason": "NIR fell sharply and 100% of the field turned near-black on 2024-11-09. Officer to confirm.",
-     "burn_date": "2024-11-09",
+     "outcome": "auto_approved",
+     "rule": "no_burn_signal",
+     "reason": "20 clear images, no burn-like change, no fire point nearby.",
+     "burn_date": null,
      "clear_dates": [
       "2024-10-03",
       "2024-10-05",
@@ -2182,148 +2123,163 @@
       "2024-10-30",
       "2024-11-02",
       "2024-11-04",
-      "2024-11-07",
       "2024-11-09",
       "2024-11-12",
       "2024-11-19",
-      "2024-11-22",
       "2024-11-24",
       "2024-11-27",
       "2024-11-29"
      ],
-     "max_dark_share": 1.0,
+     "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-28",
+     "2024-10-05",
+     "2024-10-13",
+     "2024-10-20",
+     "2024-10-28",
+     "2024-11-04",
+     "2024-11-19",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.6104,
-      "valid": 0.88
+      "nbr": 0.7888,
+      "valid": 0.33
      },
      {
       "date": "2024-09-28",
-      "nbr": 0.5953,
+      "nbr": 0.7428,
       "valid": 1.0
      },
      {
       "date": "2024-09-30",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.6739,
+      "valid": 1.0
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.541,
+      "nbr": 0.6904,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.442,
+      "nbr": 0.6345,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.4134,
+      "nbr": 0.6264,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.2372,
+      "nbr": 0.5847,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.2732,
+      "nbr": 0.5654,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.1709,
+      "nbr": 0.4879,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.1018,
+      "nbr": 0.4632,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.0419,
+      "nbr": 0.3942,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": 0.331,
+      "nbr": 0.3747,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.1507,
+      "nbr": 0.2608,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": 0.1413,
+      "nbr": 0.1044,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.0871,
+      "nbr": 0.0012,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": 0.0182,
+      "nbr": -0.0156,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.0617,
+      "nbr": -0.0609,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": -0.0856,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.2325,
+      "nbr": -0.1559,
       "valid": 1.0
      },
      {
       "date": "2024-11-12",
-      "nbr": -0.1994,
+      "nbr": -0.1256,
       "valid": 1.0
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.1569,
+      "nbr": -0.1457,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": 0.0243,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.1056,
+      "nbr": -0.1378,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": -0.0663,
+      "nbr": -0.1461,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.0883,
+      "nbr": -0.1231,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-omprakash-previous.png"
-   },
+    "evidence_url": "data/checks/f-mahender-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:18Z"
+ },
+ "f-omprakash": {
+  "advance_eligible": false,
+  "acres": 3.2,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -2360,6 +2316,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -2509,42 +2475,61 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-omprakash-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:17Z"
- },
- "f-rajbala": {
-  "advance_eligible": true,
-  "acres": 4.7,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
-     "outcome": "auto_approved",
-     "rule": "no_burn_signal",
-     "reason": "11 clear images, no burn-like change, no fire point nearby.",
-     "burn_date": null,
+     "outcome": "possible_burn",
+     "rule": "burn_scar_persistent",
+     "reason": "NIR fell sharply and 100% of the field turned near-black on 2024-11-09. Officer to confirm.",
+     "burn_date": "2024-11-09",
      "clear_dates": [
+      "2024-10-03",
       "2024-10-05",
+      "2024-10-08",
       "2024-10-10",
+      "2024-10-13",
       "2024-10-15",
+      "2024-10-18",
       "2024-10-20",
+      "2024-10-23",
       "2024-10-25",
+      "2024-10-28",
       "2024-10-30",
+      "2024-11-02",
       "2024-11-04",
+      "2024-11-07",
       "2024-11-09",
+      "2024-11-12",
       "2024-11-19",
+      "2024-11-22",
       "2024-11-24",
+      "2024-11-27",
       "2024-11-29"
      ],
-     "max_dark_share": 0.0,
+     "max_dark_share": 1.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-25",
+     "2024-10-05",
+     "2024-10-15",
+     "2024-10-23",
+     "2024-10-30",
+     "2024-11-09",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.6104,
+      "valid": 0.88
+     },
+     {
+      "date": "2024-09-28",
+      "nbr": 0.5953,
+      "valid": 1.0
      },
      {
       "date": "2024-09-30",
@@ -2552,64 +2537,126 @@
       "valid": 0.0
      },
      {
+      "date": "2024-10-03",
+      "nbr": 0.541,
+      "valid": 1.0
+     },
+     {
       "date": "2024-10-05",
-      "nbr": 0.0833,
+      "nbr": 0.442,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-08",
+      "nbr": 0.4134,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.0558,
+      "nbr": 0.2372,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-13",
+      "nbr": 0.2732,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.0631,
+      "nbr": 0.1709,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-18",
+      "nbr": 0.1018,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.0627,
+      "nbr": 0.0419,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-23",
+      "nbr": 0.331,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": -0.0175,
+      "nbr": 0.1507,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-28",
+      "nbr": 0.1413,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.058,
+      "nbr": 0.0871,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-02",
+      "nbr": 0.0182,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": 0.1732,
+      "nbr": -0.0617,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-07",
+      "nbr": -0.0856,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": 0.2213,
+      "nbr": -0.2325,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-12",
+      "nbr": -0.1994,
       "valid": 1.0
      },
      {
       "date": "2024-11-19",
-      "nbr": 0.1763,
+      "nbr": -0.1569,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-22",
+      "nbr": 0.0243,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": 0.0755,
+      "nbr": -0.1056,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-27",
+      "nbr": -0.0663,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.0402,
+      "nbr": 0.0883,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-rajbala-previous.png"
-   },
+    "evidence_url": "data/checks/f-omprakash-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:18Z"
+ },
+ "f-rajbala": {
+  "advance_eligible": true,
+  "acres": 4.7,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -2636,6 +2683,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-09-30",
+     "2025-10-15",
+     "2025-10-20",
+     "2025-11-04",
+     "2025-11-09",
+     "2025-11-24",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -2725,55 +2782,43 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-rajbala-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:22Z"
- },
- "f-rajesh": {
-  "advance_eligible": false,
-  "acres": 4.4,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
-     "outcome": "needs_review",
-     "rule": "partial_scar",
-     "reason": "Up to 46% of the field looked dark; below the 30% burn level.",
+     "outcome": "auto_approved",
+     "rule": "no_burn_signal",
+     "reason": "11 clear images, no burn-like change, no fire point nearby.",
      "burn_date": null,
      "clear_dates": [
-      "2024-10-03",
       "2024-10-05",
-      "2024-10-08",
       "2024-10-10",
-      "2024-10-13",
       "2024-10-15",
-      "2024-10-18",
       "2024-10-20",
-      "2024-10-23",
       "2024-10-25",
-      "2024-10-28",
       "2024-10-30",
-      "2024-11-02",
       "2024-11-04",
-      "2024-11-07",
       "2024-11-09",
       "2024-11-19",
-      "2024-11-22",
       "2024-11-24",
-      "2024-11-27",
       "2024-11-29"
      ],
-     "max_dark_share": 0.462,
+     "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-10-05",
+     "2024-10-10",
+     "2024-10-20",
+     "2024-10-25",
+     "2024-11-04",
+     "2024-11-09",
+     "2024-11-24",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": null,
-      "valid": 0.0
-     },
-     {
-      "date": "2024-09-28",
       "nbr": null,
       "valid": 0.0
      },
@@ -2783,119 +2828,71 @@
       "valid": 0.0
      },
      {
-      "date": "2024-10-03",
-      "nbr": 0.6459,
-      "valid": 1.0
-     },
-     {
       "date": "2024-10-05",
-      "nbr": 0.5599,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-08",
-      "nbr": 0.4544,
+      "nbr": 0.0833,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.4215,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-13",
-      "nbr": 0.3863,
+      "nbr": 0.0558,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.1692,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-18",
-      "nbr": 0.3649,
+      "nbr": 0.0631,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.3369,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-23",
-      "nbr": 0.2651,
+      "nbr": 0.0627,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": 0.2432,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-10-28",
-      "nbr": 0.1727,
+      "nbr": -0.0175,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": 0.063,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-02",
-      "nbr": -0.0237,
+      "nbr": 0.058,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.1325,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-07",
-      "nbr": -0.0919,
+      "nbr": 0.1732,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.2064,
+      "nbr": 0.2213,
       "valid": 1.0
-     },
-     {
-      "date": "2024-11-12",
-      "nbr": null,
-      "valid": 0.0
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.1233,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-22",
-      "nbr": 0.0707,
+      "nbr": 0.1763,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.0651,
-      "valid": 1.0
-     },
-     {
-      "date": "2024-11-27",
-      "nbr": -0.0149,
+      "nbr": 0.0755,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.0118,
+      "nbr": 0.0402,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-rajesh-previous.png"
-   },
+    "evidence_url": "data/checks/f-rajbala-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:24Z"
+ },
+ "f-rajesh": {
+  "advance_eligible": false,
+  "acres": 4.4,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -2932,6 +2929,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -3086,20 +3093,13 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-rajesh-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:36Z"
- },
- "f-satbir": {
-  "advance_eligible": false,
-  "acres": 2.7,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
      "outcome": "needs_review",
      "rule": "partial_scar",
-     "reason": "Up to 54% of the field looked dark; below the 30% burn level.",
+     "reason": "Up to 46% of the field looked dark; below the 30% burn level.",
      "burn_date": null,
      "clear_dates": [
       "2024-10-03",
@@ -3124,14 +3124,24 @@
       "2024-11-27",
       "2024-11-29"
      ],
-     "max_dark_share": 0.542,
+     "max_dark_share": 0.462,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-10-03",
+     "2024-10-10",
+     "2024-10-18",
+     "2024-10-25",
+     "2024-10-30",
+     "2024-11-07",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
-      "nbr": 0.6793,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-09-28",
@@ -3140,87 +3150,87 @@
      },
      {
       "date": "2024-09-30",
-      "nbr": 0.6009,
-      "valid": 1.0
+      "nbr": null,
+      "valid": 0.0
      },
      {
       "date": "2024-10-03",
-      "nbr": 0.5862,
+      "nbr": 0.6459,
       "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.4981,
+      "nbr": 0.5599,
       "valid": 1.0
      },
      {
       "date": "2024-10-08",
-      "nbr": 0.4185,
+      "nbr": 0.4544,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.3249,
+      "nbr": 0.4215,
       "valid": 1.0
      },
      {
       "date": "2024-10-13",
-      "nbr": 0.2678,
+      "nbr": 0.3863,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.1866,
+      "nbr": 0.1692,
       "valid": 1.0
      },
      {
       "date": "2024-10-18",
-      "nbr": 0.0712,
+      "nbr": 0.3649,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.0406,
+      "nbr": 0.3369,
       "valid": 1.0
      },
      {
       "date": "2024-10-23",
-      "nbr": -0.1072,
+      "nbr": 0.2651,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": -0.1714,
+      "nbr": 0.2432,
       "valid": 1.0
      },
      {
       "date": "2024-10-28",
-      "nbr": -0.0464,
+      "nbr": 0.1727,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": -0.0948,
+      "nbr": 0.063,
       "valid": 1.0
      },
      {
       "date": "2024-11-02",
-      "nbr": -0.0505,
+      "nbr": -0.0237,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.1458,
+      "nbr": -0.1325,
       "valid": 1.0
      },
      {
       "date": "2024-11-07",
-      "nbr": -0.0242,
+      "nbr": -0.0919,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.1664,
+      "nbr": -0.2064,
       "valid": 1.0
      },
      {
@@ -3230,33 +3240,40 @@
      },
      {
       "date": "2024-11-19",
-      "nbr": -0.1155,
+      "nbr": -0.1233,
       "valid": 1.0
      },
      {
       "date": "2024-11-22",
-      "nbr": 0.0393,
+      "nbr": 0.0707,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.0859,
+      "nbr": -0.0651,
       "valid": 1.0
      },
      {
       "date": "2024-11-27",
-      "nbr": -0.0429,
+      "nbr": -0.0149,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.1729,
+      "nbr": 0.0118,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-satbir-previous.png"
-   },
+    "evidence_url": "data/checks/f-rajesh-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:34Z"
+ },
+ "f-satbir": {
+  "advance_eligible": false,
+  "acres": 2.7,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -3293,6 +3310,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 1
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-10-03",
+     "2025-10-15",
+     "2025-10-23",
+     "2025-11-04",
+     "2025-11-12",
+     "2025-11-22",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -3453,107 +3480,187 @@
      }
     ],
     "evidence_url": "data/checks/f-satbir-current.png"
-   }
-  },
-  "checked_at": "2026-10-09T01:02:36Z"
- },
- "f-suresh": {
-  "advance_eligible": true,
-  "acres": 5.3,
-  "result": {
+   },
    "previous": {
     "season": "2024",
     "decision": {
-     "outcome": "auto_approved",
-     "rule": "no_burn_signal",
-     "reason": "11 clear images, no burn-like change, no fire point nearby.",
+     "outcome": "needs_review",
+     "rule": "partial_scar",
+     "reason": "Up to 54% of the field looked dark; below the 30% burn level.",
      "burn_date": null,
      "clear_dates": [
+      "2024-10-03",
       "2024-10-05",
+      "2024-10-08",
       "2024-10-10",
+      "2024-10-13",
       "2024-10-15",
+      "2024-10-18",
       "2024-10-20",
+      "2024-10-23",
       "2024-10-25",
+      "2024-10-28",
       "2024-10-30",
+      "2024-11-02",
       "2024-11-04",
+      "2024-11-07",
       "2024-11-09",
       "2024-11-19",
+      "2024-11-22",
       "2024-11-24",
+      "2024-11-27",
       "2024-11-29"
      ],
-     "max_dark_share": 0.0,
+     "max_dark_share": 0.542,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2024-09-25",
+     "2024-10-05",
+     "2024-10-13",
+     "2024-10-20",
+     "2024-10-30",
+     "2024-11-07",
+     "2024-11-22",
+     "2024-11-29"
+    ],
     "series": [
      {
       "date": "2024-09-25",
+      "nbr": 0.6793,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-09-28",
       "nbr": null,
       "valid": 0.0
      },
      {
       "date": "2024-09-30",
-      "nbr": null,
-      "valid": 0.0
+      "nbr": 0.6009,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-03",
+      "nbr": 0.5862,
+      "valid": 1.0
      },
      {
       "date": "2024-10-05",
-      "nbr": 0.0944,
+      "nbr": 0.4981,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-08",
+      "nbr": 0.4185,
       "valid": 1.0
      },
      {
       "date": "2024-10-10",
-      "nbr": 0.0409,
+      "nbr": 0.3249,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-13",
+      "nbr": 0.2678,
       "valid": 1.0
      },
      {
       "date": "2024-10-15",
-      "nbr": 0.2813,
+      "nbr": 0.1866,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-18",
+      "nbr": 0.0712,
       "valid": 1.0
      },
      {
       "date": "2024-10-20",
-      "nbr": 0.0499,
+      "nbr": 0.0406,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-23",
+      "nbr": -0.1072,
       "valid": 1.0
      },
      {
       "date": "2024-10-25",
-      "nbr": -0.0686,
+      "nbr": -0.1714,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-28",
+      "nbr": -0.0464,
       "valid": 1.0
      },
      {
       "date": "2024-10-30",
-      "nbr": -0.0882,
+      "nbr": -0.0948,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-02",
+      "nbr": -0.0505,
       "valid": 1.0
      },
      {
       "date": "2024-11-04",
-      "nbr": -0.1551,
+      "nbr": -0.1458,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-07",
+      "nbr": -0.0242,
       "valid": 1.0
      },
      {
       "date": "2024-11-09",
-      "nbr": -0.1226,
+      "nbr": -0.1664,
       "valid": 1.0
      },
      {
+      "date": "2024-11-12",
+      "nbr": null,
+      "valid": 0.0
+     },
+     {
       "date": "2024-11-19",
-      "nbr": -0.1547,
+      "nbr": -0.1155,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-22",
+      "nbr": 0.0393,
       "valid": 1.0
      },
      {
       "date": "2024-11-24",
-      "nbr": -0.117,
+      "nbr": -0.0859,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-27",
+      "nbr": -0.0429,
       "valid": 1.0
      },
      {
       "date": "2024-11-29",
-      "nbr": 0.1213,
+      "nbr": 0.1729,
       "valid": 1.0
      }
     ],
     "fires": [],
-    "evidence_url": "data/checks/f-suresh-previous.png"
-   },
+    "evidence_url": "data/checks/f-satbir-previous.png"
+   }
+  },
+  "checked_at": "2026-10-10T09:26:34Z"
+ },
+ "f-suresh": {
+  "advance_eligible": true,
+  "acres": 5.3,
+  "result": {
    "current": {
     "season": "2025",
     "decision": {
@@ -3580,6 +3687,16 @@
      "max_dark_share": 0.0,
      "fires_nearby": 0
     },
+    "evidence_dates": [
+     "2025-09-25",
+     "2025-09-30",
+     "2025-10-15",
+     "2025-10-20",
+     "2025-11-04",
+     "2025-11-09",
+     "2025-11-24",
+     "2025-11-29"
+    ],
     "series": [
      {
       "date": "2025-09-25",
@@ -3669,8 +3786,111 @@
     ],
     "fires": [],
     "evidence_url": "data/checks/f-suresh-current.png"
+   },
+   "previous": {
+    "season": "2024",
+    "decision": {
+     "outcome": "auto_approved",
+     "rule": "no_burn_signal",
+     "reason": "11 clear images, no burn-like change, no fire point nearby.",
+     "burn_date": null,
+     "clear_dates": [
+      "2024-10-05",
+      "2024-10-10",
+      "2024-10-15",
+      "2024-10-20",
+      "2024-10-25",
+      "2024-10-30",
+      "2024-11-04",
+      "2024-11-09",
+      "2024-11-19",
+      "2024-11-24",
+      "2024-11-29"
+     ],
+     "max_dark_share": 0.0,
+     "fires_nearby": 0
+    },
+    "evidence_dates": [
+     "2024-10-05",
+     "2024-10-10",
+     "2024-10-20",
+     "2024-10-25",
+     "2024-11-04",
+     "2024-11-09",
+     "2024-11-24",
+     "2024-11-29"
+    ],
+    "series": [
+     {
+      "date": "2024-09-25",
+      "nbr": null,
+      "valid": 0.0
+     },
+     {
+      "date": "2024-09-30",
+      "nbr": null,
+      "valid": 0.0
+     },
+     {
+      "date": "2024-10-05",
+      "nbr": 0.0944,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-10",
+      "nbr": 0.0409,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-15",
+      "nbr": 0.2813,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-20",
+      "nbr": 0.0499,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-25",
+      "nbr": -0.0686,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-10-30",
+      "nbr": -0.0882,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-04",
+      "nbr": -0.1551,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-09",
+      "nbr": -0.1226,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-19",
+      "nbr": -0.1547,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-24",
+      "nbr": -0.117,
+      "valid": 1.0
+     },
+     {
+      "date": "2024-11-29",
+      "nbr": 0.1213,
+      "valid": 1.0
+     }
+    ],
+    "fires": [],
+    "evidence_url": "data/checks/f-suresh-previous.png"
    }
   },
-  "checked_at": "2026-10-09T01:02:32Z"
+  "checked_at": "2026-10-10T09:26:31Z"
  }
 }
