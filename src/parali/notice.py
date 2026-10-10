@@ -102,7 +102,7 @@ li {{ margin-bottom: 4px; }}
 @media (max-width: 640px) {{ .sheet {{ margin: 0; padding: 26px 20px 84px; }} .signs {{ grid-template-columns: 1fr; }} }}
 </style></head><body>
 <article class="sheet">
-<header class="head"><div class="dept"><b>Agriculture Department</b>Crop Residue Management incentive · {e(st[0])}<br><small>Prepared with Saakshi satellite verification</small></div><div class="mark">सा</div></header>
+<header class="head"><div class="dept"><b>Agriculture Department</b>Crop Residue Management <span style="white-space:nowrap">incentive · {e(st[0])}</span><br><small>Prepared with Saakshi satellite verification</small></div><div class="mark">सा</div></header>
 <div class="meta"><span>Ref. {e(ref)}</span><span>{e(_d(today.isoformat()))}</span></div>
 <span class="status">{"ADVANCE RETURNED · CASE CLOSED" if paid else "DRAFT FOR OFFICER REVIEW · NOT ISSUED UNTIL SIGNED"}</span>
 <div class="to">To<b>{e(claim.get('farmer_name'))}</b>{e(claim.get('field_name'))}, {e(claim.get('village'))}, {e(st[0])}</div>

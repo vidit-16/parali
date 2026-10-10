@@ -14,8 +14,8 @@ const T = {
       auto_approved: "Clean", submitted: "Checking", appealed: "Appealed" },
     atStake: (x) => `${rupees(x)} advance`, noAdv: "no advance",
     reasonTitle: { possible_burn: "Burn signature found", needs_review: "Not clear from orbit", auto_approved: "No burn found" },
-    facts: { clear: "clear images", fires: "fire alerts nearby", last: "last season", smokeOut: "PM2.5 released, est.", smokeSaved: "PM2.5 avoided, est." },
-    lastV: { auto_approved: "clean", possible_burn: "burn", needs_review: "unclear" },
+    facts: { clear: "Clear images", fires: "Fire alerts", last: "Last season", smokeOut: "PM2.5 released", smokeSaved: "PM2.5 avoided", firesTip: "NASA fire alerts within 375 m of the field", smokeTip: "Estimate: 2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne" }, signalShort: "Plant signal through the season",
+    lastV: { auto_approved: "Clean", possible_burn: "Burn", needs_review: "Unclear" },
     appealBy: (n) => `${n} appealed`,
     flowTitle: "Where the money stands",
     flow: { advance: "Advance", check: "Satellite", decision: "Officer", money: "Balance" },
@@ -53,7 +53,7 @@ const T = {
       auto_approved: "साफ़", submitted: "जाँच जारी", appealed: "अपील" },
     atStake: (x) => `${rupees(x)} अग्रिम`, noAdv: "अग्रिम नहीं",
     reasonTitle: { possible_burn: "जलने का निशान मिला", needs_review: "उपग्रह से साफ़ नहीं", auto_approved: "जलना नहीं मिला" },
-    facts: { clear: "साफ़ तस्वीरें", fires: "पास में आग अलर्ट", last: "पिछला सीज़न", smokeOut: "PM2.5 निकला, अनुमान", smokeSaved: "PM2.5 बचा, अनुमान" },
+    facts: { clear: "साफ़ तस्वीरें", fires: "आग अलर्ट", last: "पिछला सीज़न", smokeOut: "PM2.5 निकला", smokeSaved: "PM2.5 बचा", firesTip: "खेत से 375 मीटर के भीतर NASA आग अलर्ट", smokeTip: "अनुमान: 2.6 टन पराली प्रति एकड़, 80% जली, लगभग 9 किलो PM2.5 प्रति टन" }, signalShort: "सीज़न भर पौधों का संकेत",
     lastV: { auto_approved: "साफ़", possible_burn: "जला", needs_review: "साफ़ नहीं" },
     appealBy: (n) => `${n} की अपील`,
     flowTitle: "राशि कहाँ है",
@@ -72,7 +72,7 @@ const T = {
       recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", callback_requested: "किसान ने फ़ोन माँगा",
     },
     decide: "आपका फ़ैसला", note: "आपने खेत पर क्या देखा या जाँचा",
-    approve: (x) => `मंज़ूर करें · ${rupees(x)} भेजें`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
+    approve: (x) => `मंज़ूर करें · ${rupees(x)}`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
     needNote: "जलना पक्का करने से पहले लिखें कि आपने क्या देखा या जाँचा।",
     stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का" }, by: (id, at) => `${id} · ${at}`,
     notice: "वसूली नोटिस", paylink: "भुगतान लिंक", payWait: "किसान के भुगतान का इंतज़ार", payDone: (x) => `${rupees(x)} मिले · मामला बंद`,
@@ -92,7 +92,7 @@ const T = {
       auto_approved: "ਸਾਫ਼", submitted: "ਜਾਂਚ ਜਾਰੀ", appealed: "ਅਪੀਲ" },
     atStake: (x) => `${rupees(x)} ਅਗਾਊਂ`, noAdv: "ਅਗਾਊਂ ਨਹੀਂ",
     reasonTitle: { possible_burn: "ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਮਿਲਿਆ", needs_review: "ਸੈਟੇਲਾਈਟ ਤੋਂ ਸਾਫ਼ ਨਹੀਂ", auto_approved: "ਸਾੜ ਨਹੀਂ ਮਿਲਿਆ" },
-    facts: { clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", fires: "ਨੇੜੇ ਅੱਗ ਅਲਰਟ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ", smokeOut: "PM2.5 ਨਿਕਲਿਆ, ਅੰਦਾਜ਼ਾ", smokeSaved: "PM2.5 ਬਚਿਆ, ਅੰਦਾਜ਼ਾ" },
+    facts: { clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", fires: "ਅੱਗ ਅਲਰਟ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ", smokeOut: "PM2.5 ਨਿਕਲਿਆ", smokeSaved: "PM2.5 ਬਚਿਆ", firesTip: "ਖੇਤ ਤੋਂ 375 ਮੀਟਰ ਦੇ ਅੰਦਰ NASA ਅੱਗ ਅਲਰਟ", smokeTip: "ਅੰਦਾਜ਼ਾ: 2.6 ਟਨ ਪਰਾਲੀ ਪ੍ਰਤੀ ਏਕੜ, 80% ਸੜੀ, ਲਗਭਗ 9 ਕਿੱਲੋ PM2.5 ਪ੍ਰਤੀ ਟਨ" }, signalShort: "ਸੀਜ਼ਨ ਭਰ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ",
     lastV: { auto_approved: "ਸਾਫ਼", possible_burn: "ਸਾੜਿਆ", needs_review: "ਸਾਫ਼ ਨਹੀਂ" },
     appealBy: (n) => `${n} ਦੀ ਅਪੀਲ`,
     flowTitle: "ਰਕਮ ਕਿੱਥੇ ਹੈ",
@@ -111,7 +111,7 @@ const T = {
       recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
     },
     decide: "ਤੁਹਾਡਾ ਫ਼ੈਸਲਾ", note: "ਤੁਸੀਂ ਖੇਤ ਵਿੱਚ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ",
-    approve: (x) => `ਮਨਜ਼ੂਰ ਕਰੋ · ${rupees(x)} ਭੇਜੋ`, approveNo: "ਮਨਜ਼ੂਰ ਕਰੋ", confirm: "ਸਾੜ ਪੱਕਾ ਕਰੋ",
+    approve: (x) => `ਮਨਜ਼ੂਰ ਕਰੋ · ${rupees(x)}`, approveNo: "ਮਨਜ਼ੂਰ ਕਰੋ", confirm: "ਸਾੜ ਪੱਕਾ ਕਰੋ",
     needNote: "ਸਾੜ ਪੱਕਾ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਲਿਖੋ ਕਿ ਤੁਸੀਂ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ।",
     stamp: { officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ" }, by: (id, at) => `${id} · ${at}`,
     notice: "ਵਸੂਲੀ ਨੋਟਿਸ", paylink: "ਭੁਗਤਾਨ ਲਿੰਕ", payWait: "ਕਿਸਾਨ ਦੇ ਭੁਗਤਾਨ ਦੀ ਉਡੀਕ", payDone: (x) => `${rupees(x)} ਮਿਲੇ · ਮਾਮਲਾ ਬੰਦ`,
@@ -137,6 +137,7 @@ const village = (c) => { const f = S.fields[c.field_id]; return f ? (lang === "e
 const isOpen = (c) => c.status === "possible_burn" || c.status === "needs_review";
 const chipKey = (c) => (c.appeal && isOpen(c) ? "appealed" : c.status);
 const chipCls = (c) => (chipKey(c) === "appealed" ? "appeal" : kindOf(c.status));
+const phone = () => matchMedia("(max-width: 640px)").matches;
 const advPaid = (c) => (c.advance?.status === "paid" ? c.advance.amount : 0);
 const burnIndex = (c) => { const d = c.decision?.burn_date; return d ? S.windows.findIndex((w) => w.start <= d && d <= w.end) : -1; };
 
@@ -218,7 +219,10 @@ function history(c) {
     const text = typeof f === "function" ? (e.type === "reviewed" ? f(e.by, e.verdict) : f(e.amount || 0)) : f;
     return `<li class="h-${e.type}"><span class="w">${esc(fmtDate(e.at, lang))}</span><span>${esc(text)}${e.note ? `<small>“${esc(e.note)}”</small>` : ""}</span></li>`;
   }).filter(Boolean);
-  return rows.length ? `<section class="hist"><h3>${esc(L.history)}</h3><ol>${rows.join("")}</ol></section>` : "";
+  if (!rows.length) return "";
+  // on a phone the history starts folded: the decision is what the officer came for
+  return phone() ? `<details class="hist fold"><summary>${esc(L.history)} <small>${rows.length}</small></summary><ol>${rows.join("")}</ol></details>`
+    : `<section class="hist"><h3>${esc(L.history)}</h3><ol>${rows.join("")}</ol></section>`;
 }
 
 function renderCase(flash = false) {
@@ -229,15 +233,15 @@ function renderCase(flash = false) {
     <header class="c-head"><div><h2>${esc(name(c))}</h2><p>${esc(fieldLabel(c))} · ${c.acres} ${esc(L.acres)} · ${esc(village(c))}</p></div>
       <em class="chip big ${chipCls(c)}">${esc(L.chip[chipKey(c)] || c.status)}</em></header>
     <div class="c-grid">
-      <div class="c-left card-s"><div id="ev"></div>${signalChart(c.series, d.burn_date, lang, L)}</div>
+      <div class="c-left card-s"><div id="ev"></div>${phone() ? `<details class="fold"><summary>${esc(L.signalShort)}</summary>${signalChart(c.series, d.burn_date, lang, L)}</details>` : signalChart(c.series, d.burn_date, lang, L)}</div>
       <div class="c-right">
         <section class="verdict ${k}"><span class="ic">${icon(k === "clean" ? "i-check" : k === "burn" ? "i-flame" : "i-eye")}</span>
           <div><b>${esc(L.reasonTitle[d.outcome] || L.chip[d.outcome] || "")}</b>${d.burn_date ? `<small>${esc(fmtDate(d.burn_date, lang, true))}</small>` : ""}</div></section>
         <div class="facts3">
-          <div><b id="f-clear">${(d.clear_dates || []).length}</b><small>${esc(L.facts.clear)}</small></div>
-          <div><b>${d.fires_nearby || 0}</b><small>${esc(L.facts.fires)}</small></div>
-          <div><b class="${kindOf(prev)}">${esc(L.lastV[prev] || "—")}</b><small>${esc(L.facts.last)}</small></div>
-          <div title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne"><b class="smoke">≈ ${smokeKg(c.acres)} kg</b><small>${esc(k === "burn" || c.status === "officer_confirmed_burnt" ? L.facts.smokeOut : L.facts.smokeSaved)}</small></div></div>
+          <div><small>${esc(L.facts.clear)}</small><b id="f-clear">${(d.clear_dates || []).length}</b></div>
+          <div title="${esc(L.facts.firesTip)}"><small>${esc(L.facts.fires)}</small><b>${d.fires_nearby || 0}</b></div>
+          <div><small>${esc(L.facts.last)}</small><b class="word ${kindOf(prev)}">${esc(L.lastV[prev] || "—")}</b></div>
+          <div title="${esc(L.facts.smokeTip)}"><small>${esc(k === "burn" || c.status === "officer_confirmed_burnt" ? L.facts.smokeOut : L.facts.smokeSaved)}</small><b class="smoke">≈ ${smokeKg(c.acres)}<i>kg</i></b></div></div>
         ${c.appeal ? `<section class="bubble"><span class="avatar farmer">${esc((c.farmer_name || "?").slice(0, 1))}</span><div><small>${esc(L.appealBy(name(c)))} · ${esc(fmtDate(c.appeal.at, lang))}</small><p>${esc(c.appeal.note)}</p></div></section>` : ""}
         ${flow(c)}
         ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>

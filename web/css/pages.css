@@ -49,7 +49,7 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 .q-main b { display: block; font-size: 14.5px; }
 .q-main > small { display: block; color: var(--muted); font-size: 12px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .q-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.q-meta small { font: 500 11.5px "Geist Mono", monospace; color: var(--muted); }
+.q-meta small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ---- officer: case ---- */
 .case-in { animation: up .4s var(--ease) both; padding-bottom: 22px; }
@@ -72,11 +72,13 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 .verdict.review { background: rgba(245, 197, 66, .08); } .verdict.review .ic { background: rgba(245, 197, 66, .18); color: var(--alert); } .verdict.review b { color: var(--alert); }
 .verdict.clean { background: rgba(67, 196, 133, .1); } .verdict.clean .ic { background: rgba(67, 196, 133, .2); color: var(--clean); } .verdict.clean b { color: var(--clean); }
 .facts3 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.facts3 b.smoke { color: #B9C2D0; font-size: 19px; }
-.facts3 div { padding: 11px 12px; border-radius: 11px; background: var(--surface); }
+.facts3 b.smoke { color: #B9C2D0; }
+.facts3 b.smoke i { font-style: normal; font-size: 13px; font-weight: 600; margin-left: 3px; color: var(--muted); }
+.facts3 div { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-width: 0; padding: 11px 12px 12px; border-radius: 11px; background: var(--surface); }
 .facts3 b { display: block; font-size: 22px; line-height: 1.1; letter-spacing: -.02em; }
 .facts3 b.clean { color: var(--clean); } .facts3 b.burn { color: #FF8A5C; } .facts3 b.review { color: var(--alert); }
-.facts3 small { font-size: 11.5px; color: var(--muted); }
+.facts3 small { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.facts3 b.word { font-size: 17px; line-height: 1.3; }
 .bubble { display: flex; gap: 10px; align-items: flex-start; }
 .bubble div { padding: 10px 13px; border-radius: 4px 14px 14px 14px; background: rgba(159, 227, 255, .08); box-shadow: 0 0 0 1px rgba(159, 227, 255, .16) inset; }
 .bubble small { font-size: 11.5px; color: var(--scan); }
@@ -260,4 +262,24 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 @media (max-width: 640px) {
   .facts3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .strip button span { white-space: normal; line-height: 1.15; overflow-wrap: anywhere; }
+}
+
+/* folded sections on phones: a quiet row that opens in place */
+details.fold { margin-top: 10px; border-top: 1px solid var(--line); }
+details.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 12px 2px 4px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::after { content: ""; margin-left: auto; width: 8px; height: 8px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translateY(-2px); transition: transform .2s; }
+details.fold[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
+details.fold > summary small { padding: 1px 7px; border-radius: 99px; background: var(--surface); color: var(--muted); font-size: 11px; }
+details.hist.fold > ol { margin-top: 8px; }
+
+/* farmer: on a phone the message opens with three lines; the rest is a tap (or the Listen button) away */
+.more { display: none; }
+@media (max-width: 640px) {
+  .flow-line b { font-size: 11.5px; }
+  .st-msg.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); margin-bottom: 4px; }
+  .more { display: inline-flex; align-items: center; gap: 6px; height: 34px; margin: 0 14px 0 0; vertical-align: middle; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .more + .listen { vertical-align: middle; }
+  .more::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); }
 }

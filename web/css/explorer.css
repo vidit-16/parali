@@ -410,3 +410,9 @@ body.panel-open .story { left: calc((100% - 400px) / 2); max-width: calc(100% - 
 @media (max-width: 1100px) { .stat.smoke { display: none; } }
 
 @media (max-width: 640px) { .strip button span { white-space: normal; line-height: 1.15; overflow-wrap: anywhere; } }
+
+/* phones: the headline card keeps the headline, the comparison and the buttons; method notes live in Sources */
+@media (max-width: 640px) {
+  .hero .vs .cap, .hero .fine { display: none; }
+  .act .cap { display: none; }
+}

@@ -11,7 +11,7 @@ const T = {
     demoPick: "Pick a farmer", demoNote: "No SMS sign-in here: pick a farmer to see their app. Cases reset daily; WhatsApp is shown in the video.", demoTyped: "Pick one of the farmers below.",
     hello: (n) => `Namaste, ${n}`, switch: "Sign out", noClaim: "No claim this season yet.", acres: "acres",
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
-    smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", money: "Your money", passbook: "Season 2025",
+    smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", more: "Read all", money: "Your money", passbook: "Season 2025",
     rows: { adv: "Advance before harvest", noadv: "No advance this year: last season was not clearly clean", bal: "Rest of the money",
       balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
     pay: (a) => `Return ${a} online`, payNote: "Razorpay test mode: no real money moves.",
@@ -34,7 +34,7 @@ const T = {
     demoPick: "किसान चुनें", demoNote: "यहाँ SMS साइन-इन नहीं है: किसी किसान को चुनकर उनका ऐप देखें। मामले रोज़ नए होते हैं; WhatsApp वीडियो में है।", demoTyped: "नीचे से कोई किसान चुनें।",
     hello: (n) => `नमस्ते, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोई दावा अभी नहीं।", acres: "एकड़",
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
-    smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", money: "आपकी राशि", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", more: "पूरा पढ़ें", money: "आपकी राशि", passbook: "सीज़न 2025",
     rows: { adv: "कटाई से पहले अग्रिम", noadv: "इस साल अग्रिम नहीं: पिछला सीज़न साफ़ नहीं दिखा", bal: "बाकी राशि",
       balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
     pay: (a) => `${a} ऑनलाइन लौटाएँ`, payNote: "Razorpay टेस्ट मोड: असली पैसा नहीं कटता।",
@@ -57,7 +57,7 @@ const T = {
     demoPick: "ਕਿਸਾਨ ਚੁਣੋ", demoNote: "ਇੱਥੇ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ: ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਉਨ੍ਹਾਂ ਦੀ ਐਪ ਵੇਖੋ। ਮਾਮਲੇ ਰੋਜ਼ ਨਵੇਂ ਹੁੰਦੇ ਹਨ; WhatsApp ਵੀਡੀਓ ਵਿੱਚ ਹੈ।", demoTyped: "ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
     hello: (n) => `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${n} ਜੀ`, switch: "ਸਾਈਨ-ਆਊਟ", noClaim: "ਇਸ ਸੀਜ਼ਨ ਦਾ ਕੋਈ ਦਾਅਵਾ ਅਜੇ ਨਹੀਂ।", acres: "ਏਕੜ",
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਸੈਟੇਲਾਈਟ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
-    smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
+    smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", more: "ਪੂਰਾ ਪੜ੍ਹੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
     rows: { adv: "ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ ਅਗਾਊਂ", noadv: "ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ: ਪਿਛਲਾ ਸੀਜ਼ਨ ਸਾਫ਼ ਨਹੀਂ ਦਿਸਿਆ", bal: "ਬਾਕੀ ਰਕਮ",
       balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
     pay: (a) => `${a} ਆਨਲਾਈਨ ਵਾਪਸ ਕਰੋ`, payNote: "Razorpay ਟੈਸਟ ਮੋਡ: ਅਸਲ ਪੈਸਾ ਨਹੀਂ ਕੱਟਦਾ।",
@@ -80,7 +80,7 @@ const T = {
     demoPick: "किसान चुणो", demoNote: "उरै SMS साइन-इन कोनी: किसे किसान नै चुण कै उसका ऐप देक्खो। मामले रोज नए होवैं सैं; WhatsApp वीडियो म्ह सै।", demoTyped: "तळै तै कोए किसान चुणो।",
     hello: (n) => `राम राम, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोए दावा इब्ब तक कोनी।", acres: "किल्ले",
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
-    smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", money: "थारी रकम", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", more: "पूरा पढ़ो", money: "थारी रकम", passbook: "सीज़न 2025",
     rows: { adv: "कटाई तै पहल्यां एडवांस", noadv: "इस साल एडवांस कोनी: पाछला सीज़न साफ कोनी दिख्या", bal: "बाकी रकम",
       balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
     pay: (a) => `${a} ऑनलाइन उल्टा दो`, payNote: "Razorpay टेस्ट मोड: असली पीसा कोनी कटदा।",
@@ -166,7 +166,7 @@ function render(animate = false) {
       <div><h1>${esc(L.hello(local(f.farmer, f.farmer_hi)))}</h1><p class="cap">${esc(local(f.name, f.name_hi))} · ${f.acres} ${esc(L.acres)} · ${esc(local(f.village, f.village_hi))}</p></div>
       <button class="link" id="switch">${esc(L.switch)}</button></section>
     ${c ? `<section class="card glass status-card ${k} ${animate ? "enter" : ""}" style="--i:1"><div class="st-top"><span class="st-ic ${k}">${icon(k === "clean" ? "i-check" : k === "burn" ? "i-flame" : "i-eye")}</span><b>${esc(L.status[k])}</b></div>
-        <p class="st-msg">${esc(msgOf(c.message))}</p>
+        <p class="st-msg clamp" id="st-msg">${esc(msgOf(c.message))}</p><button class="link more" id="more">${esc(L.more)}</button>
         ${k === "clean" ? `<p class="smoke-chip" title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne">🌫 ${esc(L.smoke(smokeKg(f.acres)))} <small>${esc(L.smokeNote)}</small></p>` : ""}
         ${audio ? `<button class="btn ghost small listen" id="listen">${icon("i-play")}<span>${esc(L.listen)}</span><i class="wave"><i></i><i></i><i></i><i></i><i></i></i></button><audio id="audio" src="${esc(audio)}" preload="none"></audio>` : ""}
         ${c.recovery?.status === "issued" ? `<a class="btn primary wide" href="${esc(c.recovery.url)}">${esc(L.pay(rupees(c.recovery.amount)))}</a><p class="cap">${esc(L.payNote)}</p>` : ""}
@@ -197,6 +197,7 @@ function render(animate = false) {
     au.onpause = au.onended = () => $("#listen").classList.remove("playing");
   }
   $("#appeal")?.addEventListener("click", () => openAppeal(c));
+  $("#more")?.addEventListener("click", (e) => { $("#st-msg").classList.remove("clamp"); e.currentTarget.remove(); });
   $$(".chipq").forEach((b) => { b.onclick = () => ask({ text: b.textContent }); });
   $("#composer").onsubmit = (e) => { e.preventDefault(); const q = $("#q").value.trim(); if (q) { $("#q").value = ""; ask({ text: q }); } };
   wireMic();
