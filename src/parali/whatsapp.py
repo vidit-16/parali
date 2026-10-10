@@ -219,35 +219,35 @@ def _name(f: dict) -> str:
 
 # ---- short replies: two lines of text, the full explanation in the voice note ----
 SHORT = {
-    "en": dict(paid="✅ Approved · ₹{x} sent to your bank", smoke=" · 🌫 ≈ {kg} kg smoke avoided", repay="❗ Burn confirmed · return ₹{x}",
-               repaid="✅ ₹{x} returned · nothing more due", confirmed="❗ The officer confirmed a burn", burn="🔥 Burn mark seen around {d} · the officer will check",
-               review="👀 With the officer · nothing to do now", wait="⏳ Satellite check running", appealed="📝 Appeal with the officer · nothing is recovered meanwhile",
-               adv="💰 Advance ₹{x} paid", noadv="💰 No advance this year", sent="₹{x} sent", held="₹{x} held until the officer decides",
-               ret="₹{x} to return", retd="₹{x} returned", whyBurn="🛰 Burnt around {d}: dark in colour, maroon in infrared", whyClean="🛰 No burn in {n} clear pictures",
-               whyReview="🛰 The pictures are not clear enough to decide", askAppeal="📝 Tell the officer in one message why the satellite is wrong. A voice note is fine.",
+    "en": dict(paid="Approved · ₹{x} sent to your bank", smoke=" · ≈ {kg} kg smoke avoided", repay="Burn confirmed · return ₹{x}",
+               repaid="₹{x} returned · nothing more due", confirmed="The officer confirmed a burn", burn="Burn mark seen around {d} · the officer will check",
+               review="With the officer · nothing to do now", wait="Satellite check running", appealed="Appeal with the officer · nothing is recovered meanwhile",
+               adv="Advance ₹{x} paid", noadv="No advance this year", sent="₹{x} sent", held="₹{x} held until the officer decides",
+               ret="₹{x} to return", retd="₹{x} returned", whyBurn="Burnt around {d}: dark in colour, maroon in infrared", whyClean="No burn in {n} clear pictures",
+               whyReview="The pictures are not clear enough to decide", askAppeal="Tell the officer in one message why the satellite is wrong. A voice note is fine.",
                noAppeal="Nothing to appeal: your claim is approved.", bWhy="Why?", bMoney="My money", bAppeal="Appeal",
                intro="Saakshi. Pick a farmer to chat as. Write or speak in English, Hindi, Punjabi or Haryanvi; Saakshi answers in the same language. You can also just say a farmer's name.",
                state="Which state?", pick="Pick a farmer", list="Farmers"),
-    "hi": dict(paid="✅ मंज़ूर · ₹{x} आपके खाते में भेजे", smoke=" · 🌫 ≈ {kg} किलो धुआँ बचा", repay="❗ जलना पक्का · ₹{x} लौटाने हैं",
-               repaid="✅ ₹{x} लौटा दिए · कुछ बाकी नहीं", confirmed="❗ अधिकारी ने जलना पक्का किया", burn="🔥 {d} के आसपास जलने का निशान · अधिकारी देखेंगे",
-               review="👀 अधिकारी के पास · अभी कुछ नहीं करना", wait="⏳ उपग्रह जाँच चल रही है", appealed="📝 अपील अधिकारी के पास · तब तक कोई वसूली नहीं",
-               adv="💰 ₹{x} अग्रिम मिला", noadv="💰 इस साल अग्रिम नहीं", sent="₹{x} भेजे", held="₹{x} अधिकारी के फ़ैसले तक रुके",
-               ret="₹{x} लौटाने हैं", retd="₹{x} लौटाए", whyBurn="🛰 {d} के आसपास जला: रंगीन में काला, इन्फ्रारेड में मैरून", whyClean="🛰 {n} साफ़ तस्वीरों में कहीं जलना नहीं",
-               whyReview="🛰 तस्वीरें फ़ैसले के लिए साफ़ नहीं", askAppeal="📝 एक संदेश में अधिकारी को बताइए कि उपग्रह क्यों ग़लत है। बोलकर भी भेज सकते हैं।",
+    "hi": dict(paid="मंज़ूर · ₹{x} आपके खाते में भेजे", smoke=" · ≈ {kg} किलो धुआँ बचा", repay="जलना पक्का · ₹{x} लौटाने हैं",
+               repaid="₹{x} लौटा दिए · कुछ बाकी नहीं", confirmed="अधिकारी ने जलना पक्का किया", burn="{d} के आसपास जलने का निशान · अधिकारी देखेंगे",
+               review="अधिकारी के पास · अभी कुछ नहीं करना", wait="उपग्रह जाँच चल रही है", appealed="अपील अधिकारी के पास · तब तक कोई वसूली नहीं",
+               adv="₹{x} अग्रिम मिला", noadv="इस साल अग्रिम नहीं", sent="₹{x} भेजे", held="₹{x} अधिकारी के फ़ैसले तक रुके",
+               ret="₹{x} लौटाने हैं", retd="₹{x} लौटाए", whyBurn="{d} के आसपास जला: रंगीन में काला, इन्फ्रारेड में मैरून", whyClean="{n} साफ़ तस्वीरों में कहीं जलना नहीं",
+               whyReview="तस्वीरें फ़ैसले के लिए साफ़ नहीं", askAppeal="एक संदेश में अधिकारी को बताइए कि उपग्रह क्यों ग़लत है। बोलकर भी भेज सकते हैं।",
                noAppeal="अपील की ज़रूरत नहीं: आपका दावा मंज़ूर है।", bWhy="क्यों?", bMoney="मेरा पैसा", bAppeal="अपील"),
-    "pa": dict(paid="✅ ਮਨਜ਼ੂਰ · ₹{x} ਤੁਹਾਡੇ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ", smoke=" · 🌫 ≈ {kg} ਕਿੱਲੋ ਧੂੰਆਂ ਬਚਿਆ", repay="❗ ਸਾੜ ਪੱਕਾ · ₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ",
-               repaid="✅ ₹{x} ਵਾਪਸ ਕੀਤੇ · ਕੁਝ ਬਾਕੀ ਨਹੀਂ", confirmed="❗ ਅਧਿਕਾਰੀ ਨੇ ਸਾੜ ਪੱਕਾ ਕੀਤਾ", burn="🔥 {d} ਦੇ ਆਸ-ਪਾਸ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ · ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ",
-               review="👀 ਅਧਿਕਾਰੀ ਕੋਲ · ਹਾਲੇ ਕੁਝ ਨਹੀਂ ਕਰਨਾ", wait="⏳ ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚੱਲ ਰਹੀ ਹੈ", appealed="📝 ਅਪੀਲ ਅਧਿਕਾਰੀ ਕੋਲ · ਉਦੋਂ ਤੱਕ ਕੋਈ ਵਸੂਲੀ ਨਹੀਂ",
-               adv="💰 ₹{x} ਅਗਾਊਂ ਮਿਲੀ", noadv="💰 ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ", sent="₹{x} ਭੇਜੇ", held="₹{x} ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੇ",
-               ret="₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ", retd="₹{x} ਵਾਪਸ ਕੀਤੇ", whyBurn="🛰 {d} ਦੇ ਆਸ-ਪਾਸ ਸੜਿਆ: ਰੰਗੀਨ ਵਿੱਚ ਕਾਲਾ, ਇਨਫ੍ਰਾਰੈੱਡ ਵਿੱਚ ਮੈਰੂਨ", whyClean="🛰 {n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ",
-               whyReview="🛰 ਤਸਵੀਰਾਂ ਫ਼ੈਸਲੇ ਲਈ ਸਾਫ਼ ਨਹੀਂ", askAppeal="📝 ਇੱਕ ਸੁਨੇਹੇ ਵਿੱਚ ਅਧਿਕਾਰੀ ਨੂੰ ਦੱਸੋ ਕਿ ਸੈਟੇਲਾਈਟ ਕਿਉਂ ਗਲਤ ਹੈ। ਬੋਲ ਕੇ ਵੀ ਭੇਜ ਸਕਦੇ ਹੋ।",
+    "pa": dict(paid="ਮਨਜ਼ੂਰ · ₹{x} ਤੁਹਾਡੇ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ", smoke=" · ≈ {kg} ਕਿੱਲੋ ਧੂੰਆਂ ਬਚਿਆ", repay="ਸਾੜ ਪੱਕਾ · ₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ",
+               repaid="₹{x} ਵਾਪਸ ਕੀਤੇ · ਕੁਝ ਬਾਕੀ ਨਹੀਂ", confirmed="ਅਧਿਕਾਰੀ ਨੇ ਸਾੜ ਪੱਕਾ ਕੀਤਾ", burn="{d} ਦੇ ਆਸ-ਪਾਸ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ · ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ",
+               review="ਅਧਿਕਾਰੀ ਕੋਲ · ਹਾਲੇ ਕੁਝ ਨਹੀਂ ਕਰਨਾ", wait="ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚੱਲ ਰਹੀ ਹੈ", appealed="ਅਪੀਲ ਅਧਿਕਾਰੀ ਕੋਲ · ਉਦੋਂ ਤੱਕ ਕੋਈ ਵਸੂਲੀ ਨਹੀਂ",
+               adv="₹{x} ਅਗਾਊਂ ਮਿਲੀ", noadv="ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ", sent="₹{x} ਭੇਜੇ", held="₹{x} ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੇ",
+               ret="₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ", retd="₹{x} ਵਾਪਸ ਕੀਤੇ", whyBurn="{d} ਦੇ ਆਸ-ਪਾਸ ਸੜਿਆ: ਰੰਗੀਨ ਵਿੱਚ ਕਾਲਾ, ਇਨਫ੍ਰਾਰੈੱਡ ਵਿੱਚ ਮੈਰੂਨ", whyClean="{n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ",
+               whyReview="ਤਸਵੀਰਾਂ ਫ਼ੈਸਲੇ ਲਈ ਸਾਫ਼ ਨਹੀਂ", askAppeal="ਇੱਕ ਸੁਨੇਹੇ ਵਿੱਚ ਅਧਿਕਾਰੀ ਨੂੰ ਦੱਸੋ ਕਿ ਸੈਟੇਲਾਈਟ ਕਿਉਂ ਗਲਤ ਹੈ। ਬੋਲ ਕੇ ਵੀ ਭੇਜ ਸਕਦੇ ਹੋ।",
                noAppeal="ਅਪੀਲ ਦੀ ਲੋੜ ਨਹੀਂ: ਤੁਹਾਡਾ ਦਾਅਵਾ ਮਨਜ਼ੂਰ ਹੈ।", bWhy="ਕਿਉਂ?", bMoney="ਮੇਰਾ ਪੈਸਾ", bAppeal="ਅਪੀਲ"),
-    "hr": dict(paid="✅ मंजूर · ₹{x} थारे खाते म्ह भेजे", smoke=" · 🌫 ≈ {kg} किलो धुम्मा बच्या", repay="❗ जळाणा पक्का · ₹{x} उल्टे देणे सैं",
-               repaid="✅ ₹{x} उल्टे दे दिए · कुछ बाकी कोनी", confirmed="❗ अफसर नै जळाणा पक्का करया", burn="🔥 {d} के आसपास जळण का निसान · अफसर देक्खैगा",
-               review="👀 अफसर कनै · इब्ब कुछ ना करणा", wait="⏳ उपग्रह जांच चालू सै", appealed="📝 अपील अफसर कनै · जद ताईं कोए वसूली कोनी",
-               adv="💰 ₹{x} एडवांस मिल्या", noadv="💰 इस साल एडवांस कोनी", sent="₹{x} भेजे", held="₹{x} अफसर के फैसले तक रुके",
-               ret="₹{x} उल्टे देणे सैं", retd="₹{x} उल्टे दिए", whyBurn="🛰 {d} के आसपास जळया: रंगीन म्ह काळा, इन्फ्रारेड म्ह मैरून", whyClean="🛰 {n} साफ फोटुआं म्ह कितै जळाणा कोनी",
-               whyReview="🛰 फोटू फैसले खातर साफ कोनी", askAppeal="📝 एक संदेस म्ह अफसर नै बताओ उपग्रह क्यूं गलत सै। बोल कै भी भेज सको सो।",
+    "hr": dict(paid="मंजूर · ₹{x} थारे खाते म्ह भेजे", smoke=" · ≈ {kg} किलो धुम्मा बच्या", repay="जळाणा पक्का · ₹{x} उल्टे देणे सैं",
+               repaid="₹{x} उल्टे दे दिए · कुछ बाकी कोनी", confirmed="अफसर नै जळाणा पक्का करया", burn="{d} के आसपास जळण का निसान · अफसर देक्खैगा",
+               review="अफसर कनै · इब्ब कुछ ना करणा", wait="उपग्रह जांच चालू सै", appealed="अपील अफसर कनै · जद ताईं कोए वसूली कोनी",
+               adv="₹{x} एडवांस मिल्या", noadv="इस साल एडवांस कोनी", sent="₹{x} भेजे", held="₹{x} अफसर के फैसले तक रुके",
+               ret="₹{x} उल्टे देणे सैं", retd="₹{x} उल्टे दिए", whyBurn="{d} के आसपास जळया: रंगीन म्ह काळा, इन्फ्रारेड म्ह मैरून", whyClean="{n} साफ फोटुआं म्ह कितै जळाणा कोनी",
+               whyReview="फोटू फैसले खातर साफ कोनी", askAppeal="एक संदेस म्ह अफसर नै बताओ उपग्रह क्यूं गलत सै। बोल कै भी भेज सको सो।",
                noAppeal="अपील की जरूरत कोनी: थारा दावा मंजूर सै।", bWhy="क्यूं?", bMoney="मेरा पीसा", bAppeal="अपील"),
 }
 CLEAN = ("auto_approved", "officer_approved")
@@ -493,7 +493,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         reply = voice.translate_pa(r.hi)
     if not reply:
         lang, reply = "hi", r.hi
-    said = f"🎙 {HEARD[lang]}: “{text}”\n" if msg.get("type") == "audio" else ""
+    said = f"{HEARD[lang]}: “{text}”\n" if msg.get("type") == "audio" else ""
     claim = _claim_of(store, farmer["id"])
     if claim and set(r.tools) & {"claim_status", "explain"}:
         client.send_buttons(phone, said + short_status(claim, lang), _buttons(lang))  # short text; the voice note explains

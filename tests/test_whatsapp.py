@@ -102,7 +102,7 @@ def test_new_number_picks_a_state_then_a_farmer(store):
     assert run(store, msg("f:f-pb", mid="m3", tap=True), c) == "linked"
     assert store.get("wa_links", "919800000001")["farmer_id"] == "f-pb"
     first = c.texts()[0].splitlines()
-    assert c.sent[0][0] == "buttons" and len(first) == 3 and first[0].startswith("⏳ Satellite")  # English, then Punjabi, then the field
+    assert c.sent[0][0] == "buttons" and len(first) == 3 and first[0].startswith("Satellite")  # English, then Punjabi, then the field
     assert store.get("wa_links", "919800000001")["lang"] == "pa"
     c = FakeClient()
     run(store, msg("change", mid="m4"), c)
