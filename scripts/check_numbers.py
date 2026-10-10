@@ -1,6 +1,9 @@
 """Recompute the headline evaluation from the label files and check it against the published results and the
 figures the map shows. Exits non-zero on any difference.
 
+The headline uses labels_full_strips.csv: the human first pass (labels.csv) with Claude Code's re-reading of 249
+plots on full-season strips (labels_claude.csv) on top. For comparison it also scores the human first pass alone.
+
 Scores only the current rules.toml (the full `parali evaluate` also refits thresholds on held-out halves,
 which takes much longer and does not change the headline).
 
@@ -19,22 +22,28 @@ from parali.label import read_labels
 from parali.rules import Thresholds
 
 ROOT = Path(__file__).resolve().parents[1]
-AREAS = [("data/cache/west_kaithal_2025.npz", "data/eval/plots.geojson", "data/eval/labels_full_strips.csv"),
-         ("data/cache/kaithal_west_2025.npz", "data/eval/kaithal/plots.geojson", "data/eval/kaithal/labels_full_strips.csv")]
+AREAS = [("data/cache/west_kaithal_2025.npz", "data/eval/plots.geojson", "data/eval/{}"),
+         ("data/cache/kaithal_west_2025.npz", "data/eval/kaithal/plots.geojson", "data/eval/kaithal/{}")]
 FIRMS = ["data/firms/kaithal_2025.csv", "data/firms/belt_2025.csv"]
 START, END = date(2025, 10, 1), date(2025, 11, 30)
 
 
-def main():
-    fire_list = [f for p in FIRMS for f in firms.load(ROOT / p)]
+def scored(label_file: str, fire_list) -> dict:
     cases = []
     for i, (area, plots_path, labels_path) in enumerate(AREAS):
+        labels_path = labels_path.format(label_file)
         tag = Path(plots_path).parent.name if i else ""
         plots = [Field(f"{tag}:{p.id}" if tag else p.id, p.geometry, p.props) for p in load_fields(ROOT / plots_path)]
         labels = {(f"{tag}:{k}" if tag else k): v for k, v in read_labels(ROOT / labels_path).items()}
         hist = AreaStack.load(ROOT / area).histories(plots, inner_buffer_m=0)
         cases += build_cases(plots, labels, hist, fire_list, START, END)
-    now = score(cases, Thresholds.load(), START, END)
+    return score(cases, Thresholds.load(), START, END)
+
+
+def main():
+    fire_list = [f for p in FIRMS for f in firms.load(ROOT / p)]
+    now = scored("labels_full_strips.csv", fire_list)
+    first = scored("labels.csv", fire_list)
     published = json.loads((ROOT / "data/eval/results_full_strips.json").read_text(encoding="utf-8"))["current"]
 
     bad = []
@@ -57,6 +66,9 @@ def main():
     print(f"{now['used']} labelled fields, {now['burnt_labels']} burnt, {now['burnt_auto_approved']:.0%} of burnt auto-approved")
     print(f"wrongly flagged clean fields: Saakshi {shown['rules']}, fire alerts {shown['alerts']}; "
           f"possible-burn precision {pct(now['rules_possible_burn']['precision'])}")
+    print(f"human first pass alone: {first['used']} fields, {first['burnt_labels']} burnt; wrongly flagged: Saakshi "
+          f"{pct(first['rules_possible_burn']['wrongful_burnt_rate'])}, fire alerts {pct(first['firms_baseline']['wrongful_burnt_rate'])}; "
+          f"precision {pct(first['rules_possible_burn']['precision'])}; {first['burnt_auto_approved']:.0%} of burnt auto-approved")
     print("\n".join(["DIFFERS " + b for b in bad]) or "matches the published results and the map")
     sys.exit(1 if bad else 0)
 

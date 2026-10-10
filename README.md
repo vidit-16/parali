@@ -17,7 +17,7 @@ and both work badly:
 
 - **Fire alerts as evidence.** NASA's thermal fire alerts (VIIRS, 375 m) lead to a red entry on the farmer's
   record, an FIR, and environmental compensation of ₹5,000–30,000 per incident. In our labelled sample the
-  alerts flagged TBD of clean fields and caught only TBD of burns: a field can be burnt and ploughed between two
+  alerts flagged 9.0% of clean fields and caught only 19% of burns: a field can be burnt and ploughed between two
   satellite passes, and a fire next door lands on your record.
 - **Paying after a manual check.** Haryana pays ₹1,000 an acre for not burning, after a slow field visit. A
   randomised trial in Punjab (J-PAL / MIT CEEPR) found that paying only after verification barely changed
@@ -48,19 +48,19 @@ alerts, and an estimate of the smoke. Anyone can open a field and run the same s
 
 ## Results
 
-749 plots in two study areas (Patran in Patiala, and Kaithal) were labelled by hand from the full season of
-pictures as burnt, not burnt or unsure; unsure plots are left out. Plots were sampled by distance to fire alerts
-and by burn signal, and weighted back to the whole area. The labels are the human labeller's own: see
-[Labels](#labels) for how AI was and was not used.
+749 plots in two study areas (Patran in Patiala, and Kaithal) were labelled burnt, not burnt or unsure from the
+season's pictures; unsure plots are left out. Plots were sampled by distance to fire alerts and by burn signal,
+and weighted back to the whole area. A human labeller made the first pass; an AI assistant re-read 249 of the
+plots on full-season strips. See [Labels](#labels), including the numbers on the human labels alone.
 
 | | Saakshi | Fire alerts alone (375 m) |
 |---|---|---|
-| Clean fields wrongly flagged | **TBD** | TBD |
-| Burnt fields approved without an officer | **TBD** | n/a |
-| Possible-burn flags that were real burns (precision) | TBD | TBD |
-| Burns caught | every labelled burn went to the officer | TBD |
+| Clean fields wrongly flagged | **0.6%** | 9.0% |
+| Burnt fields approved without an officer | **none of 111** | n/a |
+| Flags that were real burns (precision) | 75% | 6% |
+| Burns caught | every labelled burn went to the officer | 19% |
 
-Scored on TBD labelled fields, TBD of them burnt. Reproduce with `uv run python scripts/finalize_labels.py`.
+Scored on 593 labelled fields, 111 of them burnt. Reproduce with `uv run python scripts/check_numbers.py`.
 
 **The advance rule.** On 262 plots labelled earlier in the Patran area, fields that were clean in 2024 burnt in
 2025 at 1.8%; fields that were not clean in 2024 burnt at 8.6%. 78% of cropland would get the advance.
@@ -149,7 +149,7 @@ uses Bedrock, Polly and Transcribe; set `SARVAM_API_KEY` for Punjabi voice.
 uv sync --extra dev --extra aws --extra agent
 uv run pytest                              # unit, parity and property tests
 uv run python scripts/plant_bugs.py        # 27 deliberate bugs in the rules, money and guards; all must be caught
-uv run python scripts/finalize_labels.py   # headline numbers from the hand labels
+uv run python scripts/check_numbers.py     # headline numbers recomputed from the labels
 uv run python scripts/smoke.py             # end-to-end check of the live site (changes the demo; reset after)
 uv run python scripts/reset_demo.py        # fresh demo cases
 ```
@@ -168,21 +168,22 @@ API keys go in SSM under `/saakshi/` (WhatsApp, Razorpay, Sarvam); the stack rea
 
 ## Labels
 
-The headline numbers are scored only on labels made by the human labeller. The first pass covered 749 plots.
-Plots were picked for labelling partly by their burn signal, so the sample leans toward plots where the rules
-have something to say; the weights correct the rates for the whole area, not for that selection.
+- **First pass, by hand:** 749 plots (`labels.csv`), labelled by the team from strips of up to 12 dates.
+- **Second read, by AI:** the 12-date strips could skip the date a field burnt and was ploughed, so Claude Code
+  re-read 249 plots on strips showing every clear date (`labels_claude.csv`). 42 Patran plots first marked not
+  burnt or unsure were clear burns on a date the old strips had hidden; none changed in Kaithal. The headline
+  uses the first pass with these re-reads on top (`labels_full_strips.csv`).
+- **Human labels alone,** for comparison: 615 fields, 69 burnt; Saakshi wrongly flagged 1.6% of clean fields
+  against 8.7% for fire alerts, flag precision 38%, and no burnt field was approved without an officer. Both
+  versions come out of `scripts/check_numbers.py`.
 
-AI was used in two places, and kept separate:
-
-- An AI assistant (Claude Code) re-read the full-season strips of 249 plots whose earlier picture strips might
-  have hidden a burn date. Its calls are in `labels_claude.csv` and are not used in the headline.
-- The labeller then reviewed the same 249 plots blind, without seeing the assistant's calls
-  (`labels_review.csv`). The two agreed on TBD of them.
+The re-read plots were picked by their burn signal, so this set leans toward agreeing with the rules; the
+weights correct the rates for the whole area, not for that selection.
 
 ## Limits
 
 - Field outlines are samples drawn on the 20 m grid; there is no public cadastral map.
-- Labels are one person's reading of 10–20 m pictures, not site visits. TBD burnt plots is a small sample.
+- Labels are readings of 10–20 m pictures, not site visits, and 111 burnt plots is a small sample.
 - Satellites see fields, not people: a tenant who burnt elsewhere looks clean on a new field.
 - Fields under about one acre have too few whole pixels and go to the officer.
 - The trial's effect on burning is the trial's result, not ours. Recovering an advance is administratively
@@ -190,7 +191,9 @@ AI was used in two places, and kept separate:
 - The smoke figures are estimates from published emission factors, not air-quality measurements.
 - Punjabi and Haryanvi text has not yet been checked by a native speaker.
 
-## Built with AI tools
+## Team and AI tools
 
-Code, copy and analysis were written with Claude Code (Anthropic) as a pair programmer. The labels used for the
-results are the human labeller's; see [Labels](#labels).
+Vidit Choudhary chose the problem, designed the scheme (advance, check, officer, recovery, appeal), made the
+product and policy decisions, labelled the first 749 plots, set up AWS, WhatsApp and Razorpay, and tested on real
+phones. Claude Code (Anthropic) wrote most of the code, the interface text and the analysis scripts under that
+direction and review, and made the second read of 249 plots described in [Labels](#labels).

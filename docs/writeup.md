@@ -4,8 +4,8 @@
 
 Every November, burnt paddy straw from Punjab and Haryana adds to the smoke over Delhi; on the worst days farm
 fires are about a quarter of its PM2.5. The state's tools are weak. Fire alerts from NASA's VIIRS satellites
-decide who gets a red entry, an FIR and a fine, but in our labelled sample they flagged TBD of clean fields and
-caught only TBD of burns: a field can burn and be ploughed between two passes, and a neighbour's fire lands on
+decide who gets a red entry, an FIR and a fine, but in our labelled sample they flagged 9.0% of clean fields and
+caught only 19% of burns: a field can burn and be ploughed between two passes, and a neighbour's fire lands on
 your record. The incentive for not burning, ₹1,000 an acre in Haryana, is paid only after a slow field visit.
 A randomised trial in Punjab found that paying part of it upfront raises compliance by 8 to 11 percentage
 points, but paying upfront needs a check that can be run on every field, quickly and defensibly.
@@ -28,12 +28,16 @@ Saakshi does that check from Sentinel-2 pictures and runs the whole claim around
 
 ## Results
 
-749 plots in Patran and Kaithal were labelled by hand from the full season of pictures. On the labeller's own
-labels (TBD fields, TBD burnt):
+749 plots in Patran and Kaithal were labelled from the season's pictures: a human first pass, and an AI re-read
+of 249 plots on strips showing every clear date, which found 42 burns the earlier strips had hidden. On 593
+fields (111 burnt):
 
-- Saakshi wrongly flagged **TBD** of clean fields; fire alerts alone flagged **TBD**.
-- **TBD** of burnt fields were approved without an officer.
-- TBD of Saakshi's possible-burn flags were real burns.
+- Saakshi wrongly flagged **0.6%** of clean fields; fire alerts alone flagged **9.0%**.
+- **None** of the 111 burnt fields was approved without an officer.
+- 75% of Saakshi's flags were real burns, against 6% for fire alerts.
+
+On the human first pass alone, the gap holds: 1.6% against 8.7%, flag precision 38%, and still no burnt field
+approved without an officer.
 
 Fields clean in 2024 burnt in 2025 at 1.8%, against 8.6% for the rest, so "clean last season" is a sound basis
 for the advance; 78% of cropland would qualify.
@@ -70,11 +74,10 @@ batch view for the season's payouts.
 
 ## AI usage
 
-- **Claude Code (Anthropic)** was the pair programmer: it wrote most of the code, the interface text and the
-  analysis scripts, under our direction and review. It also re-read 249 plots' picture strips; those calls are
-  kept in a separate file and are not used in the results. The results use only the human labeller's labels,
-  including a blind review of the same 249 plots.
+- **Claude Code (Anthropic)** wrote most of the code, the interface text and the analysis scripts, under the
+  team's direction and review. It also re-read 249 plots on full-season strips; the headline uses those re-reads,
+  and the numbers on the human labels alone are reported next to them.
 - **In the product**, Amazon Nova 2 Lite on Bedrock interprets the farmer's request and chooses a tool; Sarvam AI
   and Amazon Polly speak the replies; Sarvam and Amazon Transcribe turn voice into text.
-- **Human work:** the labels, the product and policy decisions, the WhatsApp, Razorpay and AWS setup, and testing
-  on real phones.
+- **Human work:** the problem and the scheme design, the product and policy decisions, the first pass of 749
+  labels, the AWS, WhatsApp and Razorpay setup, and testing on real phones.
