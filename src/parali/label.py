@@ -22,36 +22,45 @@ def plot_window(stack: AreaStack, plot: Field, pad: int):
     return (r0, c0, r1, c1), (max(r0 - pad, 0), max(c0 - pad, 0), r1 + pad, c1 + pad)
 
 
-def render_strip(stack: AreaStack, plot: Field, out: Path, pad: int = 9, max_dates: int = 12) -> None:
+def clear_dates(stack: AreaStack, plot: Field, pad: int = 9) -> list[int]:
+    (pr0, pc0, pr1, pc1), _ = plot_window(stack, plot, pad)
+    return [t for t in range(len(stack.dates))
+            if np.mean(~np.isin(stack.scl[t, pr0:pr1, pc0:pc1], (0, 1, 8, 9, 10))) >= 0.8]
+
+
+def render_strip(stack: AreaStack, plot: Field, out: Path, pad: int = 9, per_line: int = 12) -> None:
+    """Every clear image of the season, wrapped onto lines of per_line dates. Every date, not a sample:
+    burnt fields here are ploughed within days, so a burn can show on one image only, and an earlier
+    version that sampled 12 dates hid the burn date of most plots the rules flagged."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.patches import Rectangle
 
     (pr0, pc0, pr1, pc1), (r0, c0, r1, c1) = plot_window(stack, plot, pad)
-    keep = []
-    for t in range(len(stack.dates)):
-        scl = stack.scl[t, pr0:pr1, pc0:pc1]
-        if np.mean(~np.isin(scl, (0, 1, 8, 9, 10))) >= 0.8:
-            keep.append(t)
-    if len(keep) > max_dates:
-        keep = [keep[i] for i in np.linspace(0, len(keep) - 1, max_dates).round().astype(int)]
-
-    fig, axes = plt.subplots(2, max(len(keep), 1), figsize=(2.1 * max(len(keep), 1), 4.9), squeeze=False)
+    keep = clear_dates(stack, plot, pad)
+    lines = max(1, -(-len(keep) // per_line))
+    fig, axes = plt.subplots(2 * lines, per_line, figsize=(2.1 * per_line, 4.9 * lines), squeeze=False)
+    for ax in axes.flat:
+        ax.axis("off")
     for j, t in enumerate(keep):
+        row, col = 2 * (j // per_line), j % per_line
+
         def win(b):
             return stack.band(t, b)[r0:r1, c0:c1]
         rgb = np.dstack([win("red"), win("green"), win("blue")]) / 0.16
         swir = np.dstack([win("swir22") / 0.35, win("nir08") / 0.45, win("red") / 0.2])
         for i, img in enumerate((rgb, swir)):
-            ax = axes[i, j]
+            ax = axes[row + i, col]
+            ax.axis("on")
             ax.imshow(np.clip(np.nan_to_num(img), 0, 1), interpolation="nearest")
             ax.add_patch(Rectangle((pc0 - c0 - 0.5, pr0 - r0 - 0.5), pc1 - pc0, pr1 - pr0,
                                    fill=False, edgecolor="cyan", linewidth=2.5))
             ax.set_xticks([]); ax.set_yticks([])
-        axes[0, j].set_title(stack.dates[t].strftime("%d %b"), fontsize=11, fontweight="bold")
-    axes[0, 0].set_ylabel("normal colour", fontsize=10)
-    axes[1, 0].set_ylabel("burn view", fontsize=10)
+        axes[row, col].set_title(stack.dates[t].strftime("%d %b"), fontsize=11, fontweight="bold")
+        if col == 0:
+            axes[row, 0].set_ylabel("normal colour", fontsize=10)
+            axes[row + 1, 0].set_ylabel("burn view", fontsize=10)
     fig.tight_layout(pad=0.3)
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=80)
@@ -94,7 +103,7 @@ summary{font-weight:600;font-size:16px;cursor:pointer}
 <details id=guide open>
 <summary>How to label (click to hide)</summary>
 <ol class=steps>
-<li>Each strip is one small patch of farmland across the 2025 season, left (late Sept) to right (early Dec).
+<li>Each strip is one small patch of farmland across the 2025 season: <b>every clear image</b>, read left to right and line by line, late Sept to early Dec. A burn often shows on one image only, so check every date.
   <b>Only look inside the cyan box.</b> Everything around it is just context.</li>
 <li>Each column is one satellite image. <b>Top row</b> = normal colour. <b>Bottom row</b> = "burn view", where burnt ground
   shows up as <b>dark red / maroon</b>.</li>

@@ -65,6 +65,9 @@ def handler(event, context):
         return _whatsapp_message(event["wa_message"])
     if "wa_setup" in event:  # run once by hand: aws lambda invoke ... --payload '{"wa_setup": true}'
         return whatsapp.setup(whatsapp.config(), event.get("waba"))
+    if "wa_profile" in event:  # run once by hand, with the picture as base64 (assets/whatsapp-profile.png)
+        return whatsapp.set_profile(whatsapp.config(), base64.b64decode(event["wa_profile"]["png_b64"]),
+                                    event["wa_profile"].get("about", ""), event["wa_profile"].get("description", ""))
     http = event["requestContext"]["http"]
     body = event.get("body")
     if body and event.get("isBase64Encoded"):

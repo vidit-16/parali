@@ -132,6 +132,26 @@ class Client:
         self._call(f"{GRAPH}/{self.cfg['phone_number_id']}/messages", json.dumps(body).encode())
 
 
+def set_profile(cfg: dict, png: bytes, about: str = "", description: str = "") -> dict:
+    """Profile photo (Meta's resumable upload, then the business profile) plus the about line."""
+    c = Client(cfg)
+    app_id = c._call(f"{GRAPH}/debug_token?input_token={cfg['token']}")["data"]["app_id"]
+    session = c._call(f"{GRAPH}/{app_id}/uploads?file_name=saakshi.png&file_length={len(png)}&file_type=image/png", b"",
+                      "application/x-www-form-urlencoded")["id"]
+    req = urllib.request.Request(f"{GRAPH}/{session}", png, {"Authorization": f"OAuth {cfg['token']}", "file_offset": "0"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        handle = json.loads(r.read())["h"]
+    body = {"messaging_product": "whatsapp", "profile_picture_handle": handle}
+    if about:
+        body["about"] = about[:139]
+    if description:
+        body["description"] = description[:512]
+    try:
+        return c._call(f"{GRAPH}/{cfg['phone_number_id']}/whatsapp_business_profile", json.dumps(body).encode())
+    except urllib.error.HTTPError as e:
+        return {"error": e.code, "message": json.loads(e.read() or b"{}").get("error", {}).get("message")}
+
+
 def setup(cfg: dict, waba: str | None = None) -> dict:
     """Check the token and subscribe the app to the WhatsApp Business Account that owns the number, without
     which Meta sends no message webhooks. Returns only non-secret details."""
