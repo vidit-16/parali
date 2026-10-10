@@ -191,7 +191,6 @@ weights correct the rates for the whole area, not for that selection.
 - The trial's effect on burning is the trial's result, not ours. Recovering an advance is administratively
   hard; Saakshi only makes it evidence-backed.
 - The smoke figures are estimates from published emission factors, not air-quality measurements.
-- Punjabi and Haryanvi text has not yet been checked by a native speaker.
 
 ## Team and AI tools
 

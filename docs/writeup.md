@@ -69,8 +69,7 @@ hears about a decision or money is composed from the record in fixed templates, 
 ## Limits and next steps
 
 Labels are one person's reading of the pictures, not site visits, and field outlines are samples, since there is
-no public cadastral map. Next: run with a district's real field registry, have native speakers check the
-Punjabi and Haryanvi, connect the advance and balance to a real direct-benefit-transfer rail, and give officers a
+no public cadastral map. Next: run with a district's real field registry, connect the advance and balance to a real direct-benefit-transfer rail, and give officers a
 batch view for the season's payouts.
 
 ## AI usage

@@ -79,9 +79,11 @@ By area (headline labels, current thresholds):
 | Burns flagged (recall) | 61% (fire alerts 16%) | 21% (fire alerts 58%) |
 | Burnt fields approved without an officer | 0% | 0% |
 
-Kaithal burnt very little in this sample, so its burn-side numbers rest on six plots. There, fire alerts caught
-more of the burns than the rules' possible-burn flag did; the burns the rules did not flag still went to the
-officer rather than being approved.
+Kaithal burnt very little in this sample: six plots. One was flagged as a possible burn. The other five went to
+the officer as "dark, without the change a fresh burn makes": 31–100% of the field turned near-black, but the
+plant signal had already fallen, which fits straw burnt on stubble harvested days earlier. None was approved.
+Flagging such fields as possible burns too would raise recall from 58% to 81% overall, but raise wrongful flags
+from 0.6% to 0.9%; since they reach the officer either way, the rules keep the lower false-flag rate.
 
 Human first pass alone (615 fields, 69 burnt): Saakshi wrongly flagged 1.6% of clean fields against 8.7% for fire
 alerts, flag precision 38%, and no burnt field was approved without an officer.

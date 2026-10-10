@@ -32,6 +32,7 @@ export const RULE = {
   burn_scar_persistent: "Burn-like scar after a sharp NIR drop",
   dark_on_one_image: "Dark on one image only",
   partial_scar: "Part of the field dark",
+  dark_without_drop: "Dark, but no fresh-burn change",
   fire_point_nearby_no_scar: "FIRMS fire point nearby, no scar on the field",
   too_few_clear_images: "Too few clear images",
   field_too_small: "Field too small for 20 m pixels",

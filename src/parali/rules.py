@@ -114,6 +114,12 @@ def decide(feats: list[DateFeatures], th: Thresholds, fires_nearby: int = 0,
         return Decision(REVIEW, "dark_on_one_image",
                         f"Burn-like change on {e.date} that does not persist on the next clear image.",
                         burn_date=e.date, **base)
+    if max_dark >= th.burn_share:
+        # dark enough for a burn, but without the fall in plant signal a fresh burn makes (often straw burnt on
+        # already-harvested stubble, or wet soil): the officer looks
+        return Decision(REVIEW, "dark_without_drop",
+                        f"Up to {max_dark:.0%} of the field looked dark, but the plant signal did not fall sharply "
+                        "as it does after a fresh burn.", **base)
     if max_dark >= th.partial_share:
         return Decision(REVIEW, "partial_scar",
                         f"Up to {max_dark:.0%} of the field looked dark; below the {th.burn_share:.0%} burn level.", **base)

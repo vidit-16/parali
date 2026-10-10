@@ -12,6 +12,7 @@ REASON_HI = {
     "too_few_clear_images": "बादलों के कारण आपके खेत की पर्याप्त साफ़ तस्वीरें नहीं मिलीं।",
     "dark_on_one_image": "एक तस्वीर में खेत का रंग गहरा दिखा, पर अगली तस्वीर में नहीं।",
     "partial_scar": "खेत के एक हिस्से का रंग गहरा दिखा।",
+    "dark_without_drop": "खेत का रंग गहरा दिखा, पर ताज़ा जलने जैसा बदलाव नहीं दिखा।",
     "fire_point_nearby_no_scar": "पास में आग का उपग्रह संकेत मिला, पर आपके खेत पर जलने का निशान नहीं दिखा।",
     "field_too_small": "खेत छोटा होने के कारण तस्वीरों से पक्का फ़ैसला नहीं हो सका।",
 }
@@ -20,6 +21,7 @@ REASON_EN = {
     "too_few_clear_images": "Not enough cloud-free images of the field.",
     "dark_on_one_image": "The field looked dark on one image but not on the next.",
     "partial_scar": "Part of the field looked dark.",
+    "dark_without_drop": "The field looked dark, but without the change a fresh burn makes.",
     "fire_point_nearby_no_scar": "A satellite fire point was detected nearby, but there is no burn scar on this field.",
     "field_too_small": "The field is too small for a confident reading at 20 m.",
 }
@@ -28,6 +30,7 @@ REASON_PA = {
     "too_few_clear_images": "ਬੱਦਲਾਂ ਕਾਰਨ ਤੁਹਾਡੇ ਖੇਤ ਦੀਆਂ ਕਾਫ਼ੀ ਸਾਫ਼ ਤਸਵੀਰਾਂ ਨਹੀਂ ਮਿਲੀਆਂ।",
     "dark_on_one_image": "ਇੱਕ ਤਸਵੀਰ ਵਿੱਚ ਖੇਤ ਦਾ ਰੰਗ ਗੂੜ੍ਹਾ ਦਿਸਿਆ, ਪਰ ਅਗਲੀ ਤਸਵੀਰ ਵਿੱਚ ਨਹੀਂ।",
     "partial_scar": "ਖੇਤ ਦੇ ਇੱਕ ਹਿੱਸੇ ਦਾ ਰੰਗ ਗੂੜ੍ਹਾ ਦਿਸਿਆ।",
+    "dark_without_drop": "ਖੇਤ ਦਾ ਰੰਗ ਗੂੜ੍ਹਾ ਦਿਸਿਆ, ਪਰ ਤਾਜ਼ਾ ਸਾੜ ਵਰਗੀ ਤਬਦੀਲੀ ਨਹੀਂ ਦਿਸੀ।",
     "fire_point_nearby_no_scar": "ਨੇੜੇ ਅੱਗ ਦਾ ਸੈਟੇਲਾਈਟ ਸੰਕੇਤ ਮਿਲਿਆ, ਪਰ ਤੁਹਾਡੇ ਖੇਤ ਉੱਤੇ ਸਾੜਨ ਦਾ ਨਿਸ਼ਾਨ ਨਹੀਂ ਦਿਸਿਆ।",
     "field_too_small": "ਖੇਤ ਛੋਟਾ ਹੋਣ ਕਾਰਨ ਤਸਵੀਰਾਂ ਤੋਂ ਪੱਕਾ ਫ਼ੈਸਲਾ ਨਹੀਂ ਹੋ ਸਕਿਆ।",
 }
@@ -236,6 +239,7 @@ REASON_HR = {
     "too_few_clear_images": "बादळां के कारण थारे खेत के पूरे साफ फोटू कोनी मिले।",
     "dark_on_one_image": "एक फोटू म्ह खेत का रंग गहरा दिख्या, पर अगले फोटू म्ह कोनी।",
     "partial_scar": "खेत के एक हिस्से का रंग गहरा दिख्या।",
+    "dark_without_drop": "खेत का रंग गहरा दिख्या, पर ताज्जा जळण जिसा बदलाव कोनी दिख्या।",
     "fire_point_nearby_no_scar": "धोरै आग का उपग्रह संकेत मिल्या, पर थारे खेत पै जळण का निसान कोनी दिख्या।",
     "field_too_small": "खेत छोटा होण के कारण फोटुआं तै पक्का फैसला कोनी हो सक्या।",
 }

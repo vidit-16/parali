@@ -91,6 +91,13 @@ def test_gradual_harvest_decline_is_not_a_burn():
     nirs = [0.32, 0.28, 0.24, 0.21, 0.18, 0.16, 0.15, 0.15]
     feats = [day(i, nir=v, dark=0.35 if i >= 5 else 0.0) for i, v in enumerate(nirs)]
     d = decide(feats, TH)
+    assert d.outcome == REVIEW and d.rule == "dark_without_drop"
+    assert "did not fall sharply" in d.reason  # never "35% ... below the 30% burn level"
+
+
+def test_part_of_the_field_dark_goes_to_review():
+    nirs = [0.32, 0.28, 0.24, 0.21, 0.18, 0.16, 0.15, 0.15]
+    d = decide([day(i, nir=v, dark=0.2 if i >= 5 else 0.0) for i, v in enumerate(nirs)], TH)
     assert d.outcome == REVIEW and d.rule == "partial_scar"
 
 
