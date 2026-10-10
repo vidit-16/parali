@@ -12,16 +12,18 @@ Environmental Hacks 2026, Air track.
 ## The problem
 
 Every November, smoke from burnt paddy straw in Punjab and Haryana settles over north India. On 22 Nov 2024 farm
-fires were about 26% of Delhi's PM2.5 (IITM decision support system, CPCB bulletin). The state has two levers,
+fires were about 26% of Delhi's PM2.5 (IITM estimate in the CPCB air quality bulletin of 23 Nov 2024). The state has two levers,
 and both work badly:
 
 - **Fire alerts as evidence.** NASA's thermal fire alerts (VIIRS, 375 m) lead to a red entry on the farmer's
   record, an FIR, and environmental compensation of ₹5,000–30,000 per incident. In our labelled sample the
   alerts flagged 9.0% of clean fields and caught only 19% of burns: a field can be burnt and ploughed between two
   satellite passes, and a fire next door lands on your record.
-- **Paying after a manual check.** Haryana pays ₹1,000 an acre for not burning, after a slow field visit. A
-  randomised trial in Punjab (J-PAL / MIT CEEPR) found that paying only after verification barely changed
-  behaviour, while paying a quarter upfront raised compliance by 8 to 11 percentage points.
+- **Paying after a manual check.** Haryana paid ₹1,000 an acre for managing straw without burning in 2024,
+  after a village committee checks GPS-tagged photos. A randomised trial in 171 Punjab villages (Jack,
+  Jayachandran, Kala and Pande, "Money (Not) to Burn"; J-PAL, MIT CEEPR) found that paying only after
+  verification did not reduce burning, while paying 25% or 50% upfront raised compliance by about 10 percentage
+  points, roughly doubling it.
 
 Paying upfront at scale needs a check that is cheap enough to run on every field, fast enough to pay on time,
 and fair enough to defend when a farmer disputes it.

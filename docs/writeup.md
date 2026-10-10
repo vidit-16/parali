@@ -2,13 +2,14 @@
 
 ## The problem
 
-Every November, burnt paddy straw from Punjab and Haryana adds to the smoke over Delhi; on the worst days farm
-fires are about a quarter of its PM2.5. The state's tools are weak. Fire alerts from NASA's VIIRS satellites
+Every November, burnt paddy straw from Punjab and Haryana adds to the smoke over Delhi; on 22 Nov 2024 farm fires were
+about 26% of its PM2.5 by IITM's estimate. The state's tools are weak. Fire alerts from NASA's VIIRS satellites
 decide who gets a red entry, an FIR and a fine, but in our labelled sample they flagged 9.0% of clean fields and
 caught only 19% of burns: a field can burn and be ploughed between two passes, and a neighbour's fire lands on
-your record. The incentive for not burning, ₹1,000 an acre in Haryana, is paid only after a slow field visit.
-A randomised trial in Punjab found that paying part of it upfront raises compliance by 8 to 11 percentage
-points, but paying upfront needs a check that can be run on every field, quickly and defensibly.
+your record. The incentive for not burning, ₹1,000 an acre in Haryana in 2024, is paid only after a village committee checks
+photos. A randomised trial in 171 Punjab villages found that paying only after verification did not reduce
+burning, while paying 25% or 50% upfront roughly doubled compliance, about 10 percentage points. Paying upfront
+needs a check that can be run on every field, quickly and defensibly.
 
 ## What we built
 
