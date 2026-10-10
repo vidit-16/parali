@@ -198,7 +198,8 @@ function renderCase(flash = false) {
         ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>
           <div class="d-btns"><button class="btn primary" id="approve">${icon("i-check")}<span>${esc(balance > 0 ? L.approve(balance) : L.approveNo)}</span></button>
           <button class="btn danger" id="confirm">${icon("i-flame")}<span>${esc(L.confirm)}</span></button></div></section>`
-        : c.review ? `<section class="decided"><div class="stamp ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}">${esc(L.stamp[c.status] || "")}<small>${esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang)))}</small></div>
+        : c.review ? `<section class="decided ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}"><span class="ic">${icon(c.status === "officer_confirmed_burnt" ? "i-flame" : "i-check")}</span>
+          <div class="dtx"><b>${esc(L.stamp[c.status] || "")}</b><small>${esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang)))}${c.review.note ? ` · “${esc(c.review.note)}”` : ""}</small></div>
           <div class="d-links">${c.notice_url ? `<a class="btn ghost small" href="${esc(c.notice_url)}" target="_blank" rel="noopener">${esc(L.notice)}</a>` : ""}
           ${c.recovery?.status === "issued" ? `<a class="btn ghost small" href="${esc(c.recovery.url)}" target="_blank" rel="noopener">${esc(L.paylink)}</a>` : ""}</div></section>` : ""}
         ${history(c)}

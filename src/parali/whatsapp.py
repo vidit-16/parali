@@ -207,9 +207,10 @@ def _name(f: dict) -> str:
 
 
 def menu(store: Store) -> str:
-    rows = [f"{i}. {_name(f)} · {f.get('name', '')} · {f.get('village', '')}" for i, f in enumerate(_farmers(store), 1)]
-    return ("Saakshi (demo). Reply with a number to be that farmer:\n"
-            "साक्षी (डेमो)। जिस किसान के रूप में बात करनी है, उसका नंबर भेजें:\n\n" + "\n".join(rows)
+    # English first, then the name in the farmer's own script
+    rows = [f"{i}. {f.get('farmer', '')} ({_name(f)}) · {f.get('name', '')} · {f.get('village', '')}" for i, f in enumerate(_farmers(store), 1)]
+    return ("Saakshi (demo). Reply with a number to chat as that farmer. Write or speak in English, Hindi, Punjabi "
+            "or Haryanvi; Saakshi answers in the same language.\n\n" + "\n".join(rows)
             + "\n\nSend \"change\" any time to pick again.")
 
 

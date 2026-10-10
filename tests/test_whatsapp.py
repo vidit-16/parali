@@ -86,7 +86,7 @@ def test_new_number_gets_the_farmer_list_then_links(store):
     c = FakeClient()
     assert run(store, msg("hello"), c) == "menu"
     menu = c.texts()[0]
-    assert "1. ਗੁਰਪ੍ਰੀਤ ਸਿੰਘ" in menu and "2. सुरेश कुमार" in menu  # each farmer in their own script
+    assert "1. Gurpreet Singh (ਗੁਰਪ੍ਰੀਤ ਸਿੰਘ)" in menu and "2. Suresh Kumar (सुरेश कुमार)" in menu  # English, then their own script
     c = FakeClient()
     run(store, msg("1", mid="m2"), c)
     assert store.get("wa_links", "919800000001")["farmer_id"] == "f-pb"

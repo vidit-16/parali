@@ -106,14 +106,15 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 .decide { padding: 14px 16px; border-radius: var(--r-m); background: rgba(255, 255, 255, .035); box-shadow: 0 0 0 1px var(--line-2) inset; }
 .d-btns { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
 .d-btns .btn { flex: 1; min-width: 170px; }
-.decided { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.decided { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 16px; border-radius: var(--r-m); }
+.decided .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+.decided .dtx { flex: 1; min-width: 160px; }
+.decided b { display: block; font-size: 15.5px; }
+.decided small { font-size: 12.5px; color: var(--ink-2); }
+.decided.clean { background: rgba(67, 196, 133, .1); } .decided.clean .ic { background: rgba(67, 196, 133, .2); color: var(--clean); } .decided.clean b { color: var(--clean); }
+.decided.burn { background: rgba(255, 106, 61, .1); } .decided.burn .ic { background: rgba(255, 106, 61, .2); color: var(--burn); } .decided.burn b { color: #FF8A5C; }
+.decided.land { animation: up .45s var(--ease) both; }
 .d-links { display: flex; gap: 8px; }
-.stamp { display: inline-grid; padding: 8px 16px; border: 2.5px solid currentColor; border-radius: 10px; font: 800 18px/1.1 Geist, sans-serif; letter-spacing: .06em; text-transform: uppercase; transform: rotate(-4deg); }
-.stamp:lang(hi), .stamp:lang(pa) { text-transform: none; letter-spacing: 0; font-family: Mukta, sans-serif; }
-.stamp small { font: 600 11px "Geist Mono", monospace; letter-spacing: 0; text-transform: none; opacity: .85; margin-top: 3px; }
-.stamp.clean { color: var(--clean); } .stamp.burn { color: #FF7A4D; }
-.stamp.land { animation: stamp .5s cubic-bezier(.2, 1.4, .4, 1) both; }
-@keyframes stamp { from { opacity: 0; transform: rotate(-12deg) scale(1.7); } to { opacity: 1; transform: rotate(-4deg) scale(1); } }
 .hist ol { list-style: none; margin: 0; padding: 0 0 0 12px; border-left: 1px solid var(--line-2); display: grid; gap: 8px; }
 .hist li { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; font-size: 13px; color: var(--ink-2); }
 .hist li::before { content: ""; position: absolute; left: -16px; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }

@@ -297,9 +297,13 @@ function toast(text, ms = 4200) {
 }
 
 const regionBounds = () => { const [w, s, e, n] = manifest.bounds; return [[w, s], [e, n]]; };
-function fitRegion(duration = 1200) {
+// on wide screens the belt sits to the right of the headline card, never under it
+const fitPadding = () => {
   const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
-  map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: reduced ? 0 : duration });
+  return { top: 90, bottom, left: wide ? Math.min(520, innerWidth * 0.36) : 24, right: wide ? 90 : 24 };
+};
+function fitRegion(duration = 1200) {
+  map.fitBounds(regionBounds(), { padding: fitPadding(), duration: reduced ? 0 : duration });
 }
 
 function playSeason() {
@@ -364,19 +368,23 @@ function runIntro() {
   events.forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
   setTimeout(() => {
     if (done) return;
-    const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
-    map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: 5200, curve: 1.4, essential: true });
+    map.fitBounds(regionBounds(), { padding: fitPadding(), duration: 5200, curve: 1.4, essential: true });
     map.once("moveend", finish);
   }, 2200);
 }
 
 const DATA_LAYERS = ["burns", "burns-new", "burn-pts", "fires", "fires-states"];
 function setPreparing(frac) {
+  frac = Math.max(frac, state.prepared || 0);  // never goes backwards
+  state.prepared = frac;
   const pct = Math.round(frac * 100);
   const b = $("#play-season");
   b.disabled = frac < 1;
-  b.querySelector("span").textContent = frac < 1 ? `${t().preparing} · ${pct}%` : t().play;
-  b.style.setProperty("--p", `${pct}%`);
+  b.querySelector("span").textContent = frac < 1 ? t().preparing : t().play;
+  let p = b.querySelector(".pct");
+  if (!p) { p = document.createElement("i"); p.className = "pct"; b.append(p); }
+  p.textContent = frac < 1 ? `${pct}%` : "";
+  b.style.setProperty("--p", frac.toFixed(3));
   $("#explore").disabled = frac < 1;
   $("#play").disabled = frac < 1;
   if (!state.revealed) $("#ring").style.strokeDashoffset = (151 * (1 - frac)).toFixed(1);
@@ -733,7 +741,7 @@ async function init() {
   const intro = params.get("intro") !== "0" && !reduced;  // every visit; any click, key or the Skip button skips it
   map = new maplibregl.Map({
     container: "map", attributionControl: false, fadeDuration: 0, maxZoom: 17.5, minZoom: 3,
-    ...(intro ? INDIA : { bounds: regionBounds(), fitBoundsOptions: { padding: 60 } }),
+    ...(intro ? INDIA : { bounds: regionBounds(), fitBoundsOptions: { padding: fitPadding() } }),
     style: {
       version: 8,
       sources: {
