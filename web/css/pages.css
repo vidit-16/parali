@@ -255,3 +255,9 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 @keyframes paypulse { 50% { opacity: .3; transform: scale(.8); } }
 @keyframes payland { from { opacity: 0; transform: translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .paystate.wait i, .paystate.land { animation: none; } }
+
+/* phones: facts in two rows, and long month names under the picture strip wrap instead of running together */
+@media (max-width: 640px) {
+  .facts3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .strip button span { white-space: normal; line-height: 1.15; overflow-wrap: anywhere; }
+}

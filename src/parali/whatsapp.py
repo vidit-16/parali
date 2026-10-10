@@ -288,20 +288,26 @@ def both(lang: str, make) -> str:
     return en if lang == "en" else f"{en}\n{make(lang)}"
 
 
-def _status_line(claim: dict, lang: str) -> str:
-    W, s, rec, st = _w(lang), claim.get("settlement") or {}, claim.get("recovery") or {}, claim["status"]
+def _status_key(claim: dict) -> str:
+    s, rec, st = claim.get("settlement") or {}, claim.get("recovery") or {}, claim["status"]
     if claim.get("appeal") and st in REVIEW:
-        return W["appealed"]
+        return "appealed"
     if st in CLEAN and s.get("state") == "balance_due":
-        return W["paid"].format(x=rupees(s.get("balance") or 0)) + W["smoke"].format(kg=season.smoke_kg(claim.get("acres")))
+        return "paid"
     if st == "officer_confirmed_burnt":
-        r = rupees(s.get("recover") or 0)
-        return W["repaid"].format(x=r) if rec.get("status") == "paid" else W["repay"].format(x=r) if s.get("recover") else W["confirmed"]
-    if st == "possible_burn":
-        return W["burn"].format(d=_day((claim.get("decision") or {}).get("burn_date"), lang))
-    if st == "needs_review":
-        return W["review"]
-    return W["wait"]
+        return "repaid" if rec.get("status") == "paid" else "repay" if s.get("recover") else "confirmed"
+    return {"possible_burn": "burn", "needs_review": "review"}.get(st, "wait")
+
+
+# one mark per message, so good news and bad news can be told apart before reading a word
+MARK = {"paid": "✅", "repaid": "✅", "repay": "❗", "confirmed": "❗", "burn": "❗", "review": "⏳", "wait": "⏳", "appealed": "⏳"}
+
+
+def _status_line(claim: dict, lang: str) -> str:
+    W, s, k = _w(lang), claim.get("settlement") or {}, _status_key(claim)
+    x = rupees(s.get("balance") or 0) if k == "paid" else rupees(s.get("recover") or 0)
+    line = W[k].format(x=x, d=_day((claim.get("decision") or {}).get("burn_date"), lang))
+    return line + W["smoke"].format(kg=season.smoke_kg(claim.get("acres"))) if k == "paid" else line
 
 
 def short_status(claim: dict, lang: str) -> str:
@@ -309,7 +315,7 @@ def short_status(claim: dict, lang: str) -> str:
     rec = claim.get("recovery") or {}
     field = _field_line(claim, "en") if lang == "en" else f"{_field_line(claim, 'en')} · {_field_line(claim, lang)}"
     url = f"\n{rec['url']}" if claim["status"] == "officer_confirmed_burnt" and rec.get("status") == "issued" and rec.get("url") else ""
-    return both(lang, lambda l: _status_line(claim, l)) + url + "\n" + field
+    return f"{MARK[_status_key(claim)]} " + both(lang, lambda l: _status_line(claim, l)) + url + "\n" + field
 
 
 def _money(claim: dict, lang: str) -> str:

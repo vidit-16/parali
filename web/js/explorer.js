@@ -26,7 +26,7 @@ const T = {
     v: { clean: "Clean", review: "With the officer", burn: "Possible burn" },
     vline: { clean: (n) => `No burn in any of ${n} clear images`, burn: (d) => `Burn signature on ${d}`, review: () => "Unclear: the officer looks at it" },
     signal: "Plant signal through the season", signalNote: "A burn drops it below zero overnight.",
-    clear: "Clear images", nearest: "Fire alerts within 375 m", none: "none", last: "Last season (2024)",
+    clear: "Clear images", nearest: "Fire alerts within 375 m", smoke: { burn: "PM2.5 released, est.", clean: "PM2.5 kept out of the air, est.", review: "PM2.5 if burnt, est." }, none: "none", last: "Last season (2024)",
     checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
@@ -53,7 +53,7 @@ const T = {
     v: { clean: "साफ़", review: "अधिकारी के पास", burn: "जलने की आशंका" },
     vline: { clean: (n) => `${n} साफ़ तस्वीरों में कहीं जलना नहीं`, burn: (d) => `${d} को जलने का निशान`, review: () => "साफ़ नहीं: अधिकारी देखेंगे" },
     signal: "सीज़न भर पौधों का संकेत", signalNote: "जलने पर यह एक रात में शून्य से नीचे गिरता है।",
-    clear: "साफ़ तस्वीरें", nearest: "375 मीटर में आग अलर्ट", none: "कोई नहीं", last: "पिछला सीज़न (2024)",
+    clear: "साफ़ तस्वीरें", nearest: "375 मीटर में आग अलर्ट", smoke: { burn: "निकला PM2.5, अनुमान", clean: "हवा में जाने से बचा PM2.5, अनुमान", review: "जलने पर PM2.5, अनुमान" }, none: "कोई नहीं", last: "पिछला सीज़न (2024)",
     checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
@@ -80,7 +80,7 @@ const T = {
     v: { clean: "ਸਾਫ਼", review: "ਅਧਿਕਾਰੀ ਕੋਲ", burn: "ਸਾੜ ਦਾ ਸ਼ੱਕ" },
     vline: { clean: (n) => `${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ`, burn: (d) => `${d} ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ`, review: () => "ਸਾਫ਼ ਨਹੀਂ: ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ" },
     signal: "ਸੀਜ਼ਨ ਭਰ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ", signalNote: "ਸਾੜ ਨਾਲ ਇਹ ਇੱਕ ਰਾਤ ਵਿੱਚ ਸਿਫ਼ਰ ਤੋਂ ਹੇਠਾਂ ਡਿੱਗਦਾ ਹੈ।",
-    clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", nearest: "375 ਮੀਟਰ ਵਿੱਚ ਅੱਗ ਅਲਰਟ", none: "ਕੋਈ ਨਹੀਂ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ (2024)",
+    clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", nearest: "375 ਮੀਟਰ ਵਿੱਚ ਅੱਗ ਅਲਰਟ", smoke: { burn: "ਨਿਕਲਿਆ PM2.5, ਅੰਦਾਜ਼ਾ", clean: "ਹਵਾ ਵਿੱਚ ਜਾਣ ਤੋਂ ਬਚਿਆ PM2.5, ਅੰਦਾਜ਼ਾ", review: "ਸਾੜਨ ਤੇ PM2.5, ਅੰਦਾਜ਼ਾ" }, none: "ਕੋਈ ਨਹੀਂ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ (2024)",
     checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
@@ -107,7 +107,7 @@ const T = {
     v: { clean: "साफ", review: "अफसर कनै", burn: "जळण का शक" },
     vline: { clean: (n) => `${n} साफ फोटुआं म्ह कितै जळाणा कोनी`, burn: (d) => `${d} नै जळण का निसान`, review: () => "साफ कोनी: अफसर देक्खैगा" },
     signal: "सीज़न भर पौधां का संकेत", signalNote: "जळण पै यो एक रात म्ह जीरो तै तळै गिरै सै।",
-    clear: "साफ फोटू", nearest: "375 मीटर म्ह आग अलर्ट", none: "कोए ना", last: "पाछला सीज़न (2024)",
+    clear: "साफ फोटू", nearest: "375 मीटर म्ह आग अलर्ट", smoke: { burn: "निकळ्या PM2.5, अंदाजा", clean: "हवा म्ह जाण तै बच्या PM2.5, अंदाजा", review: "जळाण पै PM2.5, अंदाजा" }, none: "कोए ना", last: "पाछला सीज़न (2024)",
     checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
@@ -202,7 +202,9 @@ function buildTicks() {
   const marks = [D0];
   for (let d = D0 + 1; d <= D1; d++) { const x = dateOf(d); if (x.getDate() === 1 || x.getDate() === 15) marks.push(d); }
   $("#ticks").innerHTML = marks.map((d) => {
-    const x = dateOf(d), lab = x.getDate() === 15 ? "15" : fmtDay(d, "short");
+    const x = dateOf(d);
+    // the season starts on the 21st, ten days before the next month: the first label keeps only its day, or the two collide
+    const lab = x.getDate() === 15 || (d === D0 && marks[1] - D0 < 14 && innerWidth < 1200) ? String(x.getDate()) : fmtDay(d, "short");
     return `<span style="left:${((d - D0) / (D1 - D0)) * 100}%">${esc(lab)}</span>`;
   }).join("");
 }
@@ -301,9 +303,13 @@ function toast(text, ms = 4200) {
 
 const regionBounds = () => { const [w, s, e, n] = manifest.bounds; return [[w, s], [e, n]]; };
 // on wide screens the belt sits to the right of the headline card, never under it
+// with neither the card nor the field panel open, the belt is centred
 const fitPadding = () => {
   const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
-  return { top: 90, bottom, left: wide ? Math.min(520, innerWidth * 0.36) : 24, right: wide ? 90 : 24 };
+  const hero = document.body.classList.contains("hero-open") || state.intro;
+  const panel = document.body.classList.contains("panel-open");
+  const side = wide ? 90 : 24;
+  return { top: 90, bottom, left: wide && hero ? Math.min(520, innerWidth * 0.36) : side, right: wide && panel ? 430 : side };
 };
 function fitRegion(duration = 1200) {
   map.fitBounds(regionBounds(), { padding: fitPadding(), duration: reduced ? 0 : duration });
@@ -430,7 +436,24 @@ function centroid(g) {
 }
 const kindOf = (o) => (o === "auto_approved" || o === "officer_approved" ? "clean" : o === "possible_burn" ? "burn" : "review");
 const ICON = { clean: "i-check", burn: "i-flame", review: "i-eye" };
-const fieldName = (p) => (lang === "en" ? p.name : p.name_hi || p.name);
+// names written in Hindi, shown in Gurmukhi (same rules as messages.to_gurmukhi on the server)
+const NO_GURMUKHI = { "ष": "ਸ਼", "ऋ": "ਰਿ", "ृ": "ਿ", "ॉ": "ੋ", "ऑ": "ਓ", "ॅ": "ੈ", "ऍ": "ਐ", "ः": "", "ऽ": "" };
+function toGurmukhi(text) {
+  let s = [...(text || "").normalize("NFC").replace(/ड\u093c/g, "ੜ").replace(/ढ\u093c/g, "ੜ")].map((ch) => {
+    if (ch in NO_GURMUKHI) return NO_GURMUKHI[ch];
+    const c = ch.codePointAt(0);
+    return c >= 0x900 && c <= 0x97f && ch !== "।" && ch !== "॥" ? String.fromCodePoint(c + 0x100) : ch;
+  }).join("");
+  s = s.replace(/([\u0a15-\u0a39])\u0a4d\1/g, "\u0a71$1")
+    .replace(/([\u0a15-\u0a39\u0a3f\u0a41\u0a42])\u0a02/g, "$1\u0a70")
+    .replace(/\u0a4d(?![ਰਵਹ])/g, "")
+    .replace(/\u0a4dਰ(?![\u0a3e-\u0a4c\u0a70\u0a71\u0a02\u0a15-\u0a39])/g, "ਰ")
+    .replace(/ਿਯਾ/g, "ਿਆ")
+    .replace(/ਸਿੰਹ(?![\u0a00-\u0a7f])/g, "ਸਿੰਘ");
+  return s;
+}
+const local = (s) => (lang === "pa" ? toGurmukhi(s) : s);
+const fieldName = (p) => (lang === "en" ? p.name : local(p.name_hi || p.name));
 
 function setFieldState(id, st) { if (id) map.setFeatureState({ source: "fields", id }, st); }
 function openField(f, { auto = false } = {}) {
@@ -456,6 +479,7 @@ function closePanel() {
   clearInterval(state.frameTimer);
   if (state.field) setFieldState(state.field.properties.id, { veil: false, checking: false });
   state.field = null; state.check = null;
+  if (story.on) endStory();  // the story's last steps are about this field
   $("#panel").hidden = true;
   $("#panel").classList.remove("busy");
   document.body.classList.remove("panel-open");
@@ -586,7 +610,9 @@ function actionHtml() {
     const d = c.result.current.decision, k = kindOf(d.outcome);
     const vline = k === "burn" ? L.vline.burn(fmtIso(d.burn_date)) : k === "clean" ? L.vline.clean(d.clear_dates.length) : L.vline.review();
     const meta = c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds);
+    const kg = Math.round((state.field?.properties.acres || 0) * 19);  // 2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne
     return `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div class="bt"><b>${esc(L.v[k])}</b><p>${esc(vline)}</p>
+      <p class="smoke-l" title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne">≈ ${kg} kg ${esc(L.smoke[k])}</p>
       <small>${esc(meta)} · <button class="link" id="run-check">${esc(L.rerun)}</button></small></div></div>`;
   }
   if (c && !c.failed) {
@@ -627,7 +653,7 @@ function renderAction() {
 }
 function renderPanel() {
   const f = state.field, p = f.properties, L = t();
-  const village = lang === "en" ? p.village : p.village_hi || p.village;
+  const village = lang === "en" ? p.village : local(p.village_hi || p.village);
   $("#panel-body").innerHTML = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>
     <div id="action"></div>
     <div class="vtabs" role="tablist"><button role="tab" data-v="colour">${esc(L.colour)}</button><button role="tab" data-v="ir">${esc(L.infrared)}</button></div>
@@ -795,7 +821,7 @@ async function init() {
   map.addSource("study", { type: "geojson", data: { type: "Feature", geometry: { type: "Polygon", coordinates: [[[bw, bs], [be, bs], [be, bn], [bw, bn], [bw, bs]]] } } });
   map.addLayer({ id: "study", type: "line", source: "study", minzoom: 8, paint: { "line-color": "#FFFFFF", "line-opacity": 0.8, "line-width": 1.2, "line-dasharray": [3, 3] } });
 
-  map.addSource("burns", { type: "geojson", data: "/tiles/burns.geojson" });
+  map.addSource("burns", { type: "geojson", data: "/tiles/burns.geojson", tolerance: 0.1 });
   map.addLayer({ id: "burns", type: "fill", source: "burns", layout: { visibility: "none" }, paint: {
     "fill-color": ["interpolate", ["linear"], ["get", "d"], ...BURN_RAMP.flat()],
     "fill-opacity": ["interpolate", ["linear"], ["zoom"], 9, 0.95, 14, 0.7, 16, 0.3] } });
@@ -828,7 +854,8 @@ async function init() {
   // dots stay neutral until a field is checked in this visit, so the map does not give the answer away
   const kindFor = (id) => dotKinds[id] || "none";
   const dotsFc = { type: "FeatureCollection", features: fieldsFc.features.map((f) => ({ type: "Feature", properties: { id: f.properties.id, k: kindFor(f.properties.id) }, geometry: { type: "Point", coordinates: centroid(f.geometry) } })) };
-  map.addSource("fields", { type: "geojson", data: fieldsFc, promoteId: "id" });
+  // no simplification: a field drawn on a 20 m grid must keep its steps at every zoom, even mid-flight
+  map.addSource("fields", { type: "geojson", data: fieldsFc, promoteId: "id", tolerance: 0, maxzoom: 16 });
   map.addSource("field-dots", { type: "geojson", data: dotsFc });
   refreshDots = () => {
     dotsFc.features.forEach((d) => { d.properties.k = kindFor(d.properties.id); });

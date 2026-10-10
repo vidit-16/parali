@@ -22,6 +22,38 @@ def run(cmd):
     subprocess.run(cmd, check=True, cwd=ROOT, shell=sys.platform == "win32")
 
 
+def fill_empty_tiles(s3, bucket: str) -> None:
+    """The season pictures cover two areas, but the map's bounds are one box. Every tile address in that box
+    without a picture gets a transparent one, so the map never asks for something that is not there."""
+    import io
+    import math
+    from concurrent.futures import ThreadPoolExecutor
+
+    from PIL import Image
+    mf = json.loads(s3.get_object(Bucket=bucket, Key="tiles/manifest.json")["Body"].read())
+    have = set()
+    for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix="tiles/"):
+        have.update(o["Key"] for o in page.get("Contents", []))
+
+    def tile(lon, lat, z):
+        n = 2 ** z
+        return int((lon + 180) / 360 * n), int((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n)
+    w, s, e, n = mf["bounds"]
+    missing = []
+    for z in range(mf["minzoom"], mf["maxzoom"] + 1):
+        (x0, y0), (x1, y1) = tile(w, n, z), tile(e, s, z)
+        missing += [f"tiles/{win['id']}/{z}/{x}/{y}.webp" for win in mf["windows"]
+                    for x in range(x0, x1 + 1) for y in range(y0, y1 + 1)]
+    missing = [k for k in missing if k not in have]
+    buf = io.BytesIO()
+    Image.new("RGBA", (256, 256), (0, 0, 0, 0)).save(buf, "WEBP", lossless=True)
+    empty = buf.getvalue()
+    put = lambda k: s3.put_object(Bucket=bucket, Key=k, Body=empty, ContentType="image/webp")  # noqa: E731
+    with ThreadPoolExecutor(32) as ex:
+        list(ex.map(put, missing))
+    print(f"empty tiles: {len(missing)} added")
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--profile", default="envhacks")
@@ -55,6 +87,7 @@ def main():
         s3.upload_file(str(f), bucket, f"web/{rel}", ExtraArgs={"ContentType": ctype, "CacheControl": "no-cache"})
         print("web/", rel)
     s3.upload_file(str(ROOT / "data/firms/kaithal_2025.csv"), bucket, "data/firms.csv")
+    fill_empty_tiles(s3, bucket)
 
     tbl = s.resource("dynamodb").Table(table)
     fc = json.loads((ROOT / "data/demo/fields.geojson").read_text(encoding="utf-8"))

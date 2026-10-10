@@ -115,6 +115,13 @@ body.panel-open .rail { right: 416px; }
 .hero { position: fixed; left: 16px; bottom: 106px; width: min(460px, calc(100% - 32px)); padding: 22px 22px 18px; border-radius: var(--r-l); z-index: 4; overflow: hidden; animation: rise .7s var(--ease) both; }
 .hero::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, #FF8A3D, #D9468C, #3D6BFF); }
 .hero[hidden] { display: none; }
+/* the card never reaches up under the logo: on shorter screens it tightens, then scrolls */
+.hero { max-height: calc(100% - 106px - 84px); overflow-y: auto; scrollbar-width: none; }
+@media (max-height: 920px) and (min-width: 641px) {
+  .hero { padding: 18px 20px 14px; }
+  .hero h1 { font-size: 26px; margin: 4px 0 12px; }
+  .hero h1:lang(hi), .hero h1:lang(pa) { font-size: 23px; }
+}
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .kicker { margin: 0; font-size: 13px; color: var(--muted); font-weight: 500; }
 .hero h1 { margin: 6px 0 16px; font-size: 30px; line-height: 1.12; letter-spacing: -.035em; font-weight: 800; text-wrap: balance; }
@@ -183,7 +190,8 @@ body.panel-open .rail { right: 416px; }
 .panel { position: fixed; top: 76px; right: 16px; max-height: calc(100% - 184px); width: min(384px, calc(100% - 32px)); overflow: auto; padding: 0; border-radius: var(--r-l); z-index: 7; animation: slide .45s var(--ease) both; scrollbar-width: thin; }
 .panel[hidden] { display: none; }
 @keyframes slide { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
-.panel .close { position: absolute; top: 12px; right: 12px; z-index: 2; background: rgba(17, 18, 22, .75); }
+.panel .close { position: absolute; top: 14px; right: 14px; z-index: 8; color: var(--ink); background: rgba(255, 255, 255, .08); border: 1px solid var(--line-2); }
+.panel .close:hover { background: rgba(255, 255, 255, .16); }
 .panel .head { padding: 18px 20px 14px; }
 .panel h2 { margin: 0; font-size: 21px; letter-spacing: -.02em; line-height: 1.15; padding-right: 40px; }
 .panel .sub { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
@@ -224,6 +232,7 @@ body.panel-open .rail { right: 416px; }
 .facts div { padding: 10px 12px; border-radius: 10px; background: var(--surface); }
 .facts dt { font-size: 11.5px; color: var(--muted); }
 .facts dd { margin: 1px 0 0; font-size: 15px; font-weight: 700; }
+.band .smoke-l { margin-top: 3px; font-size: 12.5px; font-weight: 600; color: var(--ink); }
 .last { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); }
 .last .mini { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; flex: none; }
 .last .mini svg { width: 15px; height: 15px; }
@@ -281,7 +290,7 @@ body.panel-open .rail { right: 416px; }
   .bar { top: 10px; left: 10px; right: 10px; gap: 8px; }
   .brand { height: 44px; padding-right: 12px; }
   .brand .name-local { display: none; }
-  .modes { display: none; }
+  .modes a { padding: 0 9px; }  /* icons only: Officer and Farmer stay one tap away on a phone */
   .lang-btn { height: 44px; }
   .rail { top: auto; bottom: 100px; transform: none; right: 10px; }
   .layers { display: none; }
@@ -297,6 +306,7 @@ body.panel-open .rail { right: 416px; }
   .stat b { font-size: 19px; }
   .panel { top: auto; left: 10px; right: 10px; bottom: 92px; width: auto; max-height: 66vh; }
   .maplibregl-ctrl-bottom-right, .maplibregl-ctrl-bottom-left { bottom: 90px; }
+  body.panel-open .maplibregl-ctrl-bottom-left, body.hero-open .maplibregl-ctrl-bottom-left { display: none; }
   .toast { bottom: 96px; }
 }
 
@@ -326,7 +336,7 @@ body.panel-open .rail { right: 416px; }
 .viewer { aspect-ratio: 2 / 1; }
 .strip canvas { aspect-ratio: 2 / 1; }
 .strip button span { white-space: nowrap; }
-#action { padding: 0 20px 14px; }
+#action { padding: 16px 20px 14px; }
 .act .cap { margin: 8px 0 0; }
 .band { margin: 0 -20px; }
 .band .bt { min-width: 0; }
@@ -398,3 +408,5 @@ body.panel-open .story { left: calc((100% - 400px) / 2); max-width: calc(100% - 
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(159, 227, 255, .55); } 100% { box-shadow: 0 0 0 14px rgba(159, 227, 255, 0); } }
 .stat.smoke b { color: #B9C2D0; }
 @media (max-width: 1100px) { .stat.smoke { display: none; } }
+
+@media (max-width: 640px) { .strip button span { white-space: normal; line-height: 1.15; overflow-wrap: anywhere; } }
