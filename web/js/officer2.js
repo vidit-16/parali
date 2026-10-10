@@ -1,7 +1,7 @@
 // Officer desk: the claims the rules could not settle. Each case shows the field's pictures (colour and infrared),
 // its plant signal, what the system read, the farmer's appeal, where the money stands, and the officer's decision.
 // Names and money appear only here.
-import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, kindOf, getJSON, drawCut, evidenceViewer, countUp, signalChart, smokeKg } from "./shared.js";
+import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, kindOf, getJSON, drawCut, evidenceViewer, countUp, signalChart, smokeKg, toGurmukhi } from "./shared.js";
 
 const T = {
   en: {
@@ -82,18 +82,58 @@ const T = {
     signal: "सीज़न भर पौधों का संकेत (NBR): जलने पर यह शून्य से नीचे गिरता है",
     empty: "कुछ बाकी नहीं। नियमों ने हर दावा तय कर दिया।", acres: "एकड़", scheme: (st) => `${st === "HR" ? "हरियाणा" : "पंजाब"} · ₹1,000 प्रति एकड़, आधा कटाई से पहले`,
   },
+  pa: {
+    explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
+    signinTitle: "ਅਧਿਕਾਰੀ ਸਾਈਨ-ਇਨ", signinNote: "ਨਾਮ, ਰਕਮ ਅਤੇ ਜਾਂਚ ਦੀ ਸੂਚੀ ਸਿਰਫ਼ ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਵੇਖਦੇ ਹਨ। ਜਨਤਕ ਨਕਸ਼ੇ ਉੱਤੇ ਇਹ ਨਹੀਂ ਦਿਸਦੇ।",
+    officerId: "ਅਧਿਕਾਰੀ ਆਈਡੀ", pin: "ਪਿੰਨ", signin: "ਸਾਈਨ-ਇਨ ਕਰੋ", demoPin: "ਪਿੰਨ: 2468 · ਮਾਮਲੇ ਰੋਜ਼ ਸਵੇਰੇ 5 ਵਜੇ ਨਵੇਂ ਹੁੰਦੇ ਹਨ", wrongPin: "ਪਿੰਨ ਸਹੀ ਨਹੀਂ ਹੈ।", signout: "ਸਾਈਨ-ਆਊਟ",
+    tabs: { todo: "ਫ਼ੈਸਲਾ ਬਾਕੀ", done: "ਤੈਅ", all: "ਸਾਰੇ" },
+    waiting: () => "ਮਾਮਲੇ ਤੁਹਾਡੇ ਫ਼ੈਸਲੇ ਲਈ", settled: (m) => `${m} ਦਾਅਵਿਆਂ ਵਿੱਚੋਂ; ਬਾਕੀ ਨਿਯਮਾਂ ਨੇ ਤੈਅ ਕੀਤੇ`,
+    chip: { possible_burn: "ਸਾੜ ਦਾ ਸ਼ੱਕ", needs_review: "ਸਾਫ਼ ਨਹੀਂ", officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ",
+      auto_approved: "ਸਾਫ਼", submitted: "ਜਾਂਚ ਜਾਰੀ", appealed: "ਅਪੀਲ" },
+    atStake: (x) => `${rupees(x)} ਅਗਾਊਂ`, noAdv: "ਅਗਾਊਂ ਨਹੀਂ",
+    reasonTitle: { possible_burn: "ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਮਿਲਿਆ", needs_review: "ਸੈਟੇਲਾਈਟ ਤੋਂ ਸਾਫ਼ ਨਹੀਂ", auto_approved: "ਸਾੜ ਨਹੀਂ ਮਿਲਿਆ" },
+    facts: { clear: "ਸਾਫ਼ ਤਸਵੀਰਾਂ", fires: "ਨੇੜੇ ਅੱਗ ਅਲਰਟ", last: "ਪਿਛਲਾ ਸੀਜ਼ਨ", smokeOut: "PM2.5 ਨਿਕਲਿਆ, ਅੰਦਾਜ਼ਾ", smokeSaved: "PM2.5 ਬਚਿਆ, ਅੰਦਾਜ਼ਾ" },
+    lastV: { auto_approved: "ਸਾਫ਼", possible_burn: "ਸਾੜਿਆ", needs_review: "ਸਾਫ਼ ਨਹੀਂ" },
+    appealBy: (n) => `${n} ਦੀ ਅਪੀਲ`,
+    flowTitle: "ਰਕਮ ਕਿੱਥੇ ਹੈ",
+    flow: { advance: "ਅਗਾਊਂ", check: "ਸੈਟੇਲਾਈਟ", decision: "ਅਧਿਕਾਰੀ", money: "ਬਾਕੀ ਰਕਮ" },
+    fv: {
+      advPaid: (x) => `+${rupees(x)} ਦਿੱਤੇ`, advNone: "ਨਹੀਂ", you: "ਤੁਸੀਂ ਤੈਅ ਕਰੋ", approved: "ਮਨਜ਼ੂਰ", confirmed: "ਸਾੜ ਪੱਕਾ",
+      held: (x) => `${rupees(x)} ਰੁਕੇ`, released: (x) => `+${rupees(x)} ਭੇਜੇ`, linkOut: (x) => `${rupees(x)} ਦਾ ਲਿੰਕ ਭੇਜਿਆ`,
+      repaid: (x) => `${rupees(x)} ਵਾਪਸ ਆਏ`, recover: (x) => `${rupees(x)} ਵਸੂਲਣੇ ਹਨ`, nothing: "ਕੁਝ ਬਾਕੀ ਨਹੀਂ",
+    },
+    history: "ਇਤਿਹਾਸ",
+    ev: {
+      submitted: "ਦਾਅਵਾ ਦਰਜ", advance_assessed: "ਅਗਾਊਂ ਲਈ 2024 ਜਾਂਚਿਆ", advance_paid: (x) => `${rupees(x)} ਅਗਾਊਂ ਦਿੱਤੇ`,
+      decided: "ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਪੂਰੀ", appeal: "ਕਿਸਾਨ ਨੇ ਅਪੀਲ ਕੀਤੀ", reviewed: (by, v) => `${by} ਨੇ ${v === "approve" ? "ਮਨਜ਼ੂਰ ਕੀਤਾ" : "ਸਾੜ ਪੱਕਾ ਕੀਤਾ"}`,
+      balance_released: (x) => `${rupees(x)} ਭੇਜੇ (DBT, ਨਕਲੀ)`, recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਬਣਿਆ",
+      recovery_link: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਲਿੰਕ ਭੇਜਿਆ (Razorpay ਟੈਸਟ)`, advance_recovered: (x) => `ਕਿਸਾਨ ਨੇ ${rupees(x)} ਵਾਪਸ ਕੀਤੇ`,
+      recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
+    },
+    decide: "ਤੁਹਾਡਾ ਫ਼ੈਸਲਾ", note: "ਤੁਸੀਂ ਖੇਤ ਵਿੱਚ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ",
+    approve: (x) => `ਮਨਜ਼ੂਰ ਕਰੋ · ${rupees(x)} ਭੇਜੋ`, approveNo: "ਮਨਜ਼ੂਰ ਕਰੋ", confirm: "ਸਾੜ ਪੱਕਾ ਕਰੋ",
+    needNote: "ਸਾੜ ਪੱਕਾ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਲਿਖੋ ਕਿ ਤੁਸੀਂ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ।",
+    stamp: { officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ" }, by: (id, at) => `${id} · ${at}`,
+    notice: "ਵਸੂਲੀ ਨੋਟਿਸ", paylink: "ਭੁਗਤਾਨ ਲਿੰਕ", payWait: "ਕਿਸਾਨ ਦੇ ਭੁਗਤਾਨ ਦੀ ਉਡੀਕ", payDone: (x) => `${rupees(x)} ਮਿਲੇ · ਮਾਮਲਾ ਬੰਦ`,
+    steps: { reviewed: "ਫ਼ੈਸਲਾ ਦਰਜ", recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਦਾ ਮਸੌਦਾ ਬਣਿਆ", recovery_link: "ਭੁਗਤਾਨ ਲਿੰਕ ਬਣਿਆ",
+      balance_released: "ਬਾਕੀ ਰਕਮ ਕਿਸਾਨ ਨੂੰ ਭੇਜੀ", farmer_told: "ਕਿਸਾਨ ਨੂੰ ਐਪ ਅਤੇ WhatsApp ਉੱਤੇ ਦੱਸਿਆ" },
+    colour: "ਰੰਗੀਨ", infrared: "ਇਨਫ੍ਰਾਰੈੱਡ", irNote: "ਸੜੀ ਜ਼ਮੀਨ ਮੈਰੂਨ ਦਿਸਦੀ ਹੈ, ਗਿੱਲੀ ਮਿੱਟੀ ਗੂੜ੍ਹੀ ਨੀਲੀ।", irWait: "ਇਨਫ੍ਰਾਰੈੱਡ ਤਸਵੀਰਾਂ ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਨਾਲ ਆਉਂਦੀਆਂ ਹਨ।",
+    signal: "ਸੀਜ਼ਨ ਭਰ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ (NBR): ਸਾੜਨ ਤੇ ਇਹ ਸਿਫ਼ਰ ਤੋਂ ਹੇਠਾਂ ਡਿੱਗਦਾ ਹੈ",
+    empty: "ਕੁਝ ਬਾਕੀ ਨਹੀਂ। ਨਿਯਮਾਂ ਨੇ ਹਰ ਦਾਅਵਾ ਤੈਅ ਕਰ ਦਿੱਤਾ।", acres: "ਏਕੜ", scheme: (st) => `${st === "HR" ? "ਹਰਿਆਣਾ" : "ਪੰਜਾਬ"} · ₹1,000 ਪ੍ਰਤੀ ਏਕੜ, ਅੱਧਾ ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ`,
+  },
 };
-// officers in both states read Hindi or English; the Punjabi and Haryanvi choices show the Hindi desk
-const pick = (l) => (l === "en" ? "en" : "hi");
+// Haryana officers read Hindi, so the Haryanvi choice shows the Hindi desk
+const pick = (l) => (l === "en" ? "en" : l === "pa" ? "pa" : "hi");
 let lang = initialLang("en");
 const t = () => T[pick(lang)];
 
 const S = { claims: [], fields: {}, windows: [], tab: "todo", sel: null, detail: null, officer: store.get("saakshi-officer", sessionStorage), pin: store.get("saakshi-pin", sessionStorage) };
 
 function labelText() { $$("[data-t]").forEach((el) => { const v = t()[el.dataset.t]; if (typeof v === "string") el.textContent = v; }); }
-const name = (c) => (lang === "en" ? c.farmer_name : c.farmer_name_hi || c.farmer_name);
-const fieldLabel = (c) => (lang === "en" ? c.field_name : c.field_name_hi || c.field_name);
-const village = (c) => { const f = S.fields[c.field_id]; return f ? (lang === "en" ? f.village : f.village_hi || f.village) : c.village; };
+const local = (s) => (lang === "pa" ? toGurmukhi(s) : s);
+const name = (c) => (lang === "en" ? c.farmer_name : local(c.farmer_name_hi || c.farmer_name));
+const fieldLabel = (c) => (lang === "en" ? c.field_name : local(c.field_name_hi || c.field_name));
+const village = (c) => { const f = S.fields[c.field_id]; return f ? (lang === "en" ? f.village : local(f.village_hi || f.village)) : c.village; };
 const isOpen = (c) => c.status === "possible_burn" || c.status === "needs_review";
 const chipKey = (c) => (c.appeal && isOpen(c) ? "appealed" : c.status);
 const chipCls = (c) => (chipKey(c) === "appealed" ? "appeal" : kindOf(c.status));
