@@ -1,106 +1,134 @@
-# Parali Check
+# Saakshi (साक्षी)
 
-**Pay farmers before harvest for not burning paddy straw. Check every field from space after.**
+Saakshi pays farmers part of the no-burn incentive before harvest, checks every field from satellite pictures
+afterwards, and gives the village officer the evidence for the cases the pictures cannot settle. Farmers use it
+in Punjabi, Hindi, Haryanvi or English, on the web or on WhatsApp, by text or by voice.
 
-Live: https://d5gpae5oilzws.cloudfront.net · Try it locally in two minutes: [below](#run-it-locally)
+**Live:** https://d5gpae5oilzws.cloudfront.net · Officer PIN `2468` · The demo's cases reset every day at 05:00 IST.
+The WhatsApp side runs on a Meta test number, so it is shown in the video rather than open to the public.
 
-Every November, smoke from burning paddy straw in Punjab and Haryana settles over north India. On 22 Nov 2024
-farm fires were about 26% of Delhi's PM2.5 (IITM decision support system, CPCB bulletin). Haryana has two
-levers against it, and both are broken:
+Environmental Hacks 2026, Air track.
 
-- **The stick.** Thermal fire alerts (NASA FIRMS / VIIRS) trigger a red entry on the farmer's record: no MSP
-  sale for two seasons, an FIR, up to Rs 30,000 in environmental compensation. In our measurement those
-  alerts flagged **14% of clean fields** and caught **14% of burns**: fields are burnt and ploughed between
-  satellite passes.
-- **The carrot.** Rs 1,200 per acre for managing straw without burning, paid **after** a slow manual check.
-  A randomised trial in Punjab (J-PAL / MIT CEEPR) found that paying only after verification barely changed
-  behaviour, while paying **25% upfront** raised compliance by **8 to 11 percentage points**.
+## The problem
 
-Paying upfront at scale needs verification that is cheap, fast and fair for every field. That is what this
-builds.
+Every November, smoke from burnt paddy straw in Punjab and Haryana settles over north India. On 22 Nov 2024 farm
+fires were about 26% of Delhi's PM2.5 (IITM decision support system, CPCB bulletin). The state has two levers,
+and both work badly:
+
+- **Fire alerts as evidence.** NASA's thermal fire alerts (VIIRS, 375 m) lead to a red entry on the farmer's
+  record, an FIR, and environmental compensation of ₹5,000–30,000 per incident. In our labelled sample the
+  alerts flagged TBD of clean fields and caught only TBD of burns: a field can be burnt and ploughed between two
+  satellite passes, and a fire next door lands on your record.
+- **Paying after a manual check.** Haryana pays ₹1,000 an acre for not burning, after a slow field visit. A
+  randomised trial in Punjab (J-PAL / MIT CEEPR) found that paying only after verification barely changed
+  behaviour, while paying a quarter upfront raised compliance by 8 to 11 percentage points.
+
+Paying upfront at scale needs a check that is cheap enough to run on every field, fast enough to pay on time,
+and fair enough to defend when a farmer disputes it.
 
 ## What it does
 
-1. **Before harvest:** each registered field is checked against last season's Sentinel-2 images. Clean last
-   season: 25% of the incentive is paid now. Not clean: no advance this year; one clean season earns it back.
-2. **After harvest:** every clear image of the field from 1 Oct to 30 Nov is read straight from the AWS Open
-   Data registry. Fixed rules look for the signature of a burn: near-infrared drops in one step and the
-   field turns near-black. Clean fields are approved and the balance released automatically.
-3. **Officer confirms:** unclear cases and every possible burn go to the village officer with the images.
-   A confirmed burn on an advanced field gets a recovery notice drafted with the evidence. Fines, red
-   entries and cases stay human decisions.
-4. **The farmer asks in Hindi.** A voice assistant (Amazon Transcribe, Bedrock, Polly) tells them the
-   advance, the status, the reason, and records objections.
+1. **Before harvest, the advance.** Each registered field is checked against last season's Sentinel-2 pictures.
+   Clean last season: half the incentive is paid now (simulated direct benefit transfer). Not clean: no advance
+   this year.
+2. **After harvest, the check.** Every clear picture of the field from 1 Oct to 30 Nov is read from the AWS Open
+   Data copy of Sentinel-2. Fixed rules look for a burn: the plant signal collapses in one step and the ground
+   turns near-black. Clean fields are approved and the balance is released.
+3. **The officer decides the rest.** Unclear fields and every possible burn go to the village officer with the
+   colour and infrared pictures, the plant signal through the season, nearby fire alerts and last season's
+   result. When the officer confirms a burn on a field that got an advance, Saakshi drafts a recovery notice
+   with the evidence and sends a payment link (Razorpay, test mode). Fines, red entries and cases stay human
+   decisions.
+4. **The farmer is told, and can answer back.** The decision reaches the farmer in their language, as text and
+   a voice note, in the app and on WhatsApp: what the satellite saw, where their money stands, and how to
+   appeal. An appeal sends the case back to the officer and cancels any open payment link.
 
-Anyone can also **draw a field on the map** and see what the rules say about it for 2024 and 2025.
+The public map shows the whole Patiala–Kaithal border belt through the 2025 season: burn-like ground, fire
+alerts, and an estimate of the smoke. Anyone can open a field and run the same satellite check.
 
-## Measured
+## Results
 
-314 plots of 80 m in west Kaithal, labelled by hand from the 2025 image series (20 burnt), sampled by
-distance to fire points and by burn signal, weighted back to the whole area.
+749 plots in two study areas (Patran in Patiala, and Kaithal) were labelled by hand from the full season of
+pictures as burnt, not burnt or unsure; unsure plots are left out. Plots were sampled by distance to fire alerts
+and by burn signal, and weighted back to the whole area. The labels are the human labeller's own: see
+[Labels](#labels) for how AI was and was not used.
 
-| | Satellite check | Fire alerts alone (FIRMS, 375 m) |
+| | Saakshi | Fire alerts alone (375 m) |
 |---|---|---|
-| Clean fields flagged | **2.6%** (held-out halves: 4.8%, 4.9%) | **14.1%** |
-| Burnt fields approved without a human | **0%** (held-out: 0%, 6.4%, i.e. one plot) | n/a |
-| Burns caught | every labelled burn went to the officer | 14.1% |
-| Claims settled without an officer | 76% (held-out: 84%, 82%) | none |
+| Clean fields wrongly flagged | **TBD** | TBD |
+| Burnt fields approved without an officer | **TBD** | n/a |
+| Possible-burn flags that were real burns (precision) | TBD | TBD |
+| Burns caught | every labelled burn went to the officer | TBD |
 
-Advance rule, checked on 2024 vs 2025: fields clean in 2024 (78% of cropland) burnt in 2025 at **1.8%**;
-fields not clean in 2024 at **8.6%**.
+Scored on TBD labelled fields, TBD of them burnt. Reproduce with `uv run python scripts/finalize_labels.py`.
 
-Method, numbers and caveats: [`docs/evaluation.md`](docs/evaluation.md).
+**The advance rule.** On 262 plots labelled earlier in the Patran area, fields that were clean in 2024 burnt in
+2025 at 1.8%; fields that were not clean in 2024 burnt at 8.6%. 78% of cropland would get the advance.
 
-## Where AWS fits
+**Smoke.** Across the belt, 3,059 ha looked burnt by 10 Dec 2025 against 357 fire alerts. At about 46 kg of
+PM2.5 per burnt hectare (2.6 t of straw an acre, 80% burnt, about 9 kg of PM2.5 a tonne), that is roughly
+140 t of PM2.5 from one belt in one season. Each field kept clean keeps about 19 kg an acre out of the air.
+These are estimates for scale, not measurements; the Sources note on the map gives the basis.
+
+Method, sampling and caveats: [`docs/evaluation.md`](docs/evaluation.md).
+
+## Model and code
+
+Language models help the farmer ask and understand; code makes and states every decision. Details:
+[`docs/safety.md`](docs/safety.md).
+
+- Decisions are fixed rules (`src/parali/rules.py`, thresholds in `rules.toml`), fitted on the hand labels.
+- The assistant (Amazon Nova 2 Lite on Bedrock, through the Strands Agents SDK) can use seven tools: list the
+  farmer's fields, read the claim, read the advance, file a claim, explain the decision, record an objection,
+  ask for a call. None can approve, reject, pay or penalise.
+- When a tool ran, the farmer hears text composed from the decision record, never the model's own words. A
+  model reply that states a decision without a tool result is dropped; a long or list-like reply is replaced by
+  the fixed help text.
+- Every message about money is a fixed template in each language. Machine translation is used only for the
+  model's short clarifying question, and only if its numbers and currency signs survive unchanged.
+- If Bedrock is slow, throttled or over the daily cap, a rule-based assistant answers instead.
+- An officer confirms every burn. Each decision keeps the pictures and the rule that fired.
+
+## How it is built
 
 ```mermaid
 flowchart LR
-  U[Farmer phone / officer browser] --> CF[CloudFront]
-  CF -->|web app, evidence, audio| S3[(S3)]
-  CF -->|/api| GW[API Gateway HTTP API]
-  GW --> API[Lambda: api]
-  GW -->|/api/agent| AG[Lambda: voice assistant]
-  AG --> TR[Transcribe hi-IN]
-  AG --> BR[Bedrock Nova 2 Lite via Strands Agents SDK]
-  AG --> PO[Polly Hindi voice]
-  API --> DB[(DynamoDB: fields, claims, audit)]
+  U[Farmer / officer browser] --> CF[CloudFront]
+  W[WhatsApp Cloud API] --> AG
+  CF -->|web app, evidence, audio, notices| S3[(S3)]
+  CF -->|/api| API[Lambda: api]
+  CF -->|/api/agent, /api/whatsapp| AG[Lambda: assistant + WhatsApp]
+  AG --> BR[Bedrock Nova 2 Lite]
+  AG --> SV[Sarvam: Punjabi voice, speech to text]
+  AG --> PO[Polly: Hindi and English voice]
+  API --> DB[(DynamoDB: fields, claims, audit trail)]
   AG --> DB
-  API -->|async| P[Lambda: satellite check]
-  AG -->|file claim| P
-  EB[EventBridge Scheduler] --> P
+  API -->|async| P[Lambda: satellite check and follow-up]
+  EB[EventBridge Scheduler] -->|daily sweep, demo reset| P
   P -->|STAC search| ES[Earth Search]
-  P -->|range reads, same region| OD[(Sentinel-2 L2A COGs, AWS Open Data)]
+  P -->|range reads| OD[(Sentinel-2 L2A, AWS Open Data)]
+  P --> RZ[Razorpay payment links, test mode]
   P --> DB
   P --> S3
-  P --> SNS[SNS decision alerts]
 ```
 
-| Service | Job |
+| Piece | Job |
 |---|---|
-| AWS Open Data (Sentinel-2 L2A COGs) | Imagery, read in place: only the pixel window around each field |
-| Lambda | Satellite check (rasterio, 29 scenes in about 10 s), API, voice assistant |
-| API Gateway (HTTP API) | `/api/*` |
-| DynamoDB | Fields, claims, decisions, audit events, usage cap |
-| S3 + CloudFront | Web app, evidence images, Hindi audio, recovery notices, imagery cache |
-| Bedrock (Nova 2 Lite) + Strands Agents SDK | Understands the farmer's request and picks a tool. Never decides. |
-| Transcribe (hi-IN streaming) | Farmer's voice to text |
-| Polly (Kajal, hi-IN) | Every answer read aloud in Hindi |
-| SNS | Decision alerts |
-| EventBridge Scheduler | Daily sweep of open claims |
-| SAM / CloudFormation | Everything above, one stack (`infra/template.yaml`) |
+| Sentinel-2 L2A on AWS Open Data | Pictures, read in place: only the pixel window around each field |
+| Lambda (Python) | Satellite check, API, assistant and WhatsApp webhook, map tiles |
+| DynamoDB | Fields, claims, decisions, audit events |
+| S3 + CloudFront | Web app, map tiles, evidence images, voice notes, recovery notices |
+| Bedrock (Nova 2 Lite) + Strands Agents SDK | Understands the farmer's request and picks a tool |
+| Sarvam AI | Punjabi voice (bulbul), speech to text in Punjabi, Hindi and English (saarika) |
+| Polly, Transcribe | Hindi and English voice; Hindi speech to text as a fallback |
+| WhatsApp Cloud API | Pick or name a farmer, get the status, tap Why / My money / Appeal, by text or voice |
+| Razorpay (test mode) | Payment link to return an advance after a confirmed burn |
+| EventBridge Scheduler | Daily sweep of open claims; daily demo reset |
+| SSM Parameter Store | API keys and tokens, never in code or the repo |
+| SAM / CloudFormation | Everything above in one stack (`infra/template.yaml`) |
 
-## Model vs code
-
-The AI understands; code decides and states the facts. Details: [`docs/safety.md`](docs/safety.md).
-
-- Decisions are fixed rules (`src/parali/rules.py`, thresholds in `rules.toml`), fitted on hand labels.
-- The assistant's seven tools can read records, file a claim, record an objection or ask for a call. None can
-  approve, reject, pay or penalise.
-- When a tool ran, the farmer hears text composed from the decision record, not the model's own words. A
-  model reply that states a decision without a tool result is dropped.
-- If Bedrock is slow, throttled or over the daily cap, a rule-based assistant answers instead, and the app
-  says so.
-- An officer confirms every burn. Every decision stores the images and the rule that fired.
+Payments to farmers (the advance and the balance) are simulated. Only the farmer's repayment goes through a real
+payment gateway, in test mode.
 
 ## Run it locally
 
@@ -111,33 +139,58 @@ uv sync
 uv run parali demo
 ```
 
-Open http://127.0.0.1:8080 and press **Play the season**. Officer PIN: `2468`. The five demo fields and their
-2024 and 2025 imagery are in `data/demo`, so nothing is downloaded. Without AWS, voice uses the browser's
-speech recognition and speech synthesis. With AWS credentials, `uv run parali demo --aws` uses Transcribe,
-Bedrock and Polly.
+Open http://127.0.0.1:8080 and press **Play the season**. Officer PIN `2468`. The demo fields and their 2024
+and 2025 imagery are in `data/demo`. With AWS credentials, `uv run --extra aws --extra agent parali demo --aws`
+uses Bedrock, Polly and Transcribe; set `SARVAM_API_KEY` for Punjabi voice.
 
-## Tests
+## Tests and checks
 
 ```
 uv sync --extra dev --extra aws --extra agent
-uv run pytest                       # 140 tests
-uv run python scripts/plant_bugs.py # 14 deliberate bugs in the rules; CI fails if any survives
+uv run pytest                              # unit, parity and property tests
+uv run python scripts/plant_bugs.py        # 27 deliberate bugs in the rules, money and guards; all must be caught
+uv run python scripts/finalize_labels.py   # headline numbers from the hand labels
+uv run python scripts/smoke.py             # end-to-end check of the live site (changes the demo; reset after)
+uv run python scripts/reset_demo.py        # fresh demo cases
 ```
+
+The parity tests check that every string exists in every language, that a claim shows the same amounts on every
+screen and in every message, and that the server and the web app use the same smoke estimate. The property tests
+run generated claims through approvals, burns, appeals and repayments and check that the money always adds up.
 
 ## Deploy
 
 ```
-uv run --extra aws python scripts/deploy.py   # sam build + deploy, web upload, demo data
+uv run --extra aws python scripts/deploy.py   # sam build + deploy, web upload, demo fields
 ```
+
+API keys go in SSM under `/saakshi/` (WhatsApp, Razorpay, Sarvam); the stack reads them at run time.
+
+## Labels
+
+The headline numbers are scored only on labels made by the human labeller. The first pass covered 749 plots.
+Plots were picked for labelling partly by their burn signal, so the sample leans toward plots where the rules
+have something to say; the weights correct the rates for the whole area, not for that selection.
+
+AI was used in two places, and kept separate:
+
+- An AI assistant (Claude Code) re-read the full-season strips of 249 plots whose earlier picture strips might
+  have hidden a burn date. Its calls are in `labels_claude.csv` and are not used in the headline.
+- The labeller then reviewed the same 249 plots blind, without seeing the assistant's calls
+  (`labels_review.csv`). The two agreed on TBD of them.
 
 ## Limits
 
-- Field boundaries are hand-drawn samples; there is no public cadastral map.
-- Labels are one person's reading of 20 m images, not site visits; 20 burnt plots is a small sample.
-- Satellites track fields, not people: a tenant who burnt elsewhere looks clean on a new field.
+- Field outlines are samples drawn on the 20 m grid; there is no public cadastral map.
+- Labels are one person's reading of 10–20 m pictures, not site visits. TBD burnt plots is a small sample.
+- Satellites see fields, not people: a tenant who burnt elsewhere looks clean on a new field.
 - Fields under about one acre have too few whole pixels and go to the officer.
 - The trial's effect on burning is the trial's result, not ours. Recovering an advance is administratively
-  hard; this only makes it evidence-backed.
-- Phone calls to farmers need an Indian number (KYC, weeks); the app plays the Hindi audio instead.
+  hard; Saakshi only makes it evidence-backed.
+- The smoke figures are estimates from published emission factors, not air-quality measurements.
+- Punjabi and Haryanvi text has not yet been checked by a native speaker.
 
-Environmental Hacks 2026, Air track. Work started 8 Oct 2026.
+## Built with AI tools
+
+Code, copy and analysis were written with Claude Code (Anthropic) as a pair programmer. The labels used for the
+results are the human labeller's; see [Labels](#labels).
