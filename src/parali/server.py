@@ -91,6 +91,9 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
             store.put("checks", check_id, item)
             raise
 
+    def followup(claim_id):
+        service.after_decision(store, claim_id, speaker, Razorpay.from_keys(), public_url())
+
     def reset():
         for sub in ("claims", "events", "blobs"):
             shutil.rmtree(state_dir / sub, ignore_errors=True)
@@ -99,6 +102,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
                 officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
                 agent_backend=agent_backend, fires=lambda: fires,
                 payments=Razorpay.from_keys, base_url=public_url,  # Razorpay only with RAZORPAY_KEY_* set
+                followup=lambda cid: threading.Thread(target=followup, args=(cid,), daemon=True).start(),
                 dispatch_check=lambda cid: threading.Thread(target=run_check, args=(cid,), daemon=True).start())
 
 

@@ -22,6 +22,7 @@ class Deps:
     fires: Callable[[], list] | None = None                  # FIRMS points for the season
     dispatch_check: Callable[[str], None] | None = None      # start a check-any-field job
     notify: Callable[[dict], None] | None = None             # tell the farmer an officer decided (WhatsApp)
+    followup: Callable[[str], None] | None = None            # run the slow part of a decision in the background
     payments: Callable[[], object] | None = None             # Razorpay client for recovering advances, or None
     base_url: Callable[[], str] | None = None                # public address Razorpay sends the payer back to
 
@@ -69,7 +70,7 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
         if method == "GET" and path == "/api/stats":
             return _json(200, _stats(s))
         if method == "GET" and path == "/api/config":
-            return _json(200, {"voice_in": deps.transcriber is not None, "voice_out": deps.speaker is not None,
+            return _json(200, {"voice_in": deps.transcriber is not None or _sarvam_on(), "voice_out": deps.speaker is not None,
                                "model": getattr(deps.agent_backend, "mode", "scripted")})
         if method == "GET" and path == "/api/officer/check":
             return _json(200, {"ok": True}) if _pin_ok(deps, headers) else _json(403, {"error": "wrong PIN"})
@@ -100,15 +101,13 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
         if method == "POST" and m:
             if not _pin_ok(deps, headers):
                 return _json(403, {"error": "officer PIN required"})
+            # the decision is saved and answered at once; the link, notice, voice notes and WhatsApp follow
             c = service.review(s, m.group(1), str(data.get("officer_id", "")), str(data.get("verdict", "")),
-                               str(data.get("note", ""))[:500], deps.speaker)
-            if (c.get("settlement") or {}).get("state") == "recover_advance":
-                c = payments.issue_recovery(s, c, _rp(deps), deps.base_url() if deps.base_url else "")
-                if (c.get("recovery") or {}).get("status") == "issued":
-                    service.write_notice(s, c)  # the letter carries the payment link
-                    c = service.respeak(s, c, deps.speaker)  # and so does the farmer's message
-            if deps.notify:
-                deps.notify(c)
+                               str(data.get("note", ""))[:500], None)
+            if deps.followup:
+                deps.followup(c["id"])
+            else:
+                c = service.after_decision(s, c["id"], deps.speaker, _rp(deps), deps.base_url() if deps.base_url else "", deps.notify)
             return _json(200, _claim_view(s, c))
         if method == "POST" and path == "/api/check":
             from parali import check
@@ -171,6 +170,24 @@ def _stats(s: Store) -> dict:
     }
 
 
+def _wav(pcm: bytes, rate: int = 16000) -> bytes:
+    import io
+    import wave
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(pcm)
+    return buf.getvalue()
+
+
+def _hear(deps: Deps, pcm: bytes) -> str:
+    """Sarvam first: it hears Punjabi, Hindi, Haryanvi and English in one model. AWS Transcribe (Hindi) if not."""
+    from parali import sarvam
+    heard = sarvam.transcribe(_wav(pcm), "audio/wav") if sarvam.api_key() else None
+    if heard and heard[0]:
+        return heard[0]
+    return deps.transcriber(pcm) if deps.transcriber else ""
+
+
 def _agent_turn(deps: Deps, data: dict) -> dict:
     import base64
     import uuid
@@ -181,9 +198,9 @@ def _agent_turn(deps: Deps, data: dict) -> dict:
         raise service.WorkflowError("unknown farmer")
     text = str(data.get("text", ""))[:500]
     transcript = None
-    if data.get("audio_b64") and deps.transcriber:
+    if data.get("audio_b64"):
         pcm = base64.b64decode(data["audio_b64"])[: 16000 * 2 * 30]
-        text = transcript = deps.transcriber(pcm)
+        text = transcript = _hear(deps, pcm)
     r = agent.respond(deps.store, farmer_id, text, deps.dispatch, backend=deps.agent_backend)
     out = {"transcript": transcript, "text": text, "hi": r.hi, "en": r.en, "tools": r.tools, "mode": r.mode,
            "note": r.note}
@@ -202,6 +219,11 @@ def _agent_turn(deps: Deps, data: dict) -> dict:
         deps.store.put_blob(key, mp3, "audio/mpeg")
         out["audio_url"] = deps.store.blob_url(key)
     return out
+
+
+def _sarvam_on() -> bool:
+    from parali import sarvam
+    return bool(sarvam.api_key())
 
 
 def officer_pin_from_env() -> str | None:

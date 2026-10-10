@@ -216,3 +216,6 @@ export function toGurmukhi(text) {
     .replace(/ਸਿੰਹ(?![\u0a00-\u0a7f])/g, "ਸਿੰਘ");
   return s;
 }
+
+// smoke estimate, same basis as the map and the notice: about 19 kg of PM2.5 per burnt acre
+export const smokeKg = (acres) => Math.round((acres || 0) * 19);

@@ -1,6 +1,6 @@
 // Farmer view: one farmer's own field and money, in their language, what the satellite saw, questions by voice
 // or text, and an appeal when they think the satellite is wrong. Phone-first.
-import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, filmstrip, kindOf, getJSON, ORBIT, countUp, drawEvidenceFrame, toGurmukhi } from "./shared.js";
+import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, filmstrip, kindOf, getJSON, ORBIT, countUp, drawEvidenceFrame, toGurmukhi, smokeKg } from "./shared.js";
 import { Recorder } from "./voice.js";
 
 // Punjabi (pa) and Haryanvi (hr) are drafts and need a native speaker's review.
@@ -8,10 +8,10 @@ const T = {
   en: {
     explore: "Explore", officer: "Officer", farmer: "Farmer",
     signIn: "Sign in", signNote: "Your claim, your money and your field, in your language.", mobile: "Mobile number", cont: "Continue",
-    demoPick: "Demo farmers", demoNote: "This demo has no SMS sign-in. Pick a farmer to see the app as they would.", demoTyped: "In this demo, pick one of the farmers below.",
+    demoPick: "Demo farmers", demoNote: "This demo has no SMS sign-in. Pick a farmer to see the app as they would. Demo cases reset daily; the WhatsApp side is shown in the video.", demoTyped: "In this demo, pick one of the farmers below.",
     hello: (n) => `Namaste, ${n}`, switch: "Sign out", noClaim: "No claim this season yet.", acres: "acres",
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
-    listen: "Listen", money: "Your money", passbook: "Season 2025",
+    smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", money: "Your money", passbook: "Season 2025",
     rows: { adv: "Advance before harvest", noadv: "No advance this year: last season was not clearly clean", bal: "Rest of the money",
       balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
     pay: (a) => `Return ${a} online`, payNote: "Razorpay test mode: no real money moves.",
@@ -31,10 +31,10 @@ const T = {
   hi: {
     explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     signIn: "साइन-इन", signNote: "आपका दावा, आपकी राशि और आपका खेत, आपकी भाषा में।", mobile: "मोबाइल नंबर", cont: "आगे",
-    demoPick: "डेमो किसान", demoNote: "इस डेमो में SMS साइन-इन नहीं है। किसी किसान को चुनकर ऐप उनकी तरह देखें।", demoTyped: "इस डेमो में नीचे से कोई किसान चुनें।",
+    demoPick: "डेमो किसान", demoNote: "इस डेमो में SMS साइन-इन नहीं है। किसी किसान को चुनकर ऐप उनकी तरह देखें। डेमो मामले रोज़ नए होते हैं; WhatsApp वाला हिस्सा वीडियो में है।", demoTyped: "इस डेमो में नीचे से कोई किसान चुनें।",
     hello: (n) => `नमस्ते, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोई दावा अभी नहीं।", acres: "एकड़",
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
-    listen: "सुनें", money: "आपकी राशि", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", money: "आपकी राशि", passbook: "सीज़न 2025",
     rows: { adv: "कटाई से पहले अग्रिम", noadv: "इस साल अग्रिम नहीं: पिछला सीज़न साफ़ नहीं दिखा", bal: "बाकी राशि",
       balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
     pay: (a) => `${a} ऑनलाइन लौटाएँ`, payNote: "Razorpay टेस्ट मोड: असली पैसा नहीं कटता।",
@@ -54,10 +54,10 @@ const T = {
   pa: {
     explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
     signIn: "ਸਾਈਨ-ਇਨ", signNote: "ਤੁਹਾਡਾ ਦਾਅਵਾ, ਤੁਹਾਡੀ ਰਕਮ ਅਤੇ ਤੁਹਾਡਾ ਖੇਤ, ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਵਿੱਚ।", mobile: "ਮੋਬਾਈਲ ਨੰਬਰ", cont: "ਅੱਗੇ",
-    demoPick: "ਡੈਮੋ ਕਿਸਾਨ", demoNote: "ਇਸ ਡੈਮੋ ਵਿੱਚ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ। ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਐਪ ਉਨ੍ਹਾਂ ਵਾਂਗ ਵੇਖੋ।", demoTyped: "ਇਸ ਡੈਮੋ ਵਿੱਚ ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
+    demoPick: "ਡੈਮੋ ਕਿਸਾਨ", demoNote: "ਇਸ ਡੈਮੋ ਵਿੱਚ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ। ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਐਪ ਉਨ੍ਹਾਂ ਵਾਂਗ ਵੇਖੋ। ਡੈਮੋ ਮਾਮਲੇ ਰੋਜ਼ ਨਵੇਂ ਹੁੰਦੇ ਹਨ; WhatsApp ਵਾਲਾ ਹਿੱਸਾ ਵੀਡੀਓ ਵਿੱਚ ਹੈ।", demoTyped: "ਇਸ ਡੈਮੋ ਵਿੱਚ ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
     hello: (n) => `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${n} ਜੀ`, switch: "ਸਾਈਨ-ਆਊਟ", noClaim: "ਇਸ ਸੀਜ਼ਨ ਦਾ ਕੋਈ ਦਾਅਵਾ ਅਜੇ ਨਹੀਂ।", acres: "ਏਕੜ",
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਸੈਟੇਲਾਈਟ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
-    listen: "ਸੁਣੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
+    smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
     rows: { adv: "ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ ਅਗਾਊਂ", noadv: "ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ: ਪਿਛਲਾ ਸੀਜ਼ਨ ਸਾਫ਼ ਨਹੀਂ ਦਿਸਿਆ", bal: "ਬਾਕੀ ਰਕਮ",
       balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
     pay: (a) => `${a} ਆਨਲਾਈਨ ਵਾਪਸ ਕਰੋ`, payNote: "Razorpay ਟੈਸਟ ਮੋਡ: ਅਸਲ ਪੈਸਾ ਨਹੀਂ ਕੱਟਦਾ।",
@@ -77,10 +77,10 @@ const T = {
   hr: {
     explore: "देक्खो", officer: "अफसर", farmer: "किसान",
     signIn: "साइन-इन", signNote: "थारा दावा, थारी रकम अर थारा खेत, थारी बोली म्ह।", mobile: "मोबाइल नंबर", cont: "आग्गै",
-    demoPick: "डेमो किसान", demoNote: "इस डेमो म्ह SMS साइन-इन कोनी। किसे किसान नै चुण कै ऐप उसकी ढाळ देक्खो।", demoTyped: "इस डेमो म्ह तळै तै कोए किसान चुणो।",
+    demoPick: "डेमो किसान", demoNote: "इस डेमो म्ह SMS साइन-इन कोनी। किसे किसान नै चुण कै ऐप उसकी ढाळ देक्खो। डेमो मामले रोज नए होवैं सैं; WhatsApp आळा हिस्सा वीडियो म्ह सै।", demoTyped: "इस डेमो म्ह तळै तै कोए किसान चुणो।",
     hello: (n) => `राम राम, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोए दावा इब्ब तक कोनी।", acres: "किल्ले",
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
-    listen: "सुणो", money: "थारी रकम", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", money: "थारी रकम", passbook: "सीज़न 2025",
     rows: { adv: "कटाई तै पहल्यां एडवांस", noadv: "इस साल एडवांस कोनी: पाछला सीज़न साफ कोनी दिख्या", bal: "बाकी रकम",
       balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
     pay: (a) => `${a} ऑनलाइन उल्टा दो`, payNote: "Razorpay टेस्ट मोड: असली पीसा कोनी कटदा।",
@@ -167,6 +167,7 @@ function render(animate = false) {
       <button class="link" id="switch">${esc(L.switch)}</button></section>
     ${c ? `<section class="card glass status-card ${k} ${animate ? "enter" : ""}" style="--i:1"><div class="st-top"><span class="st-ic ${k}">${icon(k === "clean" ? "i-check" : k === "burn" ? "i-flame" : "i-eye")}</span><b>${esc(L.status[k])}</b></div>
         <p class="st-msg">${esc(msgOf(c.message))}</p>
+        ${k === "clean" ? `<p class="smoke-chip" title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne">🌫 ${esc(L.smoke(smokeKg(f.acres)))} <small>${esc(L.smokeNote)}</small></p>` : ""}
         ${audio ? `<button class="btn ghost small listen" id="listen">${icon("i-play")}<span>${esc(L.listen)}</span><i class="wave"><i></i><i></i><i></i><i></i><i></i></i></button><audio id="audio" src="${esc(audio)}" preload="none"></audio>` : ""}
         ${c.recovery?.status === "issued" ? `<a class="btn primary wide" href="${esc(c.recovery.url)}">${esc(L.pay(rupees(c.recovery.amount)))}</a><p class="cap">${esc(L.payNote)}</p>` : ""}
         ${c.appeal ? `<p class="cap appealed">${esc(L.appealed(fmtDate(c.appeal.at, lang)))}</p>` : canAppeal ? `<button class="btn ghost wide" id="appeal">${esc(L.appeal)}</button>` : ""}

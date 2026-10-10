@@ -117,6 +117,10 @@ def mark_paid(store: Store, claim: dict, payment_id: str) -> dict:
     claim["recovery"] = rec
     claim["message"] = farmer_text(claim)
     store.put("claims", claim["id"], claim)
+    if claim.get("notice_key"):  # the notice now records the repayment
+        from parali.service import write_notice
+        write_notice(store, claim)
+        store.put("claims", claim["id"], claim)
     store.add_event(claim["id"], {"type": "advance_recovered", "by": "farmer", "amount": rec.get("amount"),
                                   "rail": RAIL, "payment_id": payment_id})
     return claim

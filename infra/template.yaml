@@ -105,7 +105,16 @@ Resources:
             - Effect: Allow
               Action: polly:SynthesizeSpeech
               Resource: "*"
+            - Effect: Allow
+              Action: lambda:InvokeFunction
+              Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-ProcessFunction-*
       Events:
+        DemoReset:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: cron(0 5 * * ? *)
+            ScheduleExpressionTimezone: Asia/Kolkata
+            Input: '{"demo_reset": true}'
         DailySweep:
           Type: ScheduleV2
           Properties:

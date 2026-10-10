@@ -7,6 +7,7 @@ watermark: this is a mock-up of the letter a department would send, not a govern
 import html
 from datetime import date
 
+from parali import season
 from parali.messages import hi_date, pa_date, rupees, to_gurmukhi
 
 STATE = {"PB": ("Punjab", "पंजाब", "ਪੰਜਾਬ"), "HR": ("Haryana", "हरियाणा", "ਹਰਿਆਣਾ")}
@@ -36,6 +37,10 @@ def render(claim: dict, evidence_url: str, today: date | None = None) -> str:
                  if fires else "No NASA fire alert was recorded near the field; the burn was found in the Sentinel-2 pictures.")
     pay = (f"""<div class="pay"><b>Pay online</b><span>{e(rec.get('url'))}</span><small>Razorpay payment link (test mode in this demo). Payment is recorded against reference {e(ref)}.</small></div>"""
            if rec.get("status") == "issued" and rec.get("url") else "")
+    paid = rec.get("status") == "paid"
+    if paid:
+        pay = (f"""<div class="pay paid"><b>Returned on {e(_d(rec.get('paid_at')))}</b><span>₹{e(rupees(rec.get('amount') or s.get('recover') or 0))} received</span>"""
+               f"""<small>Razorpay payment {e(rec.get('payment_id') or '')} (test mode in this demo), against reference {e(ref)}. Nothing more is due.</small></div>""")
     name_hi = claim.get("farmer_name_hi") or claim.get("farmer_name", "")
     field_hi = claim.get("field_name_hi") or claim.get("field_name", "")
     pa = ""
@@ -76,6 +81,7 @@ figure {{ margin: 6px 0 18px; }}
 figure img {{ width: 100%; border: 1px solid #DDD8CC; image-rendering: pixelated; }}
 figcaption {{ font: 500 12px Geist, sans-serif; color: #6B6B6B; margin-top: 6px; }}
 .pay {{ display: grid; gap: 2px; margin: 0 0 18px; padding: 12px 14px; border: 1.5px dashed #3D6BFF; border-radius: 8px; font-family: Geist, sans-serif; }}
+.pay.paid {{ border: 1.5px solid #1F8A4C; background: #EEF8F1; }} .pay.paid span {{ color: #1F8A4C; font-weight: 600; }}
 .pay b {{ font-size: 13px; }} .pay span {{ font-size: 14px; color: #3D6BFF; word-break: break-all; }} .pay small {{ color: #6B6B6B; font-size: 12px; }}
 ol {{ margin: 0 0 18px; padding-left: 20px; }}
 li {{ margin-bottom: 4px; }}
@@ -93,7 +99,7 @@ li {{ margin-bottom: 4px; }}
 <article class="sheet">
 <header class="head"><div class="dept"><b>Agriculture Department (demo)</b>Crop Residue Management incentive · {e(st[0])}<br><small>Prepared with Saakshi satellite verification</small></div><div class="mark">सा</div></header>
 <div class="meta"><span>Ref. {e(ref)}</span><span>{e(_d(today.isoformat()))}</span></div>
-<span class="status">DRAFT FOR OFFICER REVIEW · NOT ISSUED UNTIL SIGNED</span>
+<span class="status">{"ADVANCE RETURNED · CASE CLOSED" if paid else "DRAFT FOR OFFICER REVIEW · NOT ISSUED UNTIL SIGNED"}</span>
 <div class="to">To<b>{e(claim.get('farmer_name'))}</b>{e(claim.get('field_name'))}, {e(claim.get('village'))}, {e(st[0])}</div>
 <h1>Subject: <span>recovery of the advance paid under the Crop Residue Management incentive, kharif 2025</span></h1>
 <p>An advance of ₹{e(rupees(adv.get('amount') or 0))} was paid to you before harvest because your field showed no burning in {e(adv.get('prev_season'))}.
@@ -106,14 +112,15 @@ pictures{(" and noted: “" + e(rev.get('note')) + "”") if rev.get('note') els
 <tr><td>Advance paid</td><td>₹{e(rupees(adv.get('amount') or 0))}{(" on " + e(_d(adv.get('paid_at')))) if adv.get('paid_at') else ""}</td></tr>
 <tr><td>Satellite finding</td><td>Burn scar from {e(_d(burn))}; {len(dec.get('clear_dates') or [])} clear pictures read</td></tr>
 <tr><td>Confirmed by</td><td>{e(rev.get('officer_id'))}, village officer</td></tr>
-<tr class="amount"><td>Amount to be returned</td><td>₹{e(recover)}</td></tr>
+<tr><td>Estimated smoke released</td><td>≈ {season.smoke_kg(claim.get('acres'))} kg of fine particles (PM2.5)</td></tr>
+<tr class="amount"><td>{"Amount returned" if paid else "Amount to be returned"}</td><td>₹{e(recover)}{(" · paid " + e(_d(rec.get('paid_at')))) if paid else ""}</td></tr>
 </table>
 <figure><img src="{e(evidence_url)}" alt="Satellite pictures of the field through the season"><figcaption>Sentinel-2 pictures of the field, one column per clear date: colour above, infrared below (burnt ground shows maroon). The red outline marks the date of the burn scar.</figcaption></figure>
 {pay}
-<p><b>How to respond.</b> Within 15 days of this notice you may:</p>
+{"" if not paid else "<!--"}<p><b>How to respond.</b> Within 15 days of this notice you may:</p>
 <ol><li>return ₹{e(recover)}{" using the payment link above" if pay else ""}; or</li>
 <li>show that the field was not burnt, for example with a baler or happy-seeder receipt, or ask for a site inspection; or</li>
-<li>appeal in the Saakshi app or on WhatsApp. Nothing is recovered while an appeal is open.</li></ol>
+<li>appeal in the Saakshi app or on WhatsApp. Nothing is recovered while an appeal is open.</li></ol>{"" if not paid else "-->"}
 <p>Environmental compensation for stubble burning on this landholding under the CAQM rules (2024 amendment) is ₹{e(rupees(s.get('compensation_reference') or 0))} per incident.
 Whether to levy it, make a red entry or file a case is a separate decision and is not part of this notice.</p>
 <div class="signs"><div><b>Village officer</b>{e(rev.get('officer_id'))} · signature and date</div><div><b>Received by the farmer</b>signature or thumb impression and date</div></div>

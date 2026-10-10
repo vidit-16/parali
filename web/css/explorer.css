@@ -396,3 +396,5 @@ body.panel-open .story { left: calc((100% - 400px) / 2); max-width: calc(100% - 
 .irnote { padding: 2px 20px 0; }
 .btn.pulse { animation: pulse 1.6s ease-out infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(159, 227, 255, .55); } 100% { box-shadow: 0 0 0 14px rgba(159, 227, 255, 0); } }
+.stat.smoke b { color: #B9C2D0; }
+@media (max-width: 1100px) { .stat.smoke { display: none; } }

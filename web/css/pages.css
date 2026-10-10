@@ -71,7 +71,8 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 .verdict.burn { background: rgba(255, 106, 61, .1); } .verdict.burn .ic { background: rgba(255, 106, 61, .2); color: var(--burn); } .verdict.burn b { color: #FF8A5C; }
 .verdict.review { background: rgba(245, 197, 66, .08); } .verdict.review .ic { background: rgba(245, 197, 66, .18); color: var(--alert); } .verdict.review b { color: var(--alert); }
 .verdict.clean { background: rgba(67, 196, 133, .1); } .verdict.clean .ic { background: rgba(67, 196, 133, .2); color: var(--clean); } .verdict.clean b { color: var(--clean); }
-.facts3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.facts3 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.facts3 b.smoke { color: #B9C2D0; font-size: 19px; }
 .facts3 div { padding: 11px 12px; border-radius: 11px; background: var(--surface); }
 .facts3 b { display: block; font-size: 22px; line-height: 1.1; letter-spacing: -.02em; }
 .facts3 b.clean { color: var(--clean); } .facts3 b.burn { color: #FF8A5C; } .facts3 b.review { color: var(--alert); }
@@ -229,3 +230,17 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
   .queue { max-height: 46vh; }
   .c-grid { grid-template-columns: 1fr; }
 }
+
+/* after a decision: the steps the server finishes in the background, ticked as they land */
+.steps { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+.steps li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); transition: color .3s; animation: up .35s var(--ease) both; }
+.steps li:nth-child(2) { animation-delay: .08s; } .steps li:nth-child(3) { animation-delay: .16s; } .steps li:nth-child(4) { animation-delay: .24s; }
+.steps .tick { position: relative; width: 20px; height: 20px; border-radius: 50%; flex: none; box-shadow: 0 0 0 2px var(--line-2) inset; }
+.steps li:not(.done):not(.skip) .tick { box-shadow: none; border: 2px solid rgba(159, 227, 255, .25); border-top-color: var(--scan); animation: spin .8s linear infinite; }
+.steps li.done { color: var(--ink); }
+.steps li.done .tick { background: var(--clean); box-shadow: none; animation: pop .3s var(--ease); }
+.steps li.done .tick::after { content: ""; position: absolute; left: 7px; top: 3px; width: 5px; height: 10px; border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.steps li.skip { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.smoke-chip { display: inline-flex; align-items: center; gap: 6px; margin: -4px 0 12px; padding: 5px 11px; border-radius: 999px; background: rgba(67, 196, 133, .1); color: var(--clean); font-size: 13px; font-weight: 600; }
+.smoke-chip small { color: var(--muted); font-weight: 500; font-size: 11.5px; }

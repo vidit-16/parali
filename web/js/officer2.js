@@ -1,20 +1,20 @@
 // Officer desk: the claims the rules could not settle. Each case shows the field's pictures (colour and infrared),
 // its plant signal, what the system read, the farmer's appeal, where the money stands, and the officer's decision.
 // Names and money appear only here.
-import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, kindOf, getJSON, drawCut, evidenceViewer, countUp, signalChart } from "./shared.js";
+import { $, $$, esc, icon, rupees, store, initialLang, setupHeader, fmtDate, kindOf, getJSON, drawCut, evidenceViewer, countUp, signalChart, smokeKg } from "./shared.js";
 
 const T = {
   en: {
     explore: "Explore", officer: "Officer", farmer: "Farmer",
     signinTitle: "Officer sign-in", signinNote: "Village officers see names, money and the review queue. The public map does not.",
-    officerId: "Officer ID", pin: "PIN", signin: "Sign in", demoPin: "Demo PIN: 2468", wrongPin: "That PIN is not right.", signout: "Sign out",
+    officerId: "Officer ID", pin: "PIN", signin: "Sign in", demoPin: "Demo PIN: 2468 · cases reset daily at 5 am IST", wrongPin: "That PIN is not right.", signout: "Sign out",
     tabs: { todo: "To decide", done: "Decided", all: "All" },
     waiting: (n) => (n === 1 ? "case waiting for you" : "cases waiting for you"), settled: (m) => `of ${m} claims; the rules settled the rest`,
     chip: { possible_burn: "Possible burn", needs_review: "Unclear", officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed",
       auto_approved: "Clean", submitted: "Checking", appealed: "Appealed" },
     atStake: (x) => `${rupees(x)} advance`, noAdv: "no advance",
     reasonTitle: { possible_burn: "Burn signature found", needs_review: "Not clear from orbit", auto_approved: "No burn found" },
-    facts: { clear: "clear images", fires: "fire alerts nearby", last: "last season" },
+    facts: { clear: "clear images", fires: "fire alerts nearby", last: "last season", smokeOut: "PM2.5 released, est.", smokeSaved: "PM2.5 avoided, est." },
     lastV: { auto_approved: "clean", possible_burn: "burn", needs_review: "unclear" },
     appealBy: (n) => `${n} appealed`,
     flowTitle: "Where the money stands",
@@ -30,13 +30,15 @@ const T = {
       decided: "Satellite check done", appeal: "Farmer appealed", reviewed: (by, v) => `${by} ${v === "approve" ? "approved" : "confirmed the burn"}`,
       balance_released: (x) => `${rupees(x)} released (DBT, simulated)`, recovery_notice: "Recovery notice drafted",
       recovery_link: (x) => `Payment link for ${rupees(x)} sent (Razorpay test)`, advance_recovered: (x) => `${rupees(x)} repaid by the farmer`,
-      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", callback_requested: "Farmer asked for a call",
+      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", appeal_whatsapp: "Farmer appealed on WhatsApp", callback_requested: "Farmer asked for a call",
     },
     decide: "Your decision", note: "What you saw or checked on the ground",
     approve: (x) => `Approve · release ${rupees(x)}`, approveNo: "Approve", confirm: "Confirm burn",
     needNote: "Write what you saw or checked before confirming a burn.",
     stamp: { officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed" }, by: (id, at) => `${id} · ${at}`,
     notice: "Recovery notice", paylink: "Payment link",
+    steps: { reviewed: "Decision recorded", recovery_notice: "Recovery notice drafted", recovery_link: "Payment link created",
+      balance_released: "Balance released to the farmer", farmer_told: "Farmer told in the app and on WhatsApp" },
     colour: "Colour", infrared: "Infrared", irNote: "Burnt ground shows maroon, wet soil dark blue.", irWait: "Infrared frames come with the satellite check.",
     signal: "Plant signal (NBR) through the season: a burn drops it below zero",
     empty: "Nothing waiting. The rules settled every claim.", acres: "acres", scheme: (st) => `${st === "HR" ? "Haryana" : "Punjab"} · ₹1,000 an acre, half before harvest`,
@@ -44,14 +46,14 @@ const T = {
   hi: {
     explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     signinTitle: "अधिकारी साइन-इन", signinNote: "नाम, राशि और जाँच की सूची सिर्फ़ ग्राम अधिकारी देखते हैं। सार्वजनिक नक्शे पर ये नहीं दिखते।",
-    officerId: "अधिकारी आईडी", pin: "पिन", signin: "साइन-इन करें", demoPin: "डेमो पिन: 2468", wrongPin: "पिन सही नहीं है।", signout: "साइन-आउट",
+    officerId: "अधिकारी आईडी", pin: "पिन", signin: "साइन-इन करें", demoPin: "डेमो पिन: 2468 · मामले रोज़ सुबह 5 बजे नए होते हैं", wrongPin: "पिन सही नहीं है।", signout: "साइन-आउट",
     tabs: { todo: "फ़ैसला बाकी", done: "तय", all: "सभी" },
     waiting: () => "मामले आपके फ़ैसले के लिए", settled: (m) => `${m} दावों में से; बाकी नियमों ने तय किए`,
     chip: { possible_burn: "जलने की आशंका", needs_review: "साफ़ नहीं", officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का",
       auto_approved: "साफ़", submitted: "जाँच जारी", appealed: "अपील" },
     atStake: (x) => `${rupees(x)} अग्रिम`, noAdv: "अग्रिम नहीं",
     reasonTitle: { possible_burn: "जलने का निशान मिला", needs_review: "उपग्रह से साफ़ नहीं", auto_approved: "जलना नहीं मिला" },
-    facts: { clear: "साफ़ तस्वीरें", fires: "पास में आग अलर्ट", last: "पिछला सीज़न" },
+    facts: { clear: "साफ़ तस्वीरें", fires: "पास में आग अलर्ट", last: "पिछला सीज़न", smokeOut: "PM2.5 निकला, अनुमान", smokeSaved: "PM2.5 बचा, अनुमान" },
     lastV: { auto_approved: "साफ़", possible_burn: "जला", needs_review: "साफ़ नहीं" },
     appealBy: (n) => `${n} की अपील`,
     flowTitle: "राशि कहाँ है",
@@ -67,13 +69,15 @@ const T = {
       decided: "उपग्रह जाँच पूरी", appeal: "किसान ने अपील की", reviewed: (by, v) => `${by} ने ${v === "approve" ? "मंज़ूर किया" : "जलना पक्का किया"}`,
       balance_released: (x) => `${rupees(x)} भेजे (DBT, नकली)`, recovery_notice: "वसूली नोटिस बना",
       recovery_link: (x) => `${rupees(x)} का भुगतान लिंक भेजा (Razorpay टेस्ट)`, advance_recovered: (x) => `किसान ने ${rupees(x)} लौटाए`,
-      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", callback_requested: "किसान ने फ़ोन माँगा",
+      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", callback_requested: "किसान ने फ़ोन माँगा",
     },
     decide: "आपका फ़ैसला", note: "आपने खेत पर क्या देखा या जाँचा",
     approve: (x) => `मंज़ूर करें · ${rupees(x)} भेजें`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
     needNote: "जलना पक्का करने से पहले लिखें कि आपने क्या देखा या जाँचा।",
     stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का" }, by: (id, at) => `${id} · ${at}`,
     notice: "वसूली नोटिस", paylink: "भुगतान लिंक",
+    steps: { reviewed: "फ़ैसला दर्ज", recovery_notice: "वसूली नोटिस का मसौदा बना", recovery_link: "भुगतान लिंक बना",
+      balance_released: "बाकी राशि किसान को भेजी", farmer_told: "किसान को ऐप और WhatsApp पर बताया" },
     colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जली ज़मीन मैरून दिखती है, गीली मिट्टी गहरी नीली।", irWait: "इन्फ्रारेड तस्वीरें उपग्रह जाँच के साथ आती हैं।",
     signal: "सीज़न भर पौधों का संकेत (NBR): जलने पर यह शून्य से नीचे गिरता है",
     empty: "कुछ बाकी नहीं। नियमों ने हर दावा तय कर दिया।", acres: "एकड़", scheme: (st) => `${st === "HR" ? "हरियाणा" : "पंजाब"} · ₹1,000 प्रति एकड़, आधा कटाई से पहले`,
@@ -192,7 +196,8 @@ function renderCase(flash = false) {
         <div class="facts3">
           <div><b id="f-clear">${(d.clear_dates || []).length}</b><small>${esc(L.facts.clear)}</small></div>
           <div><b>${d.fires_nearby || 0}</b><small>${esc(L.facts.fires)}</small></div>
-          <div><b class="${kindOf(prev)}">${esc(L.lastV[prev] || "—")}</b><small>${esc(L.facts.last)}</small></div></div>
+          <div><b class="${kindOf(prev)}">${esc(L.lastV[prev] || "—")}</b><small>${esc(L.facts.last)}</small></div>
+          <div title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne"><b class="smoke">≈ ${smokeKg(c.acres)} kg</b><small>${esc(k === "burn" || c.status === "officer_confirmed_burnt" ? L.facts.smokeOut : L.facts.smokeSaved)}</small></div></div>
         ${c.appeal ? `<section class="bubble"><span class="avatar farmer">${esc((c.farmer_name || "?").slice(0, 1))}</span><div><small>${esc(L.appealBy(name(c)))} · ${esc(fmtDate(c.appeal.at, lang))}</small><p>${esc(c.appeal.note)}</p></div></section>` : ""}
         ${flow(c)}
         ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>
@@ -224,10 +229,34 @@ async function decide(verdict) {
     if (/PIN/.test(e.message)) showSignin();
     return;
   }
+  await followSteps(verdict);
   S.claims = await getJSON("/api/claims");
   S.detail = await getJSON(`/api/claims/${S.sel}`);
   renderQueue();
   renderCase(true);
+}
+
+// after a decision the server finishes the rest in the background; tick each step off as its event lands
+async function followSteps(verdict) {
+  const L = t(), id = S.sel;
+  const keys = verdict === "confirm_burnt" ? ["reviewed", "recovery_notice", "recovery_link", "farmer_told"] : ["reviewed", "balance_released", "farmer_told"];
+  const box = $(".decide");
+  if (!box) return;
+  box.classList.add("working");
+  box.innerHTML = `<h3>${esc(L.decide)}</h3><ol class="steps">${keys.map((k) => `<li data-k="${k}"><span class="tick"></span>${esc(L.steps[k])}</li>`).join("")}</ol>`;
+  for (let i = 0; i < 40; i++) {
+    const c = await getJSON(`/api/claims/${id}`).catch(() => null);
+    const seen = new Set((c?.events || []).map((e) => e.type));
+    if (c?.status === "officer_approved" && c.settlement?.state !== "balance_due") seen.add("balance_released");  // nothing left to pay
+    const finished = seen.has("farmer_told");
+    $$(".steps li", box).forEach((li) => {
+      const k = li.dataset.k;
+      li.classList.toggle("done", seen.has(k));
+      if (finished && !seen.has(k)) li.classList.add("skip");  // e.g. no payment link in a demo without Razorpay
+    });
+    if (finished) { await new Promise((r) => setTimeout(r, 900)); return; }
+    await new Promise((r) => setTimeout(r, 1200));
+  }
 }
 
 async function load() {

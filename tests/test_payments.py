@@ -72,6 +72,8 @@ def test_signed_return_marks_the_advance_recovered(store):  # noqa: F811
     c = store.get("claims", c["id"])
     assert c["recovery"]["status"] == "paid" and "Nothing more is due" in c["message"]["en"]
     assert notified and notified[-1]["recovery"]["status"] == "paid"
+    if c.get("notice_key"):  # the notice now records the repayment, under a new key
+        assert c["notice_key"].endswith("-paid.html") and "Nothing more is due" in store.get_blob(c["notice_key"]).decode()
     assert [e for e in store.events(c["id"]) if e["type"] == "advance_recovered"][0]["payment_id"] == "pay_1"
 
 
@@ -111,3 +113,17 @@ def test_repaid_then_appeal_won_pays_the_full_amount(store):  # noqa: F811
     won = review(d, c["id"], "approve")
     assert won["settlement"]["state"] == "balance_due" and won["settlement"]["balance"] == won["settlement"]["total"] == 2500
     assert rp.cancelled == []  # nothing open to cancel: it was paid
+
+
+def test_decision_answers_at_once_and_the_rest_follows(store):  # noqa: F811
+    rp, queued = FakeRazorpay(), []
+    d = deps(store, rp)
+    d.followup = queued.append
+    c = review(d, confirmed_burn(store))
+    assert c["status"] == "officer_confirmed_burnt" and "recovery" not in c and queued == [c["id"]]
+    told = []
+    service.after_decision(store, c["id"], None, rp, "https://x.test", lambda claim: told.append(claim) or 1)
+    c = store.get("claims", c["id"])
+    types = [e["type"] for e in store.events(c["id"])]
+    assert c["recovery"]["status"] == "issued" and "recovery_link" in types
+    assert types[-1] == "farmer_told" and store.events(c["id"])[-1]["channels"] == ["app", "whatsapp"]

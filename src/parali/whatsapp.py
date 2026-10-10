@@ -19,8 +19,9 @@ import urllib.error
 import urllib.request
 import uuid
 
-from parali import agent
-from parali.messages import to_gurmukhi
+from parali import agent, season
+from parali.service import REVIEW_STATES as REVIEW
+from parali.messages import hi_date, pa_date, rupees, to_gurmukhi
 from parali.store import Store, now_iso
 
 GRAPH = "https://graph.facebook.com/" + os.environ.get("WA_GRAPH_VERSION", "v23.0")
@@ -121,6 +122,16 @@ class Client:
                 ).encode() + data + f"\r\n--{b}--\r\n".encode()
         return self._call(f"{GRAPH}/{self.cfg['phone_number_id']}/media", body, f"multipart/form-data; boundary={b}")["id"]
 
+    def send_buttons(self, to: str, body: str, buttons: list[tuple[str, str]]) -> dict:
+        """Up to three tap buttons under a short message; a tap comes back as a message with the button's id."""
+        return self._send(to, "interactive", {"type": "button", "body": {"text": body[:1024]}, "action": {"buttons": [
+            {"type": "reply", "reply": {"id": i, "title": title[:20]}} for i, title in buttons[:3]]}})
+
+    def send_list(self, to: str, body: str, button: str, rows: list[tuple[str, str, str]]) -> dict:
+        """A tap-to-pick list of up to ten rows: (id, title, description)."""
+        return self._send(to, "interactive", {"type": "list", "body": {"text": body[:1024]}, "action": {"button": button[:20],
+            "sections": [{"title": button[:24], "rows": [{"id": i, "title": ti[:24], "description": d[:72]} for i, ti, d in rows[:10]]}]}})
+
     def download(self, media_id: str) -> tuple[bytes, str]:
         meta = self._call(f"{GRAPH}/{media_id}")
         req = urllib.request.Request(meta["url"], headers={"Authorization": f"Bearer {self.cfg['token']}"})
@@ -206,12 +217,142 @@ def _name(f: dict) -> str:
     return to_gurmukhi(hi) if f.get("state") == "PB" else hi
 
 
-def menu(store: Store) -> str:
-    # English first, then the name in the farmer's own script
-    rows = [f"{i}. {f.get('farmer', '')} ({_name(f)}) · {f.get('name', '')} · {f.get('village', '')}" for i, f in enumerate(_farmers(store), 1)]
-    return ("Saakshi (demo). Reply with a number to chat as that farmer. Write or speak in English, Hindi, Punjabi "
-            "or Haryanvi; Saakshi answers in the same language.\n\n" + "\n".join(rows)
-            + "\n\nSend \"change\" any time to pick again.")
+# ---- short replies: two lines of text, the full explanation in the voice note ----
+SHORT = {
+    "en": dict(paid="✅ Approved · ₹{x} sent to your bank", smoke=" · 🌫 ≈ {kg} kg smoke avoided", repay="❗ Burn confirmed · return ₹{x}",
+               repaid="✅ ₹{x} returned · nothing more due", confirmed="❗ The officer confirmed a burn", burn="🔥 Burn mark seen around {d} · the officer will check",
+               review="👀 With the officer · nothing to do now", wait="⏳ Satellite check running", appealed="📝 Appeal with the officer · nothing is recovered meanwhile",
+               adv="💰 Advance ₹{x} paid", noadv="💰 No advance this year", sent="₹{x} sent", held="₹{x} held until the officer decides",
+               ret="₹{x} to return", retd="₹{x} returned", whyBurn="🛰 Burnt around {d}: dark in colour, maroon in infrared", whyClean="🛰 No burn in {n} clear pictures",
+               whyReview="🛰 The pictures are not clear enough to decide", askAppeal="📝 Tell the officer in one message why the satellite is wrong. A voice note is fine.",
+               noAppeal="Nothing to appeal: your claim is approved.", bWhy="Why?", bMoney="My money", bAppeal="Appeal",
+               intro="Saakshi (demo). Chat as one of our demo farmers. Write or speak in English, Hindi, Punjabi or Haryanvi; Saakshi answers in the same language. You can also just say a farmer's name.",
+               state="Which state?", pick="Pick a farmer", list="Farmers"),
+    "hi": dict(paid="✅ मंज़ूर · ₹{x} आपके खाते में भेजे", smoke=" · 🌫 ≈ {kg} किलो धुआँ बचा", repay="❗ जलना पक्का · ₹{x} लौटाने हैं",
+               repaid="✅ ₹{x} लौटा दिए · कुछ बाकी नहीं", confirmed="❗ अधिकारी ने जलना पक्का किया", burn="🔥 {d} के आसपास जलने का निशान · अधिकारी देखेंगे",
+               review="👀 अधिकारी के पास · अभी कुछ नहीं करना", wait="⏳ उपग्रह जाँच चल रही है", appealed="📝 अपील अधिकारी के पास · तब तक कोई वसूली नहीं",
+               adv="💰 ₹{x} अग्रिम मिला", noadv="💰 इस साल अग्रिम नहीं", sent="₹{x} भेजे", held="₹{x} अधिकारी के फ़ैसले तक रुके",
+               ret="₹{x} लौटाने हैं", retd="₹{x} लौटाए", whyBurn="🛰 {d} के आसपास जला: रंगीन में काला, इन्फ्रारेड में मैरून", whyClean="🛰 {n} साफ़ तस्वीरों में कहीं जलना नहीं",
+               whyReview="🛰 तस्वीरें फ़ैसले के लिए साफ़ नहीं", askAppeal="📝 एक संदेश में अधिकारी को बताइए कि उपग्रह क्यों ग़लत है। बोलकर भी भेज सकते हैं।",
+               noAppeal="अपील की ज़रूरत नहीं: आपका दावा मंज़ूर है।", bWhy="क्यों?", bMoney="मेरा पैसा", bAppeal="अपील"),
+    "pa": dict(paid="✅ ਮਨਜ਼ੂਰ · ₹{x} ਤੁਹਾਡੇ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ", smoke=" · 🌫 ≈ {kg} ਕਿੱਲੋ ਧੂੰਆਂ ਬਚਿਆ", repay="❗ ਸਾੜ ਪੱਕਾ · ₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ",
+               repaid="✅ ₹{x} ਵਾਪਸ ਕੀਤੇ · ਕੁਝ ਬਾਕੀ ਨਹੀਂ", confirmed="❗ ਅਧਿਕਾਰੀ ਨੇ ਸਾੜ ਪੱਕਾ ਕੀਤਾ", burn="🔥 {d} ਦੇ ਆਸ-ਪਾਸ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ · ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ",
+               review="👀 ਅਧਿਕਾਰੀ ਕੋਲ · ਹਾਲੇ ਕੁਝ ਨਹੀਂ ਕਰਨਾ", wait="⏳ ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚੱਲ ਰਹੀ ਹੈ", appealed="📝 ਅਪੀਲ ਅਧਿਕਾਰੀ ਕੋਲ · ਉਦੋਂ ਤੱਕ ਕੋਈ ਵਸੂਲੀ ਨਹੀਂ",
+               adv="💰 ₹{x} ਅਗਾਊਂ ਮਿਲੀ", noadv="💰 ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ", sent="₹{x} ਭੇਜੇ", held="₹{x} ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੇ",
+               ret="₹{x} ਵਾਪਸ ਕਰਨੇ ਹਨ", retd="₹{x} ਵਾਪਸ ਕੀਤੇ", whyBurn="🛰 {d} ਦੇ ਆਸ-ਪਾਸ ਸੜਿਆ: ਰੰਗੀਨ ਵਿੱਚ ਕਾਲਾ, ਇਨਫ੍ਰਾਰੈੱਡ ਵਿੱਚ ਮੈਰੂਨ", whyClean="🛰 {n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ",
+               whyReview="🛰 ਤਸਵੀਰਾਂ ਫ਼ੈਸਲੇ ਲਈ ਸਾਫ਼ ਨਹੀਂ", askAppeal="📝 ਇੱਕ ਸੁਨੇਹੇ ਵਿੱਚ ਅਧਿਕਾਰੀ ਨੂੰ ਦੱਸੋ ਕਿ ਸੈਟੇਲਾਈਟ ਕਿਉਂ ਗਲਤ ਹੈ। ਬੋਲ ਕੇ ਵੀ ਭੇਜ ਸਕਦੇ ਹੋ।",
+               noAppeal="ਅਪੀਲ ਦੀ ਲੋੜ ਨਹੀਂ: ਤੁਹਾਡਾ ਦਾਅਵਾ ਮਨਜ਼ੂਰ ਹੈ।", bWhy="ਕਿਉਂ?", bMoney="ਮੇਰਾ ਪੈਸਾ", bAppeal="ਅਪੀਲ"),
+    "hr": dict(paid="✅ मंजूर · ₹{x} थारे खाते म्ह भेजे", smoke=" · 🌫 ≈ {kg} किलो धुम्मा बच्या", repay="❗ जळाणा पक्का · ₹{x} उल्टे देणे सैं",
+               repaid="✅ ₹{x} उल्टे दे दिए · कुछ बाकी कोनी", confirmed="❗ अफसर नै जळाणा पक्का करया", burn="🔥 {d} के आसपास जळण का निसान · अफसर देक्खैगा",
+               review="👀 अफसर कनै · इब्ब कुछ ना करणा", wait="⏳ उपग्रह जांच चालू सै", appealed="📝 अपील अफसर कनै · जद ताईं कोए वसूली कोनी",
+               adv="💰 ₹{x} एडवांस मिल्या", noadv="💰 इस साल एडवांस कोनी", sent="₹{x} भेजे", held="₹{x} अफसर के फैसले तक रुके",
+               ret="₹{x} उल्टे देणे सैं", retd="₹{x} उल्टे दिए", whyBurn="🛰 {d} के आसपास जळया: रंगीन म्ह काळा, इन्फ्रारेड म्ह मैरून", whyClean="🛰 {n} साफ फोटुआं म्ह कितै जळाणा कोनी",
+               whyReview="🛰 फोटू फैसले खातर साफ कोनी", askAppeal="📝 एक संदेस म्ह अफसर नै बताओ उपग्रह क्यूं गलत सै। बोल कै भी भेज सको सो।",
+               noAppeal="अपील की जरूरत कोनी: थारा दावा मंजूर सै।", bWhy="क्यूं?", bMoney="मेरा पीसा", bAppeal="अपील"),
+}
+CLEAN = ("auto_approved", "officer_approved")
+APPEALABLE = ("possible_burn", "needs_review", "officer_confirmed_burnt")
+TAP = re.compile(r"^(btn|f|state):[\w-]+$")
+EMOJI = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\uFE0F]")
+
+
+def _w(lang: str) -> dict:
+    return {**SHORT["en"], **SHORT[lang]}
+
+
+def _day(iso: str | None, lang: str) -> str:
+    from datetime import date
+    if not iso:
+        return ""
+    if lang == "pa":
+        return pa_date(iso)
+    if lang in ("hi", "hr"):
+        return hi_date(iso)
+    d = date.fromisoformat(iso)
+    return f"{d.day} {d:%b}"
+
+
+def _claim_of(store: Store, field_id: str) -> dict | None:
+    return next((c for c in store.list("claims") if c["field_id"] == field_id), None)
+
+
+def _field_line(claim: dict, lang: str) -> str:
+    name = claim.get("field_name", "") if lang == "en" else claim.get("field_name_hi") or claim.get("field_name", "")
+    return to_gurmukhi(name) if lang == "pa" else name
+
+
+def short_status(claim: dict, lang: str) -> str:
+    """The claim in two lines: what happened and the one number that matters, then the field."""
+    W, s, rec, st = _w(lang), claim.get("settlement") or {}, claim.get("recovery") or {}, claim["status"]
+    if claim.get("appeal") and st in REVIEW:
+        line = W["appealed"]
+    elif st in CLEAN and s.get("state") == "balance_due":
+        line = W["paid"].format(x=rupees(s.get("balance") or 0)) + W["smoke"].format(kg=season.smoke_kg(claim.get("acres")))
+    elif st == "officer_confirmed_burnt":
+        r = rupees(s.get("recover") or 0)
+        line = (W["repaid"].format(x=r) if rec.get("status") == "paid" else W["repay"].format(x=r) if s.get("recover") else W["confirmed"])
+        if rec.get("status") == "issued" and rec.get("url"):
+            line += "\n" + rec["url"]
+    elif st == "possible_burn":
+        line = W["burn"].format(d=_day((claim.get("decision") or {}).get("burn_date"), lang))
+    elif st == "needs_review":
+        line = W["review"]
+    else:
+        line = W["wait"]
+    return f"{line}\n{_field_line(claim, lang)}"
+
+
+def money_line(claim: dict, lang: str) -> str:
+    W, adv, s, rec = _w(lang), claim.get("advance") or {}, claim.get("settlement") or {}, claim.get("recovery") or {}
+    parts = [W["adv"].format(x=rupees(adv.get("amount") or 0)) if adv.get("status") == "paid" else W["noadv"]]
+    if s.get("state") == "balance_due":
+        parts.append(W["sent"].format(x=rupees(s.get("balance") or 0)))
+    elif s.get("state") == "recover_advance":
+        parts.append((W["retd"] if rec.get("status") == "paid" else W["ret"]).format(x=rupees(s.get("recover") or 0)))
+    elif s.get("state") == "pending":
+        parts.append(W["held"].format(x=rupees((s.get("total") or 0) - (adv.get("amount", 0) if adv.get("status") == "paid" else 0))))
+    return " · ".join(parts)
+
+
+def why_line(claim: dict, lang: str) -> str:
+    W, d = _w(lang), claim.get("decision") or {}
+    if d.get("burn_date"):
+        return W["whyBurn"].format(d=_day(d["burn_date"], lang))
+    if claim["status"] in CLEAN:
+        return W["whyClean"].format(n=len(d.get("clear_dates") or []))
+    return W["whyReview"]
+
+
+def _buttons(lang: str) -> list[tuple[str, str]]:
+    W = _w(lang)
+    return [("btn:why", W["bWhy"]), ("btn:money", W["bMoney"]), ("btn:appeal", W["bAppeal"])]
+
+
+def _match_farmer(store: Store, text: str) -> dict | None:
+    """A farmer named in a message or voice note: their English, Hindi or Gurmukhi first name, if only one fits."""
+    t = (text or "").lower()
+    hits = []
+    for f in _farmers(store):
+        en = (f.get("farmer") or "").split()
+        hi = (f.get("farmer_hi") or "").split()
+        names = {n.lower() for n in en[:1]} | set(hi[:1]) | {to_gurmukhi(n) for n in hi[:1]}
+        if en[:2] == ["Om", "Prakash"] or hi[:2] == ["ओम", "प्रकाश"]:
+            names |= {"om prakash", "ओम प्रकाश", "omprakash"}
+        if any(n and re.search(r"(?<![\w\u0900-\u0a7f])" + re.escape(n) + r"(?![\w\u0900-\u0a7f])", t) for n in names):
+            hits.append(f)
+    return hits[0] if len(hits) == 1 else None
+
+
+def _pick_farmer(store: Store, phone: str, client, lang: str) -> None:
+    W = _w("en")
+    client.send_buttons(phone, W["intro"] + "\n\n" + W["state"], [("state:PB", "Punjab · ਪੰਜਾਬ"), ("state:HR", "Haryana · हरियाणा")])
+
+
+def _list_farmers(store: Store, phone: str, client, state: str) -> None:
+    W = _w("en")
+    rows = [(f"f:{f['id']}", f.get("farmer", ""), f"{_name(f)} · {f.get('name', '')} · {f.get('village', '')}")
+            for f in _farmers(store) if f.get("state") == state]
+    client.send_list(phone, W["pick"], W["list"], rows)
 
 
 HEARD = {"hi": "आपने कहा", "pa": "ਤੁਸੀਂ ਕਿਹਾ", "en": "You said", "hr": "थमनै कह्या"}
@@ -221,7 +362,14 @@ NOT_HEARD = {"hi": "आवाज़ साफ़ नहीं आई। कृ�
              "hr": "आवाज साफ कोनी आई। फेर बोलो या लिख कै भेजो।"}
 
 
-def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, transcribe=None) -> str:
+def _voice(voice, text: str, lang: str, client, phone: str, fallback: str = "") -> None:
+    from parali.tts import speak
+    mp3 = speak(voice, EMOJI.sub("", text), lang) or (speak(voice, EMOJI.sub("", fallback), "hi") if fallback and lang != "hi" else None)
+    if mp3:
+        client.send_audio(phone, mp3)
+
+
+def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, transcribe=None, rp=None) -> str:
     """Answer one incoming message. Returns what was done, for the log."""
     if store.get("wa_seen", msg["id"]):
         return "duplicate"
@@ -230,7 +378,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         client.mark_read(msg["id"])
     except (urllib.error.URLError, KeyError):
         pass
-    phone, text = msg["from"], (msg.get("text") or "").strip()
+    phone, text, code = msg["from"], (msg.get("text") or "").strip(), ""
     link = store.get("wa_links", phone)
     farmer = store.get("fields", link["farmer_id"]) if link else None
     lang = lang_of(text, farmer)
@@ -249,32 +397,93 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         client.send_text(phone, NOT_HEARD[lang])
         return f"unsupported {msg.get('type')}"
 
-    just_linked = False
-    if not farmer or CHANGE.match(text):
-        farmers = _farmers(store)
-        if not CHANGE.match(text) and text.isdigit() and 1 <= int(text) <= len(farmers):
-            farmer = farmers[int(text) - 1]
-            store.put("wa_links", phone, {"id": phone, "farmer_id": farmer["id"], "at": now_iso()})
-            text, lang, just_linked = "status", "pa" if farmer.get("state") == "PB" else "hr", True
-        else:
-            client.send_text(phone, menu(store))
-            return "menu"
+    # a tap carries an English id, so it is answered in the language the farmer last wrote or spoke
+    tap = msg.get("type") == "interactive" or TAP.match(text)
+    if tap:
+        lang = (link or {}).get("lang") or ("en" if not farmer else lang_of("", farmer))
 
-    from parali.tts import speak
+    # ---- choosing a farmer: tap a state and a name, or just say the name ----
+    if text.startswith("state:"):
+        _list_farmers(store, phone, client, text[6:])
+        return "farmer list"
+    picked = store.get("fields", text[2:]) if text.startswith("f:") else None
+    if not picked and not farmer and not tap and not CHANGE.match(text):
+        picked = _match_farmer(store, text)
+    if picked:
+        if not tap:  # the farmer's state decides between Hindi and Haryanvi
+            lang = lang_of(text, picked, code)
+        farmer, link = picked, {"id": phone, "farmer_id": picked["id"], "at": now_iso(), "lang": lang}
+        store.put("wa_links", phone, link)
+        claim = _claim_of(store, farmer["id"])
+        if claim:
+            client.send_buttons(phone, short_status(claim, lang), _buttons(lang))
+            f = farmer_text_for(claim)
+            _voice(voice, f.get(lang) or "", lang, client, phone, f.get("hi", ""))
+            _send_pictures(store, farmer["id"], phone, client, lang)
+            return "linked"
+        text = "status"
+    elif not farmer or CHANGE.match(text):
+        _pick_farmer(store, phone, client, lang)
+        return "menu"
+    elif not tap and link.get("lang") != lang:
+        link = {**link, "lang": lang}
+        store.put("wa_links", phone, link)
+
+    claim = _claim_of(store, farmer["id"])
+    # ---- an appeal in progress: this message is the farmer's reason ----
+    if link and link.get("awaiting") == "appeal" and not text.startswith("btn:"):
+        link.pop("awaiting", None)
+        store.put("wa_links", phone, link)
+        if claim and claim["status"] in APPEALABLE:
+            from parali import payments, service
+            claim = service.appeal(store, claim["id"], text, voice)
+            claim = payments.cancel(store, claim, rp() if callable(rp) else rp)
+            store.add_event(claim["id"], {"type": "appeal_whatsapp", "by": "farmer"})
+            client.send_text(phone, short_status(claim, lang))
+            _voice(voice, (claim.get("message") or {}).get(lang) or "", lang, client, phone, (claim.get("message") or {}).get("hi", ""))
+            return "appeal"
+    if text == "btn:appeal":
+        if claim and claim["status"] in APPEALABLE:
+            store.put("wa_links", phone, {**link, "awaiting": "appeal"})
+            client.send_text(phone, _w(lang)["askAppeal"])
+        else:
+            client.send_text(phone, _w(lang)["noAppeal"])
+        return "appeal prompt"
+    if text == "btn:money" and claim:
+        client.send_buttons(phone, money_line(claim, lang), _buttons(lang))
+        from parali.messages import advance_text, farmer_text
+        a, f = advance_text(claim), farmer_text(claim)
+        _voice(voice, (a.get(lang) or "") + " " + (f.get(lang) or ""), lang, client, phone, a.get("hi", "") + " " + f.get("hi", ""))
+        return "money"
+    if text == "btn:why" and claim:
+        client.send_text(phone, why_line(claim, lang))
+        _send_pictures(store, farmer["id"], phone, client, lang)
+        f = farmer_text_for(claim)
+        _voice(voice, f.get(lang) or "", lang, client, phone, f.get("hi", ""))
+        return "why"
+
+    # ---- anything else goes to the assistant ----
     r = agent.respond(store, farmer["id"], text, dispatch, backend=backend)
     reply = {"hi": r.hi, "en": r.en, "pa": r.pa, "hr": r.hr}[lang]
     if lang == "pa" and not reply and voice is not None and hasattr(voice, "translate_pa"):
         reply = voice.translate_pa(r.hi)
     if not reply:
         lang, reply = "hi", r.hi
-    said = f"🎙 {HEARD[lang]}: “{text}”\n\n" if msg.get("type") == "audio" else ""
-    client.send_text(phone, said + reply)
-    mp3 = speak(voice, reply, lang) or (speak(voice, r.hi, "hi") if lang != "hi" else None)
-    if mp3:
-        client.send_audio(phone, mp3)
-    if just_linked or "explain" in r.tools:
+    said = f"🎙 {HEARD[lang]}: “{text}”\n" if msg.get("type") == "audio" else ""
+    claim = _claim_of(store, farmer["id"])
+    if claim and set(r.tools) & {"claim_status", "explain"}:
+        client.send_buttons(phone, said + short_status(claim, lang), _buttons(lang))  # short text; the voice note explains
+    else:
+        client.send_text(phone, said + reply)
+    _voice(voice, reply, lang, client, phone, r.hi)
+    if picked or "explain" in r.tools:
         _send_pictures(store, farmer["id"], phone, client, lang)
     return f"{r.mode}:{','.join(r.tools)}"
+
+
+def farmer_text_for(claim: dict) -> dict:
+    from parali.messages import farmer_text
+    return claim.get("message") or farmer_text(claim)
 
 
 PICTURE = {"hi": "आपके खेत की उपग्रह तस्वीरें, कटाई से बुआई तक।", "pa": "ਤੁਹਾਡੇ ਖੇਤ ਦੀਆਂ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ, ਵਾਢੀ ਤੋਂ ਬਿਜਾਈ ਤੱਕ।",
@@ -301,10 +510,8 @@ def notify(store: Store, claim: dict, client, voice=None) -> int:
         msg = claim.get("message") or {}
         lang = "pa" if claim.get("state_code") == "PB" else "hr"  # the farmer's own language, Hindi if it is missing
         own = msg.get(lang)
-        rec = claim.get("recovery") or {}
-        pay = f"\n\n₹{rec['amount']}: {rec['url']}" if rec.get("status") == "issued" and rec.get("url") else ""
         try:
-            client.send_text(link["id"], (own or msg.get("hi", "")) + pay)
+            client.send_buttons(link["id"], short_status(claim, lang if own else "hi"), _buttons(lang if own else "hi"))
             key = (claim.get(f"audio_key_{lang}") or claim.get("audio_key")) if own else claim.get("audio_key")
             mp3 = store.get_blob(key) if key else None
             if mp3:

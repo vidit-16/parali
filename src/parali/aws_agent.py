@@ -10,6 +10,7 @@ from functools import lru_cache, partial
 
 import boto3
 
+from parali.payments import Razorpay
 from parali import sarvam, whatsapp
 from parali.agent import BedrockBackend
 from parali.api import Deps, handle
@@ -55,7 +56,7 @@ def _whatsapp_webhook(event, context, body: bytes | None) -> dict:
 def _whatsapp_message(msg: dict) -> str:
     d = _deps()
     done = whatsapp.handle(d.store, msg, whatsapp.Client(whatsapp.config()), d.dispatch, backend=d.agent_backend,
-                           voice=d.speaker, transcribe=sarvam.transcribe)
+                           voice=d.speaker, transcribe=sarvam.transcribe, rp=Razorpay.from_keys)
     print(json.dumps({"wa": msg["id"][-8:], "type": msg.get("type"), "done": done}))
     return done
 

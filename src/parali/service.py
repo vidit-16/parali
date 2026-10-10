@@ -138,7 +138,8 @@ def write_notice(store: Store, claim: dict) -> None:
     """The draft recovery notice; written again when a payment link is added, so the letter carries it."""
     if not claim.get("evidence_key"):
         return
-    key = f"notices/{claim['id']}.html"
+    stage = (claim.get("recovery") or {}).get("status") or "draft"  # a new key per version: /blobs is cached
+    key = f"notices/{claim['id']}-{stage}.html"
     store.put_blob(key, notice.render(claim, store.blob_url(claim["evidence_key"])).encode(), "text/html; charset=utf-8")
     claim["notice_key"] = key
 
@@ -247,6 +248,26 @@ def respeak(store: Store, claim: dict, speaker: Speaker | None = None) -> dict:
     """Rewrite the farmer's message after something outside the workflow changed the claim (a payment link)."""
     _speak(store, claim, speaker)
     store.put("claims", claim["id"], claim)
+    return claim
+
+
+def after_decision(store: Store, claim_id: str, speaker: Speaker | None = None, rp=None, base_url: str = "",
+                   notify: Callable[[dict], int | None] | None = None) -> dict:
+    """The slow part of an officer's decision, run after the decision itself is saved: the payment link for an
+    advance to recover, the notice that carries it, the farmer's voice notes, and the WhatsApp message. Each step
+    leaves an event, so the officer's page can show them landing one by one."""
+    from parali import payments
+    claim = _get(store, claim_id)
+    if (claim.get("settlement") or {}).get("state") == "recover_advance":
+        claim = payments.issue_recovery(store, claim, rp, base_url)
+        if (claim.get("recovery") or {}).get("status") == "issued":
+            write_notice(store, claim)  # the letter carries the payment link
+            store.put("claims", claim_id, claim)
+    claim = respeak(store, claim, speaker)
+    channels = ["app"]
+    if notify and notify(claim):
+        channels.append("whatsapp")
+    store.add_event(claim_id, {"type": "farmer_told", "by": "system", "channels": channels})
     return claim
 
 

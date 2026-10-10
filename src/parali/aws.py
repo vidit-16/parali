@@ -88,22 +88,29 @@ def api_handler(event, context):
     elif body:
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
-                reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp,
+                reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp, followup=_followup,
                 payments=Razorpay.from_keys, base_url=public_url)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps,
                                   event.get("queryStringParameters") or {})
     return {"statusCode": status, "headers": headers, "body": out.decode()}
 
 
-def _notify_whatsapp(claim: dict) -> None:
-    """Farmers who chatted on WhatsApp hear the decision there too; a failure here never blocks the decision."""
+def _notify_whatsapp(claim: dict) -> int:
+    """Farmers who chatted on WhatsApp hear the decision there too; a failure here never blocks the decision.
+    Returns how many phones were told."""
     from parali import whatsapp
     try:
         cfg = whatsapp.config()
         if cfg.get("token"):
-            whatsapp.notify(store(), claim, whatsapp.Client(cfg))
+            return whatsapp.notify(store(), claim, whatsapp.Client(cfg))
     except Exception as e:
         print(f"whatsapp notify failed: {type(e).__name__}")
+    return 0
+
+
+def _followup(claim_id: str) -> None:
+    boto3.client("lambda", region_name=REGION).invoke(
+        FunctionName=PROCESS_FN, InvocationType="Event", Payload=json.dumps({"followup": claim_id}).encode())
 
 
 def _notify(claim: dict) -> None:
@@ -118,6 +125,18 @@ def _notify(claim: dict) -> None:
 
 def process_handler(event, context):
     st = store()
+    if event.get("followup"):
+        c = service.after_decision(st, event["followup"], _speaker(), Razorpay.from_keys(), public_url(), _notify_whatsapp)
+        return c["status"]
+    if event.get("demo_reset"):  # daily: clear the demo and file one fresh claim per field, each in its own run
+        from parali import season
+        _reset()
+        lam = boto3.client("lambda", region_name=REGION)
+        for f in st.list("fields"):
+            c = service.create_claim(st, f["id"], *season.SEASON)
+            lam.invoke(FunctionName=context.invoked_function_arn, InvocationType="Event",
+                       Payload=json.dumps({"claim_id": c["id"], "quiet": True}).encode())
+        return "reset"
     th = Thresholds.load()
     if event.get("check_id"):
         from parali import check
@@ -136,7 +155,8 @@ def process_handler(event, context):
     for cid in ids:
         try:
             c = service.run_season(st, cid, stacks, fires(), th, _speaker())
-            _notify(c)
+            if not event.get("quiet"):
+                _notify(c)
             done.append({"id": cid, "status": c["status"]})
         except Exception as e:
             print(f"claim {cid} failed: {e!r}")

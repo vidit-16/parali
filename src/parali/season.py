@@ -24,6 +24,16 @@ SCHEMES = {
     "HR": Scheme("Haryana", 1000, 0.5, "Haryana Rajya Vishisht Yojana (2024): Rs 1,000 per acre for not burning"),
     "PB": Scheme("Punjab", 1000, 0.5, "No Punjab per-acre scheme is paying out; the pilot uses Haryana's rate"),
 }
+# Smoke estimate: about 2.6 t of paddy straw per acre in Punjab, about 80% of it burnt when a field is set on fire,
+# about 9 kg of PM2.5 per tonne burnt (published emission factors for rice straw run about 8-12 kg). An estimate
+# for scale, not a measurement. CO2 is left out: it is mostly carbon the crop took in that season.
+PM25_KG_PER_ACRE = 19
+
+
+def smoke_kg(acres: float | None) -> int:
+    return int(round((acres or 0) * PM25_KG_PER_ACRE))
+
+
 DEFAULT_STATE = "PB"  # the labelled study area is Patran tehsil, Patiala
 
 CLEAN = ("auto_approved", "officer_approved")
