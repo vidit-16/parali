@@ -39,7 +39,7 @@ def _pin_ok(deps: Deps, headers: dict) -> bool:
 
 def _claim_view(store: Store, c: dict) -> dict:
     out = dict(c)
-    for k in ("evidence_key", "audio_key", "audio_key_pa", "notice_key"):
+    for k in ("evidence_key", "audio_key", "audio_key_pa", "audio_key_hr", "audio_key_en", "notice_key"):
         if c.get(k):
             out[k.replace("_key", "_url")] = store.blob_url(c[k])
     return out
@@ -105,7 +105,8 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             if (c.get("settlement") or {}).get("state") == "recover_advance":
                 c = payments.issue_recovery(s, c, _rp(deps), deps.base_url() if deps.base_url else "")
                 if (c.get("recovery") or {}).get("status") == "issued":
-                    c = service.respeak(s, c, deps.speaker)  # the message now points to the link
+                    service.write_notice(s, c)  # the letter carries the payment link
+                    c = service.respeak(s, c, deps.speaker)  # and so does the farmer's message
             if deps.notify:
                 deps.notify(c)
             return _json(200, _claim_view(s, c))
@@ -186,20 +187,19 @@ def _agent_turn(deps: Deps, data: dict) -> dict:
     r = agent.respond(deps.store, farmer_id, text, deps.dispatch, backend=deps.agent_backend)
     out = {"transcript": transcript, "text": text, "hi": r.hi, "en": r.en, "tools": r.tools, "mode": r.mode,
            "note": r.note}
-    pa = mp3 = None
-    if data.get("lang") == "pa" and r.hi:
-        # templates carry their own Punjabi; only the model's free-text question needs translating
-        pa = r.pa or (deps.speaker.translate_pa(r.hi) if hasattr(deps.speaker, "translate_pa") else None)
-        mp3 = deps.speaker.speak_pa(pa) if pa and hasattr(deps.speaker, "speak_pa") else None
-    if pa:
-        out["pa"] = pa
+    from parali.tts import speak
+    lang = data.get("lang") if data.get("lang") in ("hi", "en", "pa", "hr") else "hi"
+    said = {"hi": r.hi, "en": r.en, "pa": r.pa, "hr": r.hr}[lang]
+    if lang == "pa" and not said and r.hi and hasattr(deps.speaker, "translate_pa"):
+        said = deps.speaker.translate_pa(r.hi)  # only the model's own short question has no template
+    if not said:
+        lang, said = "hi", r.hi
+    if lang in ("pa", "hr"):
+        out[lang] = said
+    mp3 = speak(deps.speaker, said, lang) or (speak(deps.speaker, r.hi, "hi") if lang != "hi" else None)
     if mp3:
-        key = f"agent/{uuid.uuid4().hex[:12]}-pa.mp3"
+        key = f"agent/{uuid.uuid4().hex[:12]}-{lang}.mp3"
         deps.store.put_blob(key, mp3, "audio/mpeg")
-        out["audio_url"] = deps.store.blob_url(key)
-    elif deps.speaker and r.hi:
-        key = f"agent/{uuid.uuid4().hex[:12]}.mp3"
-        deps.store.put_blob(key, deps.speaker(r.hi), "audio/mpeg")
         out["audio_url"] = deps.store.blob_url(key)
     return out
 

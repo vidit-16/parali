@@ -1,14 +1,15 @@
-"""Speech for the farmer. Hindi with Amazon Polly; Punjabi with Sarvam (sarvam.py). The text comes from
-messages.py and agent.compose; the voices only read it."""
+"""Speech for the farmer. Hindi, Haryanvi and Indian English with Amazon Polly (the Kajal voice speaks both
+Hindi and English); Punjabi with Sarvam (sarvam.py). The text comes from messages.py and agent.compose; the
+voices only read it."""
 from parali import sarvam
 
 VOICE = "Kajal"
 
 
-def polly_mp3(text: str, region: str | None = None) -> bytes:
+def polly_mp3(text: str, region: str | None = None, language: str = "hi-IN") -> bytes:
     import boto3
     polly = boto3.client("polly", region_name=region)
-    r = polly.synthesize_speech(Text=text, VoiceId=VOICE, Engine="neural", LanguageCode="hi-IN", OutputFormat="mp3")
+    r = polly.synthesize_speech(Text=text, VoiceId=VOICE, Engine="neural", LanguageCode=language, OutputFormat="mp3")
     return r["AudioStream"].read()
 
 
@@ -21,5 +22,16 @@ class Voice:
         self.speak_pa = speak_pa
         self.translate_pa = translate_pa
 
-    def __call__(self, text: str) -> bytes:
-        return polly_mp3(text, self.region)
+    def __call__(self, text: str, language: str = "hi-IN") -> bytes:
+        return polly_mp3(text, self.region, language)
+
+
+def speak(speaker, text: str, lang: str) -> bytes | None:
+    """mp3 of text in lang ("hi", "hr", "en", "pa"), or None if no voice for it is available."""
+    if speaker is None or not text:
+        return None
+    if lang == "pa":
+        return speaker.speak_pa(text) if hasattr(speaker, "speak_pa") else None
+    if lang == "en":
+        return speaker(text, "en-IN") if isinstance(speaker, Voice) else None
+    return speaker(text)  # Hindi; Haryanvi is read by the Hindi voice

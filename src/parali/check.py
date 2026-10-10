@@ -67,6 +67,7 @@ def run(store: Store, check_id: str, stacks, fires, th) -> dict:
         key = f"checks/{check_id}-{name}.png"
         store.put_blob(key, evidence.render(stack, f, d.burn_date), "image/png")
         out[name] = {"season": str(s.year), "decision": d.as_dict(), "evidence_key": key,
+                     "evidence_dates": evidence.frame_dates(stack, f, d.burn_date),
                      "series": [{"date": x.date.isoformat(), "nbr": None if x.nbr != x.nbr else round(x.nbr, 4),
                                  "valid": round(x.valid_share, 2)} for x in feats],
                      "fires": [{"lat": p.lat, "lon": p.lon, "date": p.date.isoformat()} for p in near]}

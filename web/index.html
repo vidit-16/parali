@@ -86,8 +86,8 @@
   <h1 data-i18n="headline"></h1>
   <div class="vs">
     <p class="lbl" data-i18n="vslbl">Clean fields wrongly flagged (lower is better)</p>
-    <div class="row"><span data-i18n="alerts">Fire alerts</span><div class="track"><i class="bad" style="--w:8.8%"></i></div><b>8.8%</b></div>
-    <div class="row"><span>Saakshi</span><div class="track"><i class="good" style="--w:1.5%"></i></div><b>1.5%</b></div>
+    <div class="row"><span data-i18n="alerts">Fire alerts</span><div class="track"><i class="bad" style="--w:9%"></i></div><b>9.0%</b></div>
+    <div class="row"><span>Saakshi</span><div class="track"><i class="good" style="--w:0.6%"></i></div><b>0.6%</b></div>
     <p class="cap" data-i18n="vscap"></p>
   </div>
   <div class="actions">
@@ -135,7 +135,14 @@
   </div>
   <div class="stat burn"><b id="ha">0</b><span data-i18n="ha">ha burn-like</span></div>
   <div class="stat fire"><b id="fa">0</b><span data-i18n="fa">fire alerts</span></div>
+  <button class="srcbtn" id="src-btn" aria-haspopup="dialog" data-i18n="sources">Sources</button>
 </footer>
+<div class="sources glass" id="sources" hidden role="dialog" aria-label="Sources">
+  <p><b>Satellite pictures and burn patches</b>Copernicus Sentinel-2 (ESA), read from the AWS Open Data registry and processed by Saakshi.</p>
+  <p><b>Fire alerts</b>NASA FIRMS, VIIRS and MODIS, 2025 season.</p>
+  <p><b>Basemap, place names and close-up imagery</b>Esri, Maxar, Earthstar Geographics.</p>
+  <p><b>Boundaries</b>© OpenStreetMap contributors.</p>
+</div>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script type="module" src="js/explorer.js"></script>

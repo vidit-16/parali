@@ -91,7 +91,11 @@ def _pa_name(claim: dict, key: str) -> str:
 
 
 def advance_text(claim: dict) -> dict:
-    """Before harvest: is there an advance, and why."""
+    """Before harvest: is there an advance, and why. Hindi, English, Punjabi and Haryanvi."""
+    return {**_advance_text(claim), "hr": _advance_hr(claim)}
+
+
+def _advance_text(claim: dict) -> dict:
     adv = claim.get("advance") or {}
     y = adv.get("prev_season", "")
     if adv.get("eligible"):
@@ -154,10 +158,12 @@ def _money(claim: dict) -> dict:
 
 
 def farmer_text(claim: dict) -> dict:
-    """Returns {"hi", "en", "pa"} for the claim's current status, with the money line."""
+    """Returns {"hi", "en", "pa", "hr"} for the claim's current status, with the money line."""
     base = _status_text(claim)
     money = _money(claim)
-    return {k: base[k] + money[k] for k in ("hi", "en", "pa")}
+    out = {k: base[k] + money[k] for k in ("hi", "en", "pa")}
+    out["hr"] = _status_hr(claim) + _money_hr(claim)
+    return out
 
 
 def _status_text(claim: dict) -> dict:
@@ -223,3 +229,70 @@ def _status_text(claim: dict) -> dict:
         "en": f"Your claim for {field} has been received. The satellite check is running.",
         "pa": greet_pa + f"{field_pa} ਖੇਤ ਦਾ ਦਾਅਵਾ ਮਿਲ ਗਿਆ ਹੈ। ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਦੀ ਜਾਂਚ ਚੱਲ ਰਹੀ ਹੈ।",
     }
+
+
+# ---- Haryanvi (a draft: needs a native speaker's review). Spoken with the Hindi voice. ----
+REASON_HR = {
+    "too_few_clear_images": "बादळां के कारण थारे खेत के पूरे साफ फोटू कोनी मिले।",
+    "dark_on_one_image": "एक फोटू म्ह खेत का रंग गहरा दिख्या, पर अगले फोटू म्ह कोनी।",
+    "partial_scar": "खेत के एक हिस्से का रंग गहरा दिख्या।",
+    "fire_point_nearby_no_scar": "धोरै आग का उपग्रह संकेत मिल्या, पर थारे खेत पै जळण का निसान कोनी दिख्या।",
+    "field_too_small": "खेत छोटा होण के कारण फोटुआं तै पक्का फैसला कोनी हो सक्या।",
+}
+
+
+def _advance_hr(claim: dict) -> str:
+    adv = claim.get("advance") or {}
+    y = adv.get("prev_season", "")
+    if adv.get("eligible"):
+        paid = adv.get("status") == "paid"
+        return (f"{y} म्ह थारे खेत म्ह पराळी जळाण का निसान कोनी मिल्या, इस करकै थमनै ₹{rupees(adv.get('amount', 0))} का एडवांस "
+                + ("मिल लिया सै।" if paid else "मिलैगा।") + " बाकी रकम कटाई पाच्छै उपग्रह की जांच तै तय होगी।")
+    if adv:
+        return (f"{y} के फोटुआं म्ह थारा खेत साफ कोनी दिख्या, इस करकै इस साल एडवांस कोनी। पूरी रकम कटाई पाच्छै जांच तै मिलैगी। "
+                "इस साल खेत साफ रह्या तो अगले साल एडवांस मिलैगा।")
+    return ""
+
+
+def _status_hr(claim: dict) -> str:
+    status, dec = claim["status"], claim.get("decision") or {}
+    name = claim.get("farmer_name_hi") or claim.get("farmer_name", "")
+    greet = f"राम राम {name} जी। " if name else "राम राम। "
+    field = claim.get("field_name_hi") or claim.get("field_name", "")
+    if status == "auto_approved":
+        n = len(dec.get("clear_dates", []))
+        return greet + f"{field} खेत खातर थारा दावा मंजूर हो गया सै। उपग्रह के {n} साफ फोटुआं म्ह पराळी जळाण का कोए निसान कोनी मिल्या।"
+    if status == "needs_review":
+        return (greet + f"{field} खेत का दावा गाम के अफसर कनै जांच खातर भेज्या गया सै। "
+                + REASON_HR.get(dec.get("rule", ""), "") + " थमनै इब्ब कुछ करण की जरूरत कोनी।")
+    if status == "possible_burn":
+        when = f"{hi_date(dec['burn_date'])} के आसपास " if dec.get("burn_date") else ""
+        return (greet + f"उपग्रह के फोटुआं म्ह {when}{field} खेत म्ह जळण बरगा निसान दिख्या सै। यो आखरी फैसला कोनी। "
+                "गाम का अफसर फोटू देख कै फैसला करैगा, अर थम अपणी बात राख सको सो।")
+    if status == "officer_approved":
+        return greet + f"गाम के अफसर नै {field} खेत खातर थारा दावा मंजूर कर दिया सै।"
+    if status == "officer_confirmed_burnt":
+        return (greet + f"गाम के अफसर नै जांच पाच्छै पाया के {field} खेत म्ह पराळी जळाई गई थी, इस करकै दावा मंजूर कोनी होया। "
+                "थम इस फैसले पै आपत्ति दर्ज कर सको सो।")
+    return greet + f"{field} खेत का दावा मिल गया सै। उपग्रह के फोटुआं की जांच चालू सै।"
+
+
+def _money_hr(claim: dict) -> str:
+    s, adv = claim.get("settlement") or {}, claim.get("advance") or {}
+    paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
+    if s.get("state") == "balance_due":
+        out = f" बाकी ₹{rupees(s['balance'])} थारे खाते म्ह भेजे जावैंगे"
+        if paid:
+            out += f" (₹{rupees(paid)} एडवांस पहल्यां मिल लिया सै)"
+        out += "।"
+        if adv and not adv.get("eligible"):
+            out += " इस साल खेत साफ रह्या, अगले साल थमनै एडवांस मिलैगा।"
+        return out
+    if s.get("state") == "recover_advance":
+        r, rec = rupees(s["recover"]), claim.get("recovery") or {}
+        if rec.get("status") == "paid":
+            return f" एडवांस के ₹{r} उल्टे मिल गे सैं। इब्ब कुछ बाकी कोनी।"
+        if rec.get("status") == "issued":
+            return f" पहल्यां दिया गया ₹{r} का एडवांस उल्टा देणा पड़ैगा। इसका लिंक ऐप अर WhatsApp पै भेज्या सै।"
+        return f" पहल्यां दिया गया ₹{r} का एडवांस उल्टा देणा पड़ैगा; गाम का अफसर थमनै लिखत म्ह सूचना देगा।"
+    return ""

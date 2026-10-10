@@ -41,6 +41,7 @@ class Reply:
     mode: str                          # "bedrock" | "scripted" | "scripted-fallback"
     note: str = ""
     pa: str = ""                       # set when the reply came from templates; empty for the model's own words
+    hr: str = ""                       # Haryanvi, likewise
 
 
 # ---------- tools: the only things the assistant can do ----------
@@ -139,66 +140,75 @@ def _pa(hi_name, name):
     return to_gurmukhi(hi_name) if hi_name else name
 
 
-def compose(effects: list) -> tuple[str, str, str]:
-    """(hi, en, pa) for what the tools did this turn."""
-    hi, en, pa = [], [], []
+def compose(effects: list) -> tuple[str, str, str, str]:
+    """(hi, en, pa, hr) for what the tools did this turn. Haryanvi is a draft for native review."""
+    hi, en, pa, hr = [], [], [], []
 
-    def say(h, e, p):
+    def say(h, e, p, r):
         hi.append(h)
         en.append(e)
         pa.append(p)
+        hr.append(r)
 
     for name, r in effects:
         if name == "my_fields":
             if r["fields"]:
-                say(f"आपके नाम पर ये खेत दर्ज हैं: {', '.join(f.get('name_hi') or f.get('name') for f in r['fields'])}।",
+                names_hi = ", ".join(f.get("name_hi") or f.get("name") for f in r["fields"])
+                say(f"आपके नाम पर ये खेत दर्ज हैं: {names_hi}।",
                     f"Your registered fields: {', '.join(f.get('name') for f in r['fields'])}.",
-                    f"ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਇਹ ਖੇਤ ਦਰਜ ਹਨ: {', '.join(_pa(f.get('name_hi'), f.get('name')) for f in r['fields'])}।")
+                    f"ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਇਹ ਖੇਤ ਦਰਜ ਹਨ: {', '.join(_pa(f.get('name_hi'), f.get('name')) for f in r['fields'])}।",
+                    f"थारे नाम पै ये खेत दर्ज सैं: {names_hi}।")
             else:
                 say("आपके नाम पर कोई खेत दर्ज नहीं मिला।", "No field is registered in your name.",
-                    "ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਕੋਈ ਖੇਤ ਦਰਜ ਨਹੀਂ ਮਿਲਿਆ।")
+                    "ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਕੋਈ ਖੇਤ ਦਰਜ ਨਹੀਂ ਮਿਲਿਆ।", "थारे नाम पै कोए खेत दर्ज कोनी मिल्या।")
         elif name in ("claim_status", "explain"):
             if not r["claims"]:
                 say("अभी आपका कोई दावा दर्ज नहीं है। कहें तो मैं दावा दर्ज कर दूँ।",
                     "You have no claim yet. I can file one if you want.",
-                    "ਹਾਲੇ ਤੁਹਾਡਾ ਕੋਈ ਦਾਅਵਾ ਦਰਜ ਨਹੀਂ ਹੈ। ਕਹੋ ਤਾਂ ਮੈਂ ਦਾਅਵਾ ਦਰਜ ਕਰ ਦਿਆਂ।")
+                    "ਹਾਲੇ ਤੁਹਾਡਾ ਕੋਈ ਦਾਅਵਾ ਦਰਜ ਨਹੀਂ ਹੈ। ਕਹੋ ਤਾਂ ਮੈਂ ਦਾਅਵਾ ਦਰਜ ਕਰ ਦਿਆਂ।",
+                    "इब्ब तक थारा कोए दावा दर्ज कोनी। कहो तो मैं दावा दर्ज कर द्यूं।")
             for c in r["claims"]:
                 t = farmer_text(c)
-                say(t["hi"], t["en"], t["pa"])
+                say(t["hi"], t["en"], t["pa"], t["hr"])
         elif name == "advance_status":
             if not r["claims"]:
                 say("अग्रिम राशि की जाँच दावा दर्ज होने पर होती है।", "The advance is checked when a claim is filed.",
-                    "ਅਗਾਊਂ ਰਕਮ ਦੀ ਜਾਂਚ ਦਾਅਵਾ ਦਰਜ ਹੋਣ ਉੱਤੇ ਹੁੰਦੀ ਹੈ।")
+                    "ਅਗਾਊਂ ਰਕਮ ਦੀ ਜਾਂਚ ਦਾਅਵਾ ਦਰਜ ਹੋਣ ਉੱਤੇ ਹੁੰਦੀ ਹੈ।", "एडवांस की जांच दावा दर्ज होण पै होवै सै।")
             for c in r["claims"]:
                 t = advance_text(c)
-                say(t["hi"], t["en"], t["pa"])
+                say(t["hi"], t["en"], t["pa"], t["hr"])
         elif name == "file_claim":
             for c in r["filed"]:
-                say(f"{c.get('field_name_hi') or c['field_name']} खेत का दावा दर्ज हो गया। पिछले और इस सीज़न की "
+                fh = c.get("field_name_hi") or c["field_name"]
+                say(f"{fh} खेत का दावा दर्ज हो गया। पिछले और इस सीज़न की "
                     "उपग्रह तस्वीरें जाँची जा रही हैं, नतीजा कुछ ही देर में मिलेगा।",
                     f"Claim filed for {c['field_name']}. Last season's and this season's satellite images are "
                     "being checked; the result will be ready shortly.",
                     f"{_pa(c.get('field_name_hi'), c['field_name'])} ਖੇਤ ਦਾ ਦਾਅਵਾ ਦਰਜ ਹੋ ਗਿਆ। ਪਿਛਲੇ ਅਤੇ ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ "
-                    "ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ, ਨਤੀਜਾ ਕੁਝ ਹੀ ਦੇਰ ਵਿੱਚ ਮਿਲੇਗਾ।")
+                    "ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ, ਨਤੀਜਾ ਕੁਝ ਹੀ ਦੇਰ ਵਿੱਚ ਮਿਲੇਗਾ।",
+                    f"{fh} खेत का दावा दर्ज हो गया। पाछले अर इस सीज़न के उपग्रह फोटुआं की जांच होरी सै, नतीजा थोड़ी देर म्ह मिलैगा।")
             for f in r["already_filed"]:
-                say(f"{f.get('name_hi') or f.get('name')} खेत का दावा पहले से दर्ज है।",
+                fh = f.get("name_hi") or f.get("name")
+                say(f"{fh} खेत का दावा पहले से दर्ज है।",
                     f"A claim for {f.get('name')} is already filed.",
-                    f"{_pa(f.get('name_hi'), f.get('name'))} ਖੇਤ ਦਾ ਦਾਅਵਾ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਹੈ।")
+                    f"{_pa(f.get('name_hi'), f.get('name'))} ਖੇਤ ਦਾ ਦਾਅਵਾ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਹੈ।",
+                    f"{fh} खेत का दावा पहल्यां तै दर्ज सै।")
         elif name == "contest":
             if r["claims"]:
                 say("आपकी आपत्ति दर्ज कर ली गई है और उपग्रह तस्वीरों के साथ ग्राम अधिकारी को भेज दी गई है।",
                     "Your objection is recorded and sent to the village officer with the satellite images.",
-                    "ਤੁਹਾਡਾ ਇਤਰਾਜ਼ ਦਰਜ ਕਰ ਲਿਆ ਗਿਆ ਹੈ ਅਤੇ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਸਮੇਤ ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਭੇਜ ਦਿੱਤਾ ਗਿਆ ਹੈ।")
+                    "ਤੁਹਾਡਾ ਇਤਰਾਜ਼ ਦਰਜ ਕਰ ਲਿਆ ਗਿਆ ਹੈ ਅਤੇ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ ਸਮੇਤ ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਭੇਜ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
+                    "थारी आपत्ति दर्ज कर ली गई सै अर उपग्रह के फोटुआं गेल्यां गाम के अफसर कनै भेज दी सै।")
             else:
                 say("आपत्ति दर्ज करने के लिए पहले दावा होना चाहिए।", "A claim is needed before an objection can be recorded.",
-                    "ਇਤਰਾਜ਼ ਦਰਜ ਕਰਨ ਲਈ ਪਹਿਲਾਂ ਦਾਅਵਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।")
+                    "ਇਤਰਾਜ਼ ਦਰਜ ਕਰਨ ਲਈ ਪਹਿਲਾਂ ਦਾਅਵਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।", "आपत्ति दर्ज करण खातर पहल्यां दावा होणा चाहिए।")
         elif name == "callback":
             if r["claims"]:
                 say("ग्राम अधिकारी को आपको फ़ोन करने के लिए कह दिया गया है।", "The village officer has been asked to call you.",
-                    "ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਤੁਹਾਨੂੰ ਫ਼ੋਨ ਕਰਨ ਲਈ ਕਹਿ ਦਿੱਤਾ ਗਿਆ ਹੈ।")
+                    "ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਨੂੰ ਤੁਹਾਨੂੰ ਫ਼ੋਨ ਕਰਨ ਲਈ ਕਹਿ ਦਿੱਤਾ ਗਿਆ ਹੈ।", "गाम के अफसर नै थारे तै फोन करण खातर कह दिया सै।")
             else:
-                say("पहले दावा दर्ज करना होगा।", "A claim is needed first.", "ਪਹਿਲਾਂ ਦਾਅਵਾ ਦਰਜ ਕਰਨਾ ਪਵੇਗਾ।")
-    return _join(hi), _join(en), _join(pa)
+                say("पहले दावा दर्ज करना होगा।", "A claim is needed first.", "ਪਹਿਲਾਂ ਦਾਅਵਾ ਦਰਜ ਕਰਨਾ ਪਵੇਗਾ।", "पहल्यां दावा दर्ज करणा पड़ैगा।")
+    return _join(hi), _join(en), _join(pa), _join(hr)
 
 
 HELP = ("मैं आपके खेत की पराली जाँच के बारे में बता सकती हूँ: दावा दर्ज करना, दावे की स्थिति, अग्रिम राशि, "
@@ -206,28 +216,30 @@ HELP = ("मैं आपके खेत की पराली जाँच �
         "I can file your no-burn claim, tell you its status, the advance, why it was decided, or record an "
         "objection. What would you like?",
         "ਮੈਂ ਤੁਹਾਡੇ ਖੇਤ ਦੀ ਪਰਾਲੀ ਜਾਂਚ ਬਾਰੇ ਦੱਸ ਸਕਦੀ ਹਾਂ: ਦਾਅਵਾ ਦਰਜ ਕਰਨਾ, ਦਾਅਵੇ ਦੀ ਸਥਿਤੀ, ਅਗਾਊਂ ਰਕਮ, "
-        "ਫ਼ੈਸਲੇ ਦਾ ਕਾਰਨ, ਜਾਂ ਗ਼ਲਤ ਫ਼ੈਸਲੇ ਉੱਤੇ ਇਤਰਾਜ਼। ਦੱਸੋ, ਕੀ ਜਾਣਨਾ ਹੈ?")
+        "ਫ਼ੈਸਲੇ ਦਾ ਕਾਰਨ, ਜਾਂ ਗ਼ਲਤ ਫ਼ੈਸਲੇ ਉੱਤੇ ਇਤਰਾਜ਼। ਦੱਸੋ, ਕੀ ਜਾਣਨਾ ਹੈ?",
+        "मैं थारे खेत की पराळी जांच के बारे म्ह बता सकूं सूं: दावा दर्ज करणा, दावे की हालत, एडवांस, फैसले का कारण, "
+        "या गलत फैसले पै आपत्ति। बोलो, के जाणणा सै?")
 
 
 def _help(mode, tools=(), note=""):
-    return Reply(HELP[0], HELP[1], list(tools), mode, note=note, pa=HELP[2])
+    return Reply(HELP[0], HELP[1], list(tools), mode, note=note, pa=HELP[2], hr=HELP[3])
 
 
 def _from_effects(effects, mode, note=""):
-    hi, en, pa = compose(effects)
-    return Reply(hi, en, [n for n, _ in effects], mode, note=note, pa=pa)
+    hi, en, pa, hr = compose(effects)
+    return Reply(hi, en, [n for n, _ in effects], mode, note=note, pa=pa, hr=hr)
 
 
 # ---------- scripted backend ----------
 
 INTENTS = [
-    ("contest", r"गलत|आपत्ति|रेड\s*एंट्री|red\s*entry|wrong|appeal|objection|galat|aapatti|ਗ਼?ਲਤ|ਗ਼ਲਤ|ਇਤਰਾਜ਼?"),
+    ("contest", r"गलत|आपत्ति|रेड\s*एंट्री|red\s*entry|wrong|appeal|objection|galat|aapatti|ਗ਼?ਲਤ|ਗ਼ਲਤ|ਇਤਰਾਜ਼?|कोनी जळाई"),
     ("request_callback", r"फ़?फोन|कॉल|call\s*me|बात\s*कर|अधिकारी\s*से|officer|ਫ਼?ਫੋਨ|ਫ਼ੋਨ|ਕਾਲ|ਅਧਿਕਾਰੀ\s*ਨਾਲ"),
     ("advance_status", r"अग्रिम|एडवांस|advance|pehle\s*paise|पहले\s*पैसे|ਅਗਾਊਂ|ਐਡਵਾਂਸ|ਪਹਿਲਾਂ\s*ਪੈਸੇ"),
-    ("explain", r"क्यों|कारण|why|reason|kyun|kyon|ਕਿਉਂ|ਕਾਰਨ"),
+    ("explain", r"क्यों|कारण|why|\bheld\b|reason|kyun|kyon|ਕਿਉਂ|ਕਾਰਨ|क्यूं"),
     ("file_claim", r"दर्ज|आवेदन|अप्लाई|apply|file|register|दावा\s*कर|claim\s*kar|ਦਰਜ|ਅਪਲਾਈ|ਦਾਅਵਾ\s*ਕਰ"),
-    ("claim_status", r"दावा|स्थिति|स्टेटस|status|क्या\s*हुआ|कहाँ\s*तक|पैसे|राशि|payment|paisa|kab\s*milega|claim|ਦਾਅਵ|ਸਥਿਤੀ|ਸਟੇਟਸ|ਕੀ\s*ਹੋਇਆ|ਪੈਸੇ|ਰਕਮ|ਕਦੋਂ\s*ਮਿਲ"),
-    ("my_fields", r"मेरे\s*खेत|कौन\s*से\s*खेत|my\s*fields?|khet|ਮੇਰੇ\s*ਖੇਤ|ਕਿਹੜੇ\s*ਖੇਤ"),
+    ("claim_status", r"दावा|स्थिति|स्टेटस|status|क्या\s*हुआ|कहाँ\s*तक|पैसे|राशि|payment|money|paid|\bwhen\b|paisa|kab\s*milega|claim|ਦਾਅਵ|ਸਥਿਤੀ|ਸਟੇਟਸ|ਕੀ\s*ਹੋਇਆ|ਪੈਸੇ|ਰਕਮ|ਕਦੋਂ\s*ਮਿਲ|पीसा|कद\s*आवैगा|के\s*होया"),
+    ("my_fields", r"मेरे\s*खेत|कौन\s*से\s*खेत|\bfields?\b|my\s*land|khet|ਮੇਰੇ\s*ਖੇਤ|ਕਿਹੜੇ\s*ਖੇਤ"),
 ]
 
 

@@ -130,10 +130,17 @@ def _settle(store: Store, claim: dict) -> None:
                                           "rail": "DBT, simulated"})
         elif st["state"] == "recover_advance":
             store.add_event(claim["id"], {"type": "recovery_notice", "by": "system", "amount": st["recover"]})
-    if claim["settlement"]["state"] == "recover_advance" and claim.get("evidence_key"):
-        key = f"notices/{claim['id']}.html"
-        store.put_blob(key, notice.render(claim, store.blob_url(claim["evidence_key"])).encode(), "text/html; charset=utf-8")
-        claim["notice_key"] = key
+    if claim["settlement"]["state"] == "recover_advance":
+        write_notice(store, claim)
+
+
+def write_notice(store: Store, claim: dict) -> None:
+    """The draft recovery notice; written again when a payment link is added, so the letter carries it."""
+    if not claim.get("evidence_key"):
+        return
+    key = f"notices/{claim['id']}.html"
+    store.put_blob(key, notice.render(claim, store.blob_url(claim["evidence_key"])).encode(), "text/html; charset=utf-8")
+    claim["notice_key"] = key
 
 
 def _get(store: Store, claim_id: str) -> dict:
@@ -149,17 +156,21 @@ def _speak(store: Store, claim: dict, speaker: Speaker | None) -> None:
     if speaker is None:
         claim.pop("audio_key", None)
         return
+    from parali.tts import speak
     key = f"audio/{claim['id']}-{claim['status']}.mp3"
     store.put_blob(key, speaker(text["hi"]), "audio/mpeg")
     claim["audio_key"] = key
-    claim.pop("audio_key_pa", None)
-    # Punjab's farmers also hear it in Punjabi; without Sarvam they get the Hindi audio
-    if claim.get("state_code") == "PB" and hasattr(speaker, "speak_pa"):
-        mp3 = speaker.speak_pa(text["pa"])
+    # English for everyone, and the state's own language: Punjabi in Punjab, Haryanvi in Haryana.
+    # A language without a voice (Sarvam down) falls back to the Hindi audio on the page.
+    langs = ["en", "pa" if claim.get("state_code") == "PB" else "hr"]
+    for lang in ("en", "pa", "hr"):
+        claim.pop(f"audio_key_{lang}", None)
+    for lang in langs:
+        mp3 = speak(speaker, text[lang], lang)
         if mp3:
-            key = f"audio/{claim['id']}-{claim['status']}-pa.mp3"
+            key = f"audio/{claim['id']}-{claim['status']}-{lang}.mp3"
             store.put_blob(key, mp3, "audio/mpeg")
-            claim["audio_key_pa"] = key
+            claim[f"audio_key_{lang}"] = key
 
 
 def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: "list[Fire]", th: "Thresholds",
@@ -177,6 +188,7 @@ def process_claim(store: Store, claim_id: str, stacks: StackProvider, fires: "li
     from parali import evidence
     key = f"evidence/{claim_id}.png"
     store.put_blob(key, evidence.render(stack, field, d.burn_date), "image/png")
+    claim["evidence_dates"] = evidence.frame_dates(stack, field, d.burn_date)
     claim.update({
         "status": d.outcome,
         "decision": d.as_dict(),

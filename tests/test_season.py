@@ -103,8 +103,9 @@ def test_confirmed_burn_after_advance_drafts_recovery_notice(store):
     r = service.review(store, c["id"], "VO-7", "confirm_burnt", "visited 8 Nov")
     assert r["settlement"]["state"] == "recover_advance" and r["settlement"]["recover"] == 1250
     html = store.get_blob(r["notice_key"]).decode()
-    assert "DRAFT for officer review" in html and "Rs 1250" in html and "VO-7" in html
-    assert "अग्रिम राशि" in html
+    assert "DRAFT FOR OFFICER REVIEW" in html and "₹1,250" in html and "VO-7" in html
+    assert "अग्रिम राशि" in html and "ਅਗਾਊਂ ਰਕਮ" in html  # Punjab farmer: Hindi and Punjabi
+    assert "not issued by any government office" in html
 
 
 def test_officer_clears_possible_burn_releases_balance(store):

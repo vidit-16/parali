@@ -45,13 +45,24 @@ def to_rgb(stack: AreaStack, t: int, kind: str) -> np.ndarray:
     return (np.clip(np.nan_to_num(rgb), 0, 1) * 255).astype("uint8")
 
 
-def render(stack: AreaStack, field: Field, burn_date: date | None = None, n: int = 8) -> bytes:
+def _frames(stack: AreaStack, field: Field, burn_date: date | None, n: int):
     from rasterio.features import geometry_mask
     from shapely.geometry import mapping
     hw = stack.scl.shape[1:]
     g = project(field.geometry, stack.crs)
     mask = geometry_mask([mapping(g)], out_shape=hw, transform=stack.transform, invert=True)
-    ts = pick_dates(clear_dates(stack, mask), stack.dates, burn_date, n)
+    return g, hw, pick_dates(clear_dates(stack, mask), stack.dates, burn_date, n)
+
+
+def frame_dates(stack: AreaStack, field: Field, burn_date: date | None = None, n: int = 8) -> list[str]:
+    """The dates render() draws, left to right, so a page can cut the image into frames."""
+    return [stack.dates[t].isoformat() for t in _frames(stack, field, burn_date, n)[2]]
+
+
+def render(stack: AreaStack, field: Field, burn_date: date | None = None, n: int = 8) -> bytes:
+    """One column per date: the date, the colour picture, then the infrared (SWIR2, NIR, red) picture, where
+    burnt ground is maroon and wet soil dark blue. Frames are GAP pixels apart; the label row is LABEL_H high."""
+    g, hw, ts = _frames(stack, field, burn_date, n)
     h, w = hw[0] * SCALE, hw[1] * SCALE
     img = Image.new("RGB", (max(len(ts), 1) * (w + GAP), 2 * (h + GAP) + LABEL_H), "white")
     draw = ImageDraw.Draw(img)

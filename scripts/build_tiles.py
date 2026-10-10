@@ -70,7 +70,23 @@ def merge_burns(sink, blocks, fire_feats=()):
             f["properties"]["a"] = int(len(tree.query(to_m(shape(f["geometry"])), predicate="dwithin", distance=375)) > 0)
     sink.put("burns.geojson", json.dumps({"type": "FeatureCollection", "features": feats},
                                          separators=(",", ":")).encode(), "application/json")  # CloudFront compresses application/json
+    sink.put("burn_points.geojson", json.dumps(burn_points(feats), separators=(",", ":")).encode(), "application/json")
     return len(feats)
+
+
+def burn_points(feats: list) -> dict:
+    """One point per patch with its area, for the zoomed-out map: a 20 m patch is under a pixel across the whole belt."""
+    from pyproj import Geod
+    from shapely.geometry import mapping, shape
+    geod = Geod(ellps="WGS84")
+    pts = []
+    for f in feats:
+        g = shape(f["geometry"])
+        ha = abs(geod.geometry_area_perimeter(g)[0]) / 1e4
+        c = g.representative_point()
+        pts.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [round(c.x, 5), round(c.y, 5)]},
+                    "properties": {**f["properties"], "ha": round(ha, 2)}})
+    return {"type": "FeatureCollection", "features": pts}
 
 
 def fire_layer(sink, region):

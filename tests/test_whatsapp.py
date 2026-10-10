@@ -36,8 +36,8 @@ class FakeClient:
 
 
 class FakeVoice(Voice):
-    def __call__(self, text):
-        return b"hi-mp3"
+    def __call__(self, text, language="hi-IN"):
+        return b"en-mp3" if language == "en-IN" else b"hi-mp3"
 
 
 @pytest.fixture
@@ -108,7 +108,7 @@ def test_voice_note_in_punjabi_is_answered_in_punjabi(store):
     assert "ਤੁਸੀਂ ਕਿਹਾ" in text and "ਤੁਹਾਡੇ ਨਾਮ ਉੱਤੇ ਇਹ ਖੇਤ" in text
     c = FakeClient()
     run(store, msg(audio=True, mid="m3"), c, transcribe=lambda audio, mime: None)
-    assert c.texts() == [whatsapp.NOT_HEARD["hi"]]
+    assert c.texts() == [whatsapp.NOT_HEARD["hr"]]  # a Haryana farmer: Haryanvi
 
 
 def test_hindi_text_gets_hindi_text_and_polly_audio(store):
@@ -131,3 +131,23 @@ def test_decision_reaches_linked_phones(store):
 def test_webhook_payload_round_trip():
     body = json.dumps({"entry": [{"changes": [{"value": {"statuses": [{"id": "x"}]}}]}]})
     assert whatsapp.messages(json.loads(body)) == []  # delivery receipts are not messages
+
+
+def test_english_gets_english_and_haryana_gets_haryanvi(store):  # noqa: F811
+    store.put("wa_links", "919800000001", {"id": "919800000001", "farmer_id": "f-hr"})
+    c = FakeClient()
+    run(store, msg("which fields are mine"), c)
+    assert c.texts()[0].startswith("Your registered fields") and ("audio", "919800000001", b"en-mp3") in c.sent
+    c = FakeClient()
+    run(store, msg("मेरे खेत कौन से हैं", mid="m2"), c)
+    assert c.texts()[0].startswith("थारे नाम पै")
+    c = FakeClient()
+    run(store, msg("mera khet kaun sa hai", mid="m3"), c)
+    assert c.texts()[0].startswith("थारे नाम पै")  # Hinglish from Haryana: Haryanvi
+
+
+def test_every_message_has_haryanvi():
+    from parali.messages import farmer_text
+    t = farmer_text({"status": "possible_burn", "farmer_name_hi": "सुरेश", "field_name_hi": "किल्ला 44/2",
+                     "decision": {"burn_date": "2025-11-06"}, "settlement": {"state": "pending"}})
+    assert t["hr"].startswith("राम राम सुरेश जी") and "6 नवंबर" in t["hr"]

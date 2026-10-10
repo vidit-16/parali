@@ -13,11 +13,11 @@ const T = {
   // Punjabi (pa) and Haryanvi (hr) are drafts and need a native speaker's review.
   en: {
     loading: "Loading the season from orbit", explore: "Explore", officer: "Officer", farmer: "Farmer",
-    caption: "Every November, Delhi's air turns hazardous.<small>Part of that smoke is straw burnt in Punjab and Haryana. Each dot is a NASA fire alert from the 2025 season.</small>",
+    caption: "Every November, Delhi's air turns hazardous.<small>Part of that smoke is straw burnt in the fields of Punjab and Haryana. Saakshi follows one belt of those fields, on the Patiala–Kaithal border, through the 2025 season.</small>",
     delhi: "Delhi", seasonLbl: "2025 season", skip: "Skip", km: (n) => `${n} km from the belt`, study: "Study area · Patran, Punjab",
     kicker: "Patiala–Kaithal border belt · kharif 2025",
     headline: "<em>9 in 10</em> hectares that looked burnt got no fire alert.",
-    alerts: "Fire alerts", vslbl: "Clean fields wrongly flagged (lower is better)", vscap: "458 fields checked by hand, in Punjab and Haryana",
+    alerts: "Fire alerts", vslbl: "Clean fields wrongly flagged (lower is better)", vscap: "593 labelled fields in Punjab and Haryana, 111 of them burnt",
     play: "Play the season", explorebtn: "Explore the map",
     fine: "Burn-like: ground that turned near-black right after its plant signal collapsed, seen by Sentinel-2.",
     l_burns: "Burns", l_fires: "Fire alerts", l_fields: "Fields", l_missed: "Only burns no alert caught", ha: "ha burn-like", fa: "fire alerts",
@@ -30,21 +30,21 @@ const T = {
     checked: (d) => `Result saved from the live check on ${d}`, again: "Run the live check", check: "Run the satellite check",
     steps: ["Finding every clear image", "Removing clouds", "Comparing dates", "Checking fire alerts"],
     acres: "acres", err: "The check did not finish. Try again.",
-    live: "LIVE", checking: "Checking this field on AWS", slow: "taking longer than usual",
-    stage: { queued: "Starting", current: "Reading this season, September to December", previous: "Reading last season, for the advance" },
+    live: "CHECKING", checking: "Satellite check in progress", slow: "taking longer than usual",
+    stage: { queued: "Starting", current: "Reading this season's clear images, September to December", previous: "Reading last season, for the advance" },
     imagesFound: (n) => `${n} clear images this season`, pause: "Pause", resume: "Resume", exit: "Exit",
-    storySteps: (f) => ["The 2025 season over the border belt", "Into Patran, where most fields burned in early November", `Live satellite check on ${f}`, "That is the whole loop: season, field, verdict"],
-    burnView: "Infrared view of every clear image (a fresh burn turns dark blue)",
-    saved: (d) => `The live check is not answering right now; this is the result it gave on ${d}`, liveNow: (n) => `Live check, just now · ${n} s`, rerun: "Run again",
-    reading: "Reading every clear image of this field, September to December", checkNote: "Runs the check an officer would: every clear Sentinel-2 image of this field, this season and last. About 20 seconds.",
+    storySteps: (f) => ["The 2025 season over the border belt", "Into Patran, where most fields burned in early November", `${f}: run the satellite check`, `Check complete for ${f}`],
+    colour: "Colour", infrared: "Infrared", irNote: "Burnt ground shows maroon, wet soil dark blue.", irWait: "Infrared frames appear once the check has run.", preparing: "Preparing the season", sources: "Sources",
+    saved: (d) => `The check is not responding right now. Showing its result from ${d}.`, liveNow: (n) => `Checked just now · ${n} s`, rerun: "Check again",
+    reading: "Reading every clear image of this field, September to December", checkNote: "Reads every clear Sentinel-2 image of this field, this season and last: the same evidence an officer reviews. About 20 seconds.",
   },
   hi: {
     loading: "उपग्रह से सीज़न ला रहे हैं", explore: "देखें", officer: "अधिकारी", farmer: "किसान",
-    caption: "हर नवंबर दिल्ली की हवा ख़तरनाक हो जाती है।<small>उस धुएँ का एक हिस्सा पंजाब और हरियाणा में जली पराली है। हर बिंदु 2025 सीज़न का NASA आग अलर्ट है।</small>",
+    caption: "हर नवंबर दिल्ली की हवा ख़तरनाक हो जाती है।<small>उस धुएँ का एक हिस्सा पंजाब और हरियाणा के खेतों में जली पराली है। साक्षी पटियाला–कैथल सीमा के ऐसे ही खेतों को 2025 के पूरे सीज़न में देखता है।</small>",
     delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `क्षेत्र से ${n} किमी`, study: "अध्ययन क्षेत्र · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल सीमा क्षेत्र · खरीफ़ 2025",
     headline: "जले दिखने वाले हर <em>10 में से 9</em> हेक्टेयर पर आग का कोई अलर्ट नहीं आया।",
-    alerts: "आग अलर्ट", vslbl: "साफ़ खेत जिन्हें गलती से संदिग्ध बताया (कम बेहतर)", vscap: "पंजाब और हरियाणा के 458 खेत, हाथ से जाँचे",
+    alerts: "आग अलर्ट", vslbl: "साफ़ खेत जिन्हें गलती से संदिग्ध बताया (कम बेहतर)", vscap: "पंजाब और हरियाणा के 593 लेबल किए खेत, जिनमें 111 जले",
     play: "पूरा सीज़न देखें", explorebtn: "नक्शा देखें",
     fine: "जले जैसा: वह ज़मीन जो पौधों का संकेत गिरते ही लगभग काली हो गई, Sentinel-2 उपग्रह से देखी गई।",
     l_burns: "जले खेत", l_fires: "आग अलर्ट", l_fields: "खेत", l_missed: "केवल वे जले खेत जिन पर अलर्ट नहीं आया", ha: "हेक्टेयर जले जैसे", fa: "आग अलर्ट",
@@ -57,21 +57,21 @@ const T = {
     checked: (d) => `${d} की लाइव जाँच का नतीजा`, again: "लाइव जाँच चलाएँ", check: "उपग्रह जाँच चलाएँ",
     steps: ["हर साफ़ तस्वीर ढूँढ रहे हैं", "बादल हटा रहे हैं", "तारीखें मिला रहे हैं", "आग अलर्ट जाँच रहे हैं"],
     acres: "एकड़", err: "जाँच पूरी नहीं हुई। फिर कोशिश करें।",
-    live: "लाइव", checking: "AWS पर इस खेत की जाँच हो रही है", slow: "सामान्य से ज़्यादा समय लग रहा है",
-    stage: { queued: "शुरू हो रही है", current: "यह सीज़न पढ़ रहे हैं, सितंबर से दिसंबर", previous: "अग्रिम के लिए पिछला सीज़न पढ़ रहे हैं" },
+    live: "जाँच", checking: "उपग्रह जाँच चल रही है", slow: "सामान्य से ज़्यादा समय लग रहा है",
+    stage: { queued: "शुरू हो रही है", current: "इस सीज़न की साफ़ तस्वीरें पढ़ रहे हैं, सितंबर से दिसंबर", previous: "अग्रिम के लिए पिछला सीज़न पढ़ रहे हैं" },
     imagesFound: (n) => `इस सीज़न की ${n} साफ़ तस्वीरें`, pause: "रोकें", resume: "जारी रखें", exit: "बंद करें",
-    storySteps: (f) => ["सीमा क्षेत्र पर 2025 का सीज़न", "पातड़ां की ओर, जहाँ नवंबर की शुरुआत में सबसे ज़्यादा खेत जले", `${f} की लाइव उपग्रह जाँच`, "पूरा चक्र यही है: सीज़न, खेत, फ़ैसला"],
-    burnView: "हर साफ़ तस्वीर का इन्फ्रारेड दृश्य (ताज़ा जला खेत गहरा नीला दिखता है)",
-    saved: (d) => `लाइव जाँच अभी जवाब नहीं दे रही; यह ${d} की जाँच का नतीजा है`, liveNow: (n) => `लाइव जाँच, अभी · ${n} सेकंड`, rerun: "फिर चलाएँ",
-    reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "वही जाँच जो अधिकारी करते हैं: इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर। लगभग 20 सेकंड।",
+    storySteps: (f) => ["सीमा क्षेत्र पर 2025 का सीज़न", "पातड़ां की ओर, जहाँ नवंबर की शुरुआत में सबसे ज़्यादा खेत जले", `${f}: उपग्रह जाँच चलाएँ`, `${f} की जाँच पूरी`],
+    colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जली ज़मीन मैरून दिखती है, गीली मिट्टी गहरी नीली।", irWait: "जाँच के बाद इन्फ्रारेड तस्वीरें दिखेंगी।", preparing: "सीज़न तैयार हो रहा है", sources: "स्रोत",
+    saved: (d) => `जाँच अभी जवाब नहीं दे रही। ${d} का नतीजा दिखाया जा रहा है।`, liveNow: (n) => `अभी जाँचा गया · ${n} सेकंड`, rerun: "फिर जाँचें",
+    reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर पढ़ता है: वही सबूत जो अधिकारी देखते हैं। लगभग 20 सेकंड।",
   },
   pa: {
     loading: "ਉਪਗ੍ਰਹਿ ਤੋਂ ਸੀਜ਼ਨ ਲਿਆ ਰਹੇ ਹਾਂ", explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
-    caption: "ਹਰ ਨਵੰਬਰ ਦਿੱਲੀ ਦੀ ਹਵਾ ਖ਼ਤਰਨਾਕ ਹੋ ਜਾਂਦੀ ਹੈ।<small>ਉਸ ਧੂੰਏਂ ਦਾ ਇੱਕ ਹਿੱਸਾ ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਵਿੱਚ ਸਾੜੀ ਪਰਾਲੀ ਹੈ। ਹਰ ਬਿੰਦੂ 2025 ਸੀਜ਼ਨ ਦਾ NASA ਅੱਗ ਅਲਰਟ ਹੈ।</small>",
+    caption: "ਹਰ ਨਵੰਬਰ ਦਿੱਲੀ ਦੀ ਹਵਾ ਖ਼ਤਰਨਾਕ ਹੋ ਜਾਂਦੀ ਹੈ।<small>ਉਸ ਧੂੰਏਂ ਦਾ ਇੱਕ ਹਿੱਸਾ ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ ਖੇਤਾਂ ਵਿੱਚ ਸਾੜੀ ਪਰਾਲੀ ਹੈ। ਸਾਕਸ਼ੀ ਪਟਿਆਲਾ–ਕੈਥਲ ਸਰਹੱਦ ਦੇ ਅਜਿਹੇ ਖੇਤਾਂ ਨੂੰ 2025 ਦੇ ਪੂਰੇ ਸੀਜ਼ਨ ਵਿੱਚ ਵੇਖਦਾ ਹੈ।</small>",
     delhi: "ਦਿੱਲੀ", seasonLbl: "2025 ਸੀਜ਼ਨ", skip: "ਛੱਡੋ", km: (n) => `ਖੇਤਰ ਤੋਂ ${n} ਕਿਮੀ`, study: "ਅਧਿਐਨ ਖੇਤਰ · ਪਾਤੜਾਂ, ਪੰਜਾਬ",
     kicker: "ਪਟਿਆਲਾ–ਕੈਥਲ ਸਰਹੱਦੀ ਖੇਤਰ · ਸਾਉਣੀ 2025",
     headline: "ਸੜੇ ਦਿਸਦੇ ਹਰ <em>10 ਵਿੱਚੋਂ 9</em> ਹੈਕਟੇਅਰ ਲਈ ਕੋਈ ਅੱਗ ਅਲਰਟ ਨਹੀਂ ਆਇਆ।",
-    alerts: "ਅੱਗ ਅਲਰਟ", vslbl: "ਸਾਫ਼ ਖੇਤ ਜਿਨ੍ਹਾਂ ਨੂੰ ਗਲਤੀ ਨਾਲ ਸ਼ੱਕੀ ਕਿਹਾ (ਘੱਟ ਬਿਹਤਰ)", vscap: "ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ 458 ਖੇਤ, ਹੱਥੀਂ ਜਾਂਚੇ",
+    alerts: "ਅੱਗ ਅਲਰਟ", vslbl: "ਸਾਫ਼ ਖੇਤ ਜਿਨ੍ਹਾਂ ਨੂੰ ਗਲਤੀ ਨਾਲ ਸ਼ੱਕੀ ਕਿਹਾ (ਘੱਟ ਬਿਹਤਰ)", vscap: "ਪੰਜਾਬ ਅਤੇ ਹਰਿਆਣਾ ਦੇ 593 ਲੇਬਲ ਕੀਤੇ ਖੇਤ, ਜਿਨ੍ਹਾਂ ਵਿੱਚੋਂ 111 ਸੜੇ",
     play: "ਪੂਰਾ ਸੀਜ਼ਨ ਵੇਖੋ", explorebtn: "ਨਕਸ਼ਾ ਵੇਖੋ",
     fine: "ਸੜੇ ਵਰਗੀ: ਉਹ ਜ਼ਮੀਨ ਜੋ ਪੌਦਿਆਂ ਦਾ ਸੰਕੇਤ ਡਿੱਗਦੇ ਹੀ ਲਗਭਗ ਕਾਲੀ ਹੋ ਗਈ, Sentinel-2 ਉਪਗ੍ਰਹਿ ਤੋਂ ਵੇਖੀ।",
     l_burns: "ਸੜੇ ਖੇਤ", l_fires: "ਅੱਗ ਅਲਰਟ", l_fields: "ਖੇਤ", l_missed: "ਸਿਰਫ਼ ਉਹ ਸੜੇ ਖੇਤ ਜਿਨ੍ਹਾਂ ਉੱਤੇ ਅਲਰਟ ਨਹੀਂ ਆਇਆ", ha: "ਹੈਕਟੇਅਰ ਸੜੇ ਵਰਗੇ", fa: "ਅੱਗ ਅਲਰਟ",
@@ -84,21 +84,21 @@ const T = {
     checked: (d) => `${d} ਦੀ ਲਾਈਵ ਜਾਂਚ ਦਾ ਨਤੀਜਾ`, again: "ਲਾਈਵ ਜਾਂਚ ਚਲਾਓ", check: "ਉਪਗ੍ਰਹਿ ਜਾਂਚ ਚਲਾਓ",
     steps: ["ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਲੱਭ ਰਹੇ ਹਾਂ", "ਬੱਦਲ ਹਟਾ ਰਹੇ ਹਾਂ", "ਤਾਰੀਖਾਂ ਮਿਲਾ ਰਹੇ ਹਾਂ", "ਅੱਗ ਅਲਰਟ ਜਾਂਚ ਰਹੇ ਹਾਂ"],
     acres: "ਏਕੜ", err: "ਜਾਂਚ ਪੂਰੀ ਨਹੀਂ ਹੋਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
-    live: "ਲਾਈਵ", checking: "AWS ਉੱਤੇ ਇਸ ਖੇਤ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ", slow: "ਆਮ ਨਾਲੋਂ ਵੱਧ ਸਮਾਂ ਲੱਗ ਰਿਹਾ ਹੈ",
-    stage: { queued: "ਸ਼ੁਰੂ ਹੋ ਰਹੀ ਹੈ", current: "ਇਹ ਸੀਜ਼ਨ ਪੜ੍ਹ ਰਹੇ ਹਾਂ, ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ", previous: "ਅਗਾਊਂ ਲਈ ਪਿਛਲਾ ਸੀਜ਼ਨ ਪੜ੍ਹ ਰਹੇ ਹਾਂ" },
+    live: "ਜਾਂਚ", checking: "ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚੱਲ ਰਹੀ ਹੈ", slow: "ਆਮ ਨਾਲੋਂ ਵੱਧ ਸਮਾਂ ਲੱਗ ਰਿਹਾ ਹੈ",
+    stage: { queued: "ਸ਼ੁਰੂ ਹੋ ਰਹੀ ਹੈ", current: "ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ ਸਾਫ਼ ਤਸਵੀਰਾਂ ਪੜ੍ਹ ਰਹੇ ਹਾਂ, ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ", previous: "ਅਗਾਊਂ ਲਈ ਪਿਛਲਾ ਸੀਜ਼ਨ ਪੜ੍ਹ ਰਹੇ ਹਾਂ" },
     imagesFound: (n) => `ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ ${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ`, pause: "ਰੋਕੋ", resume: "ਜਾਰੀ ਰੱਖੋ", exit: "ਬੰਦ ਕਰੋ",
-    storySteps: (f) => ["ਸਰਹੱਦੀ ਖੇਤਰ ਉੱਤੇ 2025 ਦਾ ਸੀਜ਼ਨ", "ਪਾਤੜਾਂ ਵੱਲ, ਜਿੱਥੇ ਨਵੰਬਰ ਦੇ ਸ਼ੁਰੂ ਵਿੱਚ ਸਭ ਤੋਂ ਵੱਧ ਖੇਤ ਸੜੇ", `${f} ਦੀ ਲਾਈਵ ਉਪਗ੍ਰਹਿ ਜਾਂਚ`, "ਪੂਰਾ ਚੱਕਰ ਇਹੀ ਹੈ: ਸੀਜ਼ਨ, ਖੇਤ, ਫ਼ੈਸਲਾ"],
-    burnView: "ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਦਾ ਇਨਫ੍ਰਾਰੈੱਡ ਦ੍ਰਿਸ਼ (ਤਾਜ਼ਾ ਸੜਿਆ ਖੇਤ ਗੂੜ੍ਹਾ ਨੀਲਾ ਦਿਸਦਾ ਹੈ)",
-    saved: (d) => `ਲਾਈਵ ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ; ਇਹ ${d} ਦੀ ਜਾਂਚ ਦਾ ਨਤੀਜਾ ਹੈ`, liveNow: (n) => `ਲਾਈਵ ਜਾਂਚ, ਹੁਣੇ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਚਲਾਓ",
-    reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਉਹੀ ਜਾਂਚ ਜੋ ਅਧਿਕਾਰੀ ਕਰਦਾ ਹੈ: ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
+    storySteps: (f) => ["ਸਰਹੱਦੀ ਖੇਤਰ ਉੱਤੇ 2025 ਦਾ ਸੀਜ਼ਨ", "ਪਾਤੜਾਂ ਵੱਲ, ਜਿੱਥੇ ਨਵੰਬਰ ਦੇ ਸ਼ੁਰੂ ਵਿੱਚ ਸਭ ਤੋਂ ਵੱਧ ਖੇਤ ਸੜੇ", `${f}: ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚਲਾਓ`, `${f} ਦੀ ਜਾਂਚ ਪੂਰੀ`],
+    colour: "ਰੰਗੀਨ", infrared: "ਇਨਫ੍ਰਾਰੈੱਡ", irNote: "ਸੜੀ ਜ਼ਮੀਨ ਮੈਰੂਨ ਦਿਸਦੀ ਹੈ, ਗਿੱਲੀ ਮਿੱਟੀ ਗੂੜ੍ਹੀ ਨੀਲੀ।", irWait: "ਜਾਂਚ ਤੋਂ ਬਾਅਦ ਇਨਫ੍ਰਾਰੈੱਡ ਤਸਵੀਰਾਂ ਦਿਸਣਗੀਆਂ।", preparing: "ਸੀਜ਼ਨ ਤਿਆਰ ਹੋ ਰਿਹਾ ਹੈ", sources: "ਸਰੋਤ",
+    saved: (d) => `ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ। ${d} ਦਾ ਨਤੀਜਾ ਵਿਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ।`, liveNow: (n) => `ਹੁਣੇ ਜਾਂਚਿਆ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਜਾਂਚੋ",
+    reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ ਪੜ੍ਹਦਾ ਹੈ: ਉਹੀ ਸਬੂਤ ਜੋ ਅਧਿਕਾਰੀ ਵੇਖਦਾ ਹੈ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
   },
   hr: {
     loading: "उपग्रह तै सीज़न ल्यावां सां", explore: "देक्खो", officer: "अफसर", farmer: "किसान",
-    caption: "हर नवंबर म्ह दिल्ली की हवा खतरनाक हो ज्यावै सै।<small>उस धुम्मे का एक हिस्सा पंजाब अर हरियाणा म्ह जळी पराळी सै। हर बिंदु 2025 सीज़न का NASA आग अलर्ट सै।</small>",
+    caption: "हर नवंबर म्ह दिल्ली की हवा खतरनाक हो ज्यावै सै।<small>उस धुम्मे का एक हिस्सा पंजाब अर हरियाणा के खेतां म्ह जळी पराळी सै। साक्षी पटियाला–कैथल बॉर्डर के इसे खेतां नै 2025 के पूरे सीज़न म्ह देक्खै सै।</small>",
     delhi: "दिल्ली", seasonLbl: "2025 सीज़न", skip: "छोड़ें", km: (n) => `इलाके तै ${n} किमी`, study: "अध्ययन इलाका · पातड़ां, पंजाब",
     kicker: "पटियाला–कैथल बॉर्डर इलाका · खरीफ़ 2025",
     headline: "जळे दिक्खण आळे हर <em>10 म्ह तै 9</em> हेक्टेयर पै कोए आग का अलर्ट कोनी आया।",
-    alerts: "आग अलर्ट", vslbl: "साफ खेत जिन पै गलती तै शक करया (कम आच्छा)", vscap: "पंजाब अर हरियाणा के 458 खेत, हाथ तै जांचे",
+    alerts: "आग अलर्ट", vslbl: "साफ खेत जिन पै गलती तै शक करया (कम आच्छा)", vscap: "पंजाब अर हरियाणा के 593 लेबल करे खेत, जिन म्ह 111 जळे",
     play: "पूरा सीज़न देक्खो", explorebtn: "नक्सा देक्खो",
     fine: "जळे बरगी: वा धरती जो पौधां का संकेत गिरते ए काळी हो गी, Sentinel-2 नै देक्खी।",
     l_burns: "जळे खेत", l_fires: "आग अलर्ट", l_fields: "खेत", l_missed: "सिर्फ वे जळे खेत जिन पै अलर्ट कोनी आया", ha: "हेक्टेयर जळे बरगे", fa: "आग अलर्ट",
@@ -111,13 +111,13 @@ const T = {
     checked: (d) => `${d} की लाइव जांच का नतीजा`, again: "लाइव जांच चलाओ", check: "उपग्रह जांच चलाओ",
     steps: ["हर साफ फोटो टोहण लाग रे सां", "बादळ हटाण लाग रे सां", "तारीख मिलाण लाग रे सां", "आग अलर्ट जांचण लाग रे सां"],
     acres: "किल्ले", err: "जांच पूरी कोनी होई। फेर कोसिस करो।",
-    live: "लाइव", checking: "AWS पै इस खेत की जांच होरी सै", slow: "आम तै घणा बखत लाग रया सै",
-    stage: { queued: "शुरू होरी सै", current: "यो सीज़न पढ़ण लाग रे सां, सितंबर तै दिसंबर", previous: "एडवांस खातर पाछला सीज़न पढ़ण लाग रे सां" },
+    live: "जांच", checking: "उपग्रह जांच चालू सै", slow: "आम तै घणा बखत लाग रया सै",
+    stage: { queued: "शुरू होरी सै", current: "इस सीज़न की साफ फोटू पढ़ण लाग रे सां, सितंबर तै दिसंबर", previous: "एडवांस खातर पाछला सीज़न पढ़ण लाग रे सां" },
     imagesFound: (n) => `इस सीज़न के ${n} साफ फोटू`, pause: "रोक्को", resume: "चालू करो", exit: "बंद करो",
-    storySteps: (f) => ["बॉर्डर इलाके पै 2025 का सीज़न", "पातड़ां कान्नी, जित नवंबर के शुरू म्ह सब तै घणे खेत जळे", `${f} की लाइव उपग्रह जांच`, "पूरा चक्कर योए सै: सीज़न, खेत, फैसला"],
-    burnView: "हर साफ फोटो का इन्फ्रारेड नजारा (ताजा जळया खेत गहरा नीला दिक्खै)",
-    saved: (d) => `लाइव जांच इब्ब जवाब कोनी देरी; यो ${d} की जांच का नतीजा सै`, liveNow: (n) => `लाइव जांच, इब्बे · ${n} सेकंड`, rerun: "फेर चलाओ",
-    reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "वाए जांच जो अफसर करै सै: इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटो। करीब 20 सेकंड।",
+    storySteps: (f) => ["बॉर्डर इलाके पै 2025 का सीज़न", "पातड़ां कान्नी, जित नवंबर के शुरू म्ह सब तै घणे खेत जळे", `${f}: उपग्रह जांच चलाओ`, `${f} की जांच पूरी`],
+    colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जळी धरती मैरून दिक्खै, गीली माट्टी गहरी नीली।", irWait: "जांच पाच्छै इन्फ्रारेड फोटू दिक्खैंगे।", preparing: "सीज़न त्यार होरया सै", sources: "स्रोत",
+    saved: (d) => `जांच इब्ब जवाब कोनी देरी। ${d} का नतीजा दिखाया जा रया सै।`, liveNow: (n) => `इब्बे जांच्या · ${n} सेकंड`, rerun: "फेर जांचो",
+    reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटू पढ़ै सै: वाए सबूत जो अफसर देक्खै सै। करीब 20 सेकंड।",
   },
 };
 const HTML_LANG = { en: "en", hi: "hi", pa: "pa", hr: "hi" };
@@ -168,14 +168,15 @@ const dayNum = (iso) => Math.round((new Date(iso) - day0) / 864e5);
 const dateOf = (d) => new Date(day0.getTime() + d * 864e5);
 const MONTH = () => (lang === "en" ? "short" : "long");
 const MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const PA_MONTHS = ["ਜਨਵਰੀ", "ਫ਼ਰਵਰੀ", "ਮਾਰਚ", "ਅਪ੍ਰੈਲ", "ਮਈ", "ਜੂਨ", "ਜੁਲਾਈ", "ਅਗਸਤ", "ਸਤੰਬਰ", "ਅਕਤੂਬਰ", "ਨਵੰਬਰ", "ਦਸੰਬਰ"];  // browsers often lack Punjabi month names
 const fmtDay = (d, month = MONTH()) => {
   const x = dateOf(d);
-  return lang === "en" ? `${x.getDate()} ${MONTHS_EN[x.getMonth()]}` : x.toLocaleDateString(LOCALE[lang], { day: "numeric", month });
+  return lang === "en" ? `${x.getDate()} ${MONTHS_EN[x.getMonth()]}` : lang === "pa" ? `${x.getDate()} ${PA_MONTHS[x.getMonth()]}` : x.toLocaleDateString(LOCALE[lang], { day: "numeric", month });
 };
-const fmtIso = (iso) => new Date(iso).toLocaleDateString(LOCALE[lang], { day: "numeric", month: "long" });
+const fmtIso = (iso) => { const x = new Date(iso); return lang === "pa" ? `${x.getDate()} ${PA_MONTHS[x.getMonth()]}` : x.toLocaleDateString(LOCALE[lang], { day: "numeric", month: "long" }); };
 const fmtRange = (w) => {
   const s = new Date(w.start), e = new Date(w.end);
-  const m = lang === "en" ? MONTHS_EN[e.getMonth()] : e.toLocaleDateString(LOCALE[lang], { month: MONTH() });
+  const m = lang === "en" ? MONTHS_EN[e.getMonth()] : lang === "pa" ? PA_MONTHS[e.getMonth()] : e.toLocaleDateString(LOCALE[lang], { month: MONTH() });
   return `${s.getDate()}–${e.getDate()} ${m}`;
 };
 const windowIndex = (d) => { let k = 0; windows.forEach((w, j) => { if (dayNum(w.start) <= d) k = j; }); return k; };
@@ -230,17 +231,19 @@ function setDay(d, x = null) {
   centers.forEach((c, m) => { if (c <= d) j = m; });
   const k = Math.min(j + 1, windows.length - 1);
   const f = k === j ? 0 : Math.max(0, Math.min(1, (d - centers[j]) / (centers[k] - centers[j])));
-  // only the two pictures in play (and the next one, preloading) fetch tiles
-  const want = new Set([j, k]);
+  // with the whole belt in view all eight pictures stay loaded, so playing never waits on a tile;
+  // zoomed in, only the two pictures in play fetch tiles
+  const want = state.wide ? new Set(windows.map((_, m) => m)) : new Set([j, k]);
   state.opacity = state.opacity || {};
   windows.forEach((w, m) => {
-    const id = `img-${w.id}`, o = m === j ? 1 : m === k ? Math.round(f * 20) / 20 : 0;
+    const id = `img-${w.id}`, o = !state.revealed ? 0 : m === j ? 1 : m === k ? Math.round(f * 20) / 20 : 0;
     if (want.has(m) !== state.visible.has(m)) map.setLayoutProperty(id, "visibility", want.has(m) ? "visible" : "none");
     if (state.opacity[id] !== o) { map.setPaintProperty(id, "raster-opacity", zoomFade(o)); state.opacity[id] = o; }
   });
   state.visible = want;
   map.setFilter("burns", ["<=", ["get", "d"], d]);
   map.setFilter("burns-new", ["all", [">", ["get", "d"], d - 4], ["<=", ["get", "d"], d]]);
+  map.setFilter("burn-pts", ["<=", ["get", "d"], d]);
   map.setFilter("fires", ["<=", ["get", "d"], d]);
   map.setFilter("fires-states", ["<=", ["get", "d"], d]);
   const fresh = (big, small) => ["case", [">", ["get", "d"], d - 3], big, small];
@@ -249,7 +252,9 @@ function setDay(d, x = null) {
 }
 
 function play(speed = 6, onEnd = null, from = null) {
+  if (!state.loadedAll) return;
   stop();
+  reveal();
   if (from !== null) setDay(from);
   else if (state.day >= D1) setDay(D0);
   state.playing = true;
@@ -315,7 +320,7 @@ function playSeason() {
       const f = fieldsById["f-baljeet"];
       if (!f) return endStory();
       storyStep(2);
-      openField(f, { auto: true });
+      openField(f, { auto: params.get("auto") === "1" });  // ?auto=1 runs it by itself, for recordings
     }, D0);
   }, reduced ? 0 : 1300);
 }
@@ -335,49 +340,76 @@ function fadeOut(el) {
   el.classList.add("out");
   setTimeout(() => { el.hidden = true; el.classList.remove("out"); }, 600);
 }
-// One continuous run of the season: it starts over India with no alerts, the alerts fill in as the days
-// pass, the camera flies into the belt part-way, and the run ends on the headline.
+// The opening: India, Delhi and the belt, no season data. While the camera flies in, every picture and
+// layer of the season loads, so pressing Play never waits on the network and nothing pops in afterwards.
 function runIntro() {
   const cap = $("#caption"), [title, sub] = t().caption.split("<small>");
-  cap.innerHTML = `<b>${title}</b><span>${sub.replace("</small>", "")}</span>
-    <em><i></i>${(stateFireCount || 0).toLocaleString("en-IN")} ${esc(t().fa)} · ${esc(t().seasonLbl)}</em>`;
+  cap.innerHTML = `<b>${title}</b><span>${sub.replace("</small>", "")}</span>`;
   cap.hidden = false;
   const skipBtn = $("#skip");
   skipBtn.hidden = false;
-  setDay(D0);
-  let skipped = false, flying = false;
+  let done = false;
   const events = ["mousedown", "wheel", "touchstart", "keydown"];
-  const done = () => { events.forEach((ev) => removeEventListener(ev, skip)); fadeOut(skipBtn); };
-  const skip = () => {
-    if (skipped) return;
-    skipped = true;
-    done();
+  const finish = () => {
+    if (done) return;
+    done = true;
+    events.forEach((ev) => removeEventListener(ev, skip));
+    fadeOut(skipBtn);
     fadeOut(cap);
-    stop();
-    map.stop();
-    fitRegion(0);
-    setDay(D1);
     showHero();
+    preload();
   };
+  const skip = () => { if (done) return; map.stop(); fitRegion(0); finish(); };
   skipBtn.onclick = skip;
   events.forEach((ev) => addEventListener(ev, skip, { once: true, passive: true }));
-  state.onDay = (d) => {
-    if (flying || skipped || d < D0 + 30) return;
-    flying = true;
-    fadeOut(cap);
-    const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
-    map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: 4600, curve: 1.4, essential: true });
-  };
   setTimeout(() => {
-    if (skipped) return;
-    play(7, () => {
-      state.onDay = null;
-      if (skipped) return;
-      done();
-      showHero();
-      toast(t().toast);
-    }, D0);
-  }, 1600);
+    if (done) return;
+    const wide = innerWidth > 900, bottom = innerWidth <= 640 ? Math.round(innerHeight * 0.52) : 120;
+    map.fitBounds(regionBounds(), { padding: { top: 80, bottom, left: wide ? 120 : 24, right: wide ? 90 : 24 }, duration: 5200, curve: 1.4, essential: true });
+    map.once("moveend", finish);
+  }, 2200);
+}
+
+const DATA_LAYERS = ["burns", "burns-new", "burn-pts", "fires", "fires-states"];
+function setPreparing(frac) {
+  const pct = Math.round(frac * 100);
+  const b = $("#play-season");
+  b.disabled = frac < 1;
+  b.querySelector("span").textContent = frac < 1 ? `${t().preparing} · ${pct}%` : t().play;
+  b.style.setProperty("--p", `${pct}%`);
+  $("#explore").disabled = frac < 1;
+  $("#play").disabled = frac < 1;
+  if (!state.revealed) $("#ring").style.strokeDashoffset = (151 * (1 - frac)).toFixed(1);
+}
+function preload() {
+  if (state.preloading) return;
+  state.preloading = true;
+  state.fitZoom = map.getZoom();
+  state.wide = true;
+  windows.forEach((w) => map.setLayoutProperty(`img-${w.id}`, "visibility", "visible"));
+  state.visible = new Set(windows.map((_, m) => m));
+  const ids = [...windows.map((w) => `img-${w.id}`), "burns", "burn-pts", "fires", "fires-states"];
+  const loaded = (id) => { try { return map.isSourceLoaded(id); } catch { return false; } };
+  const tick = () => {
+    if (state.loadedAll) return;
+    const n = ids.filter(loaded).length;
+    setPreparing(n / ids.length);
+    if (n === ids.length) done();
+  };
+  const done = () => { map.off("sourcedata", tick); clearInterval(poll); state.loadedAll = true; setPreparing(1); };
+  map.on("sourcedata", tick);
+  const poll = setInterval(tick, 400);
+  setTimeout(() => { if (!state.loadedAll) done(); }, 15000);  // never hold the viewer longer than this
+  tick();
+}
+// the season's layers appear only once someone starts it
+function reveal() {
+  if (state.revealed) return;
+  state.revealed = true;
+  const on = { burns: state.layers.burns, "burns-new": state.layers.burns, "burn-pts": state.layers.burns, fires: state.layers.fires, "fires-states": state.layers.fires };
+  DATA_LAYERS.forEach((id) => map.setLayoutProperty(id, "visibility", on[id] ? "visible" : "none"));
+  state.ready = false;
+  setDay(state.day);
 }
 
 // ---- fields and the case file ----
@@ -396,6 +428,7 @@ function openField(f, { auto = false } = {}) {
   state.field = f;
   state.check = null;  // the answer comes from running the check, not from opening the card
   state.frame = 0;
+  state.view = "colour";
   const id = f.properties.id;
   setFieldState(id, { veil: !dotKinds[id], checking: false });
   const narrow = innerWidth <= 640;
@@ -447,6 +480,68 @@ async function drawCut(canvas, windowId, geom, W = 128, H = 80, scale = 3) {
   ctx.closePath();
   ctx.stroke();
 }
+function irData() {
+  const c = state.check;
+  if (!c || c.status !== "done") return null;
+  const cur = c.result.current;
+  return cur.evidence_url ? { url: cur.evidence_url, dates: cur.evidence_dates || null, burn: cur.decision.burn_date } : null;
+}
+// the evidence image has one column per date: a label row, the colour picture, then the infrared picture
+function drawIr(canvas, img, j, n, W = 128, H = 64, scale = 3) {
+  const fw = img.width / n, w = fw - 4, h = (img.height - 16 - 8) / 2, y = 16 + h + 4;
+  canvas.width = W * scale; canvas.height = H * scale;
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const k = Math.min(canvas.width / w, canvas.height / h);  // the whole frame, field and its surroundings
+  ctx.drawImage(img, j * fw, y, w, h, (canvas.width - w * k) / 2, (canvas.height - h * k) / 2, w * k, h * k);
+}
+async function renderViewer() {
+  const f = state.field, ir = state.view === "ir" ? irData() : null;
+  const viewer = $("#viewer"), strip = $("#strip");
+  if (!viewer) return;
+  $$(".vtabs button").forEach((b) => b.classList.toggle("on", b.dataset.v === (ir ? "ir" : "colour")));
+  $("#irnote").hidden = !ir;
+  if (ir && ir.dates) {
+    const img = new Image();
+    img.src = ir.url;
+    await img.decode().catch(() => {});
+    if (state.view !== "ir" || state.field !== f) return;
+    const n = ir.dates.length;
+    viewer.innerHTML = ir.dates.map(() => "<canvas></canvas>").join("") + `<span class="tag"></span>`;
+    strip.style.setProperty("--n", n);
+    const short = (d, j) => { const x = new Date(d); return j === 0 || d === ir.burn || x.getDate() <= 10 && j && new Date(ir.dates[j - 1]).getMonth() !== x.getMonth() ? fmtDay(dayNum(d), "short") : String(x.getDate()); };
+    strip.innerHTML = ir.dates.map((d, j) => `<button class="${d === ir.burn ? "burnt" : ""}"><canvas></canvas><span>${esc(short(d, j))}</span></button>`).join("");
+    $$("canvas", viewer).forEach((c, j) => drawIr(c, img, j, n));
+    $$("canvas", strip).forEach((c, j) => drawIr(c, img, j, n, 128, 64, 1));
+    $$("button", strip).forEach((b, j) => { b.onclick = () => showFrame(j); });
+    state.frames = ir.dates.map((d) => fmtIso(d));
+    showFrame(Math.max(0, ir.dates.indexOf(ir.burn)));
+    return;
+  }
+  if (ir) {  // an older saved result without frame dates: show the evidence image as it is
+    viewer.innerHTML = `<img class="whole" src="${esc(ir.url)}" alt="">`;
+    strip.innerHTML = "";
+    return;
+  }
+  viewer.innerHTML = windows.map(() => "<canvas></canvas>").join("") + `<span class="tag"></span><span class="tag burnt" id="burntag" hidden></span>`;
+  strip.style.setProperty("--n", windows.length);
+  strip.innerHTML = windows.map((w, j) => `<button aria-label="${esc(fmtRange(w))}"><canvas></canvas><span>${esc(j === 0 || new Date(w.start).getDate() === 1 ? fmtDay(dayNum(w.start), "short") : String(new Date(w.start).getDate()))}</span></button>`).join("");
+  const big = $$("canvas", viewer), small = $$("canvas", strip);
+  windows.forEach((w, j) => { drawCut(big[j], w.id, f.geometry, 128, 64); drawCut(small[j], w.id, f.geometry, 128, 64, 1); });
+  $$("button", strip).forEach((b, j) => { b.onclick = () => { clearInterval(state.frameTimer); showFrame(j); }; });
+  state.frames = null;
+  const bw = burnWindow();
+  $$("button", strip).forEach((b, j) => b.classList.toggle("burnt", j === bw));
+  showFrame(state.frame || 0);
+  renderBurnTag();
+}
+function renderBurnTag() {
+  const tag = $("#burntag"), bw = burnWindow();
+  if (!tag) return;
+  if (bw >= 0) { tag.textContent = t().vline.burn(fmtIso(state.check.result.current.decision.burn_date)); tag.hidden = false; } else tag.hidden = true;
+}
 function burnWindow() {
   const d = state.check?.status === "done" ? state.check.result.current.decision.burn_date : null;
   return d ? windowIndex(dayNum(d)) : -1;
@@ -456,10 +551,11 @@ function showFrame(i) {
   $$("#viewer canvas").forEach((c, j) => c.classList.toggle("on", j === i));
   $$("#strip button").forEach((b, j) => b.classList.toggle("on", j === i));
   const tag = $("#viewer .tag");
-  if (tag) tag.textContent = fmtRange(windows[i]);
+  if (tag) tag.textContent = state.frames ? state.frames[i] : fmtRange(windows[i]);
 }
 function playFrames(endAt = null) {
   clearInterval(state.frameTimer);
+  if (state.view === "ir") return;
   if (reduced) { showFrame(endAt ?? windows.length - 1); return; }
   let i = 0;
   showFrame(0);
@@ -485,11 +581,11 @@ function actionHtml() {
   if (c && !c.failed) {
     const st = L.stage[c.stage] || L.stage.queued;
     const found = c.images ? ` · ${L.imagesFound(c.images)}` : "";
-    return `<div class="status">${ORBIT}<div><p class="st1"><span class="live">${esc(L.live)}</span>${esc(L.checking)}</p>
+    return `<div class="status">${ORBIT}<div><p class="st1">${esc(L.checking)}</p>
       <p class="st2">${esc(st + found)}</p><p class="st3"><span class="elapsed">${c.elapsed || 0} s</span>${c.slow ? ` · ${esc(L.slow)}` : ""}</p></div></div>`;
   }
   return `<div class="act">${c && c.failed ? `<p class="err">${esc(L.err)}</p>` : ""}
-    <button class="btn primary wide" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button>
+    <button class="btn primary wide${story.on ? " pulse" : ""}" id="run-check">${icon("i-scan")}<span>${esc(L.check)}</span></button>
     <p class="cap">${esc(L.checkNote)}</p></div>`;
 }
 function detailsHtml() {
@@ -498,8 +594,7 @@ function detailsHtml() {
   const cur = c.result.current, d = cur.decision, kp = kindOf(c.result.previous.decision.outcome);
   return `<div class="sec"><dl class="facts"><div><dt>${esc(L.clear)}</dt><dd>${d.clear_dates.length}</dd></div>
       <div><dt>${esc(L.nearest)}</dt><dd>${cur.fires.length || esc(L.none)}</dd></div></dl></div>
-    <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>
-    ${cur.evidence_url ? `<details class="sec burnview"><summary>${esc(L.burnView)}</summary><img src="${esc(cur.evidence_url)}" alt="" loading="lazy"></details>` : ""}`;
+    <div class="sec"><div class="last"><span class="mini ${kp}">${icon(ICON[kp])}</span><span>${esc(L.last)}: <b>${esc(L.v[kp])}</b></span></div></div>`;
 }
 // the parts that change while a check runs are redrawn alone, so the pictures do not reload
 function renderAction() {
@@ -510,10 +605,13 @@ function renderAction() {
   $("#run-check")?.addEventListener("click", runCheck);
   const busy = state.check && state.check.status !== "done" && !state.check.failed;
   $("#panel").classList.toggle("busy", !!busy);
-  const bw = burnWindow();
-  $$("#strip button").forEach((b, j) => b.classList.toggle("burnt", j === bw));
-  const tag = $("#burntag");
-  if (bw >= 0) { tag.textContent = t().vline.burn(fmtIso(state.check.result.current.decision.burn_date)); tag.hidden = false; } else tag.hidden = true;
+  const ir = $(".vtabs [data-v=ir]");
+  if (ir) { ir.disabled = !irData(); ir.title = irData() ? "" : t().irWait; }
+  if (state.view !== "ir") {
+    const bw = burnWindow();
+    $$("#strip button").forEach((b, j) => b.classList.toggle("burnt", j === bw));
+    renderBurnTag();
+  }
   requestAnimationFrame(() => { const pn = $("#panel"); pn.classList.toggle("scrolls", pn.scrollHeight > pn.clientHeight + 4); });
 }
 function renderPanel() {
@@ -521,13 +619,13 @@ function renderPanel() {
   const village = lang === "en" ? p.village : p.village_hi || p.village;
   $("#panel-body").innerHTML = `<div class="head"><h2>${esc(fieldName(p))}</h2><p class="sub">${p.acres} ${esc(L.acres)} · ${esc(village)}</p></div>
     <div id="action"></div>
-    <div class="viewer" id="viewer">${windows.map(() => "<canvas></canvas>").join("")}<span class="tag"></span><span class="tag burnt" id="burntag" hidden></span></div>
-    <div class="strip" id="strip">${windows.map((w, j) => `<button aria-label="${esc(fmtRange(w))}"><canvas></canvas><span>${esc(j === 0 || new Date(w.start).getDate() === 1 ? fmtDay(dayNum(w.start), "short") : String(new Date(w.start).getDate()))}</span></button>`).join("")}</div>
+    <div class="vtabs" role="tablist"><button role="tab" data-v="colour">${esc(L.colour)}</button><button role="tab" data-v="ir">${esc(L.infrared)}</button></div>
+    <div class="viewer" id="viewer"></div>
+    <div class="strip" id="strip"></div>
+    <p class="cap irnote" id="irnote" hidden>${esc(L.irNote)}</p>
     <div id="details"></div>`;
-  const big = $$("#viewer canvas"), small = $$("#strip canvas");
-  windows.forEach((w, j) => { drawCut(big[j], w.id, f.geometry, 128, 64); drawCut(small[j], w.id, f.geometry, 128, 64, 1); });
-  $$("#strip button").forEach((b, j) => { b.onclick = () => { clearInterval(state.frameTimer); showFrame(j); }; });
-  showFrame(state.frame || 0);
+  $$(".vtabs button").forEach((b) => { b.onclick = () => { if (b.disabled) return; state.view = b.dataset.v; clearInterval(state.frameTimer); renderViewer(); }; });
+  renderViewer();
   renderAction();
 }
 
@@ -570,9 +668,9 @@ async function runCheck() {
       dotKinds[id] = kindOf(d.outcome);
       setFieldState(id, { k: dotKinds[id] });
       refreshDots();
-      if (d.burn_date) setDay(dayNum(d.burn_date) + 1);
+      if (d.burn_date) { reveal(); setDay(dayNum(d.burn_date) + 1); }
       clearInterval(state.frameTimer);
-      showFrame(d.burn_date ? windowIndex(dayNum(d.burn_date)) : windows.length - 1);
+      if (state.view !== "ir") showFrame(d.burn_date ? windowIndex(dayNum(d.burn_date)) : windows.length - 1);
     }
     renderAction();
     if (story.on) storyStep(3);
@@ -661,10 +759,7 @@ async function init() {
     fetch("/tiles/fires_states.geojson").then((r) => r.json()).catch(() => ({ type: "FeatureCollection", features: [] })),
     fetch("/api/fields").then((r) => (r.ok ? r.json() : [])).catch(() => []),
   ]);
-  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution:
-    "Our tiles: Copernicus Sentinel-2 (ESA) via AWS Open Data · Fire alerts: NASA FIRMS · Basemap, labels and close-up photo: Esri, Maxar, Earthstar Geographics · Boundaries © OpenStreetMap contributors" }), "bottom-right");
   map.addControl(new maplibregl.ScaleControl({ unit: "metric", maxWidth: 110 }), "bottom-left");
-  setTimeout(() => $$(".maplibregl-ctrl-attrib").forEach((el) => el.classList.remove("maplibregl-compact-show")), 0);
 
   // isStyleLoaded() also waits for basemap tiles, and style.load can fire before we listen: poll the style itself
   while (!(map.style && map.style._loaded)) await new Promise((ok) => setTimeout(ok, 30));
@@ -690,18 +785,24 @@ async function init() {
   map.addLayer({ id: "study", type: "line", source: "study", minzoom: 8, paint: { "line-color": "#FFFFFF", "line-opacity": 0.8, "line-width": 1.2, "line-dasharray": [3, 3] } });
 
   map.addSource("burns", { type: "geojson", data: "/tiles/burns.geojson" });
-  map.addLayer({ id: "burns", type: "fill", source: "burns", paint: {
+  map.addLayer({ id: "burns", type: "fill", source: "burns", layout: { visibility: "none" }, paint: {
     "fill-color": ["interpolate", ["linear"], ["get", "d"], ...BURN_RAMP.flat()],
     "fill-opacity": ["interpolate", ["linear"], ["zoom"], 9, 0.95, 14, 0.7, 16, 0.3] } });
-  map.addLayer({ id: "burns-new", type: "line", source: "burns", paint: { "line-color": "#FFFFFF",
+  map.addLayer({ id: "burns-new", type: "line", source: "burns", layout: { visibility: "none" }, paint: { "line-color": "#FFFFFF",
     "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1, 14, 2.2], "line-blur": 0.6, "line-opacity": 0.85 } });
+  // across the whole belt a 20 m patch is under a pixel: one dot per patch, sized by its area
+  map.addSource("burn-pts", { type: "geojson", data: "/tiles/burn_points.geojson" });
+  map.addLayer({ id: "burn-pts", type: "circle", source: "burn-pts", maxzoom: 12.2, layout: { visibility: "none" }, paint: {
+    "circle-color": ["interpolate", ["linear"], ["get", "d"], ...BURN_RAMP.flat()],
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 8, ["+", 0.9, ["*", 1.5, ["sqrt", ["get", "ha"]]]], 11.5, ["+", 1.6, ["*", 4, ["sqrt", ["get", "ha"]]]]],
+    "circle-opacity": ["interpolate", ["linear"], ["zoom"], 11, 0.9, 12.2, 0] } });
 
   map.addSource("fires-states", { type: "geojson", data: stateFires });
-  map.addLayer({ id: "fires-states", type: "circle", source: "fires-states", maxzoom: 8.2, paint: {
+  map.addLayer({ id: "fires-states", type: "circle", source: "fires-states", maxzoom: 8.2, layout: { visibility: "none" }, paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 3, 1.5, 5, 1.8, 7, 2.1],
     "circle-color": "#F5C542", "circle-blur": 0.25, "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.85, 7.7, 0.8, 8.2, 0] } });
   map.addSource("fires", { type: "geojson", data: firesFc });
-  map.addLayer({ id: "fires", type: "circle", source: "fires", minzoom: 7.7, paint: {
+  map.addLayer({ id: "fires", type: "circle", source: "fires", minzoom: 7.7, layout: { visibility: "none" }, paint: {
     "circle-radius": 3, "circle-color": "rgba(245,197,66,0.18)", "circle-stroke-color": "#F5C542",
     "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 8, 1.3, 12, 1.7, 15, 2.4],
     "circle-opacity": ["interpolate", ["linear"], ["zoom"], 7.7, 0, 8.2, 1], "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], 7.7, 0, 8.2, 1] } });
@@ -726,7 +827,7 @@ async function init() {
   map.addLayer({ id: "fields-hit", type: "fill", source: "fields", minzoom: 12.5, paint: { "fill-color": "#FFFFFF", "fill-opacity": 0.04 } });
   // an open, unchecked field is veiled so the burn map does not answer before the check does
   map.addLayer({ id: "field-veil", type: "fill", source: "fields", paint: { "fill-color": "#0D0E11",
-    "fill-opacity": ["case", ["boolean", ["feature-state", "veil"], false], 0.72, 0] } });
+    "fill-opacity": ["case", ["boolean", ["feature-state", "veil"], false], 0.45, 0] } });
   map.addLayer({ id: "field-verdict", type: "fill", source: "fields", paint: {
     "fill-color": ["match", ["feature-state", "k"], "clean", "#43C485", "burn", "#FF6A3D", "review", "#F5C542", "#000000"],
     "fill-opacity": ["case", ["==", ["typeof", ["feature-state", "k"]], "string"], 0.3, 0] } });
@@ -790,8 +891,8 @@ async function init() {
   map.on("mouseleave", "fields-hit", () => { map.getCanvas().style.cursor = ""; });
 
   // controls
-  $("#play").onclick = () => { state.intro = false; hideHero(); state.playing ? stop() : play(6); };
-  $("#slider").oninput = (e) => { state.intro = false; stop(); const x = Number(e.target.value); setDay(x, x); };
+  $("#play").onclick = () => { if (!state.loadedAll) return; state.intro = false; hideHero(); state.playing ? stop() : play(6); };
+  $("#slider").oninput = (e) => { if (!state.loadedAll) return; state.intro = false; reveal(); stop(); const x = Number(e.target.value); setDay(x, x); };
   $("#slider").onchange = (e) => setDay(Number(e.target.value));
   $("#play-season").onclick = playSeason;
   $("#story-exit").onclick = () => { stop(); endStory(); };
@@ -802,10 +903,18 @@ async function init() {
       state.onDay = null;
       if (!story.on) return;
       storyStep(2);
-      openField(fieldsById["f-baljeet"], { auto: true });
+      openField(fieldsById["f-baljeet"], { auto: params.get("auto") === "1" });
     });
   };
-  $("#explore").onclick = () => { hideHero(); toast(t().toast); };
+  $("#explore").onclick = () => { if (!state.loadedAll) return; hideHero(); reveal(); setDay(D1); toast(t().toast); };
+  $("#src-btn").onclick = (e) => { e.stopPropagation(); $("#sources").hidden = !$("#sources").hidden; };
+  addEventListener("click", (e) => { if (!e.target.closest("#sources")) $("#sources").hidden = true; });
+  // zoomed out over the belt keep every picture loaded; zoomed in fetch only the two in play
+  map.on("zoomend", () => {
+    if (!state.preloading) return;
+    const wide = map.getZoom() <= (state.fitZoom || 9) + 1.3;
+    if (wide !== state.wide) { state.wide = wide; state.ready = false; setDay(state.day); }
+  });
   $("#panel-close").onclick = closePanel;
   $("#zoom-in").onclick = () => map.zoomIn();
   $("#zoom-out").onclick = () => map.zoomOut();
@@ -819,10 +928,13 @@ async function init() {
       // dim the patches a fire alert came within 375 m of; what stays lit is what the alerts missed
       map.setPaintProperty("burns", "fill-opacity", on ? ["case", ["==", ["get", "a"], 1], 0.12, 0.95]
         : ["interpolate", ["linear"], ["zoom"], 9, 0.95, 14, 0.7, 16, 0.3]);
+      map.setPaintProperty("burn-pts", "circle-opacity", on ? ["case", ["==", ["get", "a"], 1], 0.12, 0.95]
+        : ["interpolate", ["linear"], ["zoom"], 11, 0.9, 12.2, 0]);
       if (on && !state.layers.burns) setLayer("burns", true);
       return;
     }
-    const ids = k === "burns" ? ["burns", "burns-new"] : k === "fires" ? ["fires", "fires-states"] : ["fields", "fields-hit", "field-dots", "field-dots-halo"];
+    const ids = k === "burns" ? ["burns", "burns-new", "burn-pts"] : k === "fires" ? ["fires", "fires-states"] : ["fields", "fields-hit", "field-dots", "field-dots-halo"];
+    if (k !== "fields" && !state.revealed) return;
     ids.forEach((id) => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
     syncPins();
   };
@@ -843,23 +955,21 @@ async function init() {
   addEventListener("keydown", (e) => {
     if (e.target.closest("input, textarea")) return;
     if (e.key === " ") { e.preventDefault(); $("#play").click(); }
-    if (e.key === "ArrowRight") { stop(); setDay(state.day + (e.shiftKey ? 10 : 1)); }
-    if (e.key === "ArrowLeft") { stop(); setDay(state.day - (e.shiftKey ? 10 : 1)); }
+    if (!state.loadedAll) return;
+    if (e.key === "ArrowRight") { stop(); reveal(); setDay(state.day + (e.shiftKey ? 10 : 1)); }
+    if (e.key === "ArrowLeft") { stop(); reveal(); setDay(state.day - (e.shiftKey ? 10 : 1)); }
     if (e.key === "Escape") { closePanel(); openMenu(false); }
   });
   addEventListener("resize", () => { if (state.intro && !intro) fitRegion(0); });
 
   setDay(D0);
-  let started = false;
-  const ready = new Promise((ok) => {
-    const go = () => { if (started) return; started = true; $("#loader").classList.add("gone"); setTimeout(() => $("#loader")?.remove(), 700); ok(); };
-    map.on("idle", go);
-    setTimeout(go, 4500);  // never hold the page hostage to the slowest tile
-  });
-  if (intro) { ready.then(runIntro); return; }
-  if (reduced) { ready.then(() => { setDay(D1); showHero(); }); return; }
-  map.once("dragstart", () => { if (state.intro) { stop(); showHero(); } });
-  ready.then(() => setTimeout(() => play(9, () => { if (state.intro) { showHero(); toast(t().toast); } }, D0), 500));
+  setPreparing(0);
+  // the basemap and outlines are enough to begin; the season loads while the camera flies in
+  $("#loader").classList.add("gone");
+  setTimeout(() => $("#loader")?.remove(), 700);
+  if (intro) { setTimeout(runIntro, 300); return; }
+  showHero();
+  preload();
 }
 
 init().catch((e) => {

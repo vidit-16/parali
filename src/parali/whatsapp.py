@@ -177,8 +177,23 @@ def setup(cfg: dict, waba: str | None = None) -> dict:
 
 # ---------- conversation ----------
 
-def lang_of(text: str) -> str:
-    return "pa" if re.search(r"[਀-੿]", text or "") else "hi"
+HINGLISH = re.compile(r"\b(kya|kab|kaise|kyun|kyon|mera|meri|mere|paisa|paise|khet|dawa|daava|hai|nahi|nahin|milega|batao|kitna|ji|"
+                      r"haan|aapka|kar|ho|gaya|kad|kyu|thara|mhara)\b", re.I)
+
+
+def lang_of(text: str, farmer: dict | None = None, heard: str = "") -> str:
+    """The language to answer in: Punjabi for Gurmukhi, Haryanvi for a Haryana farmer writing Devanagari or Hinglish,
+    Hindi for other Devanagari or Hinglish, English for English. A voice note uses the language Sarvam heard."""
+    hr = (farmer or {}).get("state") == "HR"
+    if heard:
+        return "pa" if heard.startswith("pa") else "en" if heard.startswith("en") else ("hr" if hr else "hi")
+    if re.search(r"[\u0a00-\u0a7f]", text or ""):
+        return "pa"
+    if re.search(r"[\u0900-\u097f]", text or "") or HINGLISH.search(text or ""):
+        return "hr" if hr else "hi"
+    if re.search(r"[A-Za-z]", text or ""):
+        return "en"
+    return "pa" if (farmer or {}).get("state") == "PB" else ("hr" if hr else "hi")
 
 
 def _farmers(store: Store) -> list[dict]:
@@ -198,9 +213,11 @@ def menu(store: Store) -> str:
             + "\n\nSend \"change\" any time to pick again.")
 
 
-HEARD = {"hi": "आपने कहा", "pa": "ਤੁਸੀਂ ਕਿਹਾ"}
+HEARD = {"hi": "आपने कहा", "pa": "ਤੁਸੀਂ ਕਿਹਾ", "en": "You said", "hr": "थमनै कह्या"}
 NOT_HEARD = {"hi": "आवाज़ साफ़ नहीं आई। कृपया दोबारा बोलें या लिखकर भेजें।",
-             "pa": "ਆਵਾਜ਼ ਸਾਫ਼ ਨਹੀਂ ਆਈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਬੋਲੋ ਜਾਂ ਲਿਖ ਕੇ ਭੇਜੋ।"}
+             "pa": "ਆਵਾਜ਼ ਸਾਫ਼ ਨਹੀਂ ਆਈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਬੋਲੋ ਜਾਂ ਲਿਖ ਕੇ ਭੇਜੋ।",
+             "en": "I could not hear that clearly. Please say it again or type it.",
+             "hr": "आवाज साफ कोनी आई। फेर बोलो या लिख कै भेजो।"}
 
 
 def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, transcribe=None) -> str:
@@ -215,7 +232,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
     phone, text = msg["from"], (msg.get("text") or "").strip()
     link = store.get("wa_links", phone)
     farmer = store.get("fields", link["farmer_id"]) if link else None
-    lang = lang_of(text) if text else ("pa" if farmer and farmer.get("state") == "PB" else "hi")
+    lang = lang_of(text, farmer)
 
     if msg.get("type") == "audio":
         heard = None
@@ -226,7 +243,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
             client.send_text(phone, NOT_HEARD[lang])
             return "voice not understood"
         text, code = heard
-        lang = "pa" if code.startswith("pa") else "hi"
+        lang = lang_of(text, farmer, code or "hi")
     elif msg.get("type") not in ("text", "interactive"):
         client.send_text(phone, NOT_HEARD[lang])
         return f"unsupported {msg.get('type')}"
@@ -237,29 +254,30 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         if not CHANGE.match(text) and text.isdigit() and 1 <= int(text) <= len(farmers):
             farmer = farmers[int(text) - 1]
             store.put("wa_links", phone, {"id": phone, "farmer_id": farmer["id"], "at": now_iso()})
-            text, lang, just_linked = "status", "pa" if farmer.get("state") == "PB" else "hi", True
+            text, lang, just_linked = "status", "pa" if farmer.get("state") == "PB" else "hr", True
         else:
             client.send_text(phone, menu(store))
             return "menu"
 
+    from parali.tts import speak
     r = agent.respond(store, farmer["id"], text, dispatch, backend=backend)
-    reply = r.pa if lang == "pa" and r.pa else None
+    reply = {"hi": r.hi, "en": r.en, "pa": r.pa, "hr": r.hr}[lang]
     if lang == "pa" and not reply and voice is not None and hasattr(voice, "translate_pa"):
         reply = voice.translate_pa(r.hi)
     if not reply:
         lang, reply = "hi", r.hi
     said = f"🎙 {HEARD[lang]}: “{text}”\n\n" if msg.get("type") == "audio" else ""
     client.send_text(phone, said + reply)
-    if voice is not None:
-        mp3 = voice.speak_pa(reply) if lang == "pa" else voice(reply)
-        if mp3:
-            client.send_audio(phone, mp3)
+    mp3 = speak(voice, reply, lang) or (speak(voice, r.hi, "hi") if lang != "hi" else None)
+    if mp3:
+        client.send_audio(phone, mp3)
     if just_linked or "explain" in r.tools:
         _send_pictures(store, farmer["id"], phone, client, lang)
     return f"{r.mode}:{','.join(r.tools)}"
 
 
-PICTURE = {"hi": "आपके खेत की उपग्रह तस्वीरें, कटाई से बुआई तक।", "pa": "ਤੁਹਾਡੇ ਖੇਤ ਦੀਆਂ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ, ਵਾਢੀ ਤੋਂ ਬਿਜਾਈ ਤੱਕ।"}
+PICTURE = {"hi": "आपके खेत की उपग्रह तस्वीरें, कटाई से बुआई तक।", "pa": "ਤੁਹਾਡੇ ਖੇਤ ਦੀਆਂ ਸੈਟੇਲਾਈਟ ਤਸਵੀਰਾਂ, ਵਾਢੀ ਤੋਂ ਬਿਜਾਈ ਤੱਕ।",
+           "en": "Satellite pictures of your field, from harvest to sowing.", "hr": "थारे खेत के उपग्रह फोटू, कटाई तै बिजाई तक।"}
 
 
 def _send_pictures(store: Store, farmer_id: str, phone: str, client, lang: str) -> None:
@@ -280,12 +298,13 @@ def notify(store: Store, claim: dict, client, voice=None) -> int:
         if link["farmer_id"] != claim["field_id"]:
             continue
         msg = claim.get("message") or {}
-        pa = claim.get("state_code") == "PB" and msg.get("pa")
+        lang = "pa" if claim.get("state_code") == "PB" else "hr"  # the farmer's own language, Hindi if it is missing
+        own = msg.get(lang)
         rec = claim.get("recovery") or {}
         pay = f"\n\n₹{rec['amount']}: {rec['url']}" if rec.get("status") == "issued" and rec.get("url") else ""
         try:
-            client.send_text(link["id"], (pa or msg.get("hi", "")) + pay)
-            key = claim.get("audio_key_pa") if pa else claim.get("audio_key")
+            client.send_text(link["id"], (own or msg.get("hi", "")) + pay)
+            key = (claim.get(f"audio_key_{lang}") or claim.get("audio_key")) if own else claim.get("audio_key")
             mp3 = store.get_blob(key) if key else None
             if mp3:
                 client.send_audio(link["id"], mp3)

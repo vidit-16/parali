@@ -8,8 +8,8 @@ from tests.test_service import TH
 
 
 class FakeVoice(Voice):  # Polly and Sarvam replaced
-    def __call__(self, text):
-        return b"hi-mp3"
+    def __call__(self, text, language="hi-IN"):
+        return b"en-mp3" if language == "en-IN" else b"hi-mp3"
 
 
 def voice(speak=lambda pa: b"pa-mp3", translate=lambda hi: None):
