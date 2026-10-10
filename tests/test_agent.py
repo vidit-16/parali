@@ -167,3 +167,10 @@ def test_slow_model_falls_back_fast(store, monkeypatch):
     t = time.time()
     r = agent.respond(store, "f1", "मेरा दावा कहाँ तक पहुँचा?", lambda _: None, backend=SlowBedrock())
     assert time.time() - t < 1.5 and r.mode == "scripted-fallback" and "slow" in r.note
+
+
+def test_model_words_are_plain_short_and_never_cut_mid_word():
+    from parali.agent import LIST, plain
+    assert plain("नमस्ते! **दावे की स्थिति** देखें। फिर `अपील` करें। तीसरा वाक्य।") == "नमस्ते! दावे की स्थिति देखें।"
+    assert LIST.search("आप क्या चाहते हैं?\n- दावे की स्थिति\n- अपील")
+    assert not LIST.search("₹2,400 आपके खाते में भेजे गए।")

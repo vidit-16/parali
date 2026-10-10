@@ -283,3 +283,11 @@ details.hist.fold > ol { margin-top: 8px; }
   .more + .listen { vertical-align: middle; }
   .more::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); }
 }
+
+@media (max-width: 640px) {
+  body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 76px; z-index: 5; pointer-events: none;
+    background: linear-gradient(var(--bg, #0D0E11) 78%, rgba(13, 14, 17, 0)); }
+}
+/* holding the mic must not start iPhone text selection or the magnifier */
+.ask .mic, .ask .chips, .ask .cap, .chat { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.ask .mic { touch-action: none; }

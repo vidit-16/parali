@@ -416,3 +416,19 @@ body.panel-open .story { left: calc((100% - 400px) / 2); max-width: calc(100% - 
   .hero .vs .cap, .hero .fine { display: none; }
   .act .cap { display: none; }
 }
+
+/* tablets and phones: the story bar sits just above the timeline (the desktop rule above pins it to the top, and
+   pinned to both it stretched over the map); once the field card opens, the card carries the story */
+@media (max-width: 900px) {
+  .story { top: auto; bottom: 100px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 20px); }
+  body.panel-open .story { display: none; }
+}
+@media (max-width: 640px) {
+  .story { bottom: 92px; left: 10px; right: 10px; transform: none; max-width: none; padding: 4px 4px 4px 12px; }
+  .story b { display: none; }
+  /* the opening caption gets the screen to itself: no zoom buttons or scale bar over it, Skip inside its corner */
+  body.intro .rail, body.intro .maplibregl-ctrl-bottom-left, body.intro .maplibregl-ctrl-bottom-right { opacity: 0; pointer-events: none; }
+  .caption { left: 10px; right: 10px; width: auto; bottom: 92px; padding: 18px 16px 60px; }
+  .skip { right: 22px; bottom: 104px; }
+}
+@media (max-width: 640px) { .rail { bottom: 140px; } }  /* clear of the story bar above the timeline */

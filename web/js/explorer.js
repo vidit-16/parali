@@ -357,6 +357,7 @@ function fadeOut(el) {
 // The opening: India, Delhi and the belt, no season data. While the camera flies in, every picture and
 // layer of the season loads, so pressing Play never waits on the network and nothing pops in afterwards.
 function runIntro() {
+  document.body.classList.add("intro");  // phones hide the map controls while the caption speaks
   const cap = $("#caption"), [title, sub] = t().caption.split("<small>");
   cap.innerHTML = `<b>${title}</b><span>${sub.replace("</small>", "")}</span>`;
   cap.hidden = false;
@@ -367,6 +368,7 @@ function runIntro() {
   const finish = () => {
     if (done) return;
     done = true;
+    document.body.classList.remove("intro");
     events.forEach((ev) => removeEventListener(ev, skip));
     fadeOut(skipBtn);
     fadeOut(cap);

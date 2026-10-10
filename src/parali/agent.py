@@ -358,10 +358,23 @@ class BedrockBackend:
         tools = [n for n, _ in ctx.effects]
         if ctx.effects:
             return _from_effects(ctx.effects, self.mode)
-        said = str(result).strip()
+        said = plain(str(result))
         if DECISION_WORDS.search(said):   # the model tried to state a decision without a tool result
             return _help(self.mode, tools, note="model reply dropped: stated a decision")
-        return Reply(said[:400], "", tools, self.mode)
+        if not said or LIST.search(str(result)) or len(said) > 260:  # a menu of options: the help template says it better, in every language
+            return _help(self.mode, tools, note="model reply replaced: too long")
+        return Reply(said, "", tools, self.mode)
+
+
+LIST = re.compile(r"(^|\n)\s*([-*•]|\d+[.)])\s", re.M)
+
+
+def plain(text: str) -> str:
+    """The model's words as a farmer reads or hears them: no markdown, at most two sentences, never cut mid-word."""
+    t = re.sub(r"[*_`#>]+", "", text or "")
+    t = re.sub(r"\s+", " ", t).strip()
+    parts = re.split(r"(?<=[।?!.])\s+", t)
+    return " ".join(parts[:2]).strip()
 
 
 DECISION_WORDS = re.compile(r"स्वीकृत|मंज़ूर|मंजूर|अस्वीकृत|खारिज|approved|rejected|जलाई\s*गई|burnt|पास\s*हो", re.I)

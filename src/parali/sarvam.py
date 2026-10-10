@@ -74,14 +74,14 @@ def translate_pa(text_hi: str) -> str | None:
     return text if _faithful(text_hi, text) else None
 
 
-def transcribe(audio: bytes, mime: str = "audio/ogg") -> tuple[str, str] | None:
+def transcribe(audio: bytes, mime: str = "audio/ogg", language: str = "unknown") -> tuple[str, str] | None:
     """(transcript, language code such as "pa-IN") for a voice note in any Indian language, or None."""
     key = api_key()
     if not key or not audio:
         return None
     import uuid
     b = uuid.uuid4().hex
-    fields = [("model", "saarika:v2.5"), ("language_code", "unknown")]
+    fields = [("model", "saarika:v2.5"), ("language_code", language)]
     body = b"".join(f'--{b}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode() for k, v in fields)
     body += (f'--{b}\r\nContent-Disposition: form-data; name="file"; filename="voice.{mime.split("/")[-1].split(";")[0]}"\r\n'
              f"Content-Type: {mime.split(';')[0]}\r\n\r\n").encode() + audio + f"\r\n--{b}--\r\n".encode()

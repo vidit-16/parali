@@ -253,6 +253,7 @@ function wireMic() {
     if (seconds > 0.6) ask({ audio_b64: b64 });
   };
   mic.addEventListener("pointerdown", start);
+  mic.addEventListener("contextmenu", (e) => e.preventDefault());
   ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => mic.addEventListener(ev, end));
 }
 function openAppeal(c) {

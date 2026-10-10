@@ -179,13 +179,19 @@ def _wav(pcm: bytes, rate: int = 16000) -> bytes:
     return buf.getvalue()
 
 
-def _hear(deps: Deps, pcm: bytes) -> str:
-    """Sarvam first: it hears Punjabi, Hindi, Haryanvi and English in one model. AWS Transcribe (Hindi) if not."""
+SPEECH_LANG = {"pa": "pa-IN", "hi": "hi-IN", "hr": "hi-IN", "en": "en-IN"}
+READABLE = re.compile(r"[\u0900-\u097f\u0a00-\u0a7fA-Za-z]")
+
+
+def _hear(deps: Deps, pcm: bytes, lang: str = "hi") -> str:
+    """Sarvam first, told the page's language (left to guess, it once heard a short Hindi clip as Malayalam).
+    AWS Transcribe (Hindi) if Sarvam is unavailable or returns something in another script."""
     from parali import sarvam
-    heard = sarvam.transcribe(_wav(pcm), "audio/wav") if sarvam.api_key() else None
-    if heard and heard[0]:
+    heard = sarvam.transcribe(_wav(pcm), "audio/wav", SPEECH_LANG.get(lang, "hi-IN")) if sarvam.api_key() else None
+    if heard and heard[0] and READABLE.search(heard[0]):
         return heard[0]
-    return deps.transcriber(pcm) if deps.transcriber else ""
+    text = deps.transcriber(pcm) if deps.transcriber else ""
+    return text if text and READABLE.search(text) else ""
 
 
 def _agent_turn(deps: Deps, data: dict) -> dict:
@@ -198,14 +204,18 @@ def _agent_turn(deps: Deps, data: dict) -> dict:
         raise service.WorkflowError("unknown farmer")
     text = str(data.get("text", ""))[:500]
     transcript = None
+    lang = data.get("lang") if data.get("lang") in ("hi", "en", "pa", "hr") else "hi"
     if data.get("audio_b64"):
         pcm = base64.b64decode(data["audio_b64"])[: 16000 * 2 * 30]
-        text = transcript = _hear(deps, pcm)
+        text = transcript = _hear(deps, pcm, lang)
+        if not text:  # nothing usable was heard: say so, in the page's language, instead of guessing
+            from parali.whatsapp import NOT_HEARD
+            return {"transcript": None, "text": "", "hi": NOT_HEARD["hi"], "en": NOT_HEARD["en"], lang: NOT_HEARD[lang],
+                    "tools": [], "mode": "unheard", "note": "voice not understood"}
     r = agent.respond(deps.store, farmer_id, text, deps.dispatch, backend=deps.agent_backend)
     out = {"transcript": transcript, "text": text, "hi": r.hi, "en": r.en, "tools": r.tools, "mode": r.mode,
            "note": r.note}
     from parali.tts import speak
-    lang = data.get("lang") if data.get("lang") in ("hi", "en", "pa", "hr") else "hi"
     said = {"hi": r.hi, "en": r.en, "pa": r.pa, "hr": r.hr}[lang]
     if lang == "pa" and not said and r.hi and hasattr(deps.speaker, "translate_pa"):
         said = deps.speaker.translate_pa(r.hi)  # only the model's own short question has no template

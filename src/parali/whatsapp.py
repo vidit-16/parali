@@ -415,7 +415,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         if transcribe:
             audio, mime = client.download(msg["media_id"])
             heard = transcribe(audio, mime)
-        if not heard or not heard[0]:
+        if not heard or not heard[0] or not re.search(r"[\u0900-\u097f\u0a00-\u0a7fA-Za-z]", heard[0]):
             client.send_text(phone, NOT_HEARD[lang])
             return "voice not understood"
         text, code = heard
