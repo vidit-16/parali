@@ -226,7 +226,7 @@ SHORT = {
                ret="₹{x} to return", retd="₹{x} returned", whyBurn="🛰 Burnt around {d}: dark in colour, maroon in infrared", whyClean="🛰 No burn in {n} clear pictures",
                whyReview="🛰 The pictures are not clear enough to decide", askAppeal="📝 Tell the officer in one message why the satellite is wrong. A voice note is fine.",
                noAppeal="Nothing to appeal: your claim is approved.", bWhy="Why?", bMoney="My money", bAppeal="Appeal",
-               intro="Saakshi (demo). Chat as one of our demo farmers. Write or speak in English, Hindi, Punjabi or Haryanvi; Saakshi answers in the same language. You can also just say a farmer's name.",
+               intro="Saakshi. Pick a farmer to chat as. Write or speak in English, Hindi, Punjabi or Haryanvi; Saakshi answers in the same language. You can also just say a farmer's name.",
                state="Which state?", pick="Pick a farmer", list="Farmers"),
     "hi": dict(paid="✅ मंज़ूर · ₹{x} आपके खाते में भेजे", smoke=" · 🌫 ≈ {kg} किलो धुआँ बचा", repay="❗ जलना पक्का · ₹{x} लौटाने हैं",
                repaid="✅ ₹{x} लौटा दिए · कुछ बाकी नहीं", confirmed="❗ अधिकारी ने जलना पक्का किया", burn="🔥 {d} के आसपास जलने का निशान · अधिकारी देखेंगे",
@@ -281,28 +281,38 @@ def _field_line(claim: dict, lang: str) -> str:
     return to_gurmukhi(name) if lang == "pa" else name
 
 
-def short_status(claim: dict, lang: str) -> str:
-    """The claim in two lines: what happened and the one number that matters, then the field."""
+def both(lang: str, make) -> str:
+    """English first, then the farmer's own language: the short texts are read by judges as well as farmers.
+    Someone who writes in English gets English only."""
+    en = make("en")
+    return en if lang == "en" else f"{en}\n{make(lang)}"
+
+
+def _status_line(claim: dict, lang: str) -> str:
     W, s, rec, st = _w(lang), claim.get("settlement") or {}, claim.get("recovery") or {}, claim["status"]
     if claim.get("appeal") and st in REVIEW:
-        line = W["appealed"]
-    elif st in CLEAN and s.get("state") == "balance_due":
-        line = W["paid"].format(x=rupees(s.get("balance") or 0)) + W["smoke"].format(kg=season.smoke_kg(claim.get("acres")))
-    elif st == "officer_confirmed_burnt":
+        return W["appealed"]
+    if st in CLEAN and s.get("state") == "balance_due":
+        return W["paid"].format(x=rupees(s.get("balance") or 0)) + W["smoke"].format(kg=season.smoke_kg(claim.get("acres")))
+    if st == "officer_confirmed_burnt":
         r = rupees(s.get("recover") or 0)
-        line = (W["repaid"].format(x=r) if rec.get("status") == "paid" else W["repay"].format(x=r) if s.get("recover") else W["confirmed"])
-        if rec.get("status") == "issued" and rec.get("url"):
-            line += "\n" + rec["url"]
-    elif st == "possible_burn":
-        line = W["burn"].format(d=_day((claim.get("decision") or {}).get("burn_date"), lang))
-    elif st == "needs_review":
-        line = W["review"]
-    else:
-        line = W["wait"]
-    return f"{line}\n{_field_line(claim, lang)}"
+        return W["repaid"].format(x=r) if rec.get("status") == "paid" else W["repay"].format(x=r) if s.get("recover") else W["confirmed"]
+    if st == "possible_burn":
+        return W["burn"].format(d=_day((claim.get("decision") or {}).get("burn_date"), lang))
+    if st == "needs_review":
+        return W["review"]
+    return W["wait"]
 
 
-def money_line(claim: dict, lang: str) -> str:
+def short_status(claim: dict, lang: str) -> str:
+    """What happened and the one number that matters, then the field; the voice note has the rest."""
+    rec = claim.get("recovery") or {}
+    field = _field_line(claim, "en") if lang == "en" else f"{_field_line(claim, 'en')} · {_field_line(claim, lang)}"
+    url = f"\n{rec['url']}" if claim["status"] == "officer_confirmed_burnt" and rec.get("status") == "issued" and rec.get("url") else ""
+    return both(lang, lambda l: _status_line(claim, l)) + url + "\n" + field
+
+
+def _money(claim: dict, lang: str) -> str:
     W, adv, s, rec = _w(lang), claim.get("advance") or {}, claim.get("settlement") or {}, claim.get("recovery") or {}
     parts = [W["adv"].format(x=rupees(adv.get("amount") or 0)) if adv.get("status") == "paid" else W["noadv"]]
     if s.get("state") == "balance_due":
@@ -314,7 +324,11 @@ def money_line(claim: dict, lang: str) -> str:
     return " · ".join(parts)
 
 
-def why_line(claim: dict, lang: str) -> str:
+def money_line(claim: dict, lang: str) -> str:
+    return both(lang, lambda l: _money(claim, l))
+
+
+def _why(claim: dict, lang: str) -> str:
     W, d = _w(lang), claim.get("decision") or {}
     if d.get("burn_date"):
         return W["whyBurn"].format(d=_day(d["burn_date"], lang))
@@ -323,9 +337,16 @@ def why_line(claim: dict, lang: str) -> str:
     return W["whyReview"]
 
 
+def why_line(claim: dict, lang: str) -> str:
+    return both(lang, lambda l: _why(claim, l))
+
+
 def _buttons(lang: str) -> list[tuple[str, str]]:
-    W = _w(lang)
-    return [("btn:why", W["bWhy"]), ("btn:money", W["bMoney"]), ("btn:appeal", W["bAppeal"])]
+    def title(k):
+        en, own = SHORT["en"][k], _w(lang)[k]
+        two = f"{en} · {own}"
+        return en if lang == "en" else two if len(two) <= 20 else own
+    return [("btn:why", title("bWhy")), ("btn:money", title("bMoney")), ("btn:appeal", title("bAppeal"))]
 
 
 def _match_farmer(store: Store, text: str) -> dict | None:
@@ -400,18 +421,21 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
     # a tap carries an English id, so it is answered in the language the farmer last wrote or spoke
     tap = msg.get("type") == "interactive" or TAP.match(text)
     if tap:
-        lang = (link or {}).get("lang") or ("en" if not farmer else lang_of("", farmer))
+        lang = (link or {}).get("lang") or ("pa" if (farmer or {}).get("state") == "PB" else "hr" if farmer else "en")
 
     # ---- choosing a farmer: tap a state and a name, or just say the name ----
     if text.startswith("state:"):
         _list_farmers(store, phone, client, text[6:])
         return "farmer list"
+    if CHANGE.match(text) and link:
+        link = {k: v for k, v in link.items() if k != "lang"}
+        store.put("wa_links", phone, link)
     picked = store.get("fields", text[2:]) if text.startswith("f:") else None
     if not picked and not farmer and not tap and not CHANGE.match(text):
         picked = _match_farmer(store, text)
     if picked:
-        if not tap:  # the farmer's state decides between Hindi and Haryanvi
-            lang = lang_of(text, picked, code)
+        # a tap: the farmer's own language (English is above it anyway); a spoken or typed name: the language used
+        lang = ("pa" if picked.get("state") == "PB" else "hr") if tap else lang_of(text, picked, code)
         farmer, link = picked, {"id": phone, "farmer_id": picked["id"], "at": now_iso(), "lang": lang}
         store.put("wa_links", phone, link)
         claim = _claim_of(store, farmer["id"])
@@ -445,9 +469,9 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
     if text == "btn:appeal":
         if claim and claim["status"] in APPEALABLE:
             store.put("wa_links", phone, {**link, "awaiting": "appeal"})
-            client.send_text(phone, _w(lang)["askAppeal"])
+            client.send_text(phone, both(lang, lambda l: _w(l)["askAppeal"]))
         else:
-            client.send_text(phone, _w(lang)["noAppeal"])
+            client.send_text(phone, both(lang, lambda l: _w(l)["noAppeal"]))
         return "appeal prompt"
     if text == "btn:money" and claim:
         client.send_buttons(phone, money_line(claim, lang), _buttons(lang))

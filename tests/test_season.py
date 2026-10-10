@@ -105,7 +105,7 @@ def test_confirmed_burn_after_advance_drafts_recovery_notice(store):
     html = store.get_blob(r["notice_key"]).decode()
     assert "DRAFT FOR OFFICER REVIEW" in html and "₹1,250" in html and "VO-7" in html
     assert "अग्रिम राशि" in html and "ਅਗਾਊਂ ਰਕਮ" in html  # Punjab farmer: Hindi and Punjabi
-    assert "not issued by any government office" in html
+    assert "Not issued by any government office" in html
 
 
 def test_officer_clears_possible_burn_releases_balance(store):

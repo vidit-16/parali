@@ -101,7 +101,12 @@ def test_new_number_picks_a_state_then_a_farmer(store):
     c = FakeClient()
     assert run(store, msg("f:f-pb", mid="m3", tap=True), c) == "linked"
     assert store.get("wa_links", "919800000001")["farmer_id"] == "f-pb"
-    assert c.sent[0][0] == "buttons" and len(c.texts()[0].splitlines()) <= 3  # short text with buttons
+    first = c.texts()[0].splitlines()
+    assert c.sent[0][0] == "buttons" and len(first) == 3 and first[0].startswith("⏳ Satellite")  # English, then Punjabi, then the field
+    assert store.get("wa_links", "919800000001")["lang"] == "pa"
+    c = FakeClient()
+    run(store, msg("change", mid="m4"), c)
+    assert "lang" not in store.get("wa_links", "919800000001")
 
 
 def test_a_farmer_is_picked_by_saying_the_name(store):
@@ -131,7 +136,7 @@ def test_buttons_answer_in_the_farmers_language_and_appeal_takes_the_next_messag
     assert run(store, msg("btn:money", mid="m2", tap=True), c) == "money" and "ਅਗਾਊਂ" in c.texts()[0]
     c = FakeClient()
     run(store, msg("btn:appeal", mid="m3", tap=True), c)
-    assert c.texts() == [whatsapp.SHORT["pa"]["askAppeal"]]
+    assert c.texts() == [whatsapp.SHORT["en"]["askAppeal"] + "\n" + whatsapp.SHORT["pa"]["askAppeal"]]
     c = FakeClient()
     assert run(store, msg("ਮੈਂ ਪਰਾਲੀ ਨਹੀਂ ਸਾੜੀ, ਹੈਪੀ ਸੀਡਰ ਵਰਤਿਆ", mid="m4"), c) == "appeal"
     assert store.get("claims", cl["id"])["appeal"]["note"].startswith("ਮੈਂ") and "awaiting" not in store.get("wa_links", "919800000001")

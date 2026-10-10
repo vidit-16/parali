@@ -8,7 +8,7 @@ const T = {
   en: {
     explore: "Explore", officer: "Officer", farmer: "Farmer",
     signIn: "Sign in", signNote: "Your claim, your money and your field, in your language.", mobile: "Mobile number", cont: "Continue",
-    demoPick: "Demo farmers", demoNote: "This demo has no SMS sign-in. Pick a farmer to see the app as they would. Demo cases reset daily; the WhatsApp side is shown in the video.", demoTyped: "In this demo, pick one of the farmers below.",
+    demoPick: "Pick a farmer", demoNote: "No SMS sign-in here: pick a farmer to see their app. Cases reset daily; WhatsApp is shown in the video.", demoTyped: "Pick one of the farmers below.",
     hello: (n) => `Namaste, ${n}`, switch: "Sign out", noClaim: "No claim this season yet.", acres: "acres",
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
     smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", money: "Your money", passbook: "Season 2025",
@@ -31,7 +31,7 @@ const T = {
   hi: {
     explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     signIn: "साइन-इन", signNote: "आपका दावा, आपकी राशि और आपका खेत, आपकी भाषा में।", mobile: "मोबाइल नंबर", cont: "आगे",
-    demoPick: "डेमो किसान", demoNote: "इस डेमो में SMS साइन-इन नहीं है। किसी किसान को चुनकर ऐप उनकी तरह देखें। डेमो मामले रोज़ नए होते हैं; WhatsApp वाला हिस्सा वीडियो में है।", demoTyped: "इस डेमो में नीचे से कोई किसान चुनें।",
+    demoPick: "किसान चुनें", demoNote: "यहाँ SMS साइन-इन नहीं है: किसी किसान को चुनकर उनका ऐप देखें। मामले रोज़ नए होते हैं; WhatsApp वीडियो में है।", demoTyped: "नीचे से कोई किसान चुनें।",
     hello: (n) => `नमस्ते, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोई दावा अभी नहीं।", acres: "एकड़",
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
     smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", money: "आपकी राशि", passbook: "सीज़न 2025",
@@ -54,7 +54,7 @@ const T = {
   pa: {
     explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
     signIn: "ਸਾਈਨ-ਇਨ", signNote: "ਤੁਹਾਡਾ ਦਾਅਵਾ, ਤੁਹਾਡੀ ਰਕਮ ਅਤੇ ਤੁਹਾਡਾ ਖੇਤ, ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਵਿੱਚ।", mobile: "ਮੋਬਾਈਲ ਨੰਬਰ", cont: "ਅੱਗੇ",
-    demoPick: "ਡੈਮੋ ਕਿਸਾਨ", demoNote: "ਇਸ ਡੈਮੋ ਵਿੱਚ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ। ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਐਪ ਉਨ੍ਹਾਂ ਵਾਂਗ ਵੇਖੋ। ਡੈਮੋ ਮਾਮਲੇ ਰੋਜ਼ ਨਵੇਂ ਹੁੰਦੇ ਹਨ; WhatsApp ਵਾਲਾ ਹਿੱਸਾ ਵੀਡੀਓ ਵਿੱਚ ਹੈ।", demoTyped: "ਇਸ ਡੈਮੋ ਵਿੱਚ ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
+    demoPick: "ਕਿਸਾਨ ਚੁਣੋ", demoNote: "ਇੱਥੇ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ: ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਉਨ੍ਹਾਂ ਦੀ ਐਪ ਵੇਖੋ। ਮਾਮਲੇ ਰੋਜ਼ ਨਵੇਂ ਹੁੰਦੇ ਹਨ; WhatsApp ਵੀਡੀਓ ਵਿੱਚ ਹੈ।", demoTyped: "ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
     hello: (n) => `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${n} ਜੀ`, switch: "ਸਾਈਨ-ਆਊਟ", noClaim: "ਇਸ ਸੀਜ਼ਨ ਦਾ ਕੋਈ ਦਾਅਵਾ ਅਜੇ ਨਹੀਂ।", acres: "ਏਕੜ",
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਸੈਟੇਲਾਈਟ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
     smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
@@ -77,7 +77,7 @@ const T = {
   hr: {
     explore: "देक्खो", officer: "अफसर", farmer: "किसान",
     signIn: "साइन-इन", signNote: "थारा दावा, थारी रकम अर थारा खेत, थारी बोली म्ह।", mobile: "मोबाइल नंबर", cont: "आग्गै",
-    demoPick: "डेमो किसान", demoNote: "इस डेमो म्ह SMS साइन-इन कोनी। किसे किसान नै चुण कै ऐप उसकी ढाळ देक्खो। डेमो मामले रोज नए होवैं सैं; WhatsApp आळा हिस्सा वीडियो म्ह सै।", demoTyped: "इस डेमो म्ह तळै तै कोए किसान चुणो।",
+    demoPick: "किसान चुणो", demoNote: "उरै SMS साइन-इन कोनी: किसे किसान नै चुण कै उसका ऐप देक्खो। मामले रोज नए होवैं सैं; WhatsApp वीडियो म्ह सै।", demoTyped: "तळै तै कोए किसान चुणो।",
     hello: (n) => `राम राम, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोए दावा इब्ब तक कोनी।", acres: "किल्ले",
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
     smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", money: "थारी रकम", passbook: "सीज़न 2025",
@@ -188,6 +188,7 @@ function render(animate = false) {
   if (c) renderSaw(c);
   if (animate) $$(".book b[data-amt]").forEach((b) => { const v = Number(b.dataset.amt); if (b.dataset.amt !== "" && v) countUp(b, v, (x) => b.dataset.sign + rupees(x), 900); });
   renderChat();
+  watchPay();
   $("#switch").onclick = () => { store.del("saakshi-farmer"); S.me = null; S.chat = []; render(); };
   const au = $("#audio");
   if (au) {
@@ -269,6 +270,21 @@ function openAppeal(c) {
   };
 }
 async function refresh() { S.claims = await getJSON("/api/claims"); render(); }
+
+// a payment link is open: show the payment as soon as it lands, even if it was paid in another tab or from WhatsApp
+let payTimer = null, payN = 0;
+function watchPay(now = false) {
+  clearTimeout(payTimer);
+  const c = S.me && S.claims.find((x) => x.field_id === S.me && x.recovery?.status === "issued");
+  if (!c) return;
+  payTimer = setTimeout(async () => {
+    if (++payN % 3 === 0) await getJSON(`/api/claims/${c.id}/recovery/check`, { method: "POST" }).catch(() => null);
+    const claims = await getJSON("/api/claims").catch(() => null);
+    if (claims && claims.find((x) => x.id === c.id)?.recovery?.status === "paid") { S.claims = claims; render(); return; }
+    watchPay();
+  }, now ? 0 : 5000);
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) watchPay(true); });
 
 async function load() {
   const [fields, claims, mf] = await Promise.all([getJSON("/api/fields"), getJSON("/api/claims"), getJSON("/tiles/manifest.json")]);

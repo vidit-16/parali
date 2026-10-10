@@ -7,7 +7,7 @@ const T = {
   en: {
     explore: "Explore", officer: "Officer", farmer: "Farmer",
     signinTitle: "Officer sign-in", signinNote: "Village officers see names, money and the review queue. The public map does not.",
-    officerId: "Officer ID", pin: "PIN", signin: "Sign in", demoPin: "Demo PIN: 2468 · cases reset daily at 5 am IST", wrongPin: "That PIN is not right.", signout: "Sign out",
+    officerId: "Officer ID", pin: "PIN", signin: "Sign in", demoPin: "PIN: 2468 · cases reset daily at 5 am IST", wrongPin: "That PIN is not right.", signout: "Sign out",
     tabs: { todo: "To decide", done: "Decided", all: "All" },
     waiting: (n) => (n === 1 ? "case waiting for you" : "cases waiting for you"), settled: (m) => `of ${m} claims; the rules settled the rest`,
     chip: { possible_burn: "Possible burn", needs_review: "Unclear", officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed",
@@ -36,7 +36,7 @@ const T = {
     approve: (x) => `Approve · release ${rupees(x)}`, approveNo: "Approve", confirm: "Confirm burn",
     needNote: "Write what you saw or checked before confirming a burn.",
     stamp: { officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed" }, by: (id, at) => `${id} · ${at}`,
-    notice: "Recovery notice", paylink: "Payment link",
+    notice: "Recovery notice", paylink: "Payment link", payWait: "Waiting for the farmer to pay", payDone: (x) => `${rupees(x)} received · case closed`,
     steps: { reviewed: "Decision recorded", recovery_notice: "Recovery notice drafted", recovery_link: "Payment link created",
       balance_released: "Balance released to the farmer", farmer_told: "Farmer told in the app and on WhatsApp" },
     colour: "Colour", infrared: "Infrared", irNote: "Burnt ground shows maroon, wet soil dark blue.", irWait: "Infrared frames come with the satellite check.",
@@ -46,7 +46,7 @@ const T = {
   hi: {
     explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     signinTitle: "अधिकारी साइन-इन", signinNote: "नाम, राशि और जाँच की सूची सिर्फ़ ग्राम अधिकारी देखते हैं। सार्वजनिक नक्शे पर ये नहीं दिखते।",
-    officerId: "अधिकारी आईडी", pin: "पिन", signin: "साइन-इन करें", demoPin: "डेमो पिन: 2468 · मामले रोज़ सुबह 5 बजे नए होते हैं", wrongPin: "पिन सही नहीं है।", signout: "साइन-आउट",
+    officerId: "अधिकारी आईडी", pin: "पिन", signin: "साइन-इन करें", demoPin: "पिन: 2468 · मामले रोज़ सुबह 5 बजे नए होते हैं", wrongPin: "पिन सही नहीं है।", signout: "साइन-आउट",
     tabs: { todo: "फ़ैसला बाकी", done: "तय", all: "सभी" },
     waiting: () => "मामले आपके फ़ैसले के लिए", settled: (m) => `${m} दावों में से; बाकी नियमों ने तय किए`,
     chip: { possible_burn: "जलने की आशंका", needs_review: "साफ़ नहीं", officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का",
@@ -75,7 +75,7 @@ const T = {
     approve: (x) => `मंज़ूर करें · ${rupees(x)} भेजें`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
     needNote: "जलना पक्का करने से पहले लिखें कि आपने क्या देखा या जाँचा।",
     stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का" }, by: (id, at) => `${id} · ${at}`,
-    notice: "वसूली नोटिस", paylink: "भुगतान लिंक",
+    notice: "वसूली नोटिस", paylink: "भुगतान लिंक", payWait: "किसान के भुगतान का इंतज़ार", payDone: (x) => `${rupees(x)} मिले · मामला बंद`,
     steps: { reviewed: "फ़ैसला दर्ज", recovery_notice: "वसूली नोटिस का मसौदा बना", recovery_link: "भुगतान लिंक बना",
       balance_released: "बाकी राशि किसान को भेजी", farmer_told: "किसान को ऐप और WhatsApp पर बताया" },
     colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जली ज़मीन मैरून दिखती है, गीली मिट्टी गहरी नीली।", irWait: "इन्फ्रारेड तस्वीरें उपग्रह जाँच के साथ आती हैं।",
@@ -204,7 +204,8 @@ function renderCase(flash = false) {
           <div class="d-btns"><button class="btn primary" id="approve">${icon("i-check")}<span>${esc(balance > 0 ? L.approve(balance) : L.approveNo)}</span></button>
           <button class="btn danger" id="confirm">${icon("i-flame")}<span>${esc(L.confirm)}</span></button></div></section>`
         : c.review ? `<section class="decided ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}"><span class="ic">${icon(c.status === "officer_confirmed_burnt" ? "i-flame" : "i-check")}</span>
-          <div class="dtx"><b>${esc(L.stamp[c.status] || "")}</b><small>${esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang)))}${c.review.note ? ` · “${esc(c.review.note)}”` : ""}</small></div>
+          <div class="dtx"><b>${esc(L.stamp[c.status] || "")}</b><small>${esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang)))}${c.review.note ? ` · “${esc(c.review.note)}”` : ""}</small>
+          ${c.recovery?.status === "issued" ? `<span class="paystate wait"><i></i>${esc(L.payWait)}</span>` : c.recovery?.status === "paid" ? `<span class="paystate done ${S.justPaid ? "land" : ""}">${icon("i-check")}${esc(L.payDone(c.recovery.amount))}</span>` : ""}</div>
           <div class="d-links">${c.notice_url ? `<a class="btn ghost small" href="${esc(c.notice_url)}" target="_blank" rel="noopener">${esc(L.notice)}</a>` : ""}
           ${c.recovery?.status === "issued" ? `<a class="btn ghost small" href="${esc(c.recovery.url)}" target="_blank" rel="noopener">${esc(L.paylink)}</a>` : ""}</div></section>` : ""}
         ${history(c)}
@@ -212,6 +213,8 @@ function renderCase(flash = false) {
   if (f) evidenceViewer($("#ev"), { windows: S.windows, geom: f.geometry, burnIndex: burnIndex(c), lang,
     ir: c.evidence_url ? { url: c.evidence_url, dates: c.evidence_dates || null, burn: d.burn_date } : null, labels: L });
   if (flash) $(".flow")?.classList.add("moving");
+  S.justPaid = false;
+  watchPayment();
   $("#approve")?.addEventListener("click", () => decide("approve"));
   $("#confirm")?.addEventListener("click", () => decide("confirm_burnt"));
 }
@@ -258,6 +261,28 @@ async function followSteps(verdict) {
     await new Promise((r) => setTimeout(r, 1200));
   }
 }
+
+// a payment link is open: notice the farmer paying without a refresh. Every third look also asks Razorpay,
+// in case the payer closed the page before coming back.
+let payTimer = null, payN = 0;
+function watchPayment(now = false) {
+  clearTimeout(payTimer);
+  const id = S.detail?.id;
+  if (S.detail?.recovery?.status !== "issued") return;
+  payTimer = setTimeout(async () => {
+    if (S.detail?.id !== id) return;
+    if (++payN % 3 === 0) await getJSON(`/api/claims/${id}/recovery/check`, { method: "POST" }).catch(() => null);
+    const c = await getJSON(`/api/claims/${id}`).catch(() => null);
+    if (S.detail?.id !== id) return;
+    if (c?.recovery?.status === "paid") {
+      S.detail = c; S.claims = await getJSON("/api/claims");
+      renderQueue(); renderCase(); S.justPaid = true; renderCase();
+      return;
+    }
+    watchPayment();
+  }, now ? 0 : 4000);
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) watchPayment(true); });
 
 async function load() {
   const [claims, fields, mf] = await Promise.all([getJSON("/api/claims"), getJSON("/api/fields"), getJSON("/tiles/manifest.json")]);
