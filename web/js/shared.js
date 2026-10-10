@@ -218,4 +218,5 @@ export function toGurmukhi(text) {
 }
 
 // smoke estimate, same basis as the map and the notice: about 19 kg of PM2.5 per burnt acre
-export const smokeKg = (acres) => Math.round((acres || 0) * 19);
+export const PM25_KG_PER_ACRE = 2.6 * 0.8 * 9;  // straw t/acre × share burnt × kg PM2.5 per t; same as season.py
+export const smokeKg = (acres) => Math.round((acres || 0) * PM25_KG_PER_ACRE);

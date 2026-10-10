@@ -244,7 +244,7 @@ function renderCase(flash = false) {
           <div title="${esc(L.facts.smokeTip)}"><small>${esc(k === "burn" || c.status === "officer_confirmed_burnt" ? L.facts.smokeOut : L.facts.smokeSaved)}</small><b class="smoke">≈ ${smokeKg(c.acres)}<i>kg</i></b></div></div>
         ${c.appeal ? `<section class="bubble"><span class="avatar farmer">${esc((c.farmer_name || "?").slice(0, 1))}</span><div><small>${esc(L.appealBy(name(c)))} · ${esc(fmtDate(c.appeal.at, lang))}</small><p>${esc(c.appeal.note)}</p></div></section>` : ""}
         ${flow(c)}
-        ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>
+        ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" aria-label="${esc(L.note)}" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>
           <div class="d-btns"><button class="btn primary" id="approve">${icon("i-check")}<span>${esc(balance > 0 ? L.approve(balance) : L.approveNo)}</span></button>
           <button class="btn danger" id="confirm">${icon("i-flame")}<span>${esc(L.confirm)}</span></button></div></section>`
         : c.review ? `<section class="decided ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}"><span class="ic">${icon(c.status === "officer_confirmed_burnt" ? "i-flame" : "i-check")}</span>

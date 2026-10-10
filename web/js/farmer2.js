@@ -182,7 +182,7 @@ function render(animate = false) {
       <div class="chat" id="chat"></div>
       <div class="chips">${L.suggest.map((q) => `<button class="chipq">${esc(q)}</button>`).join("")}</div>
       <form class="composer" id="composer"><button type="button" class="mic" id="mic" aria-label="Hold to speak">${micSvg}</button>
-        <input id="q" autocomplete="off" placeholder="${esc(L.ask)}…"><button class="btn primary small" type="submit">${esc(L.send)}</button></form>
+        <input id="q" autocomplete="off" aria-label="${esc(L.ask)}" placeholder="${esc(L.ask)}…"><button class="btn primary small" type="submit">${esc(L.send)}</button></form>
       <p class="cap" id="mic-note" hidden></p></section>`;
   filmstrip($("#film"), S.windows, f.geometry, lang, bw);
   if (c) renderSaw(c);

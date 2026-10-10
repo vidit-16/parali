@@ -127,7 +127,8 @@ const CODE = { en: "EN", hi: "हिं", pa: "ਪੰ", hr: "हरि" };
 // Burn colours run orange to purple by date. Yellow is kept for NASA fire alerts only.
 const BURN_RAMP = [[30, "#FF9D5C"], [50, "#FF6A3D"], [62, "#E8384F"], [80, "#C2187E"], [100, "#7B2CBF"]];
 // smoke estimate per burnt hectare: 2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne (see Sources)
-const PM25_KG_PER_HA = 46;
+const PM25_KG_PER_ACRE = 2.6 * 0.8 * 9;  // straw t/acre × share burnt × kg PM2.5 per t; same as season.py
+const PM25_KG_PER_HA = PM25_KG_PER_ACRE * 2.4711;
 const DELHI = [77.209, 28.6139];
 const STUDY_BOX = [76.06, 29.86, 76.22, 30.01]; // the hand-labelled Patran area, glued to the Kaithal outline
 const INDIA = { center: [78.6, 25.2], zoom: 4.35 };
@@ -610,7 +611,7 @@ function actionHtml() {
     const d = c.result.current.decision, k = kindOf(d.outcome);
     const vline = k === "burn" ? L.vline.burn(fmtIso(d.burn_date)) : k === "clean" ? L.vline.clean(d.clear_dates.length) : L.vline.review();
     const meta = c.saved ? L.saved(fmtIso(c.checked_at)) : L.liveNow(c.seconds);
-    const kg = Math.round((state.field?.properties.acres || 0) * 19);  // 2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne
+    const kg = Math.round((state.field?.properties.acres || 0) * PM25_KG_PER_ACRE);
     return `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div class="bt"><b>${esc(L.v[k])}</b><p>${esc(vline)}</p>
       <p class="smoke-l" title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne">≈ ${kg} kg ${esc(L.smoke[k])}</p>
       <small>${esc(meta)} · <button class="link" id="run-check">${esc(L.rerun)}</button></small></div></div>`;
