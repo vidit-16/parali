@@ -127,26 +127,31 @@ not farmland → <b>U</b>. Everything else → <b>N</b>. Most plots will be N; t
 <button onclick="back()">Back (&larr;)</button>
 </div>
 <script>
-let ids=[], labels={}, i=0;
-async function load(){const r=await fetch('/state');const s=await r.json();ids=s.ids;labels=s.labels;
+let ids=[], labels={}, suggest={}, i=0;
+async function load(){const r=await fetch('/state');const s=await r.json();ids=s.ids;labels=s.labels;suggest=s.suggest||{};
  i=ids.findIndex(x=>!(x in labels)); if(i<0) i=ids.length; if(Object.keys(labels).length) document.getElementById('guide').open=false; show();}
 function show(){const done=Object.keys(labels).length;
  document.getElementById('prog').textContent=`${done} / ${ids.length} labelled`;
  if(i>=ids.length){document.getElementById('pid').textContent='All done. You can close this page.';document.getElementById('img').src='';return;}
- const id=ids[i];document.getElementById('pid').textContent='Plot '+id+(labels[id]?' (was: '+labels[id]+')':'');
+ const id=ids[i];document.getElementById('pid').textContent='Plot '+id+(labels[id]?' (was: '+labels[id]+')':'')
+  +(suggest[id]?'  ·  suggested: '+suggest[id].replace('_',' ')+' (Enter to accept)':'');
  document.getElementById('img').src='/chip/'+id+'.png';}
 async function mark(l){if(i>=ids.length)return;const id=ids[i];labels[id]=l;
  await fetch('/label',{method:'POST',body:JSON.stringify({plot_id:id,label:l})});
  i++; while(i<ids.length && ids[i] in labels) i++; show();}
 function back(){if(i>0){i--;show();}}
 document.onkeydown=e=>{const k=e.key.toLowerCase();if(k=='b')mark('burnt');else if(k=='n')mark('not_burnt');
- else if(k=='u')mark('unsure');else if(e.key=='ArrowLeft')back();};
+ else if(k=='u')mark('unsure');else if(e.key=='ArrowLeft')back();
+ else if(e.key=='Enter'&&i<ids.length&&suggest[ids[i]])mark(suggest[ids[i]]);};
 load();
 </script>"""
 
 
-def serve(plot_ids: list[str], chips: Path, out: Path, port: int = 8765, guide: Path | None = None) -> None:
+def serve(plot_ids: list[str], chips: Path, out: Path, port: int = 8765, guide: Path | None = None,
+          suggest: dict[str, str] | None = None) -> None:
+    """suggest: another labeller's call per plot, shown on the page; Enter accepts it, B/N/U overrides it."""
     labels = read_labels(out)
+    suggest = suggest or {}
     guide = guide or chips.parent / "guide"
 
     class H(BaseHTTPRequestHandler):
@@ -164,7 +169,7 @@ def serve(plot_ids: list[str], chips: Path, out: Path, port: int = 8765, guide: 
             if self.path == "/":
                 self.send(200, PAGE.encode(), "text/html; charset=utf-8")
             elif self.path == "/state":
-                self.send(200, json.dumps({"ids": plot_ids, "labels": labels}).encode(), "application/json")
+                self.send(200, json.dumps({"ids": plot_ids, "labels": labels, "suggest": suggest}).encode(), "application/json")
             elif self.path.startswith(("/chip/", "/guide/")):
                 base = chips if self.path.startswith("/chip/") else guide
                 p = base / Path(self.path).name
