@@ -8,7 +8,7 @@ const T = {
     explore: "Explore", officer: "Officer", farmer: "Farmer",
     signinTitle: "Officer sign-in", signinNote: "Village officers see names, money and the review queue. The public map does not.",
     officerId: "Officer ID", pin: "PIN", signin: "Sign in", demoPin: "PIN: 2468 · cases reset daily at 5 am IST", wrongPin: "That PIN is not right.", signout: "Sign out",
-    tabs: { todo: "To decide", done: "Decided", all: "All" },
+    tabs: { todo: "To decide", done: "Decided", all: "All", payouts: "Payouts" }, payPaid: (x) => `${rupees(x)} paid to the farmer's bank`, payPending: (x) => `${rupees(x)} on its way to the farmer's bank`, payFailed: (x) => `Payment of ${rupees(x)} failed`, payRetry: "Send again", receipt: "Payment advice", payChip: { paid: "Paid", pending: "On its way", failed: "Failed", none: "Recorded" }, paySum: (amt, n, pend, fail) => `${rupees(amt)} paid to ${n} farmer${n === 1 ? "" : "s"}${pend ? ` · ${pend} on the way` : ""}${fail ? ` · ${fail} failed` : ""}`, payNone: "No balances paid yet this season.", payVia: "Cashfree Payouts, test mode",
     waiting: (n) => (n === 1 ? "case waiting for you" : "cases waiting for you"), settled: (m) => `of ${m} claims; the rules settled the rest`,
     chip: { possible_burn: "Possible burn", needs_review: "Unclear", officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed",
       auto_approved: "Clean", submitted: "Checking", appealed: "Appealed" },
@@ -21,7 +21,7 @@ const T = {
     flow: { advance: "Advance", check: "Satellite", decision: "Officer", money: "Balance" },
     fv: {
       advPaid: (x) => `+${rupees(x)} paid`, advNone: "none", you: "you decide", approved: "approved", confirmed: "burn confirmed",
-      held: (x) => `${rupees(x)} held`, released: (x) => `+${rupees(x)} released`, linkOut: (x) => `${rupees(x)} link sent`,
+      held: (x) => `${rupees(x)} held`, released: (x) => `+${rupees(x)} released`, sending: (x) => `${rupees(x)} on its way`, sendFailed: (x) => `${rupees(x)} failed`, linkOut: (x) => `${rupees(x)} link sent`,
       repaid: (x) => `${rupees(x)} repaid`, recover: (x) => `${rupees(x)} to recover`, nothing: "nothing due",
     },
     history: "History",
@@ -30,12 +30,12 @@ const T = {
       decided: "Satellite check done", appeal: "Farmer appealed", reviewed: (by, v) => `${by} ${v === "approve" ? "approved" : "confirmed the burn"}`,
       balance_released: (x) => `${rupees(x)} balance approved for payment`, recovery_notice: "Recovery notice drafted",
       recovery_link: (x) => `Payment link for ${rupees(x)} sent (Razorpay test)`, advance_recovered: (x) => `${rupees(x)} repaid by the farmer`,
-      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", appeal_whatsapp: "Farmer appealed on WhatsApp", payout_sent: (x) => `${rupees(x)} paid to the farmer's bank (Cashfree, test mode)`, payout_failed: (x) => `Payment of ${rupees(x)} failed; it will be sent again`, callback_requested: "Farmer asked for a call",
+      recovery_cancelled: "Payment link cancelled after the appeal", contest: "Farmer objected on WhatsApp", appeal_whatsapp: "Farmer appealed on WhatsApp", payout_pending: (x) => `${rupees(x)} on its way to the farmer's bank (Cashfree, test mode)`, payout_sent: (x) => `${rupees(x)} paid to the farmer's bank (Cashfree, test mode)`, payout_failed: (x) => `Payment of ${rupees(x)} failed; it will be sent again`, callback_requested: "Farmer asked for a call",
     },
     decide: "Your decision", note: "What you saw or checked on the ground",
-    approve: (x) => `Approve · release ${rupees(x)}`, approveNo: "Approve", confirm: "Confirm burn",
+    approve: (x) => `Approve · ${rupees(x)}`, approveNo: "Approve", confirm: "Confirm burn",
     needNote: "Write what you saw or checked before confirming a burn.",
-    stamp: { officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed" }, by: (id, at) => `${id} · ${at}`,
+    stamp: { officer_approved: "Approved", officer_confirmed_burnt: "Burn confirmed", auto_approved: "Approved by the rules" }, by: (id, at) => `${id} · ${at}`, byRules: "No burn in any clear picture; no officer needed",
     notice: "Recovery notice", paylink: "Payment link", payWait: "Waiting for the farmer to pay", payDone: (x) => `${rupees(x)} received · case closed`,
     steps: { reviewed: "Decision recorded", recovery_notice: "Recovery notice drafted", recovery_link: "Payment link created",
       balance_released: "Balance approved for payment", payout_sent: "Paid to the farmer's bank (Cashfree, test mode)", farmer_told: "Farmer told in the app and on WhatsApp" },
@@ -47,7 +47,7 @@ const T = {
     explore: "देखें", officer: "अधिकारी", farmer: "किसान",
     signinTitle: "अधिकारी साइन-इन", signinNote: "नाम, राशि और जाँच की सूची सिर्फ़ ग्राम अधिकारी देखते हैं। सार्वजनिक नक्शे पर ये नहीं दिखते।",
     officerId: "अधिकारी आईडी", pin: "पिन", signin: "साइन-इन करें", demoPin: "पिन: 2468 · मामले रोज़ सुबह 5 बजे नए होते हैं", wrongPin: "पिन सही नहीं है।", signout: "साइन-आउट",
-    tabs: { todo: "फ़ैसला बाकी", done: "तय", all: "सभी" },
+    tabs: { todo: "फ़ैसला बाकी", done: "तय", all: "सभी", payouts: "भुगतान" }, payPaid: (x) => `${rupees(x)} किसान के बैंक खाते में भेजे`, payPending: (x) => `${rupees(x)} किसान के खाते में भेजे जा रहे हैं`, payFailed: (x) => `${rupees(x)} का भुगतान नहीं हुआ`, payRetry: "दोबारा भेजें", receipt: "भुगतान रसीद", payChip: { paid: "भेजा", pending: "रास्ते में", failed: "नहीं हुआ", none: "दर्ज" }, paySum: (amt, n, pend, fail) => `${n} किसानों को ${rupees(amt)} भेजे${pend ? ` · ${pend} रास्ते में` : ""}${fail ? ` · ${fail} नहीं हुए` : ""}`, payNone: "इस सीज़न अभी कोई बाकी राशि नहीं भेजी गई।", payVia: "Cashfree Payouts, टेस्ट मोड",
     waiting: () => "मामले आपके फ़ैसले के लिए", settled: (m) => `${m} दावों में से; बाकी नियमों ने तय किए`,
     chip: { possible_burn: "जलने की आशंका", needs_review: "साफ़ नहीं", officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का",
       auto_approved: "साफ़", submitted: "जाँच जारी", appealed: "अपील" },
@@ -60,7 +60,7 @@ const T = {
     flow: { advance: "अग्रिम", check: "उपग्रह", decision: "अधिकारी", money: "बाकी राशि" },
     fv: {
       advPaid: (x) => `+${rupees(x)} दिया`, advNone: "नहीं", you: "आप तय करें", approved: "मंज़ूर", confirmed: "जलना पक्का",
-      held: (x) => `${rupees(x)} रुकी`, released: (x) => `+${rupees(x)} भेजी`, linkOut: (x) => `${rupees(x)} का लिंक भेजा`,
+      held: (x) => `${rupees(x)} रुकी`, released: (x) => `+${rupees(x)} भेजी`, sending: (x) => `${rupees(x)} रास्ते में`, sendFailed: (x) => `${rupees(x)} नहीं गए`, linkOut: (x) => `${rupees(x)} का लिंक भेजा`,
       repaid: (x) => `${rupees(x)} लौटाए`, recover: (x) => `${rupees(x)} वसूलने हैं`, nothing: "कुछ देय नहीं",
     },
     history: "इतिहास",
@@ -69,12 +69,12 @@ const T = {
       decided: "उपग्रह जाँच पूरी", appeal: "किसान ने अपील की", reviewed: (by, v) => `${by} ने ${v === "approve" ? "मंज़ूर किया" : "जलना पक्का किया"}`,
       balance_released: (x) => `${rupees(x)} बाकी राशि भुगतान के लिए मंज़ूर`, recovery_notice: "वसूली नोटिस बना",
       recovery_link: (x) => `${rupees(x)} का भुगतान लिंक भेजा (Razorpay टेस्ट)`, advance_recovered: (x) => `किसान ने ${rupees(x)} लौटाए`,
-      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", payout_sent: (x) => `${rupees(x)} किसान के बैंक खाते में भेजे (Cashfree, टेस्ट)`, payout_failed: (x) => `${rupees(x)} का भुगतान नहीं हुआ; दोबारा भेजा जाएगा`, callback_requested: "किसान ने फ़ोन माँगा",
+      recovery_cancelled: "अपील के बाद भुगतान लिंक रद्द", contest: "किसान ने WhatsApp पर आपत्ति की", appeal_whatsapp: "किसान ने WhatsApp पर अपील की", payout_pending: (x) => `${rupees(x)} किसान के खाते में भेजे जा रहे हैं (Cashfree, टेस्ट)`, payout_sent: (x) => `${rupees(x)} किसान के बैंक खाते में भेजे (Cashfree, टेस्ट)`, payout_failed: (x) => `${rupees(x)} का भुगतान नहीं हुआ; दोबारा भेजा जाएगा`, callback_requested: "किसान ने फ़ोन माँगा",
     },
     decide: "आपका फ़ैसला", note: "आपने खेत पर क्या देखा या जाँचा",
     approve: (x) => `मंज़ूर करें · ${rupees(x)}`, approveNo: "मंज़ूर करें", confirm: "जलना पक्का करें",
     needNote: "जलना पक्का करने से पहले लिखें कि आपने क्या देखा या जाँचा।",
-    stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का" }, by: (id, at) => `${id} · ${at}`,
+    stamp: { officer_approved: "मंज़ूर", officer_confirmed_burnt: "जलना पक्का", auto_approved: "नियमों से मंज़ूर" }, by: (id, at) => `${id} · ${at}`, byRules: "किसी साफ़ तस्वीर में जलना नहीं; अधिकारी की ज़रूरत नहीं",
     notice: "वसूली नोटिस", paylink: "भुगतान लिंक", payWait: "किसान के भुगतान का इंतज़ार", payDone: (x) => `${rupees(x)} मिले · मामला बंद`,
     steps: { reviewed: "फ़ैसला दर्ज", recovery_notice: "वसूली नोटिस का मसौदा बना", recovery_link: "भुगतान लिंक बना",
       balance_released: "बाकी राशि भुगतान के लिए मंज़ूर", payout_sent: "किसान के बैंक खाते में भेजी (Cashfree, टेस्ट)", farmer_told: "किसान को ऐप और WhatsApp पर बताया" },
@@ -86,7 +86,7 @@ const T = {
     explore: "ਵੇਖੋ", officer: "ਅਧਿਕਾਰੀ", farmer: "ਕਿਸਾਨ",
     signinTitle: "ਅਧਿਕਾਰੀ ਸਾਈਨ-ਇਨ", signinNote: "ਨਾਮ, ਰਕਮ ਅਤੇ ਜਾਂਚ ਦੀ ਸੂਚੀ ਸਿਰਫ਼ ਪਿੰਡ ਦੇ ਅਧਿਕਾਰੀ ਵੇਖਦੇ ਹਨ। ਜਨਤਕ ਨਕਸ਼ੇ ਉੱਤੇ ਇਹ ਨਹੀਂ ਦਿਸਦੇ।",
     officerId: "ਅਧਿਕਾਰੀ ਆਈਡੀ", pin: "ਪਿੰਨ", signin: "ਸਾਈਨ-ਇਨ ਕਰੋ", demoPin: "ਪਿੰਨ: 2468 · ਮਾਮਲੇ ਰੋਜ਼ ਸਵੇਰੇ 5 ਵਜੇ ਨਵੇਂ ਹੁੰਦੇ ਹਨ", wrongPin: "ਪਿੰਨ ਸਹੀ ਨਹੀਂ ਹੈ।", signout: "ਸਾਈਨ-ਆਊਟ",
-    tabs: { todo: "ਫ਼ੈਸਲਾ ਬਾਕੀ", done: "ਤੈਅ", all: "ਸਾਰੇ" },
+    tabs: { todo: "ਫ਼ੈਸਲਾ ਬਾਕੀ", done: "ਤੈਅ", all: "ਸਾਰੇ", payouts: "ਭੁਗਤਾਨ" }, payPaid: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ`, payPending: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ ਜਾ ਰਹੇ ਹਨ`, payFailed: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ`, payRetry: "ਦੁਬਾਰਾ ਭੇਜੋ", receipt: "ਭੁਗਤਾਨ ਰਸੀਦ", payChip: { paid: "ਭੇਜਿਆ", pending: "ਰਾਹ ਵਿੱਚ", failed: "ਨਹੀਂ ਹੋਇਆ", none: "ਦਰਜ" }, paySum: (amt, n, pend, fail) => `${n} ਕਿਸਾਨਾਂ ਨੂੰ ${rupees(amt)} ਭੇਜੇ${pend ? ` · ${pend} ਰਾਹ ਵਿੱਚ` : ""}${fail ? ` · ${fail} ਨਹੀਂ ਹੋਏ` : ""}`, payNone: "ਇਸ ਸੀਜ਼ਨ ਹਾਲੇ ਕੋਈ ਬਾਕੀ ਰਕਮ ਨਹੀਂ ਭੇਜੀ ਗਈ।", payVia: "Cashfree Payouts, ਟੈਸਟ ਮੋਡ",
     waiting: () => "ਮਾਮਲੇ ਤੁਹਾਡੇ ਫ਼ੈਸਲੇ ਲਈ", settled: (m) => `${m} ਦਾਅਵਿਆਂ ਵਿੱਚੋਂ; ਬਾਕੀ ਨਿਯਮਾਂ ਨੇ ਤੈਅ ਕੀਤੇ`,
     chip: { possible_burn: "ਸਾੜ ਦਾ ਸ਼ੱਕ", needs_review: "ਸਾਫ਼ ਨਹੀਂ", officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ",
       auto_approved: "ਸਾਫ਼", submitted: "ਜਾਂਚ ਜਾਰੀ", appealed: "ਅਪੀਲ" },
@@ -99,7 +99,7 @@ const T = {
     flow: { advance: "ਅਗਾਊਂ", check: "ਸੈਟੇਲਾਈਟ", decision: "ਅਧਿਕਾਰੀ", money: "ਬਾਕੀ ਰਕਮ" },
     fv: {
       advPaid: (x) => `+${rupees(x)} ਦਿੱਤੇ`, advNone: "ਨਹੀਂ", you: "ਤੁਸੀਂ ਤੈਅ ਕਰੋ", approved: "ਮਨਜ਼ੂਰ", confirmed: "ਸਾੜ ਪੱਕਾ",
-      held: (x) => `${rupees(x)} ਰੁਕੇ`, released: (x) => `+${rupees(x)} ਭੇਜੇ`, linkOut: (x) => `${rupees(x)} ਦਾ ਲਿੰਕ ਭੇਜਿਆ`,
+      held: (x) => `${rupees(x)} ਰੁਕੇ`, released: (x) => `+${rupees(x)} ਭੇਜੇ`, sending: (x) => `${rupees(x)} ਰਾਹ ਵਿੱਚ`, sendFailed: (x) => `${rupees(x)} ਨਹੀਂ ਗਏ`, linkOut: (x) => `${rupees(x)} ਦਾ ਲਿੰਕ ਭੇਜਿਆ`,
       repaid: (x) => `${rupees(x)} ਵਾਪਸ ਆਏ`, recover: (x) => `${rupees(x)} ਵਸੂਲਣੇ ਹਨ`, nothing: "ਕੁਝ ਬਾਕੀ ਨਹੀਂ",
     },
     history: "ਇਤਿਹਾਸ",
@@ -108,12 +108,12 @@ const T = {
       decided: "ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਪੂਰੀ", appeal: "ਕਿਸਾਨ ਨੇ ਅਪੀਲ ਕੀਤੀ", reviewed: (by, v) => `${by} ਨੇ ${v === "approve" ? "ਮਨਜ਼ੂਰ ਕੀਤਾ" : "ਸਾੜ ਪੱਕਾ ਕੀਤਾ"}`,
       balance_released: (x) => `${rupees(x)} ਬਾਕੀ ਰਕਮ ਭੁਗਤਾਨ ਲਈ ਮਨਜ਼ੂਰ`, recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਬਣਿਆ",
       recovery_link: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਲਿੰਕ ਭੇਜਿਆ (Razorpay ਟੈਸਟ)`, advance_recovered: (x) => `ਕਿਸਾਨ ਨੇ ${rupees(x)} ਵਾਪਸ ਕੀਤੇ`,
-      recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", payout_sent: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ (Cashfree, ਟੈਸਟ)`, payout_failed: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ; ਦੁਬਾਰਾ ਭੇਜਿਆ ਜਾਵੇਗਾ`, callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
+      recovery_cancelled: "ਅਪੀਲ ਤੋਂ ਬਾਅਦ ਭੁਗਤਾਨ ਲਿੰਕ ਰੱਦ", contest: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਇਤਰਾਜ਼ ਕੀਤਾ", appeal_whatsapp: "ਕਿਸਾਨ ਨੇ WhatsApp ਉੱਤੇ ਅਪੀਲ ਕੀਤੀ", payout_pending: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ ਜਾ ਰਹੇ ਹਨ (Cashfree, ਟੈਸਟ)`, payout_sent: (x) => `${rupees(x)} ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੇ (Cashfree, ਟੈਸਟ)`, payout_failed: (x) => `${rupees(x)} ਦਾ ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ; ਦੁਬਾਰਾ ਭੇਜਿਆ ਜਾਵੇਗਾ`, callback_requested: "ਕਿਸਾਨ ਨੇ ਫ਼ੋਨ ਮੰਗਿਆ",
     },
     decide: "ਤੁਹਾਡਾ ਫ਼ੈਸਲਾ", note: "ਤੁਸੀਂ ਖੇਤ ਵਿੱਚ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ",
     approve: (x) => `ਮਨਜ਼ੂਰ ਕਰੋ · ${rupees(x)}`, approveNo: "ਮਨਜ਼ੂਰ ਕਰੋ", confirm: "ਸਾੜ ਪੱਕਾ ਕਰੋ",
     needNote: "ਸਾੜ ਪੱਕਾ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਲਿਖੋ ਕਿ ਤੁਸੀਂ ਕੀ ਵੇਖਿਆ ਜਾਂ ਜਾਂਚਿਆ।",
-    stamp: { officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ" }, by: (id, at) => `${id} · ${at}`,
+    stamp: { officer_approved: "ਮਨਜ਼ੂਰ", officer_confirmed_burnt: "ਸਾੜ ਪੱਕਾ", auto_approved: "ਨਿਯਮਾਂ ਨੇ ਮਨਜ਼ੂਰ ਕੀਤਾ" }, by: (id, at) => `${id} · ${at}`, byRules: "ਕਿਸੇ ਸਾਫ਼ ਤਸਵੀਰ ਵਿੱਚ ਸਾੜ ਨਹੀਂ; ਅਧਿਕਾਰੀ ਦੀ ਲੋੜ ਨਹੀਂ",
     notice: "ਵਸੂਲੀ ਨੋਟਿਸ", paylink: "ਭੁਗਤਾਨ ਲਿੰਕ", payWait: "ਕਿਸਾਨ ਦੇ ਭੁਗਤਾਨ ਦੀ ਉਡੀਕ", payDone: (x) => `${rupees(x)} ਮਿਲੇ · ਮਾਮਲਾ ਬੰਦ`,
     steps: { reviewed: "ਫ਼ੈਸਲਾ ਦਰਜ", recovery_notice: "ਵਸੂਲੀ ਨੋਟਿਸ ਦਾ ਮਸੌਦਾ ਬਣਿਆ", recovery_link: "ਭੁਗਤਾਨ ਲਿੰਕ ਬਣਿਆ",
       balance_released: "ਬਾਕੀ ਰਕਮ ਭੁਗਤਾਨ ਲਈ ਮਨਜ਼ੂਰ", payout_sent: "ਕਿਸਾਨ ਦੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ (Cashfree, ਟੈਸਟ)", farmer_told: "ਕਿਸਾਨ ਨੂੰ ਐਪ ਅਤੇ WhatsApp ਉੱਤੇ ਦੱਸਿਆ" },
@@ -158,19 +158,34 @@ function showSignin() {
   };
 }
 
+// ---- payouts: every balance the season has paid, with Cashfree's references ----
+const payKind = (c) => { const s = c.payout?.status; return s === "SUCCESS" ? "paid" : ["FAILED", "REJECTED", "REVERSED"].includes(s) ? "failed" : s ? "pending" : "none"; };
+function payoutList(list, animate) {
+  const L = t(), paid = list.filter((c) => payKind(c) === "paid");
+  const sum = paid.reduce((a, c) => a + (c.payout.amount || 0), 0);
+  const pend = list.filter((c) => payKind(c) === "pending").length, fail = list.filter((c) => payKind(c) === "failed").length;
+  if (!list.length) return `<ul class="q-list"><li class="empty">${esc(L.payNone)}</li></ul>`;
+  return `<div class="pay-sum"><b>${esc(L.paySum(sum, paid.length, pend, fail))}</b><small>${esc(L.payVia)}</small></div>
+    <ul class="q-list pay-list ${animate ? "enter" : ""}">${list.map((c, i) => { const k = payKind(c), amt = c.payout?.amount || c.settlement.balance;
+      return `<li style="--i:${i}"><button data-id="${c.id}" class="qc pay ${S.sel === c.id ? "on" : ""}">
+        <span class="q-main"><b>${esc(name(c))}</b><small>${esc(fieldLabel(c))} · ${esc(village(c))}</small>
+          <span class="q-meta"><em class="chip pay-${k}">${esc(L.payChip[k])}</em><small>${c.payout?.cf_transfer_id ? `Cashfree ${esc(c.payout.cf_transfer_id)}` : ""}</small></span></span>
+        <b class="pay-amt ${k}">${esc(rupees(amt))}</b></button></li>`; }).join("")}</ul>`;
+}
+
 // ---- queue: one card per case, with the field on its key date ----
 function renderQueue(animate = false) {
   const L = t(), open = S.claims.filter(isOpen);
   const list = S.tab === "todo" ? open.sort((a, b) => (b.appeal ? 1 : 0) - (a.appeal ? 1 : 0) || (a.status === "possible_burn" ? -1 : 1))
-    : S.tab === "done" ? S.claims.filter((c) => c.review) : S.claims;
+    : S.tab === "done" ? S.claims.filter((c) => c.review) : S.tab === "payouts" ? S.claims.filter((c) => c.settlement?.state === "balance_due") : S.claims;
   $("#queue").innerHTML = `<div class="q-head"><div class="q-who"><span class="avatar">${esc((S.officer || "?").slice(0, 2).toUpperCase())}</span><b>${esc(S.officer)}</b><button class="link" id="signout">${esc(L.signout)}</button></div>
       <div class="q-count"><b id="q-n">${open.length}</b><span>${esc(L.waiting(open.length))}<small>${esc(L.settled(S.claims.length))}</small></span></div>
       <div class="tabs">${Object.entries(L.tabs).map(([k, v]) => `<button data-tab="${k}" class="${S.tab === k ? "on" : ""}">${esc(v)}</button>`).join("")}</div></div>
-    <ul class="q-list ${animate ? "enter" : ""}">${list.length ? list.map((c, i) => `<li style="--i:${i}"><button data-id="${c.id}" class="qc ${chipCls(c)} ${S.sel === c.id ? "on" : ""}">
+    ${S.tab === "payouts" ? payoutList(list, animate) : `<ul class="q-list ${animate ? "enter" : ""}">${list.length ? list.map((c, i) => `<li style="--i:${i}"><button data-id="${c.id}" class="qc ${chipCls(c)} ${S.sel === c.id ? "on" : ""}">
         <canvas class="qthumb" data-field="${c.field_id}" data-w="${burnIndex(c)}"></canvas>
         <span class="q-main"><b>${esc(name(c))}</b><small>${esc(fieldLabel(c))} · ${esc(village(c))}</small>
           <span class="q-meta"><em class="chip ${chipCls(c)}">${esc(L.chip[chipKey(c)] || c.status)}</em><small>${esc(advPaid(c) ? L.atStake(advPaid(c)) : L.noAdv)}</small></span></span></button></li>`).join("")
-      : `<li class="empty">${esc(L.empty)}</li>`}</ul>`;
+      : `<li class="empty">${esc(L.empty)}</li>`}</ul>`}`;
   if (animate) countUp($("#q-n"), open.length);
   $$("#queue canvas.qthumb").forEach((cv) => {
     const f = S.fields[cv.dataset.field];
@@ -195,7 +210,8 @@ function flow(c) {
   const k = kindOf(c.decision?.outcome || c.status);
   const balance = (st.total || 0) - adv;
   const decided = c.status === "officer_approved" || c.status === "officer_confirmed_burnt" || c.status === "auto_approved";
-  const money = st.state === "balance_due" ? { v: F.released(st.balance), cls: "in" }
+  const pk = payKind(c);
+  const money = st.state === "balance_due" ? (pk === "pending" ? { v: F.sending(st.balance), cls: "held wait" } : pk === "failed" ? { v: F.sendFailed(st.balance), cls: "out" } : { v: F.released(st.balance), cls: "in" })
     : st.state === "recover_advance" ? (rec.status === "paid" ? { v: F.repaid(st.recover), cls: "out done" } : rec.status === "issued" ? { v: F.linkOut(st.recover), cls: "out wait" } : { v: F.recover(st.recover), cls: "out" })
     : st.state === "not_payable" ? { v: F.nothing, cls: "" } : { v: F.held(balance), cls: "held wait" };
   const nodes = [
@@ -247,11 +263,16 @@ function renderCase(flash = false) {
         ${isOpen(c) ? `<section class="decide"><h3>${esc(L.decide)}</h3><textarea id="note" rows="2" aria-label="${esc(L.note)}" placeholder="${esc(L.note)}"></textarea><p class="err" id="derr" hidden></p>
           <div class="d-btns"><button class="btn primary" id="approve">${icon("i-check")}<span>${esc(balance > 0 ? L.approve(balance) : L.approveNo)}</span></button>
           <button class="btn danger" id="confirm">${icon("i-flame")}<span>${esc(L.confirm)}</span></button></div></section>`
-        : c.review ? `<section class="decided ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}"><span class="ic">${icon(c.status === "officer_confirmed_burnt" ? "i-flame" : "i-check")}</span>
-          <div class="dtx"><b>${esc(L.stamp[c.status] || "")}</b><small>${esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang)))}${c.review.note ? ` · “${esc(c.review.note)}”` : ""}</small>
-          ${c.recovery?.status === "issued" ? `<span class="paystate wait"><i></i>${esc(L.payWait)}</span>` : c.recovery?.status === "paid" ? `<span class="paystate done ${S.justPaid ? "land" : ""}">${icon("i-check")}${esc(L.payDone(c.recovery.amount))}</span>` : ""}</div>
+        : c.review || c.status === "auto_approved" ? `<section class="decided ${c.status === "officer_confirmed_burnt" ? "burn" : "clean"} ${flash ? "land" : ""}"><span class="ic">${icon(c.status === "officer_confirmed_burnt" ? "i-flame" : "i-check")}</span>
+          <div class="dtx"><b>${esc(L.stamp[c.status] || "")}</b><small>${c.review ? esc(L.by(c.review.officer_id, fmtDate(c.review.at, lang))) : esc(L.byRules)}${c.review?.note ? ` · “${esc(c.review.note)}”` : ""}</small>
+          ${c.recovery?.status === "issued" ? `<span class="paystate wait"><i></i>${esc(L.payWait)}</span>` : c.recovery?.status === "paid" ? `<span class="paystate done ${S.justPaid ? "land" : ""}">${icon("i-check")}${esc(L.payDone(c.recovery.amount))}</span>` : ""}
+          ${c.payout ? (payKind(c) === "paid" ? `<span class="paystate done">${icon("i-check")}${esc(L.payPaid(c.payout.amount))}</span>`
+            : payKind(c) === "pending" ? `<span class="paystate wait"><i></i>${esc(L.payPending(c.payout.amount))}</span>`
+            : `<span class="paystate fail">${esc(L.payFailed(c.payout.amount))}</span>`) : ""}</div>
           <div class="d-links">${c.notice_url ? `<a class="btn ghost small" href="${esc(c.notice_url)}" target="_blank" rel="noopener">${esc(L.notice)}</a>` : ""}
-          ${c.recovery?.status === "issued" ? `<a class="btn ghost small" href="${esc(c.recovery.url)}" target="_blank" rel="noopener">${esc(L.paylink)}</a>` : ""}</div></section>` : ""}
+          ${c.recovery?.status === "issued" ? `<a class="btn ghost small" href="${esc(c.recovery.url)}" target="_blank" rel="noopener">${esc(L.paylink)}</a>` : ""}
+          ${c.payout?.receipt_url ? `<a class="btn ghost small" href="${esc(c.payout.receipt_url)}" target="_blank" rel="noopener">${esc(L.receipt)}</a>` : ""}
+          ${payKind(c) === "failed" ? `<button class="btn ghost small" id="pay-retry">${esc(L.payRetry)}</button>` : ""}</div></section>` : ""}
         ${history(c)}
       </div></div></div>`;
   if (f) evidenceViewer($("#ev"), { windows: S.windows, geom: f.geometry, burnIndex: burnIndex(c), lang,
@@ -259,6 +280,11 @@ function renderCase(flash = false) {
   if (flash) $(".flow")?.classList.add("moving");
   S.justPaid = false;
   watchPayment();
+  $("#pay-retry")?.addEventListener("click", async (e) => {
+    e.currentTarget.disabled = true;
+    S.detail = await getJSON(`/api/claims/${c.id}/payout/check`, { method: "POST", headers: { "Content-Type": "application/json", "X-Officer-Pin": S.pin }, body: JSON.stringify({ retry: true }) }).catch(() => S.detail);
+    renderCase();
+  });
   $("#approve")?.addEventListener("click", () => decide("approve"));
   $("#confirm")?.addEventListener("click", () => decide("confirm_burnt"));
 }
@@ -312,6 +338,15 @@ let payTimer = null, payN = 0;
 function watchPayment(now = false) {
   clearTimeout(payTimer);
   const id = S.detail?.id;
+  if (S.detail && payKind(S.detail) === "pending") {  // a balance still with the bank: ask Cashfree again
+    payTimer = setTimeout(async () => {
+      const c = await getJSON(`/api/claims/${id}/payout/check`, { method: "POST" }).catch(() => null);
+      if (S.detail?.id !== id || !c) return;
+      if (payKind(c) !== "pending") { S.detail = c; S.claims = await getJSON("/api/claims"); renderQueue(); renderCase(); return; }
+      watchPayment();
+    }, now ? 0 : 5000);
+    return;
+  }
   if (S.detail?.recovery?.status !== "issued") return;
   payTimer = setTimeout(async () => {
     if (S.detail?.id !== id) return;

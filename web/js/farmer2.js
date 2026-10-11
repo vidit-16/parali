@@ -13,7 +13,7 @@ const T = {
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
     smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", more: "Read all", money: "Your money", passbook: "Season 2025",
     rows: { adv: "Advance before harvest", noadv: "No advance this year: last season was not clearly clean", bal: "Rest of the money",
-      balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", via: "Cashfree (test mode)", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
+      balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", via: "Cashfree (test mode)", balOnway: "On its way to your bank", balRetry: "Payment failed; being sent again", receipt: "Receipt", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
     pay: (a) => `Return ${a} online`, payNote: "Razorpay test mode: no real money moves.",
     total: (t) => `Full amount for your field: ${rupees(t)}`,
     saw: "What the satellite saw", colour: "Colour", infrared: "Infrared",
@@ -36,7 +36,7 @@ const T = {
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
     smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", more: "पूरा पढ़ें", money: "आपकी राशि", passbook: "सीज़न 2025",
     rows: { adv: "कटाई से पहले अग्रिम", noadv: "इस साल अग्रिम नहीं: पिछला सीज़न साफ़ नहीं दिखा", bal: "बाकी राशि",
-      balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", via: "Cashfree (टेस्ट)", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
+      balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", via: "Cashfree (टेस्ट)", balOnway: "आपके बैंक खाते में भेजी जा रही है", balRetry: "भुगतान नहीं हुआ; दोबारा भेजी जा रही है", receipt: "रसीद", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
     pay: (a) => `${a} ऑनलाइन लौटाएँ`, payNote: "Razorpay टेस्ट मोड: असली पैसा नहीं कटता।",
     total: (t) => `आपके खेत की पूरी राशि: ${rupees(t)}`,
     saw: "उपग्रह ने क्या देखा", colour: "रंगीन", infrared: "इन्फ्रारेड",
@@ -59,7 +59,7 @@ const T = {
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਸੈਟੇਲਾਈਟ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
     smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", more: "ਪੂਰਾ ਪੜ੍ਹੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
     rows: { adv: "ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ ਅਗਾਊਂ", noadv: "ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ: ਪਿਛਲਾ ਸੀਜ਼ਨ ਸਾਫ਼ ਨਹੀਂ ਦਿਸਿਆ", bal: "ਬਾਕੀ ਰਕਮ",
-      balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", via: "Cashfree (ਟੈਸਟ)", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
+      balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", via: "Cashfree (ਟੈਸਟ)", balOnway: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ", balRetry: "ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ; ਦੁਬਾਰਾ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ", receipt: "ਰਸੀਦ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
     pay: (a) => `${a} ਆਨਲਾਈਨ ਵਾਪਸ ਕਰੋ`, payNote: "Razorpay ਟੈਸਟ ਮੋਡ: ਅਸਲ ਪੈਸਾ ਨਹੀਂ ਕੱਟਦਾ।",
     total: (t) => `ਤੁਹਾਡੇ ਖੇਤ ਦੀ ਪੂਰੀ ਰਕਮ: ${rupees(t)}`,
     saw: "ਸੈਟੇਲਾਈਟ ਨੇ ਕੀ ਵੇਖਿਆ", colour: "ਰੰਗੀਨ", infrared: "ਇਨਫ੍ਰਾਰੈੱਡ",
@@ -82,7 +82,7 @@ const T = {
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
     smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", more: "पूरा पढ़ो", money: "थारी रकम", passbook: "सीज़न 2025",
     rows: { adv: "कटाई तै पहल्यां एडवांस", noadv: "इस साल एडवांस कोनी: पाछला सीज़न साफ कोनी दिख्या", bal: "बाकी रकम",
-      balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", via: "Cashfree (टेस्ट)", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
+      balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", via: "Cashfree (टेस्ट)", balOnway: "थारे बैंक खाते म्ह भेजी जा री सै", balRetry: "भुगतान कोनी होया; फेर भेजी जा री सै", receipt: "रसीद", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
     pay: (a) => `${a} ऑनलाइन उल्टा दो`, payNote: "Razorpay टेस्ट मोड: असली पीसा कोनी कटदा।",
     total: (t) => `थारे खेत की पूरी रकम: ${rupees(t)}`,
     saw: "उपग्रह नै के देख्या", colour: "रंगीन", infrared: "इन्फ्रारेड",
@@ -125,8 +125,11 @@ function moneyRows(c) {
   const rows = [];
   rows.push(adv.status === "paid" ? { text: R.adv, amt: adv.amount, sign: "+", cls: "in", when: fmtDate(adv.paid_at, lang) } : { text: R.noadv, amt: null, cls: "" });
   const rest = (st.total || 0) - (adv.status === "paid" ? adv.amount : 0);
-  if (st.state === "balance_due") rows.push({ text: `${R.bal}: ${R.balPaid}`, amt: st.balance, sign: "+", cls: "in",
-    when: fmtDate(c.payout?.sent_at || st.released_at, lang) + (c.payout?.status === "SUCCESS" ? ` · ${R.via}` : "") });
+  if (st.state === "balance_due") {
+    const ps = c.payout?.status, failed = ["FAILED", "REJECTED", "REVERSED"].includes(ps), pending = ps && ps !== "SUCCESS" && !failed;
+    rows.push({ text: `${R.bal}: ${failed ? R.balRetry : pending ? R.balOnway : R.balPaid}`, amt: st.balance, sign: "+", cls: failed || pending ? "held" : "in",
+      when: fmtDate(c.payout?.paid_at || c.payout?.sent_at || st.released_at, lang) + (ps === "SUCCESS" ? ` · ${R.via}` : ""), link: c.payout?.receipt_url, linkText: R.receipt });
+  }
   else if (st.state === "recover_advance" && c.recovery?.status === "paid") rows.push({ text: R.returned, amt: st.recover, sign: "−", cls: "out", when: fmtDate(c.recovery.paid_at, lang) });
   else if (st.state === "recover_advance") rows.push({ text: R.repay, amt: st.recover, sign: "−", cls: "out" });
   else if (st.state === "not_payable") rows.push({ text: `${R.bal}: ${R.notpay}`, amt: null, cls: "" });
@@ -175,7 +178,7 @@ function render(animate = false) {
         <div id="appeal-box"></div></section>
       <section class="card glass ${animate ? "enter" : ""}" style="--i:2"><h2>${esc(L.saw)}</h2><div id="saw"></div></section>
       <section class="card glass passbook ${animate ? "enter" : ""}" style="--i:3"><div class="pb-head"><h2>${esc(L.money)}</h2><small>${esc(L.passbook)}</small></div>
-        <ol class="book">${rows.map((r, i) => `<li class="${r.cls}" style="--i:${i}"><span class="tx">${esc(r.text)}${r.when ? `<small>${esc(r.when)}</small>` : ""}</span><b data-amt="${r.amt ?? ""}" data-sign="${r.sign || ""}">${r.amt === null ? "—" : esc((r.sign || "") + rupees(r.amt))}</b></li>`).join("")}</ol>
+        <ol class="book">${rows.map((r, i) => `<li class="${r.cls}" style="--i:${i}"><span class="tx">${esc(r.text)}${r.when || r.link ? `<small>${esc(r.when || "")}${r.link ? ` · <a class="rcpt" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkText)}</a>` : ""}</small>` : ""}</span><b data-amt="${r.amt ?? ""}" data-sign="${r.sign || ""}">${r.amt === null ? "—" : esc((r.sign || "") + rupees(r.amt))}</b></li>`).join("")}</ol>
         <p class="cap">${esc(L.total(c.settlement?.total || 0))}</p></section>`
     : `<section class="card glass"><p>${esc(L.noClaim)}</p></section>`}
     <section class="card glass ${animate ? "enter" : ""}" style="--i:4"><h2>${esc(L.season)}</h2><div id="film"></div></section>
@@ -278,8 +281,17 @@ async function refresh() { S.claims = await getJSON("/api/claims"); render(); }
 let payTimer = null, payN = 0;
 function watchPay(now = false) {
   clearTimeout(payTimer);
-  const c = S.me && S.claims.find((x) => x.field_id === S.me && x.recovery?.status === "issued");
+  const pendingPayout = (x) => x.payout && !["SUCCESS", "FAILED", "REJECTED", "REVERSED"].includes(x.payout.status);
+  const c = S.me && S.claims.find((x) => x.field_id === S.me && (x.recovery?.status === "issued" || pendingPayout(x)));
   if (!c) return;
+  if (pendingPayout(c)) {
+    payTimer = setTimeout(async () => {
+      const n = await getJSON(`/api/claims/${c.id}/payout/check`, { method: "POST" }).catch(() => null);
+      if (n && !pendingPayout(n)) { await refresh(); return; }
+      watchPay();
+    }, now ? 0 : 5000);
+    return;
+  }
   payTimer = setTimeout(async () => {
     if (++payN % 3 === 0) await getJSON(`/api/claims/${c.id}/recovery/check`, { method: "POST" }).catch(() => null);
     const claims = await getJSON("/api/claims").catch(() => null);

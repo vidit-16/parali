@@ -292,3 +292,20 @@ details.hist.fold > ol { margin-top: 8px; }
 /* holding the mic must not start iPhone text selection or the magnifier */
 .ask .mic, .ask .chips, .ask .cap, .chat { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .ask .mic { touch-action: none; }
+
+/* payouts tab: the season's balances, paid through Cashfree */
+.pay-sum { display: grid; gap: 2px; margin: 0 4px 10px; padding: 12px 14px; border-radius: 12px; background: rgba(67, 196, 133, .08); border: 1px solid rgba(67, 196, 133, .22); }
+.pay-sum b { font-size: 14px; color: var(--clean); }
+.pay-sum small { font-size: 11.5px; color: var(--muted); }
+.qc.pay { grid-template-columns: minmax(0, 1fr) auto; }
+.qc.pay::before { background: var(--clean); }
+.pay-amt { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--clean); }
+.pay-amt.pending { color: var(--alert); } .pay-amt.failed { color: #FF8A5C; } .pay-amt.none { color: var(--ink-2); }
+.chip.pay-paid { background: rgba(67, 196, 133, .15); color: var(--clean); }
+.chip.pay-pending { background: rgba(245, 197, 66, .14); color: var(--alert); }
+.chip.pay-failed { background: rgba(255, 106, 61, .15); color: #FF8A5C; }
+.chip.pay-none { background: var(--surface); color: var(--muted); }
+.paystate.fail { color: #FF8A5C; }
+.hist li.h-payout_pending::before { background: var(--alert); }
+.book .rcpt { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.dtx .paystate { display: flex; width: fit-content; }

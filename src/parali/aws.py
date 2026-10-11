@@ -91,7 +91,7 @@ def api_handler(event, context):
         body = body.encode()
     deps = Deps(store=store(), dispatch=_dispatch, officer_pin=officer_pin_from_env(), speaker=_speaker(),
                 reset=_reset, fires=fires, dispatch_check=_dispatch_check, notify=_notify_whatsapp, followup=_followup,
-                payments=Razorpay.from_keys, base_url=public_url)
+                payments=Razorpay.from_keys, payouts=Cashfree.from_keys, base_url=public_url)
     status, headers, out = handle(http["method"], event["rawPath"], body, event.get("headers") or {}, deps,
                                   event.get("queryStringParameters") or {})
     return {"statusCode": status, "headers": headers, "body": out.decode()}
@@ -152,8 +152,9 @@ def process_handler(event, context):
             raise
     if event.get("claim_id"):
         ids = [event["claim_id"]]
-    else:  # scheduled sweep: anything still waiting for a decision
+    else:  # scheduled sweep: anything still waiting for a decision, and payouts still pending or failed
         ids = [c["id"] for c in st.list("claims") if c["status"] == "submitted"]
+        print(json.dumps({"payouts_followed_up": payouts.sweep(st, Cashfree.from_keys())}))
     done = []
     for cid in ids:
         try:

@@ -133,7 +133,9 @@ flowchart LR
 Money moves through real gateways in test mode: the balance goes out through Cashfree Payouts and a repayment comes
 back through a Razorpay payment link. Test mode means no real money moves, and Cashfree accepts test transfers only
 to its own test bank account, so every demo farmer is paid "to" that account. The pre-harvest advance is recorded
-but not sent through a gateway.
+but not sent through a gateway. Each paid balance gets a payment advice with Cashfree's transfer and bank references, the
+officer's Payouts tab lists the season's transfers, and a transfer the bank has not settled is checked again (on
+the page while someone is looking, and in the daily sweep), while a failed one is sent again under a new id.
 
 ## Run it locally
 

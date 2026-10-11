@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RULES_TESTS = ["tests/test_rules.py", "tests/test_service.py", "tests/test_evaluate.py"]
 MONEY_TESTS = ["tests/test_season.py", "tests/test_payments.py", "tests/test_money_properties.py", "tests/test_parity.py",
-               "tests/test_whatsapp.py", "tests/test_api.py"]
+               "tests/test_whatsapp.py", "tests/test_api.py", "tests/test_payouts.py"]
 
 RULES = [
     ("drop >= nir_drop becomes >", "if drop >= th.nir_drop and dark:", "if drop > th.nir_drop and dark:"),
@@ -49,8 +49,19 @@ MONEY = [
     ("src/parali/payments.py", "payment signature not checked", "return hmac.compare_digest(want, params[\"razorpay_signature\"])", "return True"),
     ("src/parali/whatsapp.py", "WhatsApp signature not checked", "return hmac.compare_digest(header[7:], want)", "return True"),
     ("src/parali/api.py", "officer PIN not checked", 'return hmac.compare_digest(given, deps.officer_pin)', "return True"),
-    ("src/parali/whatsapp.py", "farmer told the total, not the balance", 'x = rupees(s.get("balance") or 0) if k == "paid"',
-     'x = rupees(s.get("total") or 0) if k == "paid"'),
+    ("src/parali/whatsapp.py", "farmer told the total, not the balance", 'x = rupees(s.get("balance") or 0) if k in ("paid", "paying", "payfail")',
+     'x = rupees(s.get("total") or 0) if k in ("paid", "paying", "payfail")'),
+    ("src/parali/payouts.py", "payout sent twice", "or not s.get(\"balance\") or p.get(\"status\") in DONE + PENDING:", "or not s.get(\"balance\"):"),
+    ("src/parali/payouts.py", "payout of the full incentive", "n, amount = int(p.get(\"n\", 0)) + 1, int(s[\"balance\"])",
+     "n, amount = int(p.get(\"n\", 0)) + 1, int(s[\"total\"])"),
+    ("src/parali/payouts.py", "payout after a confirmed burn", "if cf is None or s.get(\"state\") != \"balance_due\" or not s.get(\"balance\") or",
+     "if cf is None or"),
+    ("src/parali/payouts.py", "pending payout never followed up", "if cf is None or p.get(\"status\") not in PENDING:", "if True:"),
+    ("src/parali/payouts.py", "receipt before the money lands", "    if status in DONE:\n        claim[\"payout\"][\"paid_at\"]",
+     "    if True:\n        claim[\"payout\"][\"paid_at\"]"),
+    ("src/parali/whatsapp.py", "failed payout told as sent", "return \"paying\" if po in PAY_PENDING else \"payfail\" if po in PAY_FAILED else \"paid\"",
+     "return \"paid\""),
+    ("src/parali/api.py", "payout resent without the PIN", "and _pin_ok(deps, headers) and data.get(\"retry\")", "and data.get(\"retry\")"),
     ("src/parali/whatsapp.py", "English line dropped", 'return en if lang == "en" else f"{en}\\n{make(lang)}"', "return make(lang)"),
 ]
 BUGS = [("src/parali/rules.py", n, o, w, RULES_TESTS) for n, o, w in RULES] + [(f, n, o, w, MONEY_TESTS) for f, n, o, w in MONEY]

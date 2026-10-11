@@ -104,7 +104,7 @@ def make_deps(state_dir: Path, speaker=None, officer_pin: str | None = None, tra
     return Deps(store=store, dispatch=lambda cid: threading.Thread(target=run, args=(cid,), daemon=True).start(),
                 officer_pin=officer_pin, speaker=speaker, reset=reset, transcriber=transcriber,
                 agent_backend=agent_backend, fires=lambda: fires,
-                payments=Razorpay.from_keys, base_url=public_url,  # Razorpay only with RAZORPAY_KEY_* set
+                payments=Razorpay.from_keys, payouts=Cashfree.from_keys, base_url=public_url,  # only with keys set
                 followup=lambda cid: threading.Thread(target=followup, args=(cid,), daemon=True).start(),
                 dispatch_check=lambda cid: threading.Thread(target=run_check, args=(cid,), daemon=True).start())
 

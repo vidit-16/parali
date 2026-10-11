@@ -129,30 +129,77 @@ class Cashfree:
         return self._call("GET", f"/transfers?transfer_id={transfer_id}")
 
 
+PENDING = ("RECEIVED", "PENDING", "APPROVAL_PENDING", "VALIDATION_PENDING")
+
+
+def _record(store: Store, claim: dict, out: dict, n: int, tid: str, amount: int) -> dict:
+    """Write what Cashfree said onto the claim, with one event per state the payout reaches."""
+    before = (claim.get("payout") or {}).get("status") if (claim.get("payout") or {}).get("n") == n else None
+    status = out.get("status") or "FAILED"
+    claim["payout"] = {**({} if before is None else claim["payout"]), "n": n, "transfer_id": tid,
+                       "cf_transfer_id": out.get("cf_transfer_id") or (claim.get("payout") or {}).get("cf_transfer_id"),
+                       "status": status, "utr": out.get("transfer_utr") or (claim.get("payout") or {}).get("utr"),
+                       "amount": amount, "rail": RAIL, "note": out.get("status_description", "")}
+    claim["payout"].setdefault("sent_at", now_iso())
+    if status in DONE:
+        claim["payout"]["paid_at"] = claim["payout"].get("paid_at") or now_iso()
+        from parali import receipt
+        receipt.write(store, claim)
+    store.put("claims", claim["id"], claim)
+    if status != before:
+        kind = "payout_sent" if status in DONE else "payout_failed" if status in FAILED else "payout_pending"
+        store.add_event(claim["id"], {"type": kind, "by": "system", "amount": amount, "rail": RAIL, "status": status,
+                                      "cf_transfer_id": claim["payout"]["cf_transfer_id"]})
+    return claim
+
+
 def release(store: Store, claim: dict, cf: "Cashfree | None") -> dict:
-    """Send the balance that is due, once. A failed transfer can be sent again under a new id."""
+    """Send the balance that is due, once. A failed transfer is sent again under a new id; a pending one is left
+    for refresh() to follow up."""
     s, p = claim.get("settlement") or {}, claim.get("payout") or {}
-    if cf is None or s.get("state") != "balance_due" or not s.get("balance") or p.get("status") in DONE + ("PENDING", "RECEIVED"):
+    if cf is None or s.get("state") != "balance_due" or not s.get("balance") or p.get("status") in DONE + PENDING:
         return claim
-    n = int(p.get("n", 0)) + 1
+    n, amount = int(p.get("n", 0)) + 1, int(s["balance"])
     tid = f"SKS_{claim['id']}_{n}"
     try:
-        out = cf.transfer(tid, int(s["balance"]), claim.get("farmer_name", ""), f"Saakshi incentive balance {claim['id']}")
-        if out.get("status") not in DONE + FAILED:
-            time.sleep(2)
+        out = cf.transfer(tid, amount, claim.get("farmer_name", ""), f"Saakshi incentive balance {claim['id']}")
+        for wait in (2, 3, 4, 6):  # sandbox transfers usually settle within seconds; later ones are followed up
+            if out.get("status") not in PENDING:
+                break
+            time.sleep(wait)
             out = {**out, **cf.status(tid)}
     except urllib.error.HTTPError as e:
-        detail = (e.msg or "")[:300]
-        print(f"cashfree transfer failed: HTTP {e.code} {detail}")
+        print(f"cashfree transfer failed: HTTP {e.code} {(e.msg or '')[:300]}")
         out = {"status": "FAILED", "status_description": f"HTTP {e.code}"}
     except (urllib.error.URLError, TimeoutError, ValueError) as e:
         print(f"cashfree transfer failed: {type(e).__name__}")
         out = {"status": "FAILED", "status_description": type(e).__name__}
-    claim["payout"] = {"n": n, "transfer_id": tid, "cf_transfer_id": out.get("cf_transfer_id"), "status": out.get("status"),
-                       "utr": out.get("transfer_utr"), "amount": int(s["balance"]), "rail": RAIL, "sent_at": now_iso(),
-                       "note": out.get("status_description", "")}
-    store.put("claims", claim["id"], claim)
-    store.add_event(claim["id"], {"type": "payout_sent" if out.get("status") not in FAILED else "payout_failed", "by": "system",
-                                  "amount": int(s["balance"]), "rail": RAIL, "status": out.get("status"),
-                                  "cf_transfer_id": out.get("cf_transfer_id")})
-    return claim
+    return _record(store, claim, out, n, tid, amount)
+
+
+def refresh(store: Store, claim: dict, cf: "Cashfree | None") -> dict:
+    """Ask Cashfree again about a transfer that is still pending (banks can take minutes)."""
+    p = claim.get("payout") or {}
+    if cf is None or p.get("status") not in PENDING:
+        return claim
+    try:
+        out = cf.status(p["transfer_id"])
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        print(f"cashfree status failed: {type(e).__name__}")
+        return claim
+    return _record(store, claim, out, int(p["n"]), p["transfer_id"], int(p["amount"]))
+
+
+def sweep(store: Store, cf: "Cashfree | None") -> list[str]:
+    """Daily: follow up pending transfers, send failed or missed ones again. Returns what it touched."""
+    touched = []
+    for c in store.list("claims"):
+        status = (c.get("payout") or {}).get("status")
+        due = (c.get("settlement") or {}).get("state") == "balance_due" and (c.get("settlement") or {}).get("balance")
+        if status in PENDING:
+            refresh(store, c, cf)
+            touched.append(c["id"])
+        elif due and status not in DONE:
+            release(store, c, cf)
+            touched.append(c["id"])
+    return touched

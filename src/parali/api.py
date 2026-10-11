@@ -44,6 +44,8 @@ def _claim_view(store: Store, c: dict) -> dict:
     for k in ("evidence_key", "audio_key", "audio_key_pa", "audio_key_hr", "audio_key_en", "notice_key"):
         if c.get(k):
             out[k.replace("_key", "_url")] = store.blob_url(c[k])
+    if (c.get("payout") or {}).get("receipt_key"):
+        out["payout"] = {**c["payout"], "receipt_url": store.blob_url(c["payout"]["receipt_key"])}
     return out
 
 
@@ -98,6 +100,18 @@ def handle(method: str, path: str, body: bytes | None, headers: dict, deps: Deps
             if c is None:
                 return _json(404, {"error": "not found"})
             return _json(200, _claim_view(s, payments.check(s, c, _rp(deps))))
+        m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/payout/check", path)
+        if method == "POST" and m:
+            # anyone may ask whether a pending payout landed; only an officer may send a failed one again
+            from parali import payouts
+            c = s.get("claims", m.group(1))
+            if c is None:
+                return _json(404, {"error": "not found"})
+            cf = deps.payouts() if deps.payouts else None
+            c = payouts.refresh(s, c, cf)
+            if (c.get("payout") or {}).get("status") in payouts.FAILED and _pin_ok(deps, headers) and data.get("retry"):
+                c = payouts.release(s, c, cf)
+            return _json(200, _claim_view(s, c))
         m = re.fullmatch(r"/api/claims/([0-9a-f]{6,32})/review", path)
         if method == "POST" and m:
             if not _pin_ok(deps, headers):
