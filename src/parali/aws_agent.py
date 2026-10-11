@@ -53,10 +53,26 @@ def _whatsapp_webhook(event, context, body: bytes | None) -> dict:
     return {"statusCode": 200, "body": ""}
 
 
+def _hear_voice_note(audio: bytes, mime: str):
+    """Sarvam first (Punjabi, Hindi, English in one model); Amazon Transcribe in Hindi if Sarvam is unavailable."""
+    heard = sarvam.transcribe(audio, mime)
+    if heard and heard[0]:
+        return heard
+    if "ogg" in mime or "opus" in mime:
+        from parali.speech import transcribe_ogg
+        try:
+            text = transcribe_ogg(audio, "hi-IN", REGION)
+        except Exception as e:  # no transcript is handled as "could not hear"
+            print(f"transcribe fallback failed: {type(e).__name__}")
+            return None
+        return (text, "hi-IN") if text else None
+    return None
+
+
 def _whatsapp_message(msg: dict) -> str:
     d = _deps()
     done = whatsapp.handle(d.store, msg, whatsapp.Client(whatsapp.config()), d.dispatch, backend=d.agent_backend,
-                           voice=d.speaker, transcribe=sarvam.transcribe, rp=Razorpay.from_keys)
+                           voice=d.speaker, transcribe=_hear_voice_note, rp=Razorpay.from_keys)
     print(json.dumps({"wa": msg["id"][-8:], "type": msg.get("type"), "done": done}))
     return done
 

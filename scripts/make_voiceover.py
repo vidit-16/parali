@@ -1,10 +1,10 @@
-"""Generate the demo video's narration with Amazon Polly from docs/video/script.md.
+"""Generate the demo video's narration (Amazon Polly or Sarvam) from docs/video/script.md.
 
 One mp3 per scene in web/video/ (s1.mp3 ... s8.mp3, wa.mp3) plus scenes.json with each scene's text, which the
 autopilot shows as captions. Re-run after editing the script.
 
 usage: uv run --extra aws python scripts/make_voiceover.py [--voice polly:Kajal | polly:Matthew | polly:Arthur | sarvam:shubh ...]
-       [--profile envhacks] [--rate 100%]
+       [--profile envhacks] [--rate 100%] [--only s1,s5]
 """
 import argparse
 import html
@@ -32,6 +32,7 @@ def main():
     ap.add_argument("--profile", default="envhacks")
     ap.add_argument("--rate", default="100%")
     ap.add_argument("--voice", default="polly:Kajal")
+    ap.add_argument("--only", default="", help="comma-separated scenes to regenerate, e.g. s1,s5; the rest keep their audio")
     a = ap.parse_args()
     engine, voice = a.voice.split(":", 1)
     polly = boto3.Session(profile_name=a.profile, region_name="us-west-2").client("polly")
@@ -48,13 +49,15 @@ def main():
         return polly.synthesize_speech(Text=ssml, TextType="ssml", OutputFormat="mp3", VoiceId=voice, Engine="neural",
                                        LanguageCode=langs.get(voice, "en-IN"))["AudioStream"].read()
     OUT.mkdir(parents=True, exist_ok=True)
-    meta = []
+    meta, only = [], set(filter(None, a.only.split(",")))
     for sid, text in scenes():
-        audio = speak(text)
-        (OUT / f"{sid}.mp3").write_bytes(audio)
-        # the caption shows "P M two point five" as written for the voice: show it as PM2.5
-        meta.append({"id": sid, "text": text.replace("P M two point five", "PM2.5").replace("Patiala Kaithal", "Patiala–Kaithal")})
-        print(sid, f"{len(audio) // 1024} KB")
+        if not only or sid in only:
+            audio = speak(text)
+            (OUT / f"{sid}.mp3").write_bytes(audio)
+            print(sid, f"{len(audio) // 1024} KB")
+        # the captions show what the voice is given spelled out ("P M two point five") as it is written
+        meta.append({"id": sid, "text": text.replace("P M two point five", "PM2.5").replace("Patiala Kaithal", "Patiala–Kaithal")
+                     .replace("Sentinel two", "Sentinel-2")})
     (OUT / "scenes.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
 
 

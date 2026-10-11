@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Parali Check - satellite verification of no-burn paddy residue claims
+Description: Saakshi - satellite checks of no-burn claims, officer desk, farmer app and WhatsApp
 
 Parameters:
   OfficerPin:
@@ -89,6 +89,7 @@ Resources:
   ProcessFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: "Saakshi: satellite check, decisions, payouts, daily sweep"
       Handler: parali.aws.process_handler
       Layers: [!Ref DepsLayer]
       Timeout: 600
@@ -125,6 +126,7 @@ Resources:
   ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: "Saakshi: API for the map, officer desk and farmer app"
       Handler: parali.aws.api_handler
       Layers: [!Ref DepsLayer]
       Timeout: 29
@@ -152,6 +154,7 @@ Resources:
   TilesFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: "Saakshi: map tiles of the season"
       Handler: parali.aws_tiles.handler
       Layers: [!Ref DepsLayer]
       Timeout: 900
@@ -162,6 +165,7 @@ Resources:
   AgentFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: "Saakshi: farmer assistant and WhatsApp"
       Handler: parali.aws_agent.handler
       Layers: [!Ref AgentLayer]
       Timeout: 60                     # API calls are cut at 30 s; a WhatsApp reply runs async and may take longer

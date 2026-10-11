@@ -1,8 +1,9 @@
 """Farmer's voice to text with Amazon Transcribe streaming (hi-IN).
 
 The browser records 16 kHz mono PCM (16-bit little-endian) and sends it in one request; we stream it to
-Transcribe and return the final transcript. A push-to-talk clip of a few seconds comes back in about the
-length of the clip.
+Transcribe and return the final transcript. A clip of a few seconds comes back in about the length of the clip.
+WhatsApp voice notes (Ogg Opus) go to Transcribe as they are: it reads that format directly. Sarvam is the
+first choice for both; this is the fallback when Sarvam is unavailable.
 """
 import asyncio
 
@@ -17,7 +18,21 @@ def transcribe_pcm(pcm: bytes, language: str = "hi-IN", region: str = "us-west-2
     return asyncio.run(_stream(pcm, language, region))
 
 
-async def _stream(pcm: bytes, language: str, region: str) -> str:
+def opus_rate(ogg: bytes) -> int:
+    """The input sample rate written in an Ogg Opus file's header (OpusHead), 16000 if it cannot be read."""
+    i = ogg.find(b"OpusHead")
+    if i < 0 or len(ogg) < i + 16:
+        return 16000
+    rate = int.from_bytes(ogg[i + 12:i + 16], "little")
+    return rate if 8000 <= rate <= 48000 else 16000
+
+
+def transcribe_ogg(ogg: bytes, language: str = "hi-IN", region: str = "us-west-2") -> str:
+    """A WhatsApp voice note (Ogg Opus) to text."""
+    return asyncio.run(_stream(ogg[: 2_000_000], language, region, encoding="ogg-opus", rate=opus_rate(ogg)))
+
+
+async def _stream(pcm: bytes, language: str, region: str, encoding: str = "pcm", rate: int = SAMPLE_RATE) -> str:
     from amazon_transcribe.client import TranscribeStreamingClient
     from amazon_transcribe.handlers import TranscriptResultStreamHandler
 
@@ -31,7 +46,7 @@ async def _stream(pcm: bytes, language: str, region: str) -> str:
 
     client = TranscribeStreamingClient(region=region)
     stream = await client.start_stream_transcription(
-        language_code=language, media_sample_rate_hz=SAMPLE_RATE, media_encoding="pcm")
+        language_code=language, media_sample_rate_hz=rate, media_encoding=encoding)
 
     async def send():
         for i in range(0, len(pcm), CHUNK):

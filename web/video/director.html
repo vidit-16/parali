@@ -13,7 +13,22 @@
   iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: var(--bg); }
   /* captions get their own strip under the app, so they never cover the timeline, buttons or text */
   body.caps iframe { height: calc(100% - var(--strip)); }
-  iframe.off { visibility: hidden; z-index: -1; }  /* loaded in the background, so the next scene appears at once */
+  iframe.off { visibility: hidden; z-index: -1; }
+  iframe.zoomable { transition: transform .65s cubic-bezier(.3, .7, .2, 1); }
+  .spot { position: fixed; z-index: 25; border-radius: 14px; pointer-events: none; opacity: 0; transition: opacity .45s;
+    box-shadow: 0 0 0 9999px rgba(5, 6, 9, .5), 0 0 0 2px rgba(255, 181, 71, .9), 0 0 34px 6px rgba(255, 160, 60, .45); }
+  .spot.on { opacity: 1; }
+  .shots { position: fixed; inset: 0; z-index: 28; background: #0D0E11; display: grid; place-items: center; opacity: 0; transition: opacity .5s; pointer-events: none; overflow: hidden; }
+  body.caps .shots { bottom: var(--strip); }
+  .shots.on { opacity: 1; }
+  .shots img { position: absolute; max-width: 92%; max-height: 88%; border-radius: 12px; box-shadow: 0 20px 80px rgba(0,0,0,.6); opacity: 0; transition: opacity .5s; }
+  .shots img.on { opacity: 1; animation: kb 3.2s ease-out both; }
+  @keyframes kb { from { transform: scale(1); } to { transform: scale(1.06); } }
+  .shots small { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); padding: 6px 12px; border-radius: 99px; background: rgba(255, 153, 0, .14); color: #FFB547; font: 600 13px Geist; letter-spacing: .04em; }
+  .phone { width: min(360px, 32vh); aspect-ratio: 9 / 19.5; border-radius: 42px; padding: 12px; background: #1b1c22; box-shadow: 0 0 0 2px #2c2e36, 0 30px 90px rgba(0,0,0,.6); margin: 18px auto 0; }
+  .phone video { width: 100%; height: 100%; object-fit: cover; border-radius: 32px; background: #000; display: block; }
+  .card .in.wa-live { display: grid; grid-template-columns: auto auto; gap: 48px; align-items: center; text-align: left; max-width: 1100px; }
+  .card .in.wa-live .phone { margin: 0; width: min(380px, 38vh); }  /* loaded in the background, so the next scene appears at once */
   :root { --strip: 66px; }
   .strip { display: none; position: fixed; left: 0; right: 0; bottom: 0; height: var(--strip); z-index: 35; background: #0D0E11; border-top: 1px solid var(--line); }
   body.caps .strip { display: grid; place-items: center; }
@@ -49,6 +64,8 @@
 <iframe id="app" title="Saakshi" allow="autoplay"></iframe>
 <div class="strip"><div class="cap" id="cap"></div></div>
 <div class="card" id="card"><div class="in" id="cardIn"></div></div>
+<div class="spot" id="spot"></div>
+<div class="shots" id="shots"><small>AMAZON WEB SERVICES CONSOLE</small></div>
 <button class="ghost" id="srt" hidden style="position:fixed;top:16px;right:16px;z-index:50">Download captions (.srt)</button>
 <div class="panel" id="panel"><div class="box">
   <h2>Video autopilot</h2>
@@ -59,7 +76,8 @@
     <li>When the dashed WhatsApp card shows, the phone clip goes there in the edit.</li>
   </ol>
   <div class="row"><button class="ghost" id="prep">Prepare</button><button class="primary" id="go">Start</button>
-    <label><input type="checkbox" id="caps" checked> Captions</label></div>
+    <label><input type="checkbox" id="caps" checked> Captions</label>
+    <label title="Same timing and captions, silent: for a voice recorded over the video"><input type="checkbox" id="voice" checked> Narration</label></div>
   <div id="status"></div>
 </div></div>
 <script>
@@ -125,6 +143,7 @@ function uncaption() {
 // one narration clip; resolves when it has finished
 function say(id) {
   const a = new Audio(`${id}.mp3`);
+  a.muted = !$("#voice").checked;
   if (scenes[id]) caption(scenes[id]);
   return new Promise((ok) => {
     a.onended = () => { uncaption(); ok(a); };
@@ -141,6 +160,41 @@ async function duration(id) {
   await new Promise((ok) => { a.onloadedmetadata = ok; a.onerror = ok; });
   return a.duration || 10;
 }
+// the camera eases in on one element of the page, the rest dims and a glow traces it; then it eases back
+async function spotlight(el, hold = 1800, maxScale = 1.6) {
+  if (!el) return;
+  el.scrollIntoView({ block: "center" });
+  await sleep(150);
+  const r = el.getBoundingClientRect(), vw = cur.clientWidth, vh = cur.clientHeight;
+  const s = Math.max(1.05, Math.min(maxScale, (0.86 * vw) / r.width, (0.78 * vh) / r.height));
+  // move the camera so the element sits in the middle, without showing anything past the page edges
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const tx = Math.min(0, Math.max(vw - vw * s, vw / 2 - cx * s)), ty = Math.min(0, Math.max(vh - vh * s, vh / 2 - cy * s));
+  cur.classList.add("zoomable");
+  cur.style.transformOrigin = "0 0";
+  cur.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+  const sp = $("#spot"), pad = 10;
+  Object.assign(sp.style, { left: `${tx + r.left * s - pad}px`, top: `${ty + r.top * s - pad}px`,
+    width: `${r.width * s + 2 * pad}px`, height: `${r.height * s + 2 * pad}px` });
+  await sleep(450);
+  sp.classList.add("on");
+  await sleep(hold);
+  sp.classList.remove("on");
+  cur.style.transform = "";
+  await sleep(650);
+  cur.classList.remove("zoomable");
+}
+const exists = (url) => fetch(url, { method: "HEAD" }).then((r) => r.ok).catch(() => false);
+// the console screenshots, one after another with a slow push-in
+async function consoleShots(files, each = 2400) {
+  const box = $("#shots");
+  box.querySelectorAll("img").forEach((i) => i.remove());
+  const imgs = files.map((f) => { const i = new Image(); i.src = f; box.appendChild(i); return i; });
+  await Promise.all(imgs.map((i) => i.decode().catch(() => {})));
+  box.classList.add("on");
+  for (const i of imgs) { i.classList.add("on"); await sleep(each); i.classList.remove("on"); }
+  box.classList.remove("on");
+}
 function showCard(html, cls = "") { $("#cardIn").className = "in " + cls; $("#cardIn").innerHTML = html; card.classList.add("on"); }
 const hideCard = () => card.classList.remove("on");
 async function typeInto(el, text) {
@@ -152,6 +206,16 @@ async function typeInto(el, text) {
   }
 }
 const q = (sel) => D().querySelector(sel);
+// the claim as the server has it now, until it passes the test (null after ms)
+async function claimWhen(id, test, ms) {
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    const c = await fetch(`/api/claims/${id}`, { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+    if (c && test(c)) return c;
+    await sleep(700);
+  }
+  return null;
+}
 const byName = (name) => [...D().querySelectorAll("#queue [data-id]")].find((b) => b.textContent.includes(name));
 
 async function prepare() {
@@ -211,6 +275,8 @@ const SCENES = [
     preload("../officer.html");
     const s3 = say("s3");
     await until(() => q("#panel .band"), 90000);
+    await sleep(600);
+    await spotlight(q("#panel .band"), 2600, 1.5);
     await s3;
     await sleep(900);
   }],
@@ -218,6 +284,7 @@ const SCENES = [
     await show("../officer.html");
     drop("../index.html?auto=1");
     await until(() => byName("Baljeet"), 30000);
+    const id = byName("Baljeet").dataset.id;
     byName("Baljeet").click();
     await until(() => q("#note"), 20000);
     const s4 = say("s4");
@@ -227,48 +294,51 @@ const SCENES = [
     await typeInto(q("#note"), "Visited 7 Nov: ash across the field, neighbours confirm.");
     await sleep(500);
     q("#confirm").click();
-    await until(() => q(".decided"), 60000);
-    const notice = await until(() => q(".decided a[href*='notices/']"), 20000).catch(() => null);
-    if (notice) {  // the recovery notice itself, briefly
-      const href = notice.getAttribute("href");
-      preload(href);
+    await until(() => q(".steps"), 10000).catch(() => null);
+    await sleep(700);
+    await spotlight(q(".steps"), 2400, 1.7);
+    // the notice is written within seconds; the voice notes and WhatsApp after it still land on the officer page
+    const c = await claimWhen(id, (c) => c.recovery?.status === "issued" && c.notice_url, 20000);
+    if (c) {  // the recovery notice itself, briefly
+      preload(c.notice_url);
       await sleep(900);
-      await show(href);
-      await sleep(600);
-      D().querySelector(".pay, .amount")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      await Promise.all([s4, sleep(3600)]);
+      await show(c.notice_url);
+      await sleep(500);
+      await Promise.all([s4, spotlight(D().querySelector("tr.amount") || D().querySelector(".pay"), 2200, 1.8)]);
       await show("../officer.html");
     } else await s4;
-    await sleep(300);
   }],
-  ["s5", async () => {  // approving another case pays the balance through Cashfree
+  ["s5", async () => {  // the officer approves Satbir (a fire alert next door, no scar on his field); Cashfree pays him
     await show("../officer.html");
-    await until(() => byName("Mahender"), 30000);
-    byName("Mahender").click();
+    await until(() => byName("Satbir"), 30000);
+    const id = byName("Satbir").dataset.id;
+    byName("Satbir").click();
     await until(() => q("#note"), 20000);
     q(".decide").scrollIntoView({ behavior: "smooth", block: "center" });
-    const s5 = say("s5");
-    await sleep(900);
-    await typeInto(q("#note"), "Dark patch is wet soil after irrigation; no ash on the ground.");
+    await sleep(400);
+    await typeInto(q("#note"), "Fire was on the next field. Checked: no ash on this one.");
     q("#approve").click();
-    await until(() => q(".decided"), 60000);
-    const receipt = await until(() => q(".decided a[href*='receipts/']"), 20000).catch(() => null);
-    localStorage.setItem("saakshi-farmer", "f-mahender");  // the farmer's page loads behind the receipt
+    const s5 = say("s5");  // the narration covers the transfer
+    const c = await claimWhen(id, (c) => c.payout?.receipt_url, 25000);
+    if (c) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
+      preload(c.payout.receipt_url);
+      await sleep(1200);
+      await show(c.payout.receipt_url);
+      await sleep(400);
+      await spotlight(D().querySelector(".amount"), 2400, 1.7);
+    }
+    // the farmer's page loads once the farmer's messages are redone, so it never shows the old status
+    await claimWhen(id, (c) => c.events?.at(-1)?.type === "farmer_told" && c.status === "officer_approved", 30000);
+    localStorage.setItem("saakshi-farmer", "f-satbir");
     localStorage.setItem("saakshi-lang", "pa");
     preload("../farmer.html");
-    if (receipt) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
-      const href = receipt.getAttribute("href");
-      preload(href);
-      await sleep(1000);
-      await show(href);
-      await Promise.all([s5, sleep(3400)]);
-    } else await s5;
-    await sleep(300);
+    await s5;
   }],
   ["s6", async () => {  // the farmer's page, in Punjabi; wait until it has fully drawn before talking over it
-    localStorage.setItem("saakshi-farmer", "f-mahender");
+    localStorage.setItem("saakshi-farmer", "f-satbir");
     localStorage.setItem("saakshi-lang", "pa");
     await show("../farmer.html");
+   
     await until(() => q(".status-card") && q(".passbook .book li") && q("#saw canvas, #saw img"), 30000);
     await sleep(500);
     const s6 = say("s6");
@@ -278,28 +348,45 @@ const SCENES = [
     await sleep(500);
     const listen = q("#listen");
     if (listen) {  // the farmer's own voice note, in Punjabi
-      caption("Mahender's voice note, in Punjabi", "vn");
+      caption("Satbir's voice note, in Punjabi", "vn");
       listen.click();
       await sleep(5200);
       if (!q("#audio").paused) listen.click();
       uncaption();
     }
-    q(".passbook").scrollIntoView({ behavior: "smooth", block: "center" });
-    await sleep(1600);
+    await spotlight(q(".passbook"), 2000, 1.5);
     localStorage.setItem("saakshi-lang", "en");
   }],
   ["wa", async () => {  // the marker for the phone clip, as long as its narration
-    showCard(`<h1>On WhatsApp</h1><p>Status, reasons, money and appeals, by text or voice</p><span class="tag">Phone clip goes here in the edit</span>`, "wa");
     preload("../how.html");
-    await say("wa");
+    if (await exists("wa.mp4")) {
+      showCard(`<div><h1>On WhatsApp</h1><p>Status, reasons and money in English and the farmer's language,<br>with a voice note. Questions by voice, in Punjabi.</p></div>
+        <div class="phone"><video id="wav" src="wa.mp4" muted playsinline preload="auto"></video></div>`, "wa-live");
+      const v = $("#wav");
+      await v.play().catch(() => {});
+      await say("wa");
+    } else {
+      showCard(`<h1>On WhatsApp</h1><p>Status, reasons, money and appeals, by text or voice</p><span class="tag">Phone clip goes here in the edit</span>`, "wa");
+      await say("wa");
+    }
   }],
   ["s7", async () => {  // how it runs on AWS
     await show("../how.html");
     await until(() => W().howPlay, 10000);
     hideCard();
-    W().howPlay(await duration("s7"));
-    await say("s7");
-    await sleep(600);
+    const d7 = await duration("s7");
+    W().howPlay(d7);
+    const t7 = performance.now();
+    const s7 = say("s7");
+    const shots = [];
+    for (const f of ["console1.png", "console2.png", "console3.png"]) if (await exists(f)) shots.push(f);
+    await sleep(2800);
+    if (shots.length) await consoleShots(shots, Math.min(2600, (d7 * 1000 * 0.42) / shots.length));
+    const left = d7 * 1000 * 0.6 - (performance.now() - t7);
+    if (left > 0) await sleep(left);
+    await spotlight(W().document.getElementById("n-bedrock"), 2400, 1.9);
+    await s7;
+    await sleep(500);
   }],
   ["s8", async () => {  // closing card
     showCard(`<div class="mark">सा</div><h1>Saakshi</h1><p>Pay farmers before harvest. Check every field after. A person confirms every burn.</p>
