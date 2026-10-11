@@ -11,7 +11,7 @@ const T = {
     demoPick: "Pick a farmer", demoNote: "No SMS sign-in here: pick a farmer to see their app. Cases reset daily; WhatsApp is shown in the video.", demoTyped: "Pick one of the farmers below.",
     hello: (n) => `Namaste, ${n}`, switch: "Sign out", noClaim: "No claim this season yet.", acres: "acres",
     status: { clean: "Paid in full", burn: "The satellite saw a burn", review: "An officer is looking", wait: "Being checked" },
-    smoke: (kg) => `≈ {kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", more: "Read all", money: "Your money", passbook: "Season 2025",
+    smoke: (kg) => `≈ ${kg} kg smoke avoided`, smokeNote: "PM2.5, est.", listen: "Listen", more: "Read all", money: "Your money", passbook: "Season 2025",
     rows: { adv: "Advance before harvest", noadv: "No advance this year: last season was not clearly clean", bal: "Rest of the money",
       balHeld: "Held until the officer decides", balPaid: "Sent to your bank account", via: "Cashfree (test mode)", balOnway: "On its way to your bank", balRetry: "Payment failed; being sent again", receipt: "Receipt", repay: "Advance to return", notpay: "Not payable this season", returned: "Advance returned" },
     pay: (a) => `Return ${a} online`, payNote: "Razorpay test mode: no real money moves.",
@@ -21,7 +21,7 @@ const T = {
     sawClean: (n) => `No burn in ${n} clear pictures this season. The latest is shown.`,
     sawReview: "The pictures are not clear enough to decide. The officer will check.", sawWait: "Pictures appear once the check is done.",
     season: "Your field through the season",
-    ask: "Ask anything", askHint: "Hold the mic and speak, or type.", send: "Send", listening: "Listening… let go to send",
+    ask: "Ask anything", askHint: "Tap the mic and speak, or type.", send: "Send", listening: "Listening… tap to send, or just stop talking", heardNothing: "Didn't hear anything. Tap the mic and speak.",
     suggest: ["When will my money come?", "Why is my claim held?", "How do I appeal?"],
     thinking: "Thinking", you: "You", appeal: "I did not burn: appeal", appealTitle: "Tell the officer why the satellite is wrong",
     appealHint: "For example: used a happy seeder; the dark patch is wet soil after irrigation.", appealSend: "Send appeal",
@@ -34,7 +34,7 @@ const T = {
     demoPick: "किसान चुनें", demoNote: "यहाँ SMS साइन-इन नहीं है: किसी किसान को चुनकर उनका ऐप देखें। मामले रोज़ नए होते हैं; WhatsApp वीडियो में है।", demoTyped: "नीचे से कोई किसान चुनें।",
     hello: (n) => `नमस्ते, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोई दावा अभी नहीं।", acres: "एकड़",
     status: { clean: "पूरी राशि मिल गई", burn: "उपग्रह को जलने का निशान दिखा", review: "अधिकारी देख रहे हैं", wait: "जाँच जारी है" },
-    smoke: (kg) => `≈ {kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", more: "पूरा पढ़ें", money: "आपकी राशि", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ ${kg} kg धुआँ बचा`, smokeNote: "PM2.5, est.", listen: "सुनें", more: "पूरा पढ़ें", money: "आपकी राशि", passbook: "सीज़न 2025",
     rows: { adv: "कटाई से पहले अग्रिम", noadv: "इस साल अग्रिम नहीं: पिछला सीज़न साफ़ नहीं दिखा", bal: "बाकी राशि",
       balHeld: "अधिकारी के फ़ैसले तक रुकी", balPaid: "आपके बैंक खाते में भेजी", via: "Cashfree (टेस्ट)", balOnway: "आपके बैंक खाते में भेजी जा रही है", balRetry: "भुगतान नहीं हुआ; दोबारा भेजी जा रही है", receipt: "रसीद", repay: "अग्रिम लौटाना होगा", notpay: "इस सीज़न देय नहीं", returned: "अग्रिम लौटा दी" },
     pay: (a) => `${a} ऑनलाइन लौटाएँ`, payNote: "Razorpay टेस्ट मोड: असली पैसा नहीं कटता।",
@@ -44,7 +44,7 @@ const T = {
     sawClean: (n) => `इस सीज़न की ${n} साफ़ तस्वीरों में कहीं जलना नहीं। सबसे नई तस्वीर दिखाई गई है।`,
     sawReview: "तस्वीरें फ़ैसले के लिए साफ़ नहीं हैं। अधिकारी देखेंगे।", sawWait: "जाँच पूरी होने पर तस्वीरें दिखेंगी।",
     season: "सीज़न भर आपका खेत",
-    ask: "कुछ भी पूछें", askHint: "माइक दबाकर बोलें, या लिखें।", send: "भेजें", listening: "सुन रहे हैं… छोड़ते ही भेजेंगे",
+    ask: "कुछ भी पूछें", askHint: "माइक दबाएँ और बोलें, या लिखें।", send: "भेजें", listening: "सुन रहे हैं… भेजने के लिए दबाएँ, या बस चुप हो जाएँ", heardNothing: "कुछ सुनाई नहीं दिया। माइक दबाकर बोलें।",
     suggest: ["मेरा पैसा कब आएगा?", "मेरा दावा क्यों रुका है?", "अपील कैसे करूँ?"],
     thinking: "सोच रहे हैं", you: "आप", appeal: "मैंने नहीं जलाया: अपील करें", appealTitle: "अधिकारी को बताइए कि उपग्रह क्यों ग़लत है",
     appealHint: "जैसे: हैप्पी सीडर चलाया था; काला हिस्सा सिंचाई के बाद गीली मिट्टी है।", appealSend: "अपील भेजें",
@@ -57,7 +57,7 @@ const T = {
     demoPick: "ਕਿਸਾਨ ਚੁਣੋ", demoNote: "ਇੱਥੇ SMS ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੈ: ਕਿਸੇ ਕਿਸਾਨ ਨੂੰ ਚੁਣ ਕੇ ਉਨ੍ਹਾਂ ਦੀ ਐਪ ਵੇਖੋ। ਮਾਮਲੇ ਰੋਜ਼ ਨਵੇਂ ਹੁੰਦੇ ਹਨ; WhatsApp ਵੀਡੀਓ ਵਿੱਚ ਹੈ।", demoTyped: "ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਕਿਸਾਨ ਚੁਣੋ।",
     hello: (n) => `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${n} ਜੀ`, switch: "ਸਾਈਨ-ਆਊਟ", noClaim: "ਇਸ ਸੀਜ਼ਨ ਦਾ ਕੋਈ ਦਾਅਵਾ ਅਜੇ ਨਹੀਂ।", acres: "ਏਕੜ",
     status: { clean: "ਪੂਰੀ ਰਕਮ ਮਿਲ ਗਈ", burn: "ਸੈਟੇਲਾਈਟ ਨੂੰ ਸਾੜ ਦਾ ਨਿਸ਼ਾਨ ਦਿਸਿਆ", review: "ਅਧਿਕਾਰੀ ਵੇਖ ਰਹੇ ਹਨ", wait: "ਜਾਂਚ ਜਾਰੀ ਹੈ" },
-    smoke: (kg) => `≈ {kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", more: "ਪੂਰਾ ਪੜ੍ਹੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
+    smoke: (kg) => `≈ ${kg} kg ਧੂੰਆਂ ਬਚਿਆ`, smokeNote: "PM2.5, est.", listen: "ਸੁਣੋ", more: "ਪੂਰਾ ਪੜ੍ਹੋ", money: "ਤੁਹਾਡੀ ਰਕਮ", passbook: "ਸੀਜ਼ਨ 2025",
     rows: { adv: "ਵਾਢੀ ਤੋਂ ਪਹਿਲਾਂ ਅਗਾਊਂ", noadv: "ਇਸ ਸਾਲ ਅਗਾਊਂ ਨਹੀਂ: ਪਿਛਲਾ ਸੀਜ਼ਨ ਸਾਫ਼ ਨਹੀਂ ਦਿਸਿਆ", bal: "ਬਾਕੀ ਰਕਮ",
       balHeld: "ਅਧਿਕਾਰੀ ਦੇ ਫ਼ੈਸਲੇ ਤੱਕ ਰੁਕੀ", balPaid: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ", via: "Cashfree (ਟੈਸਟ)", balOnway: "ਤੁਹਾਡੇ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ", balRetry: "ਭੁਗਤਾਨ ਨਹੀਂ ਹੋਇਆ; ਦੁਬਾਰਾ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ", receipt: "ਰਸੀਦ", repay: "ਅਗਾਊਂ ਵਾਪਸ ਕਰਨਾ ਪਵੇਗਾ", notpay: "ਇਸ ਸੀਜ਼ਨ ਦੇਣਯੋਗ ਨਹੀਂ", returned: "ਅਗਾਊਂ ਵਾਪਸ ਕੀਤੀ" },
     pay: (a) => `${a} ਆਨਲਾਈਨ ਵਾਪਸ ਕਰੋ`, payNote: "Razorpay ਟੈਸਟ ਮੋਡ: ਅਸਲ ਪੈਸਾ ਨਹੀਂ ਕੱਟਦਾ।",
@@ -67,7 +67,7 @@ const T = {
     sawClean: (n) => `ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ ${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ ਵਿੱਚ ਕਿਤੇ ਸਾੜ ਨਹੀਂ। ਸਭ ਤੋਂ ਨਵੀਂ ਤਸਵੀਰ ਵਿਖਾਈ ਗਈ ਹੈ।`,
     sawReview: "ਤਸਵੀਰਾਂ ਫ਼ੈਸਲੇ ਲਈ ਸਾਫ਼ ਨਹੀਂ ਹਨ। ਅਧਿਕਾਰੀ ਵੇਖੇਗਾ।", sawWait: "ਜਾਂਚ ਪੂਰੀ ਹੋਣ ਤੇ ਤਸਵੀਰਾਂ ਦਿਸਣਗੀਆਂ।",
     season: "ਸੀਜ਼ਨ ਭਰ ਤੁਹਾਡਾ ਖੇਤ",
-    ask: "ਕੁਝ ਵੀ ਪੁੱਛੋ", askHint: "ਮਾਈਕ ਦਬਾ ਕੇ ਬੋਲੋ, ਜਾਂ ਲਿਖੋ।", send: "ਭੇਜੋ", listening: "ਸੁਣ ਰਹੇ ਹਾਂ… ਛੱਡਦੇ ਹੀ ਭੇਜਾਂਗੇ",
+    ask: "ਕੁਝ ਵੀ ਪੁੱਛੋ", askHint: "ਮਾਈਕ ਦਬਾਓ ਅਤੇ ਬੋਲੋ, ਜਾਂ ਲਿਖੋ।", send: "ਭੇਜੋ", listening: "ਸੁਣ ਰਹੇ ਹਾਂ… ਭੇਜਣ ਲਈ ਦਬਾਓ, ਜਾਂ ਬੱਸ ਚੁੱਪ ਹੋ ਜਾਓ", heardNothing: "ਕੁਝ ਸੁਣਾਈ ਨਹੀਂ ਦਿੱਤਾ। ਮਾਈਕ ਦਬਾ ਕੇ ਬੋਲੋ।",
     suggest: ["ਮੇਰਾ ਪੈਸਾ ਕਦੋਂ ਆਵੇਗਾ?", "ਮੇਰਾ ਦਾਅਵਾ ਕਿਉਂ ਰੁਕਿਆ ਹੈ?", "ਅਪੀਲ ਕਿਵੇਂ ਕਰਾਂ?"],
     thinking: "ਸੋਚ ਰਹੇ ਹਾਂ", you: "ਤੁਸੀਂ", appeal: "ਮੈਂ ਨਹੀਂ ਸਾੜਿਆ: ਅਪੀਲ ਕਰੋ", appealTitle: "ਅਧਿਕਾਰੀ ਨੂੰ ਦੱਸੋ ਕਿ ਸੈਟੇਲਾਈਟ ਕਿਉਂ ਗਲਤ ਹੈ",
     appealHint: "ਜਿਵੇਂ: ਹੈਪੀ ਸੀਡਰ ਚਲਾਇਆ ਸੀ; ਕਾਲਾ ਹਿੱਸਾ ਸਿੰਚਾਈ ਤੋਂ ਬਾਅਦ ਗਿੱਲੀ ਮਿੱਟੀ ਹੈ।", appealSend: "ਅਪੀਲ ਭੇਜੋ",
@@ -80,7 +80,7 @@ const T = {
     demoPick: "किसान चुणो", demoNote: "उरै SMS साइन-इन कोनी: किसे किसान नै चुण कै उसका ऐप देक्खो। मामले रोज नए होवैं सैं; WhatsApp वीडियो म्ह सै।", demoTyped: "तळै तै कोए किसान चुणो।",
     hello: (n) => `राम राम, ${n} जी`, switch: "साइन-आउट", noClaim: "इस सीज़न का कोए दावा इब्ब तक कोनी।", acres: "किल्ले",
     status: { clean: "पूरी रकम मिलगी", burn: "उपग्रह नै जळण का निसान दिख्या", review: "अफसर देक्खण लाग रे सैं", wait: "जांच चालू सै" },
-    smoke: (kg) => `≈ {kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", more: "पूरा पढ़ो", money: "थारी रकम", passbook: "सीज़न 2025",
+    smoke: (kg) => `≈ ${kg} kg धुम्मा बच्या`, smokeNote: "PM2.5, est.", listen: "सुणो", more: "पूरा पढ़ो", money: "थारी रकम", passbook: "सीज़न 2025",
     rows: { adv: "कटाई तै पहल्यां एडवांस", noadv: "इस साल एडवांस कोनी: पाछला सीज़न साफ कोनी दिख्या", bal: "बाकी रकम",
       balHeld: "अफसर के फैसले तक रुकी", balPaid: "थारे बैंक खाते म्ह भेज दी", via: "Cashfree (टेस्ट)", balOnway: "थारे बैंक खाते म्ह भेजी जा री सै", balRetry: "भुगतान कोनी होया; फेर भेजी जा री सै", receipt: "रसीद", repay: "एडवांस उल्टा देणा पड़ैगा", notpay: "इस सीज़न देण लायक कोनी", returned: "एडवांस उल्टा दे दिया" },
     pay: (a) => `${a} ऑनलाइन उल्टा दो`, payNote: "Razorpay टेस्ट मोड: असली पीसा कोनी कटदा।",
@@ -90,7 +90,7 @@ const T = {
     sawClean: (n) => `इस सीज़न के ${n} साफ फोटुआं म्ह कितै जळाणा कोनी। सब तै नया फोटू दिखाया सै।`,
     sawReview: "फोटू फैसले खातर साफ कोनी। अफसर देक्खैगा।", sawWait: "जांच पूरी होण पै फोटू दिक्खैंगे।",
     season: "सीज़न भर थारा खेत",
-    ask: "कुछ भी पूछो", askHint: "माइक दबा कै बोलो, या लिखो।", send: "भेजो", listening: "सुणण लाग रे सां… छोड्डते ए भेजांगे",
+    ask: "कुछ भी पूछो", askHint: "माइक दबाओ अर बोलो, या लिखो।", send: "भेजो", listening: "सुणण लाग रे सां… भेजण खातर दबाओ, या बस चुप हो जाओ", heardNothing: "कुछ सुणाई कोनी दिया। माइक दबा कै बोलो।",
     suggest: ["मेरा पीसा कद आवैगा?", "मेरा दावा क्यूं रुक रया सै?", "अपील क्यूकर करूं?"],
     thinking: "सोच्चण लाग रे सां", you: "थम", appeal: "मन्नै कोनी जळाई: अपील करो", appealTitle: "अफसर नै बताओ उपग्रह क्यूं गलत सै",
     appealHint: "जियां: हैप्पी सीडर चलाया था; काळा हिस्सा सिंचाई पाच्छै गीली माट्टी सै।", appealSend: "अपील भेजो",
@@ -185,7 +185,7 @@ function render(animate = false) {
     <section class="card glass ask ${animate ? "enter" : ""}" style="--i:5"><h2>${esc(L.ask)}</h2><p class="cap">${esc(L.askHint)}</p>
       <div class="chat" id="chat"></div>
       <div class="chips">${L.suggest.map((q) => `<button class="chipq">${esc(q)}</button>`).join("")}</div>
-      <form class="composer" id="composer"><button type="button" class="mic" id="mic" aria-label="Hold to speak">${micSvg}</button>
+      <form class="composer" id="composer"><button type="button" class="mic" id="mic" aria-label="${esc(L.askHint)}">${micSvg}</button>
         <input id="q" autocomplete="off" aria-label="${esc(L.ask)}" placeholder="${esc(L.ask)}…"><button class="btn primary small" type="submit">${esc(L.send)}</button></form>
       <p class="cap" id="mic-note" hidden></p></section>`;
   filmstrip($("#film"), S.windows, f.geometry, lang, bw);
@@ -237,28 +237,32 @@ async function ask(payload) {
     renderChat();
   }
 }
+// tap to start, tap to send; it also sends by itself when the farmer stops talking, and gives up quietly if
+// nothing was said
 function wireMic() {
   const mic = $("#mic"), note = $("#mic-note");
-  const start = async (e) => {
+  const finish = async (why) => {
+    const rec = S.recording;
+    if (!rec) return;
+    S.recording = null;
+    mic.classList.remove("on");
+    mic.style.removeProperty("--lvl");
+    note.hidden = true;
+    const { b64, seconds } = await rec.stop();
+    if (why === "nothing" || !rec.spoke || seconds < 0.6) { note.textContent = t().heardNothing; note.hidden = false; return; }
+    ask({ audio_b64: b64 });
+  };
+  mic.addEventListener("click", async (e) => {
     e.preventDefault();
-    if (S.recording) return;
+    if (S.recording) return finish("tap");
     try {
-      S.recording = new Recorder();
+      S.recording = new Recorder({ onEnd: (why) => finish(why), onLevel: (v) => mic.style.setProperty("--lvl", v.toFixed(2)) });
       await S.recording.start();
       mic.classList.add("on");
       note.textContent = t().listening; note.hidden = false;
     } catch { S.recording = null; note.textContent = t().micErr; note.hidden = false; }
-  };
-  const end = async () => {
-    if (!S.recording) return;
-    const rec = S.recording; S.recording = null;
-    mic.classList.remove("on"); note.hidden = true;
-    const { b64, seconds } = await rec.stop();
-    if (seconds > 0.6) ask({ audio_b64: b64 });
-  };
-  mic.addEventListener("pointerdown", start);
+  });
   mic.addEventListener("contextmenu", (e) => e.preventDefault());
-  ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => mic.addEventListener(ev, end));
 }
 function openAppeal(c) {
   const L = t();

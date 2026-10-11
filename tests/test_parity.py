@@ -39,6 +39,32 @@ def test_every_language_has_every_web_string(name):
         assert set(keys) == en, f"{name} {lang}: missing {sorted(en - set(keys))}, extra {sorted(set(keys) - en)}"
 
 
+FILLED_JS = r"""
+const src = require("fs").readFileSync(process.argv[1], "utf8");
+const start = src.indexOf("const T = {");
+const end = src.indexOf("\n};", start) + 3;
+const rupees = (x) => "Rs" + x, esc = (x) => x;
+const T = eval("(" + src.slice(start, end).replace("const T = ", "").replace(/;$/, "") + ")");
+const bad = [];
+const walk = (o, p) => Object.entries(o).forEach(([k, v]) => {
+  if (typeof v === "function") {
+    let out = "";
+    try { out = String(v(1234, 5, 6, 7)); } catch (e) { return; }
+    if (/\{[a-zA-Z_]+\}/.test(out)) bad.push(p + k + " -> " + out);
+  } else if (v && typeof v === "object" && !Array.isArray(v)) walk(v, p + k + ".");
+});
+Object.entries(T).forEach(([l, v]) => walk(v, l + "."));
+console.log(JSON.stringify(bad));
+"""
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+@pytest.mark.parametrize("name", sorted(LANGS))
+def test_no_web_text_leaves_a_placeholder_unfilled(name):
+    out = subprocess.run(["node", "-e", FILLED_JS, str(WEB / name)], capture_output=True, text=True, check=True).stdout
+    assert json.loads(out) == [], out
+
+
 def test_every_whatsapp_short_text_is_in_every_language():
     english_only = {"intro", "state", "pick", "list"}  # the farmer picker comes before a language is known
     want = set(whatsapp.SHORT["en"]) - english_only

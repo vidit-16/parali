@@ -1,5 +1,13 @@
-// Push-to-talk recorder: 16 kHz mono 16-bit PCM, base64, for Amazon Transcribe streaming.
+// Tap-to-talk recorder: 16 kHz mono 16-bit PCM, base64, for speech to text.
+// It listens for the end of speech itself: onEnd("silence") after SILENCE_MS of quiet once the person has spoken,
+// onEnd("nothing") if nothing was said for NOTHING_MS, onEnd("limit") at LIMIT_MS. onLevel(0..1) drives the ring.
+const SILENCE_MS = 4000, NOTHING_MS = 8000, LIMIT_MS = 30000, LOUD = 0.02;
 export class Recorder {
+  constructor({ onEnd = null, onLevel = null } = {}) {
+    this.onEnd = onEnd;
+    this.onLevel = onLevel;
+  }
+
   async start() {
     this.stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -7,7 +15,21 @@ export class Recorder {
     const src = this.ctx.createMediaStreamSource(this.stream);
     this.node = this.ctx.createScriptProcessor(4096, 1, 1);
     this.chunks = [];
-    this.node.onaudioprocess = (e) => this.chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+    this.spoke = false;
+    this.lastLoud = performance.now();
+    this.node.onaudioprocess = (e) => {
+      const data = e.inputBuffer.getChannelData(0);
+      this.chunks.push(new Float32Array(data));
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) sum += data[i] * data[i];
+      const rms = Math.sqrt(sum / data.length), now = performance.now();
+      this.onLevel?.(Math.min(1, rms * 12));
+      if (rms > LOUD) { this.spoke = true; this.lastLoud = now; }
+      if (this.ended) return;
+      const why = this.spoke && now - this.lastLoud > SILENCE_MS ? "silence" : !this.spoke && now - this.t0 > NOTHING_MS ? "nothing"
+        : now - this.t0 > LIMIT_MS ? "limit" : null;
+      if (why) { this.ended = true; this.onEnd?.(why); }
+    };
     src.connect(this.node);
     this.node.connect(this.ctx.destination);
     this.t0 = performance.now();

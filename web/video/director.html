@@ -11,9 +11,15 @@
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 15px/1.45 Geist, system-ui, sans-serif; overflow: hidden; }
   body.rolling { cursor: none; }
   iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: var(--bg); }
-  .cap { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 20; max-width: min(1100px, 86vw); padding: 10px 18px; border-radius: 12px;
-    background: rgba(10, 11, 14, .82); backdrop-filter: blur(8px); font-size: 17px; line-height: 1.45; text-align: center; opacity: 0; transition: opacity .4s; pointer-events: none; }
+  /* captions get their own strip under the app, so they never cover the timeline, buttons or text */
+  body.caps iframe { height: calc(100% - var(--strip)); }
+  iframe.off { visibility: hidden; z-index: -1; }  /* loaded in the background, so the next scene appears at once */
+  :root { --strip: 66px; }
+  .strip { display: none; position: fixed; left: 0; right: 0; bottom: 0; height: var(--strip); z-index: 35; background: #0D0E11; border-top: 1px solid var(--line); }
+  body.caps .strip { display: grid; place-items: center; }
+  .cap { max-width: min(1240px, 92vw); padding: 0 20px; font-size: 17px; line-height: 1.4; text-align: center; color: var(--ink); opacity: 0; transition: opacity .35s; }
   .cap.on { opacity: 1; }
+  .cap.vn { color: #9FE3FF; }
   .card { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: radial-gradient(1200px 700px at 50% 40%, #1a1c24, #0D0E11); opacity: 0; transition: opacity .6s; pointer-events: none; }
   .card.on { opacity: 1; }
   .card .in { text-align: center; max-width: 980px; padding: 0 24px; }
@@ -41,13 +47,14 @@
 </head>
 <body>
 <iframe id="app" title="Saakshi" allow="autoplay"></iframe>
-<div class="cap" id="cap"></div>
+<div class="strip"><div class="cap" id="cap"></div></div>
 <div class="card" id="card"><div class="in" id="cardIn"></div></div>
+<button class="ghost" id="srt" hidden style="position:fixed;top:16px;right:16px;z-index:50">Download captions (.srt)</button>
 <div class="panel" id="panel"><div class="box">
   <h2>Video autopilot</h2>
-  <p>Plays the whole web demo with its narration, about 2 minutes 50 seconds with a 16-second WhatsApp slot. Record the screen with sound (Win + Alt + R), then press Start.</p>
+  <p>Plays the whole web demo with its narration, under 3 minutes with a WhatsApp slot. Record the screen with sound (Win + Alt + R), then press Start.</p>
   <ol>
-    <li><b>Prepare</b> resets the demo to fresh cases (about two minutes). Do it before every take.</li>
+    <li><b>Prepare</b> resets the demo to fresh cases and loads the season once, so nothing waits on the network (about a minute). Do it before every take.</li>
     <li>Press <b>Start</b>: the page goes full screen. Move the mouse to the screen edge.</li>
     <li>When the dashed WhatsApp card shows, the phone clip goes there in the edit.</li>
   </ol>
@@ -58,12 +65,44 @@
 <script>
 const PIN = "2468";
 const $ = (s) => document.querySelector(s);
-const app = $("#app"), cap = $("#cap"), card = $("#card");
+const cap = $("#cap"), card = $("#card");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-let scenes = {};
+let scenes = {}, t0 = 0, cues = [];
 fetch("scenes.json").then((r) => r.json()).then((s) => { s.forEach((x) => { scenes[x.id] = x.text; }); });
 const status = (t) => { $("#status").textContent = t; };
-const W = () => app.contentWindow, D = () => app.contentDocument;
+// pages live in frames; the next page loads in a hidden frame while the current scene talks, then swaps in
+let cur = $("#app");
+const frames = new Map();
+const W = () => cur.contentWindow, D = () => cur.contentDocument;
+function frameFor(url, fresh = false) {
+  let fr = frames.get(url);
+  if (fr && fresh) { frames.delete(url); fr.stale = true; fr = null; }
+  if (!fr) {
+    const f = document.createElement("iframe");
+    f.className = "off";
+    f.title = "Saakshi";
+    f.allow = "autoplay";
+    document.body.prepend(f);
+    fr = { f, ready: new Promise((ok) => { f.onload = () => ok(); }) };
+    f.src = url;
+    frames.set(url, fr);
+  }
+  return fr;
+}
+const preload = (url) => { frameFor(url); };
+async function show(url, fresh = false) {
+  const old = cur, fr = frameFor(url, fresh);
+  await fr.ready;
+  if (old !== fr.f) {
+    fr.f.classList.remove("off");
+    old.classList.add("off");
+    cur = fr.f;
+    // a frame nobody will return to is dropped, so the map's graphics memory is freed
+    if (![...frames.values()].some((x) => x.f === old)) setTimeout(() => old.remove(), 500);
+  }
+}
+const load = (url) => show(url, true);
+const drop = (url) => { const fr = frames.get(url); if (fr && fr.f !== cur) { fr.f.remove(); frames.delete(url); } };
 
 async function until(fn, ms = 60000, every = 250) {
   const t0 = Date.now();
@@ -73,18 +112,29 @@ async function until(fn, ms = 60000, every = 250) {
     await sleep(every);
   }
 }
-function load(url) {
-  return new Promise((ok) => { app.onload = () => ok(); app.src = url; });
+function caption(text, cls = "") {
+  cap.className = "cap on " + cls;
+  cap.textContent = text;
+  cues.push({ start: performance.now() - t0, text });
+}
+function uncaption() {
+  cap.classList.remove("on");
+  const last = cues.at(-1);
+  if (last && last.end === undefined) last.end = performance.now() - t0;
 }
 // one narration clip; resolves when it has finished
 function say(id) {
   const a = new Audio(`${id}.mp3`);
-  if ($("#caps").checked && scenes[id]) { cap.textContent = scenes[id]; cap.classList.add("on"); }
+  if (scenes[id]) caption(scenes[id]);
   return new Promise((ok) => {
-    a.onended = () => { cap.classList.remove("on"); ok(a); };
-    a.onerror = () => ok(a);
-    a.play().catch(() => ok(a));
+    a.onended = () => { uncaption(); ok(a); };
+    a.onerror = () => { uncaption(); ok(a); };
+    a.play().catch(() => { uncaption(); ok(a); });
   });
+}
+function srt() {
+  const ts = (ms) => { const d = new Date(Math.max(0, ms)); return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}:${String(d.getUTCSeconds()).padStart(2, "0")},${String(d.getUTCMilliseconds()).padStart(3, "0")}`; };
+  return cues.filter((c) => c.end).map((c, i) => `${i + 1}\n${ts(c.start)} --> ${ts(c.end)}\n${c.text}\n`).join("\n");
 }
 async function duration(id) {
   const a = new Audio(`${id}.mp3`);
@@ -109,18 +159,32 @@ async function prepare() {
   try {
     status("Resetting the demo…");
     await fetch("/api/demo/reset", { method: "POST", headers: { "X-Officer-Pin": PIN } });
-    const fields = await (await fetch("/api/fields")).json();
+    const getList = async (url) => {  // a busy moment during the reset can return an error: ask again
+      for (let i = 0; i < 20; i++) {
+        const v = await fetch(url).then((r) => r.json()).catch(() => null);
+        if (Array.isArray(v)) return v;
+        await sleep(3000);
+      }
+      throw new Error(`${url} is not answering`);
+    };
+    const fields = await getList("/api/fields");
     for (const f of fields) {
       await fetch("/api/claims", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ field_id: f.id }) });
       await sleep(700);
     }
     for (;;) {
-      const claims = await (await fetch("/api/claims")).json();
+      const claims = await getList("/api/claims");
       const open = claims.filter((c) => c.status === "submitted").length;
       status(`Checking the season for each field: ${claims.length - open} of ${claims.length} done`);
       if (claims.length >= fields.length && !open) break;
       await sleep(4000);
     }
+    status("Loading the season once, so the take never waits…");
+    sessionStorage.setItem("saakshi-officer", "VO-PATRAN-08");
+    sessionStorage.setItem("saakshi-pin", PIN);
+    localStorage.setItem("saakshi-lang", "en");
+    await load("../index.html?intro=0");
+    await until(() => W().saakshi?.state?.loadedAll, 120000);
     status("Ready. Start recording, then press Start.");
   } catch (e) { status("Prepare failed: " + e.message); }
   $("#prep").disabled = $("#go").disabled = false;
@@ -130,6 +194,7 @@ async function prepare() {
 const SCENES = [
   ["s1", async () => {  // the opening flies in from India while the problem is told
     await load("../index.html?auto=1");
+    drop("../index.html?intro=0");  // the copy Prepare used to fill the cache
     const s1 = say("s1");
     await until(() => W().saakshi?.state && !q("#loader"), 90000);
     await s1;
@@ -143,29 +208,41 @@ const SCENES = [
     await s2;
   }],
   ["s3", async () => {  // the live satellite check finishes on screen
+    preload("../officer.html");
     const s3 = say("s3");
     await until(() => q("#panel .band"), 90000);
     await s3;
-    await sleep(1500);
+    await sleep(900);
   }],
   ["s4", async () => {  // the officer confirms that burn
-    await load("../officer.html");
+    await show("../officer.html");
+    drop("../index.html?auto=1");
     await until(() => byName("Baljeet"), 30000);
     byName("Baljeet").click();
     await until(() => q("#note"), 20000);
     const s4 = say("s4");
-    await sleep(2500);
+    await sleep(1800);
     q(".decide").scrollIntoView({ behavior: "smooth", block: "center" });
     await sleep(1200);
     await typeInto(q("#note"), "Visited 7 Nov: ash across the field, neighbours confirm.");
     await sleep(500);
     q("#confirm").click();
     await until(() => q(".decided"), 60000);
-    await s4;
-    await sleep(1200);
+    const notice = await until(() => q(".decided a[href*='notices/']"), 20000).catch(() => null);
+    if (notice) {  // the recovery notice itself, briefly
+      const href = notice.getAttribute("href");
+      preload(href);
+      await sleep(900);
+      await show(href);
+      await sleep(600);
+      D().querySelector(".pay, .amount")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      await Promise.all([s4, sleep(3600)]);
+      await show("../officer.html");
+    } else await s4;
+    await sleep(300);
   }],
   ["s5", async () => {  // approving another case pays the balance through Cashfree
-    if (!/officer/.test(app.src)) await load("../officer.html");
+    await show("../officer.html");
     await until(() => byName("Mahender"), 30000);
     byName("Mahender").click();
     await until(() => q("#note"), 20000);
@@ -175,30 +252,50 @@ const SCENES = [
     await typeInto(q("#note"), "Dark patch is wet soil after irrigation; no ash on the ground.");
     q("#approve").click();
     await until(() => q(".decided"), 60000);
-    await s5;
-    await sleep(1500);
+    const receipt = await until(() => q(".decided a[href*='receipts/']"), 20000).catch(() => null);
+    localStorage.setItem("saakshi-farmer", "f-mahender");  // the farmer's page loads behind the receipt
+    localStorage.setItem("saakshi-lang", "pa");
+    preload("../farmer.html");
+    if (receipt) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
+      const href = receipt.getAttribute("href");
+      preload(href);
+      await sleep(1000);
+      await show(href);
+      await Promise.all([s5, sleep(3400)]);
+    } else await s5;
+    await sleep(300);
   }],
   ["s6", async () => {  // the farmer's page, in Punjabi; wait until it has fully drawn before talking over it
     localStorage.setItem("saakshi-farmer", "f-mahender");
     localStorage.setItem("saakshi-lang", "pa");
-    await load("../farmer.html");
+    await show("../farmer.html");
     await until(() => q(".status-card") && q(".passbook .book li") && q("#saw canvas, #saw img"), 30000);
-    await sleep(1200);
+    await sleep(500);
     const s6 = say("s6");
     await sleep(3500);
-    q(".passbook").scrollIntoView({ behavior: "smooth", block: "center" });
     await s6;
-    await sleep(800);
+    q(".status-card").scrollIntoView({ behavior: "smooth", block: "center" });
+    await sleep(500);
+    const listen = q("#listen");
+    if (listen) {  // the farmer's own voice note, in Punjabi
+      caption("Mahender's voice note, in Punjabi", "vn");
+      listen.click();
+      await sleep(5200);
+      if (!q("#audio").paused) listen.click();
+      uncaption();
+    }
+    q(".passbook").scrollIntoView({ behavior: "smooth", block: "center" });
+    await sleep(1600);
     localStorage.setItem("saakshi-lang", "en");
   }],
   ["wa", async () => {  // the marker for the phone clip, as long as its narration
     showCard(`<h1>On WhatsApp</h1><p>Status, reasons, money and appeals, by text or voice</p><span class="tag">Phone clip goes here in the edit</span>`, "wa");
+    preload("../how.html");
     await say("wa");
   }],
   ["s7", async () => {  // how it runs on AWS
-    await load("../how.html");
+    await show("../how.html");
     await until(() => W().howPlay, 10000);
-    await sleep(400);
     hideCard();
     W().howPlay(await duration("s7"));
     await say("s7");
@@ -219,6 +316,9 @@ async function run() {
   const sp = new URLSearchParams(location.search);
   $("#panel").hidden = true;
   document.body.classList.add("rolling");
+  document.body.classList.toggle("caps", $("#caps").checked);
+  t0 = performance.now();
+  cues = [];
   if (!sp.has("nofs")) await document.documentElement.requestFullscreen?.().catch(() => {});
   sessionStorage.setItem("saakshi-officer", "VO-PATRAN-08");
   sessionStorage.setItem("saakshi-pin", PIN);
@@ -232,7 +332,14 @@ async function run() {
     cap.classList.add("on");
   }
   document.body.classList.remove("rolling");
+  setTimeout(() => { $("#srt").hidden = false; }, 6000);  // after the closing card, out of the take
 }
+$("#srt").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([srt()], { type: "text/plain" }));
+  a.download = "saakshi-captions.srt";
+  a.click();
+};
 $("#prep").onclick = prepare;
 $("#go").onclick = run;
 </script>

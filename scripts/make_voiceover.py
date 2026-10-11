@@ -3,7 +3,8 @@
 One mp3 per scene in web/video/ (s1.mp3 ... s8.mp3, wa.mp3) plus scenes.json with each scene's text, which the
 autopilot shows as captions. Re-run after editing the script.
 
-usage: uv run --extra aws python scripts/make_voiceover.py [--profile envhacks] [--rate 104%]
+usage: uv run --extra aws python scripts/make_voiceover.py [--voice polly:Kajal | polly:Matthew | polly:Arthur | sarvam:shubh ...]
+       [--profile envhacks] [--rate 100%]
 """
 import argparse
 import html
@@ -29,15 +30,27 @@ def scenes() -> list[tuple[str, str]]:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--profile", default="envhacks")
-    ap.add_argument("--rate", default="104%")
+    ap.add_argument("--rate", default="100%")
+    ap.add_argument("--voice", default="polly:Kajal")
     a = ap.parse_args()
+    engine, voice = a.voice.split(":", 1)
     polly = boto3.Session(profile_name=a.profile, region_name="us-west-2").client("polly")
+    langs = {"Kajal": "en-IN", "Matthew": "en-US", "Arthur": "en-GB", "Brian": "en-GB", "Stephen": "en-US"}
+
+    def speak(text: str) -> bytes:
+        if engine == "sarvam":
+            import base64
+            from parali import sarvam
+            out = sarvam._post("/text-to-speech", {"text": text, "target_language_code": "en-IN", "model": "bulbul:v3",
+                                                   "speaker": voice, "output_audio_codec": "mp3"}, sarvam.api_key())
+            return base64.b64decode(out["audios"][0])
+        ssml = f'<speak><prosody rate="{a.rate}">{html.escape(text)}</prosody></speak>'
+        return polly.synthesize_speech(Text=ssml, TextType="ssml", OutputFormat="mp3", VoiceId=voice, Engine="neural",
+                                       LanguageCode=langs.get(voice, "en-IN"))["AudioStream"].read()
     OUT.mkdir(parents=True, exist_ok=True)
     meta = []
     for sid, text in scenes():
-        ssml = f'<speak><prosody rate="{a.rate}">{html.escape(text)}</prosody></speak>'
-        audio = polly.synthesize_speech(Text=ssml, TextType="ssml", OutputFormat="mp3", VoiceId="Kajal",
-                                        Engine="neural", LanguageCode="en-IN")["AudioStream"].read()
+        audio = speak(text)
         (OUT / f"{sid}.mp3").write_bytes(audio)
         # the caption shows "P M two point five" as written for the voice: show it as PM2.5
         meta.append({"id": sid, "text": text.replace("P M two point five", "PM2.5").replace("Patiala Kaithal", "Patiala–Kaithal")})
