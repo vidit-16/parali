@@ -109,4 +109,4 @@ season.
 Links: [code](https://github.com/vidit-16/saakshi) · [live demo](https://d5gpae5oilzws.cloudfront.net)
 (officer PIN 2468) · video: YOUTUBE_LINK
 
-Built with Claude Code as the coding assistant.
+Assisted by Claude Code.
