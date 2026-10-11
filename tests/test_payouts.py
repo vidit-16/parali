@@ -90,7 +90,8 @@ class PendingCashfree(FakeCashfree):
 
     def status(self, transfer_id):
         self.asked += 1
-        return {"status": "PENDING"} if self.asked < 6 else {"status": "SUCCESS", "transfer_utr": "UTR9"}
+        # pending through every check release() makes and the first follow-up; settled on the second
+        return {"status": "PENDING"} if self.asked <= payouts.CHECKS + 1 else {"status": "SUCCESS", "transfer_utr": "UTR9"}
 
 
 def test_a_pending_payout_is_followed_up_until_it_lands_with_a_receipt(store, monkeypatch):  # noqa: F811

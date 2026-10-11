@@ -129,6 +129,7 @@ class Cashfree:
         return self._call("GET", f"/transfers?transfer_id={transfer_id}")
 
 
+CHECKS = 15  # how many times release() asks about a pending transfer, a second apart
 PENDING = ("RECEIVED", "PENDING", "APPROVAL_PENDING", "VALIDATION_PENDING")
 
 
@@ -163,10 +164,10 @@ def release(store: Store, claim: dict, cf: "Cashfree | None") -> dict:
     tid = f"SKS_{claim['id']}_{n}"
     try:
         out = cf.transfer(tid, amount, claim.get("farmer_name", ""), f"Saakshi incentive balance {claim['id']}")
-        for wait in (2, 3, 4, 6):  # sandbox transfers usually settle within seconds; later ones are followed up
+        for _ in range(CHECKS):  # every second, so a settled transfer shows at once; later ones are followed up
             if out.get("status") not in PENDING:
                 break
-            time.sleep(wait)
+            time.sleep(1)
             out = {**out, **cf.status(tid)}
     except urllib.error.HTTPError as e:
         print(f"cashfree transfer failed: HTTP {e.code} {(e.msg or '')[:300]}")

@@ -127,3 +127,25 @@ def test_decision_answers_at_once_and_the_rest_follows(store):  # noqa: F811
     types = [e["type"] for e in store.events(c["id"])]
     assert c["recovery"]["status"] == "issued" and "recovery_link" in types
     assert types[-1] == "farmer_told" and store.events(c["id"])[-1]["channels"] == ["app", "whatsapp"]
+
+
+def test_a_demo_reset_cancels_every_open_payment_link():
+    from parali.payments import Razorpay
+
+    class Fake(Razorpay):
+        def __init__(self):
+            self.links = {f"plink_{i}": "created" for i in range(25)} | {"plink_paid": "paid", "plink_x": "cancelled"}
+            self.calls = []
+
+        def _call(self, method, path, body=None):
+            self.calls.append((method, path))
+            if method == "GET":  # one page of ten, as count and skip ask
+                skip = int(path.split("skip=")[1])
+                return {"payment_links": [{"id": k, "status": v} for k, v in list(self.links.items())[skip:skip + 10]]}
+            self.links[path.split("/")[2]] = "cancelled"
+            return {}
+
+    rp = Fake()
+    rp.PAGE = 10
+    assert rp.cancel_open_links() == 25
+    assert rp.links["plink_paid"] == "paid" and list(rp.links.values()).count("cancelled") == 26

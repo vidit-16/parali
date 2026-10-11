@@ -206,10 +206,10 @@ async function typeInto(el, text) {
   }
 }
 const q = (sel) => D().querySelector(sel);
-// the claim as the server has it now, until it passes the test (null after ms)
-async function claimWhen(id, test, ms) {
+// the claim as the server has it now, once it passes the test (null after ms, or once giveUp() says so)
+async function claimWhen(id, test, ms, giveUp = () => false) {
   const end = Date.now() + ms;
-  while (Date.now() < end) {
+  while (Date.now() < end && !giveUp()) {
     const c = await fetch(`/api/claims/${id}`, { cache: "no-store" }).then((r) => r.json()).catch(() => null);
     if (c && test(c)) return c;
     await sleep(700);
@@ -298,7 +298,9 @@ const SCENES = [
     await sleep(700);
     await spotlight(q(".steps"), 2400, 1.7);
     // the notice is written within seconds; the voice notes and WhatsApp after it still land on the officer page
-    const c = await claimWhen(id, (c) => c.recovery?.status === "issued" && c.notice_url, 20000);
+    // if the payment link cannot be made, the notice is shown once the server has finished, without the link
+    const c = await claimWhen(id, (c) => c.notice_url && (c.recovery?.status === "issued" ||
+      c.events?.some((e) => e.type === "farmer_told")), 20000);
     if (c) {  // the recovery notice itself, briefly
       preload(c.notice_url);
       await sleep(900);
@@ -318,8 +320,10 @@ const SCENES = [
     await sleep(400);
     await typeInto(q("#note"), "Fire was on the next field. Checked: no ash on this one.");
     q("#approve").click();
-    const s5 = say("s5");  // the narration covers the transfer
-    const c = await claimWhen(id, (c) => c.payout?.receipt_url, 25000);
+    let done = 0;
+    const s5 = say("s5").then((a) => { done = Date.now(); return a; });  // the narration covers the transfer
+    // the bank can be slow: wait for the payment advice while the narration runs and 2 s after, then move on
+    const c = await claimWhen(id, (c) => c.payout?.receipt_url, 25000, () => done && Date.now() - done > 2000);
     if (c) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
       preload(c.payout.receipt_url);
       await sleep(1200);

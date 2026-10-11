@@ -2,6 +2,7 @@
 import base64
 import json
 import os
+import urllib.error
 from datetime import timedelta
 from functools import lru_cache
 from pathlib import Path
@@ -71,6 +72,12 @@ def _dispatch_check(check_id: str) -> None:
 
 def _reset() -> None:
     st = store()
+    rp = Razorpay.from_keys()
+    if rp:  # the old cases' payment links would otherwise use up the test-mode limit
+        try:
+            print(f"razorpay links cancelled: {rp.cancel_open_links()}")
+        except (urllib.error.URLError, ValueError) as e:
+            print(f"razorpay cancel failed: {type(e).__name__}")
     for c in st.list("claims"):
         for item in st.table.query(KeyConditionExpression=Key("pk").eq(f"claims#{c['id']}"))["Items"]:
             st.table.delete_item(Key={"pk": item["pk"], "sk": item["sk"]})

@@ -49,6 +49,8 @@ def public_url() -> str:
 
 
 class Razorpay:
+    PAGE = 100  # payment links listed per request
+
     def __init__(self, key_id: str, key_secret: str):
         self.key_id, self.key_secret = key_id, key_secret
 
@@ -77,6 +79,20 @@ class Razorpay:
     def cancel_link(self, link_id: str) -> dict:
         return self._call("POST", f"/payment_links/{link_id}/cancel")
 
+    def cancel_open_links(self) -> int:
+        """Cancel every link still open. Test mode allows only 30 open links, and each demo reset makes new ones."""
+        seen, open_ = set(), []
+        for page in range(20):  # a page at a time, until a page brings nothing new
+            items = self._call("GET", f"/payment_links?count={self.PAGE}&skip={page * self.PAGE}").get("payment_links", [])
+            new = [x for x in items if x["id"] not in seen]
+            if not new:
+                break
+            seen.update(x["id"] for x in new)
+            open_ += [x for x in new if x.get("status") in ("created", "partially_paid")]
+        for link in open_:
+            self.cancel_link(link["id"])
+        return len(open_)
+
 
 def signature_ok(params: dict, key_secret: str) -> bool:
     keys_ = ("razorpay_payment_link_id", "razorpay_payment_link_reference_id", "razorpay_payment_link_status",
@@ -98,6 +114,9 @@ def issue_recovery(store: Store, claim: dict, rp: Razorpay | None, base_url: str
         link = rp.create_link(s["recover"], f"{claim['id']}-{n}",
                               f"Return of the no-burn advance for {claim.get('field_name', '')} ({claim.get('village', '')})",
                               claim.get("farmer_name", ""), {"claim_id": claim["id"]}, f"{base_url}/api/razorpay/return")
+    except urllib.error.HTTPError as e:  # Razorpay says why in the body; it never holds the keys
+        print(f"razorpay link failed: HTTP {e.code} {e.read()[:300]!r}")
+        return claim
     except (urllib.error.URLError, KeyError, ValueError) as e:
         print(f"razorpay link failed: {type(e).__name__}")
         return claim
