@@ -16,8 +16,8 @@ needs a check that can be run on every field, quickly and defensibly.
 Saakshi does that check from Sentinel-2 pictures and runs the whole claim around it.
 
 - **Before harvest**, a field that was clean last season gets half the incentive as an advance.
-- **After harvest**, every clear picture of the field is read. Fixed rules approve clean fields and release the
-  balance; anything unclear and every possible burn goes to the village officer.
+- **After harvest**, every clear picture of the field is read. Fixed rules approve clean fields and pay the
+  balance to the farmer's bank; anything unclear and every possible burn goes to the village officer.
 - **The officer** sees colour and infrared pictures, the plant signal through the season, nearby fire alerts and
   last season's result, and decides. A confirmed burn on an advanced field gets a drafted recovery notice and a
   payment link to return the advance.
@@ -60,8 +60,8 @@ for the advance; 78% of cropland would qualify.
 AWS: Sentinel-2 read in place from the AWS Open Data registry, Lambda for the check, the API, the assistant and
 the WhatsApp webhook, DynamoDB, S3 and CloudFront, EventBridge for the daily sweep, Bedrock (Amazon Nova 2 Lite
 through the Strands Agents SDK) for understanding the farmer's request, Polly and Transcribe for Hindi and English
-voice. Sarvam AI gives Punjabi voice and speech to text. The WhatsApp Cloud API carries the chat; Razorpay (test
-mode) the repayment link. Everything is one SAM stack.
+voice. Sarvam AI gives Punjabi voice and speech to text. The WhatsApp Cloud API carries the chat; Cashfree Payouts pays the balance and Razorpay
+collects a repayment, both in test mode. Everything is one SAM stack.
 
 The model never decides. It picks one of seven tools; none can approve, reject, pay or penalise. What the farmer
 hears about a decision or money is composed from the record in fixed templates, not written by the model.
@@ -69,8 +69,8 @@ hears about a decision or money is composed from the record in fixed templates, 
 ## Limits and next steps
 
 Labels are one person's reading of the pictures, not site visits, and field outlines are samples, since there is
-no public cadastral map. Next: run with a district's real field registry, connect the advance and balance to a real direct-benefit-transfer rail, and give officers a
-batch view for the season's payouts.
+no public cadastral map. Next: run with a district's real field registry, move payouts from test mode to the state's direct-benefit-transfer rail, and give officers a batch view for the
+season's payouts.
 
 ## AI usage
 

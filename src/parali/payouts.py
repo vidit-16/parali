@@ -7,6 +7,7 @@ simulated, as the record already says.
 """
 import base64
 import hashlib
+import re
 import json
 import os
 import secrets
@@ -30,7 +31,7 @@ def keys() -> dict:
     """app_id, secret and public_key (for the request signature): CASHFREE_* variables locally, SSM on Lambda."""
     if os.environ.get("CASHFREE_APP_ID"):
         return {"app_id": os.environ["CASHFREE_APP_ID"], "secret": os.environ.get("CASHFREE_SECRET", "")}
-    if not (_keys.get("app_id") and _keys.get("secret")) and os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    if not (_keys.get("app_id") and _keys.get("secret") and _keys.get("public_key")) and os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
         import boto3
         try:
             page = boto3.client("ssm").get_parameters_by_path(Path="/saakshi/cashfree/", WithDecryption=True)
@@ -113,9 +114,15 @@ class Cashfree:
             return json.loads(r.read())
 
     def transfer(self, transfer_id: str, amount: int, name: str, remarks: str) -> dict:
+        try:
+            return self._transfer_v2(transfer_id, amount, name, remarks)
+        except urllib.error.HTTPError as e:  # keep Cashfree's reason for the log
+            raise urllib.error.HTTPError(e.url, e.code, e.read().decode(errors="replace")[:300], e.headers, None)
+
+    def _transfer_v2(self, transfer_id: str, amount: int, name: str, remarks: str) -> dict:
         return self._call("POST", "/transfers", {
             "transfer_id": transfer_id, "transfer_amount": amount, "transfer_currency": "INR", "transfer_mode": "banktransfer",
-            "transfer_remarks": remarks[:70],
+            "transfer_remarks": re.sub(r"[^A-Za-z0-9 ]", " ", remarks)[:70],  # Cashfree accepts letters, digits and spaces
             "beneficiary_details": {"beneficiary_name": name[:100] or "Farmer", "beneficiary_instrument_details": TEST_ACCOUNT}})
 
     def status(self, transfer_id: str) -> dict:
@@ -130,12 +137,12 @@ def release(store: Store, claim: dict, cf: "Cashfree | None") -> dict:
     n = int(p.get("n", 0)) + 1
     tid = f"SKS_{claim['id']}_{n}"
     try:
-        out = cf.transfer(tid, int(s["balance"]), claim.get("farmer_name", ""), f"Saakshi no-burn incentive balance {claim['id']}")
+        out = cf.transfer(tid, int(s["balance"]), claim.get("farmer_name", ""), f"Saakshi incentive balance {claim['id']}")
         if out.get("status") not in DONE + FAILED:
             time.sleep(2)
             out = {**out, **cf.status(tid)}
     except urllib.error.HTTPError as e:
-        detail = e.read().decode(errors="replace")[:300]
+        detail = (e.msg or "")[:300]
         print(f"cashfree transfer failed: HTTP {e.code} {detail}")
         out = {"status": "FAILED", "status_description": f"HTTP {e.code}"}
     except (urllib.error.URLError, TimeoutError, ValueError) as e:

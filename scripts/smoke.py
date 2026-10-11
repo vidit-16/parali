@@ -82,7 +82,11 @@ def main():
         s, adv = c["settlement"], c.get("advance") or {}
         paid = adv.get("amount", 0) if adv.get("status") == "paid" else 0
         ok(s["state"] == "balance_due" and s["balance"] + paid == s["total"], "balance plus advance is the full incentive")
-        po = c.get("payout") or {}
+        for _ in range(6):  # the claim record can lag the event list by a moment
+            po = get(f"/api/claims/{other['id']}").json().get("payout") or {}
+            if po:
+                break
+            time.sleep(2)
         if po:
             ok(po.get("status") == "SUCCESS" and po.get("amount") == s["balance"], f"balance paid through Cashfree: {po.get('status')} {po.get('cf_transfer_id')}")
         else:

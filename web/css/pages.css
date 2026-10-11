@@ -121,7 +121,8 @@ h3:lang(hi), h3:lang(pa) { text-transform: none; letter-spacing: 0; font-size: 1
 .hist ol { list-style: none; margin: 0; padding: 0 0 0 12px; border-left: 1px solid var(--line-2); display: grid; gap: 8px; }
 .hist li { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; font-size: 13px; color: var(--ink-2); }
 .hist li::before { content: ""; position: absolute; left: -16px; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
-.hist li.h-advance_paid::before, .hist li.h-balance_released::before, .hist li.h-advance_recovered::before { background: var(--clean); }
+.hist li.h-advance_paid::before, .hist li.h-balance_released::before, .hist li.h-advance_recovered::before, .hist li.h-payout_sent::before { background: var(--clean); }
+.hist li.h-payout_failed::before { background: var(--burn); }
 .hist li.h-recovery_notice::before, .hist li.h-recovery_link::before { background: var(--burn); }
 .hist li.h-appeal::before { background: var(--scan); }
 .hist .w { font: 500 11.5px "Geist Mono", monospace; color: var(--muted); }

@@ -31,11 +31,11 @@ and fair enough to defend when a farmer disputes it.
 ## What it does
 
 1. **Before harvest, the advance.** Each registered field is checked against last season's Sentinel-2 pictures.
-   Clean last season: half the incentive is paid now (simulated direct benefit transfer). Not clean: no advance
+   Clean last season: half the incentive is paid now. Not clean: no advance
    this year.
 2. **After harvest, the check.** Every clear picture of the field from 1 Oct to 30 Nov is read from the AWS Open
    Data copy of Sentinel-2. Fixed rules look for a burn: the plant signal collapses in one step and the ground
-   turns near-black. Clean fields are approved and the balance is released.
+   turns near-black. Clean fields are approved and the balance is paid to the farmer's bank (Cashfree Payouts, test mode).
 3. **The officer decides the rest.** Unclear fields and every possible burn go to the village officer with the
    colour and infrared pictures, the plant signal through the season, nearby fire alerts and last season's
    result. When the officer confirms a burn on a field that got an advance, Saakshi drafts a recovery notice
@@ -124,13 +124,16 @@ flowchart LR
 | Sarvam AI | Punjabi voice (bulbul), speech to text in Punjabi, Hindi and English (saarika) |
 | Polly, Transcribe | Hindi and English voice; Hindi speech to text as a fallback |
 | WhatsApp Cloud API | Pick or name a farmer, get the status, tap Why / My money / Appeal, by text or voice |
+| Cashfree Payouts (test mode) | The balance to the farmer's bank after approval, with Cashfree's transfer id and bank reference |
 | Razorpay (test mode) | Payment link to return an advance after a confirmed burn |
 | EventBridge Scheduler | Daily sweep of open claims; daily demo reset |
 | SSM Parameter Store | API keys and tokens, never in code or the repo |
 | SAM / CloudFormation | Everything above in one stack (`infra/template.yaml`) |
 
-Payments to farmers (the advance and the balance) are simulated. Only the farmer's repayment goes through a real
-payment gateway, in test mode.
+Money moves through real gateways in test mode: the balance goes out through Cashfree Payouts and a repayment comes
+back through a Razorpay payment link. Test mode means no real money moves, and Cashfree accepts test transfers only
+to its own test bank account, so every demo farmer is paid "to" that account. The pre-harvest advance is recorded
+but not sent through a gateway.
 
 ## Run it locally
 
@@ -166,7 +169,7 @@ run generated claims through approvals, burns, appeals and repayments and check 
 uv run --extra aws python scripts/deploy.py   # sam build + deploy, web upload, demo fields
 ```
 
-API keys go in SSM under `/saakshi/` (WhatsApp, Razorpay, Sarvam); the stack reads them at run time.
+API keys go in SSM under `/saakshi/` (WhatsApp, Razorpay, Cashfree, Sarvam); the stack reads them at run time.
 
 ## Labels
 
