@@ -335,6 +335,7 @@ const SCENES = [
     await s5;
   }],
   ["s6", async () => {  // the farmer's page, in Punjabi; wait until it has fully drawn before talking over it
+    fetch("wa.mp4").catch(() => {});  // the phone clip is in the cache before its scene
     localStorage.setItem("saakshi-farmer", "f-satbir");
     localStorage.setItem("saakshi-lang", "pa");
     await show("../farmer.html");
@@ -363,8 +364,13 @@ const SCENES = [
       showCard(`<div><h1>On WhatsApp</h1><p>Status, reasons and money in English and the farmer's language,<br>with a voice note. Questions by voice, in Punjabi.</p></div>
         <div class="phone"><video id="wav" src="wa.mp4" muted playsinline preload="auto"></video></div>`, "wa-live");
       const v = $("#wav");
+      // picture and sound start together, once the clip can play to the end
+      await new Promise((ok) => { if (v.readyState >= 4) ok(); else { v.oncanplaythrough = ok; setTimeout(ok, 5000); } });
       await v.play().catch(() => {});
-      await say("wa");
+      const a = say("wa");
+      const keep = setInterval(() => { if (v.paused && !v.ended) v.play().catch(() => {}); }, 500);
+      await a;
+      clearInterval(keep);
     } else {
       showCard(`<h1>On WhatsApp</h1><p>Status, reasons, money and appeals, by text or voice</p><span class="tag">Phone clip goes here in the edit</span>`, "wa");
       await say("wa");

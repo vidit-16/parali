@@ -51,7 +51,9 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     meta, only = [], set(filter(None, a.only.split(",")))
     for sid, text in scenes():
-        if not only or sid in only:
+        if sid == "wa" and (OUT / "wa.mp4").exists():
+            pass  # built with the phone clip by make_wa_cut.py
+        elif not only or sid in only:
             audio = speak(text)
             (OUT / f"{sid}.mp3").write_bytes(audio)
             print(sid, f"{len(audio) // 1024} KB")

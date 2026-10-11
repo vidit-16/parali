@@ -490,7 +490,7 @@ def handle(store: Store, msg: dict, client, dispatch, backend=None, voice=None, 
         _voice(voice, (a.get(lang) or "") + " " + (f.get(lang) or ""), lang, client, phone, a.get("hi", "") + " " + f.get("hi", ""))
         return "money"
     if text == "btn:why" and claim:
-        client.send_text(phone, why_line(claim, lang))
+        client.send_buttons(phone, why_line(claim, lang), _buttons(lang))  # My money and Appeal stay one tap away
         _send_pictures(store, farmer["id"], phone, client, lang)
         f = farmer_text_for(claim)
         _voice(voice, f.get(lang) or "", lang, client, phone, f.get("hi", ""))
