@@ -324,6 +324,13 @@ const SCENES = [
     const s5 = say("s5").then((a) => { done = Date.now(); return a; });  // the narration covers the transfer
     // the bank can be slow: wait for the payment advice while the narration runs and 2 s after, then move on
     const c = await claimWhen(id, (c) => c.payout?.receipt_url, 25000, () => done && Date.now() - done > 2000);
+    // the farmer's page loads behind the advice, once the farmer's messages are redone, so it never shows the old status
+    const ready = claimWhen(id, (c) => c.events?.at(-1)?.type === "farmer_told" && c.status === "officer_approved", 30000)
+      .then(() => {
+        localStorage.setItem("saakshi-farmer", "f-satbir");
+        localStorage.setItem("saakshi-lang", "pa");
+        preload("../farmer.html");
+      });
     if (c) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
       preload(c.payout.receipt_url);
       // the officer's page turns the payment green first, so the advice follows what was just shown
@@ -333,11 +340,7 @@ const SCENES = [
       await sleep(400);
       await spotlight(D().querySelector(".amount"), 2400, 1.7);
     }
-    // the farmer's page loads once the farmer's messages are redone, so it never shows the old status
-    await claimWhen(id, (c) => c.events?.at(-1)?.type === "farmer_told" && c.status === "officer_approved", 30000);
-    localStorage.setItem("saakshi-farmer", "f-satbir");
-    localStorage.setItem("saakshi-lang", "pa");
-    preload("../farmer.html");
+    await ready;
     await s5;
   }],
   ["s6", async () => {  // the farmer's page, in Punjabi; wait until it has fully drawn before talking over it
