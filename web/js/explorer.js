@@ -35,7 +35,7 @@ const T = {
     imagesFound: (n) => `${n} clear images this season`, pause: "Pause", resume: "Resume", exit: "Exit",
     storySteps: (f) => ["The 2025 season over the border belt", "Into Patran, where most fields burned in early November", `${f}: run the satellite check`, `Check complete for ${f}`],
     colour: "Colour", infrared: "Infrared", irNote: "Burnt ground shows maroon, wet soil dark blue.", irWait: "Infrared frames appear once the check has run.", preparing: "Preparing the season", pm: "tonnes PM2.5", sources: "Sources",
-    saved: (d) => `The check is not responding right now. Showing its result from ${d}.`, liveNow: (n) => `Checked just now · ${n} s`, rerun: "Check again",
+    saved: (d) => `The check is not responding right now. Showing its result from ${d}.`, liveNow: (n) => `Checked just now · ${n} s`, rerun: "Check again", aws: (n) => `${n} clear Sentinel-2 pictures read from AWS Open Data, on AWS Lambda`,
     reading: "Reading every clear image of this field, September to December", checkNote: "Reads every clear Sentinel-2 image of this field, this season and last: the same evidence an officer reviews. About 20 seconds.",
   },
   hi: {
@@ -62,7 +62,7 @@ const T = {
     imagesFound: (n) => `इस सीज़न की ${n} साफ़ तस्वीरें`, pause: "रोकें", resume: "जारी रखें", exit: "बंद करें",
     storySteps: (f) => ["सीमा क्षेत्र पर 2025 का सीज़न", "पातड़ां की ओर, जहाँ नवंबर की शुरुआत में सबसे ज़्यादा खेत जले", `${f}: उपग्रह जाँच चलाएँ`, `${f} की जाँच पूरी`],
     colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जली ज़मीन मैरून दिखती है, गीली मिट्टी गहरी नीली।", irWait: "जाँच के बाद इन्फ्रारेड तस्वीरें दिखेंगी।", preparing: "सीज़न तैयार हो रहा है", pm: "टन PM2.5", sources: "स्रोत",
-    saved: (d) => `जाँच अभी जवाब नहीं दे रही। ${d} का नतीजा दिखाया जा रहा है।`, liveNow: (n) => `अभी जाँचा गया · ${n} सेकंड`, rerun: "फिर जाँचें",
+    saved: (d) => `जाँच अभी जवाब नहीं दे रही। ${d} का नतीजा दिखाया जा रहा है।`, liveNow: (n) => `अभी जाँचा गया · ${n} सेकंड`, rerun: "फिर जाँचें", aws: (n) => `AWS ओपन डेटा से ${n} साफ़ Sentinel-2 तस्वीरें, AWS Lambda पर पढ़ी गईं`,
     reading: "इस खेत की सितंबर से दिसंबर तक की हर साफ़ तस्वीर पढ़ रहे हैं", checkNote: "इस खेत की इस और पिछले सीज़न की हर साफ़ Sentinel-2 तस्वीर पढ़ता है: वही सबूत जो अधिकारी देखते हैं। लगभग 20 सेकंड।",
   },
   pa: {
@@ -89,7 +89,7 @@ const T = {
     imagesFound: (n) => `ਇਸ ਸੀਜ਼ਨ ਦੀਆਂ ${n} ਸਾਫ਼ ਤਸਵੀਰਾਂ`, pause: "ਰੋਕੋ", resume: "ਜਾਰੀ ਰੱਖੋ", exit: "ਬੰਦ ਕਰੋ",
     storySteps: (f) => ["ਸਰਹੱਦੀ ਖੇਤਰ ਉੱਤੇ 2025 ਦਾ ਸੀਜ਼ਨ", "ਪਾਤੜਾਂ ਵੱਲ, ਜਿੱਥੇ ਨਵੰਬਰ ਦੇ ਸ਼ੁਰੂ ਵਿੱਚ ਸਭ ਤੋਂ ਵੱਧ ਖੇਤ ਸੜੇ", `${f}: ਸੈਟੇਲਾਈਟ ਜਾਂਚ ਚਲਾਓ`, `${f} ਦੀ ਜਾਂਚ ਪੂਰੀ`],
     colour: "ਰੰਗੀਨ", infrared: "ਇਨਫ੍ਰਾਰੈੱਡ", irNote: "ਸੜੀ ਜ਼ਮੀਨ ਮੈਰੂਨ ਦਿਸਦੀ ਹੈ, ਗਿੱਲੀ ਮਿੱਟੀ ਗੂੜ੍ਹੀ ਨੀਲੀ।", irWait: "ਜਾਂਚ ਤੋਂ ਬਾਅਦ ਇਨਫ੍ਰਾਰੈੱਡ ਤਸਵੀਰਾਂ ਦਿਸਣਗੀਆਂ।", preparing: "ਸੀਜ਼ਨ ਤਿਆਰ ਹੋ ਰਿਹਾ ਹੈ", pm: "ਟਨ PM2.5", sources: "ਸਰੋਤ",
-    saved: (d) => `ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ। ${d} ਦਾ ਨਤੀਜਾ ਵਿਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ।`, liveNow: (n) => `ਹੁਣੇ ਜਾਂਚਿਆ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਜਾਂਚੋ",
+    saved: (d) => `ਜਾਂਚ ਹੁਣ ਜਵਾਬ ਨਹੀਂ ਦੇ ਰਹੀ। ${d} ਦਾ ਨਤੀਜਾ ਵਿਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ।`, liveNow: (n) => `ਹੁਣੇ ਜਾਂਚਿਆ · ${n} ਸਕਿੰਟ`, rerun: "ਦੁਬਾਰਾ ਜਾਂਚੋ", aws: (n) => `AWS ਓਪਨ ਡੇਟਾ ਤੋਂ ${n} ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰਾਂ, AWS Lambda ਉੱਤੇ ਪੜ੍ਹੀਆਂ`,
     reading: "ਇਸ ਖੇਤ ਦੀ ਸਤੰਬਰ ਤੋਂ ਦਸੰਬਰ ਤੱਕ ਦੀ ਹਰ ਸਾਫ਼ ਤਸਵੀਰ ਪੜ੍ਹ ਰਹੇ ਹਾਂ", checkNote: "ਇਸ ਖੇਤ ਦੀ ਇਸ ਅਤੇ ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੀ ਹਰ ਸਾਫ਼ Sentinel-2 ਤਸਵੀਰ ਪੜ੍ਹਦਾ ਹੈ: ਉਹੀ ਸਬੂਤ ਜੋ ਅਧਿਕਾਰੀ ਵੇਖਦਾ ਹੈ। ਲਗਭਗ 20 ਸਕਿੰਟ।",
   },
   hr: {
@@ -116,7 +116,7 @@ const T = {
     imagesFound: (n) => `इस सीज़न के ${n} साफ फोटू`, pause: "रोक्को", resume: "चालू करो", exit: "बंद करो",
     storySteps: (f) => ["बॉर्डर इलाके पै 2025 का सीज़न", "पातड़ां कान्नी, जित नवंबर के शुरू म्ह सब तै घणे खेत जळे", `${f}: उपग्रह जांच चलाओ`, `${f} की जांच पूरी`],
     colour: "रंगीन", infrared: "इन्फ्रारेड", irNote: "जळी धरती मैरून दिक्खै, गीली माट्टी गहरी नीली।", irWait: "जांच पाच्छै इन्फ्रारेड फोटू दिक्खैंगे।", preparing: "सीज़न त्यार होरया सै", pm: "टन PM2.5", sources: "स्रोत",
-    saved: (d) => `जांच इब्ब जवाब कोनी देरी। ${d} का नतीजा दिखाया जा रया सै।`, liveNow: (n) => `इब्बे जांच्या · ${n} सेकंड`, rerun: "फेर जांचो",
+    saved: (d) => `जांच इब्ब जवाब कोनी देरी। ${d} का नतीजा दिखाया जा रया सै।`, liveNow: (n) => `इब्बे जांच्या · ${n} सेकंड`, rerun: "फेर जांचो", aws: (n) => `AWS ओपन डेटा तै ${n} साफ Sentinel-2 फोटू, AWS Lambda पै पढ़े`,
     reading: "इस खेत की सितंबर तै दिसंबर तक की हर साफ फोटो पढ़ण लाग रे सां", checkNote: "इस खेत की इस अर पाछले सीज़न की हर साफ Sentinel-2 फोटू पढ़ै सै: वाए सबूत जो अफसर देक्खै सै। करीब 20 सेकंड।",
   },
 };
@@ -616,7 +616,8 @@ function actionHtml() {
     const kg = Math.round((state.field?.properties.acres || 0) * PM25_KG_PER_ACRE);
     return `<div class="band ${k}"><div class="ic">${icon(ICON[k])}</div><div class="bt"><b>${esc(L.v[k])}</b><p>${esc(vline)}</p>
       <p class="smoke-l" title="2.6 t straw an acre, 80% burnt, ~9 kg PM2.5 a tonne">≈ ${kg} kg ${esc(L.smoke[k])}</p>
-      <small>${esc(meta)} · <button class="link" id="run-check">${esc(L.rerun)}</button></small></div></div>`;
+      <small>${esc(meta)} · <button class="link" id="run-check">${esc(L.rerun)}</button></small>
+      <small class="aws-l">${esc(L.aws(d.clear_dates.length))}</small></div></div>`;
   }
   if (c && !c.failed) {
     const st = L.stage[c.stage] || L.stage.queued;

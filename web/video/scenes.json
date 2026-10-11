@@ -1,0 +1,38 @@
+[
+ {
+  "id": "s1",
+  "text": "Every November, burnt paddy straw from Punjab and Haryana chokes Delhi. Farmers are paid to stop burning, but only after slow field visits, and the satellite fire alerts used as evidence often blame the wrong field. Saakshi fixes both."
+ },
+ {
+  "id": "s2",
+  "text": "This is the Patiala–Kaithal border belt through the 2025 season. Red is ground that turned black after harvest, seen by Sentinel-2. Yellow rings are NASA fire alerts. Most burns never raised an alert: a field can burn and be ploughed between two passes. On fields we labelled by hand, fire alerts wrongly flagged nine in a hundred clean fields. Saakshi flagged fewer than one."
+ },
+ {
+  "id": "s3",
+  "text": "Open any field and run the check. It reads every clear Sentinel-2 picture of the field from AWS Open Data, on AWS Lambda. Here, on the sixth of November, the field turned near-black. A possible burn, and the smoke it released."
+ },
+ {
+  "id": "s4",
+  "text": "Saakshi never punishes on its own. Every possible burn goes to the village officer, with the pictures, the plant signal and last season's record. When the officer confirms a burn, Saakshi drafts the recovery notice and sends a Razorpay link to return the advance."
+ },
+ {
+  "id": "s5",
+  "text": "When the officer approves, the balance goes straight to the farmer's bank through Cashfree Payouts, with a payment advice. Clean fields are paid automatically."
+ },
+ {
+  "id": "s6",
+  "text": "The farmer sees the same pictures, in Punjabi, Hindi, Haryanvi or English, hears a voice note, tracks every rupee, and can appeal in one tap."
+ },
+ {
+  "id": "wa",
+  "text": "Most farmers live on WhatsApp, so Saakshi does too. Pick or simply say your name. Your status arrives in English and your own language, with a voice note. Tap Why to see the satellite pictures, My money for your balance, or appeal with a voice note."
+ },
+ {
+  "id": "s7",
+  "text": "All of it runs on AWS. Lambda reads Sentinel-2 in place, DynamoDB keeps every decision and its audit trail, CloudFront serves the app, and Amazon Bedrock with the Strands Agents SDK understands the farmer. The model picks a tool. It never decides."
+ },
+ {
+  "id": "s8",
+  "text": "Paid before harvest. Every field checked. Every burn confirmed by a person. About nineteen kilograms of PM2.5 kept out of the air, for every acre that stays clean. This is Saakshi."
+ }
+]

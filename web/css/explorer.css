@@ -432,3 +432,5 @@ body.panel-open .story { left: calc((100% - 400px) / 2); max-width: calc(100% - 
   .skip { right: 22px; bottom: 104px; }
 }
 @media (max-width: 640px) { .rail { bottom: 140px; } }  /* clear of the story bar above the timeline */
+.band small.aws-l { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: #FFB547; font-size: 11.5px; }
+.band small.aws-l::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #FFB547; flex: none; }

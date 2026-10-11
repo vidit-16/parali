@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saakshi · How it works</title>
+<meta name="description" content="How Saakshi runs on AWS: from Sentinel-2 pictures to the officer's decision and the farmer's money.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/explorer.css">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<style>
+  html, body { overflow: auto; }
+  .how { min-height: 100%; padding: 92px 32px 40px; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; max-width: 1280px; margin: 0 auto; }
+  .how h1 { margin: 0; font-size: 30px; letter-spacing: -.03em; font-weight: 800; }
+  .how h1 small { display: block; margin-top: 6px; font-size: 15px; font-weight: 500; letter-spacing: 0; color: var(--ink-2); }
+  .board { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 34px; align-content: center; }
+  .col { display: grid; gap: 14px; align-content: center; }
+  .col > h2 { margin: 0 0 2px; font: 600 11.5px Geist, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .node { position: relative; z-index: 1; padding: 13px 14px 12px; border-radius: 14px; background: #16171C; border: 1px solid var(--line-2);
+    transition: border-color .5s, box-shadow .5s, opacity .5s, transform .5s; }
+  .node b { display: block; font-size: 14.5px; letter-spacing: -.01em; }
+  .node small { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.4; color: var(--ink-2); }
+  .node .svc { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 7px; padding: 2px 8px; border-radius: 99px; font: 600 10.5px Geist, sans-serif; letter-spacing: .04em; }
+  .svc.aws { background: rgba(255, 153, 0, .14); color: #FFB547; }
+  .svc.code { background: rgba(67, 196, 133, .14); color: var(--clean); }
+  .svc.human { background: rgba(159, 227, 255, .12); color: #9FE3FF; }
+  .svc.ext { background: rgba(255, 255, 255, .08); color: var(--ink-2); }
+  .playing .node { opacity: 1; filter: brightness(.45); }
+  .playing .node.lit { filter: none; border-color: rgba(255, 181, 71, .65); box-shadow: 0 0 0 1px rgba(255, 181, 71, .25), 0 10px 40px rgba(255, 140, 40, .12); transform: translateY(-2px); }
+  .playing .node.done { filter: brightness(.85); }
+  svg.wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+  .wires path { fill: none; stroke: rgba(255, 255, 255, .14); stroke-width: 1.4; }
+  .wires path.lit { stroke: #FFB547; stroke-width: 2; stroke-dasharray: 6 6; animation: flow 1s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -12; } }
+  .rule { display: flex; flex-wrap: wrap; gap: 10px 26px; padding: 14px 18px; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); font-size: 13.5px; color: var(--ink-2); }
+  .rule b { color: var(--ink); }
+  @media (max-width: 900px) { .board { grid-template-columns: 1fr 1fr; } .how { padding: 84px 16px 28px; } svg.wires { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .wires path.lit { animation: none; } .node { transition: none; } }
+</style>
+</head>
+<body class="page">
+<header class="bar">
+  <a class="brand glass" href="index.html" aria-label="Saakshi home"><img class="mark" src="img/logo.svg" alt=""><span class="name">Saakshi</span><span class="name-local" lang="hi">साक्षी</span></a>
+</header>
+<main class="how">
+  <h1>How Saakshi works <small>From a satellite picture to a farmer's bank account. Every box marked AWS runs in one AWS stack.</small></h1>
+  <div class="board" id="board">
+    <svg class="wires" id="wires" aria-hidden="true"></svg>
+    <section class="col">
+      <h2>In</h2>
+      <div class="node" data-step="1" id="n-s2"><span class="svc aws">AWS OPEN DATA</span><b>Sentinel-2 pictures</b><small>Read in place: only the pixels around each field, every clear date of the season</small></div>
+      <div class="node" data-step="1" id="n-firms"><span class="svc ext">NASA FIRMS</span><b>Fire alerts</b><small>Thermal alerts within 375 m, shown to the officer</small></div>
+      <div class="node" data-step="5" id="n-farmer"><span class="svc ext">WEB · WHATSAPP · VOICE</span><b>The farmer asks</b><small>Punjabi, Hindi, Haryanvi or English, typed or spoken</small></div>
+    </section>
+    <section class="col">
+      <h2>Check</h2>
+      <div class="node" data-step="2" id="n-lambda"><span class="svc aws">AWS LAMBDA</span><b>Satellite check</b><small>Plant signal and darkness per date, for every field, in seconds</small></div>
+      <div class="node" data-step="2" id="n-rules"><span class="svc code">CODE, NOT A MODEL</span><b>Fixed rules decide</b><small>Clean: approved. Possible burn or unclear: to the officer</small></div>
+      <div class="node" data-step="5" id="n-bedrock"><span class="svc aws">AMAZON BEDROCK · STRANDS AGENTS</span><b>Understands the farmer</b><small>Nova 2 Lite picks a tool: status, explain, appeal. It never decides</small></div>
+    </section>
+    <section class="col">
+      <h2>Decide</h2>
+      <div class="node" data-step="3" id="n-db"><span class="svc aws">AMAZON DYNAMODB</span><b>Every claim and decision</b><small>With the audit trail: who decided what, when, on which pictures</small></div>
+      <div class="node" data-step="3" id="n-officer"><span class="svc human">A PERSON</span><b>Village officer</b><small>Confirms every burn. Fines and red entries stay human decisions</small></div>
+      <div class="node" data-step="6" id="n-sched"><span class="svc aws">AMAZON EVENTBRIDGE</span><b>Daily sweep</b><small>Open claims checked, pending payouts followed up</small></div>
+    </section>
+    <section class="col">
+      <h2>Out</h2>
+      <div class="node" data-step="4" id="n-money"><span class="svc ext">CASHFREE · RAZORPAY (TEST)</span><b>The money</b><small>Balance to the farmer's bank; a link to return an advance after a confirmed burn</small></div>
+      <div class="node" data-step="4" id="n-web"><span class="svc aws">AMAZON S3 · CLOUDFRONT</span><b>App, evidence, notices</b><small>Pictures, recovery notices and payment advice for officer and farmer</small></div>
+      <div class="node" data-step="5" id="n-voice"><span class="svc aws">AMAZON POLLY · SARVAM</span><b>Told in their language</b><small>Text and a voice note, in the app and on WhatsApp</small></div>
+    </section>
+  </div>
+  <div class="rule"><span><b>The model understands; code decides.</b></span><span>No model can approve, reject, pay or penalise.</span><span>Every burn is confirmed by a person.</span><span>One SAM / CloudFormation stack.</span></div>
+</main>
+<script>
+// wires between the boxes, then (with ?play=<seconds>) light the steps in order over that many seconds
+const links = [["n-s2", "n-lambda"], ["n-firms", "n-officer"], ["n-lambda", "n-rules"], ["n-rules", "n-db"], ["n-db", "n-officer"],
+  ["n-officer", "n-money"], ["n-db", "n-web"], ["n-farmer", "n-bedrock"], ["n-bedrock", "n-db"], ["n-bedrock", "n-voice"], ["n-sched", "n-money"]];
+const board = document.getElementById("board"), wires = document.getElementById("wires");
+function draw() {
+  const b = board.getBoundingClientRect();
+  wires.innerHTML = links.map(([a, z]) => {
+    const p = document.getElementById(a).getBoundingClientRect(), q = document.getElementById(z).getBoundingClientRect();
+    const x1 = p.right - b.left, y1 = p.top + p.height / 2 - b.top, x2 = q.left - b.left, y2 = q.top + q.height / 2 - b.top;
+    const [sx, sy, ex, ey] = x2 > x1 ? [x1, y1, x2, y2] : [p.left + p.width / 2 - b.left, p.bottom - b.top, q.left + q.width / 2 - b.left, q.top - b.top];
+    const c = x2 > x1 ? `C${(sx + ex) / 2},${sy} ${(sx + ex) / 2},${ey}` : `C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2}`;
+    return `<path data-a="${a}" data-z="${z}" d="M${sx},${sy} ${c} ${ex},${ey}"/>`;
+  }).join("");
+}
+addEventListener("resize", draw);
+document.fonts.ready.then(draw);
+draw();
+const secs = Number(new URLSearchParams(location.search).get("play"));
+function light(step) {
+  document.querySelectorAll(".node").forEach((n) => {
+    const s = Number(n.dataset.step);
+    n.classList.toggle("lit", s === step);
+    n.classList.toggle("done", s < step);
+  });
+  const lit = new Set([...document.querySelectorAll(".node.lit")].map((n) => n.id));
+  wires.querySelectorAll("path").forEach((p) => p.classList.toggle("lit", lit.has(p.dataset.a) || lit.has(p.dataset.z)));
+}
+window.howPlay = (seconds) => {  // also called by the video director
+  board.classList.add("playing");
+  const steps = 6, each = (seconds * 1000) / (steps + 1);
+  for (let i = 1; i <= steps; i++) setTimeout(() => light(i), (i - 1) * each);
+  setTimeout(() => { board.classList.remove("playing"); light(0); }, steps * each + 600);
+};
+if (secs > 0) window.howPlay(secs);
+</script>
+</body>
+</html>

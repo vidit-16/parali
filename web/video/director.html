@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saakshi · Video autopilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0D0E11; --ink: #F2F3F5; --ink-2: #B9C0CC; --muted: #8B93A1; --clean: #43C485; --burn: #FF6A3D; --line: rgba(255,255,255,.1); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 15px/1.45 Geist, system-ui, sans-serif; overflow: hidden; }
+  body.rolling { cursor: none; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: var(--bg); }
+  .cap { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 20; max-width: min(1100px, 86vw); padding: 10px 18px; border-radius: 12px;
+    background: rgba(10, 11, 14, .82); backdrop-filter: blur(8px); font-size: 17px; line-height: 1.45; text-align: center; opacity: 0; transition: opacity .4s; pointer-events: none; }
+  .cap.on { opacity: 1; }
+  .card { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: radial-gradient(1200px 700px at 50% 40%, #1a1c24, #0D0E11); opacity: 0; transition: opacity .6s; pointer-events: none; }
+  .card.on { opacity: 1; }
+  .card .in { text-align: center; max-width: 980px; padding: 0 24px; }
+  .mark { width: 76px; height: 76px; border-radius: 20px; background: linear-gradient(225deg, #3D6BFF, #D9468C 55%, #FF8A3D); display: grid; place-items: center; margin: 0 auto 22px; font: 800 34px Geist; }
+  .card h1 { margin: 0 0 10px; font-size: 44px; letter-spacing: -.035em; }
+  .card p { margin: 0; color: var(--ink-2); font-size: 18px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 34px 0 26px; }
+  .stats div { padding: 20px 18px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid var(--line); text-align: left; }
+  .stats b { display: block; font-size: 30px; letter-spacing: -.03em; } .stats b em { font-style: normal; font-size: 16px; color: var(--muted); font-weight: 600; }
+  .stats small { color: var(--ink-2); font-size: 14px; }
+  .g { color: var(--clean); } .r { color: #FF8A5C; }
+  .wa h1 { font-size: 38px; } .wa .tag { display: inline-block; margin-top: 14px; padding: 6px 12px; border: 1px dashed rgba(255,255,255,.3); border-radius: 10px; color: var(--muted); font-size: 13px; }
+  .panel { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; background: rgba(8,9,12,.92); }
+  .panel[hidden] { display: none; }
+  .panel .box { width: min(560px, 92vw); padding: 26px; border-radius: 18px; background: #16171C; border: 1px solid var(--line); }
+  .panel h2 { margin: 0 0 6px; font-size: 22px; } .panel p { margin: 0 0 14px; color: var(--ink-2); font-size: 14px; }
+  .panel ol { margin: 0 0 18px; padding-left: 20px; color: var(--ink-2); font-size: 14px; } .panel li { margin-bottom: 5px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button { height: 42px; padding: 0 18px; border: 0; border-radius: 11px; font: 600 15px Geist; cursor: pointer; }
+  .primary { background: var(--ink); color: var(--bg); } .ghost { background: rgba(255,255,255,.08); color: var(--ink); }
+  button:disabled { opacity: .4; cursor: default; }
+  #status { margin-top: 12px; font-size: 13px; color: var(--muted); min-height: 18px; }
+  label { font-size: 13px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+</style>
+</head>
+<body>
+<iframe id="app" title="Saakshi" allow="autoplay"></iframe>
+<div class="cap" id="cap"></div>
+<div class="card" id="card"><div class="in" id="cardIn"></div></div>
+<div class="panel" id="panel"><div class="box">
+  <h2>Video autopilot</h2>
+  <p>Plays the whole web demo with its narration, about 2 minutes 50 seconds with a 16-second WhatsApp slot. Record the screen with sound (Win + Alt + R), then press Start.</p>
+  <ol>
+    <li><b>Prepare</b> resets the demo to fresh cases (about two minutes). Do it before every take.</li>
+    <li>Press <b>Start</b>: the page goes full screen. Move the mouse to the screen edge.</li>
+    <li>When the dashed WhatsApp card shows, the phone clip goes there in the edit.</li>
+  </ol>
+  <div class="row"><button class="ghost" id="prep">Prepare</button><button class="primary" id="go">Start</button>
+    <label><input type="checkbox" id="caps" checked> Captions</label></div>
+  <div id="status"></div>
+</div></div>
+<script>
+const PIN = "2468";
+const $ = (s) => document.querySelector(s);
+const app = $("#app"), cap = $("#cap"), card = $("#card");
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let scenes = {};
+fetch("scenes.json").then((r) => r.json()).then((s) => { s.forEach((x) => { scenes[x.id] = x.text; }); });
+const status = (t) => { $("#status").textContent = t; };
+const W = () => app.contentWindow, D = () => app.contentDocument;
+
+async function until(fn, ms = 60000, every = 250) {
+  const t0 = Date.now();
+  for (;;) {
+    try { const v = fn(); if (v) return v; } catch { /* page still loading */ }
+    if (Date.now() - t0 > ms) throw new Error("timed out waiting");
+    await sleep(every);
+  }
+}
+function load(url) {
+  return new Promise((ok) => { app.onload = () => ok(); app.src = url; });
+}
+// one narration clip; resolves when it has finished
+function say(id) {
+  const a = new Audio(`${id}.mp3`);
+  if ($("#caps").checked && scenes[id]) { cap.textContent = scenes[id]; cap.classList.add("on"); }
+  return new Promise((ok) => {
+    a.onended = () => { cap.classList.remove("on"); ok(a); };
+    a.onerror = () => ok(a);
+    a.play().catch(() => ok(a));
+  });
+}
+async function duration(id) {
+  const a = new Audio(`${id}.mp3`);
+  await new Promise((ok) => { a.onloadedmetadata = ok; a.onerror = ok; });
+  return a.duration || 10;
+}
+function showCard(html, cls = "") { $("#cardIn").className = "in " + cls; $("#cardIn").innerHTML = html; card.classList.add("on"); }
+const hideCard = () => card.classList.remove("on");
+async function typeInto(el, text) {
+  el.focus();
+  for (let i = 1; i <= text.length; i++) {
+    el.value = text.slice(0, i);
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    await sleep(28);
+  }
+}
+const q = (sel) => D().querySelector(sel);
+const byName = (name) => [...D().querySelectorAll("#queue [data-id]")].find((b) => b.textContent.includes(name));
+
+async function prepare() {
+  $("#prep").disabled = $("#go").disabled = true;
+  try {
+    status("Resetting the demo…");
+    await fetch("/api/demo/reset", { method: "POST", headers: { "X-Officer-Pin": PIN } });
+    const fields = await (await fetch("/api/fields")).json();
+    for (const f of fields) {
+      await fetch("/api/claims", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ field_id: f.id }) });
+      await sleep(700);
+    }
+    for (;;) {
+      const claims = await (await fetch("/api/claims")).json();
+      const open = claims.filter((c) => c.status === "submitted").length;
+      status(`Checking the season for each field: ${claims.length - open} of ${claims.length} done`);
+      if (claims.length >= fields.length && !open) break;
+      await sleep(4000);
+    }
+    status("Ready. Start recording, then press Start.");
+  } catch (e) { status("Prepare failed: " + e.message); }
+  $("#prep").disabled = $("#go").disabled = false;
+}
+
+// each scene loads the page it needs, so a take can start from any scene with ?from=s4 (and so on)
+const SCENES = [
+  ["s1", async () => {  // the opening flies in from India while the problem is told
+    await load("../index.html?auto=1");
+    const s1 = say("s1");
+    await until(() => W().saakshi?.state && !q("#loader"), 90000);
+    await s1;
+  }],
+  ["s2", async () => {  // the season plays; the story ends on Baljeet's field and runs the live check by itself
+    if (!W().saakshi) await load("../index.html?auto=1&intro=0");
+    await until(() => q("#play-season") && !q("#play-season").disabled, 90000);
+    q("#play-season").click();
+    const s2 = say("s2");
+    await until(() => W().saakshi.state.field, 120000);
+    await s2;
+  }],
+  ["s3", async () => {  // the live satellite check finishes on screen
+    const s3 = say("s3");
+    await until(() => q("#panel .band"), 90000);
+    await s3;
+    await sleep(1500);
+  }],
+  ["s4", async () => {  // the officer confirms that burn
+    await load("../officer.html");
+    await until(() => byName("Baljeet"), 30000);
+    byName("Baljeet").click();
+    await until(() => q("#note"), 20000);
+    const s4 = say("s4");
+    await sleep(2500);
+    q(".decide").scrollIntoView({ behavior: "smooth", block: "center" });
+    await sleep(1200);
+    await typeInto(q("#note"), "Visited 7 Nov: ash across the field, neighbours confirm.");
+    await sleep(500);
+    q("#confirm").click();
+    await until(() => q(".decided"), 60000);
+    await s4;
+    await sleep(1200);
+  }],
+  ["s5", async () => {  // approving another case pays the balance through Cashfree
+    if (!/officer/.test(app.src)) await load("../officer.html");
+    await until(() => byName("Mahender"), 30000);
+    byName("Mahender").click();
+    await until(() => q("#note"), 20000);
+    q(".decide").scrollIntoView({ behavior: "smooth", block: "center" });
+    const s5 = say("s5");
+    await sleep(900);
+    await typeInto(q("#note"), "Dark patch is wet soil after irrigation; no ash on the ground.");
+    q("#approve").click();
+    await until(() => q(".decided"), 60000);
+    await s5;
+    await sleep(1500);
+  }],
+  ["s6", async () => {  // the farmer's page, in Punjabi; wait until it has fully drawn before talking over it
+    localStorage.setItem("saakshi-farmer", "f-mahender");
+    localStorage.setItem("saakshi-lang", "pa");
+    await load("../farmer.html");
+    await until(() => q(".status-card") && q(".passbook .book li") && q("#saw canvas, #saw img"), 30000);
+    await sleep(1200);
+    const s6 = say("s6");
+    await sleep(3500);
+    q(".passbook").scrollIntoView({ behavior: "smooth", block: "center" });
+    await s6;
+    await sleep(800);
+    localStorage.setItem("saakshi-lang", "en");
+  }],
+  ["wa", async () => {  // the marker for the phone clip, as long as its narration
+    showCard(`<h1>On WhatsApp</h1><p>Status, reasons, money and appeals, by text or voice</p><span class="tag">Phone clip goes here in the edit</span>`, "wa");
+    await say("wa");
+  }],
+  ["s7", async () => {  // how it runs on AWS
+    await load("../how.html");
+    await until(() => W().howPlay, 10000);
+    await sleep(400);
+    hideCard();
+    W().howPlay(await duration("s7"));
+    await say("s7");
+    await sleep(600);
+  }],
+  ["s8", async () => {  // closing card
+    showCard(`<div class="mark">सा</div><h1>Saakshi</h1><p>Pay farmers before harvest. Check every field after. A person confirms every burn.</p>
+      <div class="stats"><div><b><span class="g">0.6%</span> <em>vs</em> <span class="r">9.0%</span></b><small>clean fields wrongly flagged, Saakshi vs fire alerts, on hand-labelled fields</small></div>
+      <div><b>0</b><small>burnt fields approved without an officer</small></div>
+      <div><b>≈ 19 kg</b><small>PM2.5 kept out of the air per clean acre (estimate)</small></div></div>
+      <p>d5gpae5oilzws.cloudfront.net</p>`);
+    await say("s8");
+    await sleep(2500);
+  }],
+];
+
+async function run() {
+  const sp = new URLSearchParams(location.search);
+  $("#panel").hidden = true;
+  document.body.classList.add("rolling");
+  if (!sp.has("nofs")) await document.documentElement.requestFullscreen?.().catch(() => {});
+  sessionStorage.setItem("saakshi-officer", "VO-PATRAN-08");
+  sessionStorage.setItem("saakshi-pin", PIN);
+  localStorage.setItem("saakshi-lang", "en");
+  const from = Math.max(0, SCENES.findIndex(([id]) => id === sp.get("from")));
+  const to = sp.get("to") ? SCENES.findIndex(([id]) => id === sp.get("to")) : SCENES.length - 1;
+  try {
+    for (const [, scene] of SCENES.slice(from, to + 1)) await scene();
+  } catch (e) {
+    cap.textContent = "Autopilot stopped: " + e.message;
+    cap.classList.add("on");
+  }
+  document.body.classList.remove("rolling");
+}
+$("#prep").onclick = prepare;
+$("#go").onclick = run;
+</script>
+</body>
+</html>
