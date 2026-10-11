@@ -4,6 +4,8 @@ Saakshi pays farmers part of the no-burn incentive before harvest, checks every 
 afterwards, and gives the village officer the evidence for the cases the pictures cannot settle. Farmers use it
 in Punjabi, Hindi, Haryanvi or English, on the web or on WhatsApp, by text or by voice.
 
+**Video (3 min):** https://www.youtube.com/watch?v=_0H2pnWebJQ
+
 **Live:** https://d5gpae5oilzws.cloudfront.net · Officer PIN `2468` · The demo's cases reset every day at 05:00 IST.
 The WhatsApp side runs on a Meta test number, so it is shown in the video rather than open to the public.
 

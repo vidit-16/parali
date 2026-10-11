@@ -1,7 +1,7 @@
 # Checking stubble-burning claims field by field with Sentinel-2 on AWS
 
 Every November, farmers in Punjab and Haryana clear paddy straw by burning it, and the smoke drifts over Delhi.
-Both states pay an incentive for not burning: Haryana paid ₹1,000 an acre in 2024. The incentive works badly in
+States pay an incentive for not burning: Haryana paid ₹1,000 an acre in 2024. The incentive works badly in
 practice. It is paid months after the season, once a committee has checked photos, and the main enforcement
 signal is NASA's VIIRS fire alerts, which decide who gets a red entry, a fine or an FIR.
 
@@ -107,6 +107,6 @@ payouts from test mode to the state's direct-benefit-transfer rail, and give off
 season.
 
 Links: [code](https://github.com/vidit-16/saakshi) · [live demo](https://d5gpae5oilzws.cloudfront.net)
-(officer PIN 2468) · video: YOUTUBE_LINK
+(officer PIN 2468) · [video](https://www.youtube.com/watch?v=_0H2pnWebJQ)
 
 Assisted by Claude Code.

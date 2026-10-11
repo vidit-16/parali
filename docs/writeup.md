@@ -1,5 +1,7 @@
 # Saakshi: pay before harvest, check every field after
 
+Video: https://www.youtube.com/watch?v=_0H2pnWebJQ · Live: https://d5gpae5oilzws.cloudfront.net (officer PIN 2468) · Code: https://github.com/vidit-16/saakshi
+
 ## The problem
 
 Every November, burnt paddy straw from Punjab and Haryana adds to the smoke over Delhi; on 22 Nov 2024 farm fires were
