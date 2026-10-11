@@ -326,7 +326,9 @@ const SCENES = [
     const c = await claimWhen(id, (c) => c.payout?.receipt_url, 25000, () => done && Date.now() - done > 2000);
     if (c) {  // the payment advice, briefly (skipped if the bank has not settled the transfer yet)
       preload(c.payout.receipt_url);
-      await sleep(1200);
+      // the officer's page turns the payment green first, so the advice follows what was just shown
+      await until(() => q(".paystate.done"), 8000).catch(() => null);
+      await sleep(1000);
       await show(c.payout.receipt_url);
       await sleep(400);
       await spotlight(D().querySelector(".amount"), 2400, 1.7);
@@ -353,7 +355,7 @@ const SCENES = [
     await sleep(500);
     const listen = q("#listen");
     if (listen) {  // the farmer's own voice note, in Punjabi
-      caption("Satbir's voice note, in Punjabi", "vn");
+      caption("Saakshi's voice note to Satbir, in Punjabi", "vn");
       listen.click();
       await sleep(5200);
       if (!q("#audio").paused) listen.click();
